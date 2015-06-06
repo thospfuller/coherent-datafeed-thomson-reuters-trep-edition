@@ -1,0 +1,84 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <util:map id="messageChannelsMap">
+        <entry key="com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries" value-ref="checkForMoreRicsChannel"/>
+        <entry key="com.coherentlogic.coherent.datafeed.beans.TS1DefEntry" value-ref="reviewInitializationChannel"/>
+        <entry key="com.coherentlogic.coherent.datafeed.beans.CachedDictionaryEntry" value-ref="reviewDictionariesLoadedChannel"/>
+    </util:map>
+
+    <bean id="classTypeRouter" class="com.coherentlogic.coherent.datafeed.integration.routers.ClassTypeRouter">
+        <constructor-arg name="messageChannels" ref="messageChannelsMap"/>
+        <constructor-arg name="errorChannel" ref="errorChannel"/>
+    </bean>
+
+    <int:router input-channel="routeByCacheEntryTypeChannel"
+     default-output-channel="errorChannel"
+     ref="classTypeRouter"/>
+
+    <int:channel id="checkForMoreRicsChannel"/>
+
+    <int:router input-channel="checkForMoreRicsChannel"
+     default-output-channel="errorChannel"
+     expression="payload.isRicListEmpty ()">
+        <int:mapping channel="transformIntoTimeSeriesChannel"
+         value="#{T(java.lang.Boolean).TRUE}"/>
+        <int:mapping channel="requestNextRicChannel"
+         value="#{T(java.lang.Boolean).FALSE}"/>
+    </int:router>
+
+    <int:channel id="requestNextRicChannel"/>
+    <int:channel id="transformIntoTimeSeriesChannel"/>
+
+    <int:service-activator
+     input-channel="requestNextRicChannel"
+     output-channel="errorChannel"
+     ref="timeSeriesService"
+     method="requestNextRic"/>
+
+    <int:transformer ref="timeSeriesTransformer"
+     input-channel="transformIntoTimeSeriesChannel"
+     output-channel="addTimeSeriesToQueueChannel"/>
+
+    <int:channel id="addTimeSeriesToQueueChannel"/>
+
+    <int-jms:outbound-channel-adapter
+     channel="addTimeSeriesToQueueChannel"
+     connection-factory="jmsConnectionFactory"
+     destination="timeSeriesUpdatesTopic"/>
+
+    <!-- ///////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+
+    <int:channel id="processTimeSeriesChannel"/>
+
+    <bean id="cachedTimeSeriesLoader"
+     class="com.coherentlogic.coherent.datafeed.services.TimeSeriesLoader">
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="ts1DefDb" ref="ts1DefDb"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="processTimeSeriesChannel"
+     output-channel="requestNextRicChannel"
+     ref="cachedTimeSeriesLoader"
+     method="load"/>
+
+</beans>

@@ -1,0 +1,213 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:stream="http://www.springframework.org/schema/integration/stream"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+        http://www.springframework.org/schema/integration/stream
+        http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.2.xsd">
+
+<!-- WORKFLOW EXPLAINED
+     1.) Event arrives at the EventDrivenEndpoint
+     2.) Event.type -> OMM_ITEM_EVENT (so far all events will be of this type)
+     3.) msgModelType -> LOGIN | MARKET_PRICE
+     4.) A.) LOGIN -> REFRESH_RESP | COMPLETION_EVENT
+             a.) REFRESH_RESP -> IGNORE
+             b.) COMPLETION_EVENT -> STATUS_RESPONSE | LOGIN_REJECTED (??)
+         B.) MARKET_PRICE -> REFRESH_RESP | UPDATE_RESP
+             a.) REFRESH_RESP -> Create new domain
+             b.) UPDATE_RESP  -> Update current domain
+  -->
+
+    <stream:stderr-channel-adapter channel="errorChannel" append-newline="true" />
+
+    <import resource="dictionary-workflow-beans.xml"/>
+    <import resource="directory-workflow-beans.xml"/>
+    <import resource="timeseries-workflow-beans.xml"/>
+    <import resource="ts1def-workflow-beans.xml"/>
+    <import resource="redis-beans.xml"/>
+
+    <int:channel id="routeByEventTypeChannel"/>
+
+    <int:router input-channel="routeByEventTypeChannel"
+     default-output-channel="errorChannel"
+     expression="payload.type">
+        <int:mapping channel="completionEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
+        <int:mapping channel="ommItemEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
+        <int:mapping channel="marketDataItemEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/>
+    </int:router>
+
+    <!-- This transformer casts the Event into an instance of OMMItemEvent.
+
+         TODO: See OMMClient.java
+               OMMMsg msg = ((OMMItemEvent)event).getMsg();
+               if (msg.isSet(OMMMsg.Indication.CLEAR_CACHE)) {
+                   clearDataAndTables();
+               }
+               OMMMsg.Indication.CLEAR_CACHE then we need to go to a channel
+               which will ultimately clear the MarketPriceUpdate map, or other
+               map if this is for something else.
+
+               See also for ripple.
+      -->
+    <int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
+     output-channel="ommItemEventChannel"/>
+
+    <int:channel id="completionEventChannel"/>
+
+    <!-- @TODO Remove this and add a workflow that eventually adds a message to
+               a queue. This will be called if the dacsId is incorrect, for
+               example, and the user should be alerted of the problem with
+               their dacs id.
+      -->
+    <int:service-activator
+     input-channel="completionEventChannel"
+     output-channel="errorChannel"
+     ref="completionEventHandler"
+     method="onCompletionEventReceived"/>
+
+    <int:channel id="ommItemEventChannel"/>
+    <int:channel id="marketDataItemEventChannel"/>
+
+    <!-- See rfa.example.framework.OMMSubAppContext.java
+      -->
+    <int:router input-channel="ommItemEventChannel"
+     default-output-channel="errorChannel"
+     expression="payload.msg.msgModelType">
+        <int:mapping channel="loginChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).LOGIN}"/>
+        <int:mapping channel="dictionaryChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DICTIONARY}"/>
+        <int:mapping channel="directoryChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DIRECTORY}"/>
+        <int:mapping channel="marketPriceChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_PRICE}"/>
+    </int:router>
+
+    <int:channel id="loginChannel"/>
+    <!-- See directory-workflow-beans.xml for this workflow. -->
+    <int:channel id="directoryChannel"/>
+    <!-- See dictionary-workflow-beans.xml for this workflow. -->
+    <int:channel id="dictionaryChannel"/>
+
+    <int:channel id="marketPriceChannel"/>
+
+    <int:router ref="routeByQueryType" input-channel="marketPriceChannel"/>
+
+    <!-- See the bean with id routeByQueryType in the application-context file.
+      -->
+    <int:channel id="processMarketPriceChannel"/>
+
+    <int:router input-channel="loginChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="payload.msg.msgType">
+        <int:mapping channel="nullChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
+        <int:mapping channel="processStatusResponseChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
+    </int:router>
+
+    <int:channel id="processSeriesChannel"/>
+
+    <!-- @deprecated: do we even need this since it's going to a null channel?
+      -->
+    <int:transformer ref="ommSeriesTransformer"
+     input-channel="processSeriesChannel"
+     output-channel="nullChannel"/>
+
+    <int:router input-channel="processMarketPriceChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="payload.msg.msgType">
+        <int:mapping channel="refreshMarketPriceChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
+        <int:mapping channel="updateMarketPriceChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).UPDATE_RESP}"/>
+        <int:mapping channel="processStatusResponseChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
+    </int:router>
+
+    <!-- See ts1def-workflow-beans.xml -->
+    <int:channel id="processTS1DefChannel"/>
+
+    <int:channel id="refreshMarketPriceChannel"/>
+
+    <int:transformer ref="refreshMarketPriceTransformer"
+     input-channel="refreshMarketPriceChannel"
+     output-channel="addMarketPriceToRedisChannel"/>
+
+    <int:channel id="updateMarketPriceChannel"/>
+
+    <int:transformer ref="updateMarketPriceTransformer"
+     input-channel="updateMarketPriceChannel"
+     output-channel="addMarketPriceToRedisChannel"/>
+
+    <!--
+      A status response message needs to be extracted from an instance of
+      {@link OMMMsg} only when there is state to be processed, so below we
+      first extract the message, check if there is state and, if so, transfer
+      that state into an instance of {@link StatusResponse} which is then added
+      to the appropriate queue.
+      -->
+    <int:channel id="processStatusResponseChannel"/>
+
+    <int:transformer ref="ommMsgTransformer"
+     input-channel="processStatusResponseChannel"
+     output-channel="hasStateChannel"/>
+
+    <int:channel id="hasStateChannel"/>
+
+    <!-- See: https://jira.springsource.org/browse/SPR-7831
+         payload.has(#{T(com.reuters.rfa.omm.OMMMsg).HAS_STATE})
+         hasStateBean is a hack solution for the problem above.
+      -->
+    <int:router input-channel="hasStateChannel"
+     default-output-channel="errorChannel"
+     expression="@authenticationHelper.loginSucceeded(payload)">
+        <int:mapping channel="getOMMStateChannel"
+         value="true"/>
+        <int:mapping channel="errorChannel"
+         value="false"/>
+    </int:router>
+
+    <int:channel id="getOMMStateChannel"/>
+
+    <int:transformer ref="ommStateTransformer"
+     input-channel="getOMMStateChannel"
+     output-channel="getStatusResponseChannel"/>
+
+    <int:channel id="getStatusResponseChannel"/>
+
+    <int:transformer ref="statusResponseTransformer"
+     input-channel="getStatusResponseChannel"
+     output-channel="errorChannel"/> <!-- addStatusResponseToQueueChannel -->
+
+    <int:channel id="addMarketPriceToRedisChannel"/>
+    <int:channel id="routeByCacheEntryTypeChannel"/>
+    <!-- int:channel id="addTimeSeriesToQueueChannel"/ -->
+    <!-- int:channel id="addStatusResponseToQueueChannel"/ -->
+
+    <int:channel id="statusInterpreterChannel"/>
+
+    <int:service-activator
+     input-channel="statusInterpreterChannel"
+     ref="statusInterpreter"
+     method="onStatusResponseReceived"/>
+</beans>

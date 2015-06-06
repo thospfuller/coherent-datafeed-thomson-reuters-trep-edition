@@ -1,0 +1,455 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <!-- TODO: Create specific workflowEnds so that we can read exactly what is
+               ending.
+      -->
+
+    <!-- This workflow contains logic specifically for the construction of the
+         session object. Note that this workflow calls channels to other work-
+         -flows and vice-versa.
+
+         The session is passed from one point to the next and must be included
+         in each point.
+      -->
+
+    <!-- The following workflow pertains to authentication however keep in mind
+         that this is a proxied call into Spring Integration.
+      -->
+
+    <int:gateway id="statusResponseServiceGateway"
+        service-interface="com.coherentlogic.coherent.datafeed.services.StatusResponseServiceGateway">
+          <!-- NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+                payload-expression="new Object ()" -->
+        <!-- ONLY APPLICABLE WHEN THE METHOD HAS ZERO PARAMETERS payload-expression="new Object ()" -->
+        <int:method name="getNextUpdateAsJSON"
+         request-channel="getStatusResponseRequestChannel"
+         reply-channel="getStatusResponseReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"/>
+    </int:gateway>
+
+    <!-- int:channel id="getStatusResponseRequestChannel"/>
+    <int:channel id="getStatusResponseReplyChannel"/ -->
+
+    <!-- NO LONGER NEEDED AS WE'RE USING THE MSG PROCESSOR NOW int:service-activator
+         input-channel="getStatusResponseRequestChannel"
+         output-channel="getStatusResponseReplyChannel"
+         ref="statusResponseService"
+         method="getNextUpdateAsJSON"/ -->
+
+    <int:gateway id="authenticationEntryPoint"
+        service-interface="com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification"
+        default-request-channel="logChannel"
+        default-reply-channel="logChannel">
+        <int:method name="login" request-channel="loginChannel" reply-channel="loginCompletedChannel"/>
+        <int:method name="logout" request-channel="logoutChannel"/>
+    </int:gateway>
+
+    <int:channel id="loginChannel"/>
+    <int:channel id="loginCompletedChannel"/>
+
+    <!-- The process method will use the session to acquire the dacsId and then
+         invoke the login method; when this method returns, the handle
+         associated with the login will be added to the session and the last
+         step is to wait for the authentication process to complete. Note that
+         the notification will come from another thread, that which originates
+         from the RFA API.
+      -->
+    <int:service-activator
+     input-channel="loginChannel"
+     output-channel="loginCompletedChannel"
+     ref="loginMessageProcessor"
+     method="process"/>
+
+    <int:channel id="logoutChannel"/>
+
+    <!-- The process method will use the session to acquire the dacsId and then
+         invoke the login method; when this method returns, the handle
+         associated with the login will be added to the session and the last
+         step is to wait for the authentication process to complete. Note that
+         the notification will come from another thread, that which originates
+         from the RFA API.
+      -->
+    <int:service-activator
+     input-channel="logoutChannel"
+     output-channel="workflowEndsChannel"
+     ref="logoutMessageProcessor"
+     method="process"/>
+
+    <!-- int:gateway id="ts1DefServiceGateway"
+        service-interface="com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification">
+          NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+                payload-expression="new Object ()"
+        <int:method name="initialize"
+         request-channel="initializeTS1DefRequestChannel"
+         reply-channel="initializeTS1DefReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TS1DefQueryParameters (#args[0])"/>
+    </int:gateway -->
+
+    <!-- @todo We should use either 'initialise' or 'initialize' throughout this
+         application.
+    <int:channel id="initializeTS1DefRequestChannel"/>
+    <int:channel id="initializeTS1DefReplyChannel"/
+
+    <int:service-activator
+     input-channel="initializeTS1DefRequestChannel"
+     output-channel="initializeTS1DefReplyChannel"
+     ref="ts1DefMessageProcessor"
+     method="process"/>
+    -->
+
+    <int:gateway id="dictionaryServiceGateway"
+        service-interface="com.coherentlogic.coherent.datafeed.services.DictionaryGatewaySpecification">
+          <!-- NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+                payload-expression="new Object ()" -->
+        <int:method name="getDictionaryEntries"
+         request-channel="getDictionaryEntriesRequestChannel"
+         reply-channel="getDictionaryEntriesReplyChannel"
+         payload-expression="new Object ()"/>
+        <int:method name="getDictionaryEntriesAsJSON"
+         request-channel="getDictionaryEntriesAsJSONRequestChannel"
+         reply-channel="getDictionaryEntriesAsJSONReplyChannel"
+         payload-expression="new Object ()"/>
+    </int:gateway>
+
+    <int:channel id="getDictionaryEntriesRequestChannel"/>
+    <int:channel id="getDictionaryEntriesReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getDictionaryEntriesRequestChannel"
+     output-channel="getDictionaryEntriesReplyChannel"
+     ref="getDictionaryEntriesMessageProcessor"
+     method="getDictionaryEntries"/>
+
+    <int:channel id="getDictionaryEntriesAsJSONRequestChannel"/>
+    <int:channel id="getDictionaryEntriesAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getDictionaryEntriesAsJSONRequestChannel"
+     output-channel="getDictionaryEntriesAsJSONReplyChannel"
+     ref="getDictionaryEntriesMessageProcessor"
+     method="getDictionaryEntriesAsJSON"/>
+
+    <int:gateway id="directoryServiceGateway"
+        service-interface="com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification">
+          <!-- NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+                payload-expression="new Object ()" -->
+        <int:method name="getDirectoryEntries"
+         request-channel="getDirectoryEntriesRequestChannel"
+         reply-channel="getDirectoryEntriesReplyChannel"
+         payload-expression="new Object ()"/>
+        <int:method name="getDirectoryEntriesAsJSON"
+         request-channel="getDirectoryEntriesAsJSONRequestChannel"
+         reply-channel="getDirectoryEntriesAsJSONReplyChannel"
+         payload-expression="new Object ()"/>
+    </int:gateway>
+
+    <int:channel id="getDirectoryEntriesRequestChannel"/>
+    <int:channel id="getDirectoryEntriesReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getDirectoryEntriesRequestChannel"
+     output-channel="getDirectoryEntriesReplyChannel"
+     ref="getDirectoryEntriesMessageProcessor"
+     method="getDirectoryEntries"/>
+
+    <int:channel id="getDirectoryEntriesAsJSONRequestChannel"/>
+    <int:channel id="getDirectoryEntriesAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getDirectoryEntriesAsJSONRequestChannel"
+     output-channel="getDirectoryEntriesAsJSONReplyChannel"
+     ref="getDirectoryEntriesMessageProcessor"
+     method="getDirectoryEntriesAsJSON"/>
+
+    <!--
+        -->
+    <int:gateway id="statusResponseServiceGateway"
+        service-interface="com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification">
+        <int:method name="getNextUpdateAsJSON"
+         request-channel="getStatusResponseUpdatesRequestChannel"
+         reply-channel="getStatusResponseUpdatesReplyChannel"/>
+        <!--
+          NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+          -->
+        <int:method name="getNextUpdateAsJSON"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextStatusResponseUpdateAsJSONRequestChannel"
+         reply-channel="getNextStatusResponseUpdateAsJSONReplyChannel"/>
+    </int:gateway>
+
+    <int:channel id="getNextStatusResponseUpdateAsJSONRequestChannel"/>
+    <int:channel id="getNextStatusResponseUpdateAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextStatusResponseUpdateAsJSONRequestChannel"
+     output-channel="getNextStatusResponseUpdateAsJSONReplyChannel"
+     ref="getNextStatusResponseUpdateAsJSONMessageProcessor"
+     method="process"/>
+
+    <!--
+        -->
+    <int:gateway id="queryMarketPriceUpdates"
+        service-interface="com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification">
+        <int:method name="query"
+         request-channel="queryMarketPriceUpdatesChannel"
+         reply-channel="queryMarketPriceUpdatesReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
+        <!--
+          NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+                ONLY APPLICABLE WHEN THE METHOD HAS ZERO PARAMS payload-expression="new Object ()"
+          -->
+        <int:method name="getNextUpdateAsJSON"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextMarketPriceUpdateAsJSONRequestChannel"
+         reply-channel="getNextMarketPriceUpdateAsJSONReplyChannel"/>
+        <int:method name="getNextUpdate"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextMarketPriceUpdateRequestChannel"
+         reply-channel="getNextMarketPriceUpdateReplyChannel"/>
+    </int:gateway>
+
+    <int:channel id="queryMarketPriceUpdatesChannel"/>
+    <int:channel id="queryMarketPriceUpdatesReplyChannel"/>
+
+    <bean id="getNextMarketPriceUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketPriceUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketPriceService"/>
+    </bean>
+
+    <bean id="getNextStatusResponseUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextStatusResponseUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="statusResponseService"/>
+    </bean>
+
+    <bean id="getNextTimeSeriesUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextTimeSeriesUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="timeSeriesService"/>
+    </bean>
+
+    <bean id="queryMarketPriceUpdatesMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketPriceMessageProcessor">
+        <constructor-arg name="marketPriceService" ref="marketPriceService"/>
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="marketPriceCache" ref="marketPriceCache"/>
+    </bean>
+
+    <int:channel id="getNextMarketPriceUpdateAsJSONRequestChannel"/>
+    <int:channel id="getNextMarketPriceUpdateAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextMarketPriceUpdateAsJSONRequestChannel"
+     output-channel="getNextMarketPriceUpdateAsJSONReplyChannel"
+     ref="getNextMarketPriceUpdateAsJSONMessageProcessor"
+     method="process"/>
+
+    <int:channel id="getNextMarketPriceUpdateRequestChannel"/>
+    <int:channel id="getNextMarketPriceUpdateReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextMarketPriceUpdateRequestChannel"
+     output-channel="getNextMarketPriceUpdateReplyChannel"
+     ref="getNextMarketPriceUpdateMessageProcessor"
+     method="process"/>
+
+    <bean id="getNextMarketPriceUpdateMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketPriceUpdateMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketPriceService"/>
+    </bean>
+
+    <int:channel id="getNextTimeSeriesUpdateAsJSONRequestChannel"/>
+    <int:channel id="getNextTimeSeriesUpdateAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextTimeSeriesUpdateAsJSONRequestChannel"
+     output-channel="getNextTimeSeriesUpdateAsJSONReplyChannel"
+     ref="getNextTimeSeriesUpdateAsJSONMessageProcessor"
+     method="process"/>
+
+     <int:channel id="marketPriceUpdateAsJSONChannel"/>
+
+    <int:service-activator
+     input-channel="queryMarketPriceUpdatesChannel"
+     output-channel="queryMarketPriceUpdatesReplyChannel"
+     ref="queryMarketPriceUpdatesMessageProcessor"
+     method="process"/>
+
+    <!-- NOTE: ONCE THE LOGIN HAS SUCCEEEDED OR FAILED THE NEXT STEP IS TO
+               GET THE AVAILABLE DIRECTORIES SO THE WORKFLOW BELOW IS ACTUALLY
+               DRIVEN BY THE RFA CLIENT, WHICH MEANS WE NEED TO ENSURE THAT THE
+               SESSION IS AVAILABLE IN THE PAYLOAD (UNDERSTAND THAT A DIFFERENT
+               THREAD IS CALLING THESE CHANNELS).
+      -->
+
+    <int:channel id="loadDirectoriesChannel"/>
+
+    <!-- Once we've sent the request to load the directories, this workflow
+         effectively ends. The next step is to wait for the workflow to
+         complete, which happens below since we use the
+         directoryRefreshHasCompletedChannel to start the next step, which
+         involves loading the dictionaries. -->
+    <int:service-activator
+     input-channel="loadDirectoriesChannel"
+     output-channel="workflowEndsChannel"
+     ref="directoryMessageProcessor"
+     method="process"/>
+
+    <!-- This is driven by the completion of the directory workflow and is
+         called once all directories have been loaded.
+         @see routeByDirectoriesLoadedStatus in app ctx.
+         -->
+    <int:channel id="loadDictionariesChannel"/>
+
+    <int:service-activator
+     input-channel="loadDictionariesChannel"
+     output-channel="workflowEndsChannel"
+     ref="dictionaryMessageProcessor"
+     method="process"/>
+
+    <!-- @see dictionary-workflow-beans.xml COMPLETION_EVENT.
+      -->
+    <int:channel id="dictionaryRefreshHasCompletedChannel"/>
+
+    <!-- Note that initialisationSuccessful does not currently return anything
+         and this may result in the workflow stopping here.
+
+         Calling either initialisationSuccessful or initialisationFailed will
+         signal all waiting threads that the authentication process has
+         completed successfully.
+      -->
+     <int:router input-channel="dictionaryRefreshHasCompletedChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="@dictionaryLoadCompleteService.allDictionariesAreLoaded(headers)">
+        <int:mapping channel="initializeTS1DefDbChannel"
+         value="#{T(java.lang.Boolean).TRUE}"/>
+         <!-- False and we'll keep loading dictionaries. -->
+        <int:mapping channel="workflowEndsChannel"
+         value="#{T(java.lang.Boolean).FALSE}"/>
+    </int:router>
+
+    <int:channel id="initializeTS1DefDbChannel"/>
+
+    <int:service-activator
+     input-channel="initializeTS1DefDbChannel"
+     output-channel="workflowEndsChannel"
+     ref="ts1DefMessageProcessor"
+     method="process"/>
+
+    <int:channel id="ts1DefDbCompletionEventReceivedChannel"/>
+
+    <!-- Note that initialisationSuccessful does not currently return anything
+         and this may result in the workflow stopping here.
+
+         Calling either initialisationSuccessful or initialisationFailed will
+         signal all waiting threads that the authentication process has
+         completed successfully.
+      -->
+     <int:router input-channel="ts1DefDbCompletionEventReceivedChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="@ts1DefDbHelper.allTS1DefDbEntriesAreLoaded (payload, headers.get ('session'))">
+        <int:mapping channel="frameworkStartUpCompletedChannel"
+         value="#{T(java.lang.Boolean).TRUE}"/>
+         <!-- False and we'll keep loading dictionaries. -->
+        <int:mapping channel="workflowEndsChannel"
+         value="#{T(java.lang.Boolean).FALSE}"/>
+    </int:router>
+
+    <int:channel id="frameworkStartUpCompletedChannel"/>
+
+    <!--
+      Once all dictionaries have been loaded the framework is considered to be
+      fully functional, so we notify any listeners that the startup has
+      succeeded; if there are outstanding dictionaries to load the workflow
+      will just end.
+      -->
+    <int:service-activator
+     input-channel="frameworkStartUpCompletedChannel"
+     output-channel="workflowEndsChannel"
+     ref="frameworkEventListenerAdapter"
+     method="initialisationSuccessful"/>
+
+    <int:gateway id="timeSeriesServiceGateway"
+        service-interface="com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification"
+        default-request-channel="logChannel"
+        default-reply-channel="logChannel">
+        <int:method name="queryTimeSeriesFor"
+         request-channel="queryTimeSeriesForRequestChannel"
+         reply-channel="queryTimeSeriesForReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/>
+        <!-- ONLY APPLICABLE IF THE METHOD HAS ZERO PARAMS payload-expression="new Object ()" -->
+        <int:method name="getNextUpdateAsJSON"
+         request-channel="getNextTimeSeriesUpdateAsJSONRequestChannel"
+         reply-channel="getNextTimeSeriesUpdateAsJSONReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"/>
+        <int:method name="getNextUpdate"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextTimeSeriesUpdateRequestChannel"
+         reply-channel="getNextTimeSeriesUpdateReplyChannel"/>
+    </int:gateway>
+
+    <int:channel id="queryTimeSeriesForRequestChannel"/>
+    <int:channel id="queryTimeSeriesForReplyChannel"/>
+
+    <int:channel id="getNextTimeSeriesUpdateRequestChannel"/>
+    <int:channel id="getNextTimeSeriesUpdateReplyChannel"/>
+
+    <bean id="queryTimeSeriesUpdatesMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor">
+        <constructor-arg name="timeSeriesService" ref="timeSeriesService"/>
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="queryTimeSeriesForRequestChannel"
+     output-channel="queryTimeSeriesForReplyChannel"
+     ref="queryTimeSeriesUpdatesMessageProcessor"
+     method="process"/>
+
+    <!-- int:service-activator
+     input-channel="getNextTimeSeriesUpdateAsJSONRequestChannel"
+     output-channel="getNextTimeSeriesUpdateAsJSONReplyChannel"
+     ref="timeSeriesService"
+     method="getNextUpdateAsJSON"/ -->
+
+    <bean id="getNextTimeSeriesUpdateMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextTimeSeriesUpdateMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="timeSeriesService"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="getNextTimeSeriesUpdateRequestChannel"
+     output-channel="getNextTimeSeriesUpdateReplyChannel"
+     ref="getNextTimeSeriesUpdateMessageProcessor"
+     method="process"/>
+</beans>

@@ -1,0 +1,45 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+        <!-- Note that we only use this file when we want to load the dictionary
+             data from a local file. This should not be used in conjunction with
+             the dictionary-workflow-beans, which reads the dictionary
+             information via the network.
+
+             When using this file, make sure that:
+             1.) The reference to the dictionary-workflow-beans.xml file has
+                 been commented out from the integration-beans.xml file and
+             2.) additionally you'll need to set the mapping in the
+                 dictionaryChannel to point to the errorChannel.
+
+                 Before: int:mapping channel="dictionaryChannel"
+                 After:  int:mapping channel="errorChannel"
+             3.) Change the messageChannelsMap entry for the
+                 reviewDictionariesLoadedChannel.
+          -->
+
+        <!--
+      WARNING: If you're using the FileBasedFieldDictionaryFactory don't forget
+               to assign the init method! DefaultFieldDictionaryFactory
+
+      Use the FileBasedFieldDictionaryFactory when running this outside of
+      Eclipse, however note that calling mvn package will fail unless you've
+      copied the data directory into the module's root folder.
+      No ctor args for:
+      DefaultFieldDictionaryFactory works when running Example in Eclipse.
+      RPackageDictionaryFactory is used when deploying in R.
+      -->
+    <bean id="fieldDictionaryFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultFieldDictionaryFactory"
+     init-method="start">
+    </bean>
+
+    <bean id="fieldDictionary" class="com.reuters.rfa.dictionary.FieldDictionary"
+     factory-bean="fieldDictionaryFactory" factory-method="getInstance"/>
+</beans>

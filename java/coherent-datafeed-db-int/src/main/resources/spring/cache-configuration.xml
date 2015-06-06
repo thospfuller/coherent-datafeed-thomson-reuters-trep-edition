@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="urn:infinispan:config:6.0 http://www.infinispan.org/schemas/infinispan-config-6.0.xsd"
+      xmlns="urn:infinispan:config:6.0">
+    <namedCache name="sessionCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="queryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="directoryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="directoryEntryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="dictionaryEntryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="marketPriceEntryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="ts1DefEntryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="timeSeriesEntryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="dictionaryCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="marketPriceCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+    <namedCache name="ts1DefCache">
+        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
+    </namedCache>
+</infinispan>

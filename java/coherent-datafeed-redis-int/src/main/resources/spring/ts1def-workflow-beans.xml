@@ -1,0 +1,75 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <bean id="ts1DefServiceOrig" class="com.coherentlogic.coherent.datafeed.services.TS1DefService">
+        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.builders.ServiceName).IDN_RDF}"/>
+        <constructor-arg name="msgModelType" value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_PRICE}"/>
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="eventDrivenEndpoint"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="ts1DefService" class="com.coherentlogic.coherent.datafeed.services.ConcurrentTS1DefService">
+        <constructor-arg name="ts1DefService" ref="ts1DefServiceOrig"/>
+        <constructor-arg name="time" value="60"/>
+        <constructor-arg name="timeUnit" value="#{T(java.util.concurrent.TimeUnit).SECONDS}"/>
+    </bean>
+
+    <bean id="ts1DefDbLoader"
+     class="com.coherentlogic.coherent.datafeed.services.TS1DefDbLoader">
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="ts1DefDb" ref="ts1DefDb"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="ts1DefDbLoadCompleteServiceFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.TS1DefDbLoadCompleteServiceFactory">
+        <constructor-arg name="concurrentTS1DefService" ref="ts1DefService"/>
+    </bean>
+
+    <bean id="ts1DefDbLoadCompleteService"
+     class="com.coherentlogic.coherent.datafeed.services.TS1DefDbLoadCompleteService"
+     factory-bean="ts1DefDbLoadCompleteServiceFactory"
+     factory-method="getInstance"/>
+
+    <int:service-activator
+     input-channel="processTS1DefChannel"
+     output-channel="errorChannel"
+     ref="ts1DefDbLoader"
+     method="load"/>
+
+    <!-- We only want to review the TS1Defs that have been loaded after data has
+         been retuned from TR; in this case, we watch for cases where the
+         TS1DefEntry has been removed from the cache, then we can check if there
+         are more to be processed and, if not, then we can wake up any threads
+         that are waiting for this service to complete loading.
+
+         See timeseries-workflow-beans.xml specifically the bean with the id
+         classTypeRouter.
+      -->
+
+    <int:channel id="reviewInitializationChannel"/>
+
+    <int:service-activator input-channel="reviewInitializationChannel"
+     output-channel="errorChannel"
+     ref="ts1DefDbLoadCompleteService"
+     method="checkInitializationHasCompleted"/>
+
+</beans>

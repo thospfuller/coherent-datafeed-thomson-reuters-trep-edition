@@ -1,0 +1,23 @@
+Initialize        A function which initializes the package; this must be called
+                  first otherwise the other functions will not work.
+InstallLicense    Installs the license file, for example
+                  "InstallLicense('path/to/license/file.license')".
+UninstallLicense  Uninstalls the license file, for example
+                  "UninstallLicense()".
+Login             Establishes a session with Thomson Reuters, for instance; for
+                  example, "Login('YouCos_DACSID')".
+Logout            Terminates the session with Thomson Reuters; for example
+                  "Logout()".
+Query             Query Thomson Reuters for market price updates for the RICS
+                  provided; for example "Query('MSFT.O', 'GOOG.O')".
+GetNextUpdate     Function returns the next market price update as a
+                  data.frame; for example "next <- GetNextUpdate()".
+GetTimeSeriesDataFor     Function returns the time series data for the given
+                         RIC; for example "timeSeries <- cdatafeedtre::GetTimeSeriesDataFor("ILMN.O", "daily")"
+GetDirectories    Method returns directory information that is available to
+                  this application.
+GetDictionaries   Method returns dictionary information that is available to
+                  this application.
+GetNextStatusResponse    Method is used to inspect messages returned from
+                         Thomson Reuters. This method is mainly used for
+                         debugging.

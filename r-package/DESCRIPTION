@@ -1,0 +1,20 @@
+Package: cdatafeedtre
+Type: Package
+Title: Coherent Datafeed: Thomson Reuters TREP Edition
+Version: 1.0.1
+Date: 2015-06-07
+Author: Support <support@coherentlogic.com>
+Maintainer: Support <support@coherentlogic.com>
+Description: Allows the user to retrieve market price updates and tick history data from Thomson Reuters.
+Imports: rJava, RJSONIO
+Depends: R (>= 3.0.1), rJava, RJSONIO
+SystemRequirements: Java (>= 7.0)
+LazyLoad: yes
+License: LGPL-3
+Copyright: (C) 2015 Coherent Logic Limited; ALL RIGHTS RESERVED.
+URL: http://www.r-project.org,
+    https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition/,
+    https://coherentlogic.com/middleware-development/solutions-for-traders-using-thomson-reuters-market-data/
+SystemRequirements: java
+Repository: http://r.coherentlogic.com/
+Archs: i386, x64

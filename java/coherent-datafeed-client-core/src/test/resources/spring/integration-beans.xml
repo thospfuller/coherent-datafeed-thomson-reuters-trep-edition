@@ -1,0 +1,82 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xmlns:stream="http://www.springframework.org/schema/integration/stream"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+        http://www.springframework.org/schema/integration/stream
+        http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.2.xsd">
+
+    <import resource="session-construction-workflow-beans.xml"/>
+    <import resource="statusresponse-workflow-beans.xml"/>
+    <import resource="authentication-workflow-beans.xml"/>
+    <import resource="marketprice-workflow-beans.xml"/>
+    <import resource="dictionary-workflow-beans.xml"/>
+    <import resource="directory-workflow-beans.xml"/>
+    <import resource="ts1def-workflow-beans.xml"/>
+    <import resource="timeseries-workflow-beans.xml"/>
+
+    <int:channel id="workflowEndsChannel"/>
+
+    <int:service-activator
+     input-channel="workflowEndsChannel"
+     ref="workflowEndsService"
+     method="end"/>
+
+    <int:channel id="workflowEndsDueToFinalMsgChannel"/>
+
+    <int:service-activator
+     input-channel="workflowEndsDueToFinalMsgChannel"
+     ref="workflowEndsDueToFinalMsgService"
+     method="end"/>
+
+    <int:channel id="loadDirectoriesChannel"/>
+
+    <bean id="unexpectedEventReceiveHandler" class="com.coherentlogic.coherent.datafeed.services.UnexpectedEventReceiveHandler"/>
+
+    <int:channel id="handleUnexpectedEventReceivedChannel"/>
+
+    <int:service-activator
+     input-channel="handleUnexpectedEventReceivedChannel"
+     ref="unexpectedEventReceiveHandler"
+     method="handle"/>
+
+    <int:channel id="logChannel"/>
+
+    <int:logging-channel-adapter id="logger" log-full-message="true" level="ERROR" channel="logChannel"/>
+
+    <!-- This will work however be careful to note that an exception that causes other exceptions to be
+         thrown will result in an AggregateMessageDeliveryException being thrown. This has been a problem
+         since when we were testing this we were expecting an single exception and when this was thrown
+         other exceptions were thrown too and then the error channel couldn't process them until we
+         added the exceptionThrownOnAuthenticateChannel.
+      -->
+    <!-- int:exception-type-router input-channel="errorChannel" default-output-channel="logChannel">
+        <int:mapping exception-type="com.coherentlogic.coherent.datafeed.exceptions.AuthenticationFailedException"
+         channel="exceptionThrownOnAuthenticateChannel"/>
+        <int:mapping exception-type="org.springframework.integration.dispatcher.AggregateMessageDeliveryException"
+         channel="exceptionThrownOnAuthenticateChannel"/>
+    </int:exception-type-router -->
+
+    <!-- int:channel id="exceptionThrownOnAuthenticateChannel"/>
+
+    <int:service-activator
+     input-channel="exceptionThrownOnAuthenticateChannel"
+     output-channel="nullChannel"
+     ref="integrationEndpointAdapter"
+     method="exceptionThrownOnAuthenticate"/ -->
+</beans>

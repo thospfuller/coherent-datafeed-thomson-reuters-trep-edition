@@ -1,0 +1,66 @@
+package com.coherentlogic.coherent.datafeed.integration.routers;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.springframework.integration.Message;
+import org.springframework.integration.MessageChannel;
+import org.springframework.integration.router.AbstractMessageRouter;
+
+import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+
+/**
+ * A message router that can be paused when another thread needs to complete a
+ * task
+ *
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ */
+public class PausableMessageRouter extends AbstractMessageRouter {
+
+    private final PauseResumeService pauseResumeService;
+
+    private final MessageChannel successChannel;
+
+    private final MessageChannel failChannel;
+
+    public PausableMessageRouter(
+        MessageChannel successChannel,
+        MessageChannel failChannel
+    ) {
+        this (new PauseResumeService(), successChannel, failChannel);
+    }
+
+    public PausableMessageRouter(
+        PauseResumeService pauseResumeService,
+        MessageChannel successChannel,
+        MessageChannel failChannel) {
+        this.pauseResumeService = pauseResumeService;
+        this.successChannel = successChannel;
+        this.failChannel = failChannel;
+    }
+
+    @Override
+    protected Collection<MessageChannel> determineTargetChannels(
+        Message<?> message) {
+
+        Collection<MessageChannel> result = new ArrayList<MessageChannel> ();
+
+        pauseResumeService.reset();
+
+        // Method returns when either the RFA thread calls resume or the timeout
+        // expires; if RFA (TR) indicates the login has failed or the timeout
+        // expires, success will be false and the failChannel will be returned.
+        boolean success = pauseResumeService.pause();
+
+        if (success)
+            result.add(successChannel);
+        else
+            result.add(failChannel);
+
+        return result;
+    }
+
+    public void reset () {
+        pauseResumeService.reset();
+    }
+}

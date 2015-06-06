@@ -1,0 +1,108 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <int:channel id="onTS1DefAddSessionToHeadersChannel"/>
+
+    <!-- Do we need this? -->
+    <int:service-activator
+     input-channel="onTS1DefAddSessionToHeadersChannel"
+     output-channel="processTS1DefChannel"
+     ref="ts1DefMessageEnricher"
+     method="enrich"/>
+
+    <int:channel id="processTS1DefChannel"/>
+
+    <int:router input-channel="processTS1DefChannel"
+     default-output-channel="processTS1DefChannel"
+     expression="payload.type">
+        <int:mapping channel="ts1DefDbCompletionEventReceivedChannel"
+         value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
+        <int:mapping channel="ts1DefTransformToOMMItemEventReceivedChannel"
+         value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
+        <int:mapping channel="ts1DefWorkflowEndsDueToMarketDataItemEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/>
+    </int:router>
+
+    <int:channel id="ts1DefCompletionEventReceivedChannel"/>
+    <int:channel id="ts1DefTransformToOMMItemEventReceivedChannel"/>
+
+    <int:transformer ref="ommItemEventTransformer"
+     input-channel="ts1DefTransformToOMMItemEventReceivedChannel"
+     output-channel="processTS1DefChannel"/>
+
+    <int:service-activator
+     input-channel="processTS1DefChannel"
+     output-channel="workflowEndsChannel"
+     ref="ts1DefDbLoaderMessageProcessor"
+     method="process"/>
+
+    <!-- COMPLETION_EVENT -->
+
+    <bean id="allTS1DefDbEntriesAreLoadedWorkflowEndsService"
+     class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg name="note" value="All ts1DefDb entries have been loaded."/>
+    </bean>
+
+    <int:channel id="allTS1DefDbEntriesAreLoadedWorkflowEndsChannel"/>
+
+    <int:service-activator
+     input-channel="allTS1DefDbEntriesAreLoadedWorkflowEndsChannel"
+     ref="allTS1DefDbEntriesAreLoadedWorkflowEndsService"
+     method="end"/>
+
+    <bean id="allTS1DefDbEntriesAreNotLoadedWorkflowEndsService"
+     class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg name="note"
+        value="There are outstanding ts1DefDb entries to be loaded."/>
+    </bean>
+
+    <int:channel id="allTS1DefDbEntriesAreNotLoadedWorkflowEndsChannel"/>
+
+    <int:service-activator
+     input-channel="allTS1DefDbEntriesAreNotLoadedWorkflowEndsChannel"
+     ref="allTS1DefDbEntriesAreNotLoadedWorkflowEndsService"
+     method="end"/>
+
+    <int:router input-channel="ts1DefCompletionEventReceivedChannel"
+     expression="@ts1DefDbHelper.allTS1DefDbEntriesAreLoaded (payload, headers.get ('session'))">
+        <int:mapping channel="allTS1DefDbEntriesAreLoadedWorkflowEndsChannel"
+         value="#{T(java.lang.Boolean).TRUE}"/>
+        <int:mapping channel="allTS1DefDbEntriesAreNotLoadedWorkflowEndsChannel"
+         value="#{T(java.lang.Boolean).FALSE}"/>
+    </int:router>
+
+    <!-- We only want to review the TS1Defs that have been loaded after data has
+         been returned from TR; in this case, we watch for cases where the
+         TS1DefEntry has been removed from the cache, then we can check if there
+         are more to be processed and, if not, then we can wake up any threads
+         that are waiting for this service to complete loading.
+
+         See timeseries-workflow-beans.xml specifically the bean with the id
+         classTypeRouter.
+      -->
+
+    <!-- int:channel id="reviewInitializationChannel"/>
+
+    <int:service-activator input-channel="reviewInitializationChannel"
+     output-channel="errorChannel"
+     ref="ts1DefDbLoadCompleteService"
+     method="checkInitializationHasCompleted"/ -->
+
+</beans>

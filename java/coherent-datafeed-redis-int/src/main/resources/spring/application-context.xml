@@ -1,0 +1,381 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- aop:aspectj-autoproxy/ -->
+
+    <context:component-scan base-package="com.coherentlogic"/>
+
+    <import resource="hornetq-beans.xml"/>
+    <import resource="integration-beans.xml"/>
+    <import resource="cache-beans.xml"/>
+    <import resource="dictionary-beans.xml"/>
+
+    <bean id="userBean" class="com.coherentlogic.coherent.datafeed.beans.UserBean"/>
+
+    <bean id="loggingService"
+     class="com.coherentlogic.coherent.datafeed.services.LoggingService"
+     init-method="initialize"/>
+
+    <bean id="context"
+     class="com.coherentlogic.coherent.datafeed.configuration.ContextInitializer"
+     init-method="start" destroy-method="stop"/>
+
+    <bean id="poolFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.OMMPoolFactory"/>
+
+    <bean id="pool" class="com.reuters.rfa.omm.OMMPool"
+     factory-bean="poolFactory" factory-method="getInstance"/>
+
+    <bean id="encoderFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.OMMEncoderFactory">
+        <constructor-arg name="pool" ref="pool"/>
+        <constructor-arg name="msgType">
+            <util:constant static-field="com.reuters.rfa.omm.OMMTypes.MSG"/>
+        </constructor-arg>
+        <constructor-arg name="size" value="500"/>
+    </bean>
+
+    <bean id="encoder" class="com.reuters.rfa.omm.OMMEncoder"
+     factory-bean="encoderFactory" factory-method="getInstance">
+    </bean>
+
+    <bean id="eventQueueFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.EventQueueFactory">
+        <constructor-arg name="eventQueueName" value="myEventQueue"/>
+    </bean>
+
+    <bean id="eventQueue" class="com.reuters.rfa.common.EventQueue"
+     factory-bean="eventQueueFactory" factory-method="getInstance"/>
+
+    <!-- The context must be created before the session factory is instantiated,
+         which explains why we have the depends-on attribute below.
+      -->
+    <bean id="defaultSessionFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.RFASessionFactory"
+     depends-on="context">
+        <constructor-arg name="sessionName" value="mySession"/>
+    </bean>
+    <bean id="provSessionFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.RFASessionFactory"
+     depends-on="context">
+        <constructor-arg name="sessionName" value="provSession"/>
+    </bean>
+
+    <bean id="defaultSession" class="com.reuters.rfa.session.Session"
+     factory-bean="defaultSessionFactory" factory-method="getInstance"/>
+    <bean id="provSession" class="com.reuters.rfa.session.Session"
+     factory-bean="provSessionFactory" factory-method="getInstance"/>
+
+    <bean id="loginMessageBuilderFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.LoginMessageBuilderFactory">
+        <constructor-arg name="pool" ref="pool"/>
+        <constructor-arg name="encoder" ref="encoder"/>
+    </bean>
+
+    <bean id="loginMessageBuilder" class="com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder"
+     factory-bean="loginMessageBuilderFactory" factory-method="getInstance"/>
+
+    <bean id="defaultRequestMessageBuilderFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory">
+        <constructor-arg name="consumer" ref="defaultOMMConsumer"/>
+        <constructor-arg name="eventQueue" ref="eventQueue"/>
+        <constructor-arg name="pool" ref="pool"/>
+        <constructor-arg name="encoder" ref="encoder"/>
+    </bean>
+    <bean id="provRequestMessageBuilderFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory">
+        <constructor-arg name="consumer" ref="provOMMConsumer"/>
+        <constructor-arg name="eventQueue" ref="eventQueue"/>
+        <constructor-arg name="pool" ref="pool"/>
+        <constructor-arg name="encoder" ref="encoder"/>
+    </bean>
+
+    <bean id="defaultRequestMessageBuilder" class="com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder"
+     factory-bean="defaultRequestMessageBuilderFactory" factory-method="getInstance"/>
+    <bean id="provRequestMessageBuilder" class="com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder"
+     factory-bean="provRequestMessageBuilderFactory" factory-method="getInstance"/>
+
+    <bean id="defaultOMMConsumerFactory"
+     class="com.coherentlogic.reuters.rfa.session.omm.OMMConsumerFactory">
+        <constructor-arg name="session" ref="defaultSession"/>
+        <constructor-arg name="eventSourceType">
+            <util:constant static-field="com.reuters.rfa.common.EventSource.OMM_CONSUMER"/>
+        </constructor-arg>
+        <constructor-arg name="name" value="myOMMConsumer"/>
+        <constructor-arg name="wCompEvents" value="true"/>
+    </bean>
+    <bean id="provOMMConsumerFactory"
+     class="com.coherentlogic.reuters.rfa.session.omm.OMMConsumerFactory">
+        <constructor-arg name="session" ref="provSession"/>
+        <constructor-arg name="eventSourceType">
+            <util:constant static-field="com.reuters.rfa.common.EventSource.OMM_CONSUMER"/>
+        </constructor-arg>
+        <constructor-arg name="name" value="provOMMConsumer"/>
+        <constructor-arg name="wCompEvents" value="true"/>
+    </bean>
+
+    <!--
+      A consumer that consumes messages from the default configuration settings.
+      -->
+    <bean id="defaultOMMConsumer"
+     class="com.reuters.rfa.session.omm.OMMConsumer"
+     factory-bean="defaultOMMConsumerFactory"
+     factory-method="getInstance"/>
+
+    <!--
+      A consumer that consumes messages from the prov configuration settings.
+      -->
+    <bean id="provOMMConsumer"
+     class="com.reuters.rfa.session.omm.OMMConsumer"
+     factory-bean="provOMMConsumerFactory"
+     factory-method="getInstance"/>
+
+    <bean id="positionFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.PositionFactory"/>
+
+    <bean id="dispatcher" class="com.coherentlogic.reuters.rfa.common.DispatchableNotificationClientImpl">
+        <constructor-arg name="eventQueue" ref="eventQueue"/>
+        <constructor-arg name="timeout">
+            <util:constant static-field="com.reuters.rfa.common .Dispatchable.INFINITE_WAIT"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="eventQueueProxy" class="com.coherentlogic.coherent.datafeed.proxies.EventQueueProxy">
+        <constructor-arg name="eventQueue" ref="eventQueue"/>
+        <constructor-arg name="dispatchableNotificationClient" ref="dispatcher"/>
+    </bean>
+
+    <bean id="eventDrivenEndpoint"
+     class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
+        <property name="requestChannel" ref="routeByEventTypeChannel"/>
+    </bean>
+
+    <bean id="completionEventHandler"
+     class="com.coherentlogic.coherent.datafeed.integration.endpoints.CompletionEventHandler">
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <!--
+      A service that is used to convert the value of an event type into a
+      string this is useful when routing via a header since we don't want to be
+      adding integer values to the Spring configuration file as it will make it
+      difficult to sort out what the integer represents without adding comments.
+
+      DEPRECATED: UNUSED, I BELIEVE
+      -->
+    <bean id="OMMLoginEventRouter"
+     class="com.coherentlogic.coherent.datafeed.services.EventTypeConverterService"/>
+
+    <bean id="authenticationService" class="com.coherentlogic.coherent.datafeed.services.AuthenticationService"
+     depends-on="loggingService">
+        <constructor-arg name="loginMessageBuilder" ref="loginMessageBuilder" type="com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder"/>
+        <constructor-arg name="eventQueue" ref="eventQueue" type="com.reuters.rfa.common.EventQueue"/>
+        <constructor-arg name="ommConsumer" ref="defaultOMMConsumer" type="com.reuters.rfa.session.omm.OMMConsumer"/>
+        <constructor-arg name="positionFactory" ref="positionFactory"/>
+        <constructor-arg name="eventDrivenEndpoint" ref="eventDrivenEndpoint"/>
+        <constructor-arg name="cache" ref="cache"/>
+        <constructor-arg name="userBean" ref="userBean"/>
+    </bean>
+
+    <bean id="marketPriceJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.JSONGenerator">
+        <constructor-arg type="Class" value="com.coherentlogic.coherent.datafeed.domain.MarketPrice"/>
+    </bean>
+
+    <bean id="marketMakerJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.JSONGenerator">
+        <constructor-arg type="Class" value="com.coherentlogic.coherent.datafeed.domain.MarketMaker"/>
+    </bean>
+
+    <bean id="marketByOrderJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.JSONGenerator">
+        <constructor-arg type="Class" value="com.coherentlogic.coherent.datafeed.domain.MarketByOrder"/>
+    </bean>
+
+    <bean id="timeSeriesJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.JSONGenerator">
+        <constructor-arg name="targets">
+            <util:list>
+                <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
+            </util:list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="statusResponseJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.JSONGenerator">
+        <constructor-arg type="Class" value="com.coherentlogic.coherent.datafeed.domain.StatusResponse"/>
+    </bean>
+
+    <bean id="timeSeriesService" class="com.coherentlogic.coherent.datafeed.services.TimeSeriesService"
+     depends-on="loggingService">
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="eventDrivenEndpoint"/>
+        <constructor-arg name="messageConsumer" ref="timeSeriesConsumer"/>
+        <constructor-arg name="jsonGenerator" ref="timeSeriesJsonGenerator"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="marketPriceService" class="com.coherentlogic.coherent.datafeed.services.MarketPriceService"
+     depends-on="loggingService">
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="eventDrivenEndpoint"/>
+        <constructor-arg name="messageConsumer" ref="marketPriceConsumer"/>
+        <constructor-arg name="jsonGenerator" ref="marketPriceJsonGenerator"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="statusResponseService" class="com.coherentlogic.coherent.datafeed.services.StatusResponseService"
+     depends-on="loggingService">
+        <constructor-arg name="messageConsumer" ref="statusResponseConsumer"/>
+        <constructor-arg name="jsonGenerator" ref="statusResponseJsonGenerator"/>
+    </bean>
+
+    <bean id="ommSeriesHelper" class="com.coherentlogic.coherent.datafeed.services.OMMSeriesHelper"/>
+
+    <bean id="directoryService" class="com.coherentlogic.coherent.datafeed.services.DirectoryService">
+        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.builders.ServiceName).IDN_RDF}"/>
+        <constructor-arg name="msgModelType" value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DIRECTORY}"/>
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="eventDrivenEndpoint"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="ommItemEventTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMItemEventTransformer"/>
+
+    <bean id="ommMsgTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMMsgTransformer"/>
+    <bean id="ommMapTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMMapTransformer"/>
+
+    <bean id="serviceEntryAdapter" class="com.coherentlogic.coherent.datafeed.adapters.DirectoryEntryAdapter"/>
+
+    <bean id="serviceLoader" class="com.coherentlogic.coherent.datafeed.services.DirectoryServiceLoader">
+        <constructor-arg name="serviceEntryAdapter" ref="serviceEntryAdapter"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="authenticationHelper" class="com.coherentlogic.coherent.datafeed.misc.AuthenticationHelper"/>
+
+    <!-- Called by the marketPriceChannel, basically determines if the handle is
+         associated with a time series request or a request for market price
+         updates and continues the workflow accordingly.
+      -->
+    <bean id="routeByQueryType" class="com.coherentlogic.coherent.datafeed.integration.routers.RouteByQueryType">
+        <constructor-arg name="messageChannelMap">
+            <util:map>
+                <entry key="com.coherentlogic.coherent.datafeed.beans.CachedMarketPrice"
+                 value-ref="processMarketPriceChannel"/>
+                <entry key="com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries"
+                 value-ref="processTimeSeriesChannel"/>
+                <entry key="com.coherentlogic.coherent.datafeed.beans.TS1DefEntry"
+                 value-ref="processTS1DefChannel"/>
+            </util:map>
+        </constructor-arg>
+        <constructor-arg name="errorChannel" ref="errorChannel"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="statusInterpreter"
+     class="com.coherentlogic.coherent.datafeed.integration.endpoints.StatusInterpreter"/>
+
+    <bean id="dataAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataAdapter">
+        <constructor-arg ref="fieldDictionary"/>
+    </bean>
+
+    <bean id="ommDataBufferAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter">
+        <constructor-arg ref="fieldDictionary"/>
+        <constructor-arg ref="dataAdapter"/>
+    </bean>
+
+    <bean id="ommEnumAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter">
+        <constructor-arg ref="fieldDictionary"/>
+        <constructor-arg ref="dataAdapter"/>
+    </bean>
+
+    <bean id="ommNumericAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter">
+        <constructor-arg ref="fieldDictionary"/>
+        <constructor-arg ref="dataAdapter"/>
+    </bean>
+
+    <bean id="ommDateTimeAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter">
+        <constructor-arg ref="fieldDictionary"/>
+        <constructor-arg ref="dataAdapter"/>
+    </bean>
+
+    <util:map id="fieldEntryAdapters" key-type="java.lang.Class">
+        <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter" value-ref="ommDataBufferAdapter"/>
+        <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter" value-ref="ommEnumAdapter"/>
+        <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter" value-ref="ommNumericAdapter"/>
+        <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter" value-ref="ommDateTimeAdapter"/>
+    </util:map>
+
+    <bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
+    <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
+    <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
+
+    <bean id="statusResponseAdapter" class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter"/>
+
+    <bean id="marketPriceAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketPriceAdapter">
+        <constructor-arg name="marketPriceFactory" ref="marketPriceFactory"/>
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+    </bean>
+
+    <bean id="marketMakerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter">
+        <constructor-arg name="marketMakerFactory" ref="marketMakerFactory"/>
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+    </bean>
+
+    <bean id="ommStateTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTransformer"/>
+
+    <bean id="statusResponseTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.StatusResponseTransformer">
+        <constructor-arg name="statusResponseAdapter" ref="statusResponseAdapter"/>
+    </bean>
+
+    <bean id="ts1DefDb" class="com.reuters.ts1.TS1DefDb"/>
+
+    <bean id="timeSeriesAdapter" class="com.coherentlogic.coherent.datafeed.adapters.TimeSeriesAdapter">
+        <constructor-arg name="ts1DefDb" ref="ts1DefDb"/>
+    </bean>
+
+    <bean id="timeSeriesTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.TimeSeriesTransformer">
+        <constructor-arg name="timeSeriesAdapter" ref="timeSeriesAdapter"/>
+    </bean>
+
+    <bean id="cacheEntryRemovedEventListenerEndpoint" class="com.coherentlogic.coherent.datafeed.integration.endpoints.CacheEntryRemovedEventListenerEndpoint">
+        <property name="requestChannel" ref="routeByCacheEntryTypeChannel"/>
+    </bean>
+
+    <bean id="refreshMarketPriceTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.RefreshMarketPriceTransformer">
+        <constructor-arg name="cache" ref="cache"/>
+        <constructor-arg name="marketPriceAdapter" ref="marketPriceAdapter"/>
+    </bean>
+
+    <bean id="updateMarketPriceTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.UpdateMarketPriceTransformer">
+        <constructor-arg name="cache" ref="cache"/>
+        <constructor-arg name="marketPriceAdapter" ref="marketPriceAdapter"/>
+    </bean>
+
+    <bean id="refreshMarketMakerTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.RefreshMarketMakerTransformer">
+        <constructor-arg name="cache" ref="cache"/>
+        <constructor-arg name="marketMakerAdapter" ref="marketMakerAdapter"/>
+    </bean>
+
+    <bean id="updateMarketMakerTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.UpdateMarketMakerTransformer">
+        <constructor-arg name="cache" ref="cache"/>
+        <constructor-arg name="marketMakerAdapter" ref="marketMakerAdapter"/>
+    </bean>
+
+    <bean id="ommSeriesTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMSeriesTransformer"/>
+</beans>

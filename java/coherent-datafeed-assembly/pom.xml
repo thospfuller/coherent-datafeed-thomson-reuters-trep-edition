@@ -1,0 +1,221 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+    <artifactId>coherent-datafeed-assembly</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.coherentlogic.coherent.datafeed</groupId>
+        <artifactId>client</artifactId>
+        <version>1.0.1-RELEASE</version>
+    </parent>
+
+    <name>assembly</name>
+    <url>http://www.coherentlogic.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-client-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- mvn dependency:copy-dependencies -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <!-- REMOVING THE CONFIGURATION BELOW WILL CAUSE THE DEPENDENCIES TO 
+                            BE COPIED INTO THE ASSEMBLY'S TARGET/DEPENDENCY DIRECTORY AND THIS IS WHAT 
+                            WE WANT BECAUSE THAT'S WHERE OBFUSCATION TAKES PLACE. -->
+                        <!-- configuration> <outputDirectory>../../r-package/inst/java/</outputDirectory> 
+                            </configuration -->
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- This is supposed to fix a problem in Eclipse that reads "maven-dependency-plugin 
+                (goals "copy-dependencies", "unpack") is not supported by m2e. pom.xml /coherent-datafeed-assembly 
+                line 52 Maven Project Build Lifecycle Mapping Problem" After trying this, 
+                however, I did not see a change as the error was still there. -->
+            <plugin>
+                <groupId>org.eclipse.m2e</groupId>
+                <artifactId>lifecycle-mapping</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <lifecycleMappingMetadata>
+                        <pluginExecutions>
+                            <!-- copy-dependency plugin -->
+                            <pluginExecution>
+                                <pluginExecutionFilter>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-dependency-plugin</artifactId>
+                                    <versionRange>[1.0.0,)</versionRange>
+                                    <goals>
+                                        <goal>copy-dependencies</goal>
+                                    </goals>
+                                </pluginExecutionFilter>
+                                <action>
+                                    <ignore />
+                                </action>
+                            </pluginExecution>
+                        </pluginExecutions>
+                    </lifecycleMappingMetadata>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>false</minimizeJar>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.coherentlogic.coherent.datafeed.client.Main</mainClass>
+                                </transformer>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.tooling</resource>
+                                </transformer>
+                            </transformers>
+                            <relocations>
+                            </relocations>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>junit:junit</exclude>
+                                    <exclude>org.mockito:mockito-all</exclude>
+                                    <exclude>com.reuters:rfa</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- WARNING: For some reason the com.pyx4me:proguard-maven-plugin:2.0.4 
+                plugin is not working and I'm not interested in trying to figure out why. 
+                The symptom is that the build will always fail on obfuscation with an error 
+                code of 1. The solution which works is to use the following plugin, which 
+                is a fork of the pyx4me plugin: com.github.wvengen:proguard-maven-plugin:2.0.7-SNAPSHOT 
+                However note that this plugin needs to be downloaded and installed manually. 
+                You can find the plugin here: https://github.com/wvengen/proguard-maven-plugin -->
+            <!-- plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.7-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>4.8</proguardVersion>
+                    <includeDependency>false</includeDependency>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                    <maxMemory>1024m</maxMemory>
+                    <injar>dependency/coherent-datafeed-client-core-0.9.5-RELEASE.jar</injar>
+                    <outjar>dependency/coherent-datafeed-client-core-0.9.5-RELEASE-PG.jar</outjar>
+                    <libs>
+                        <lib>${java.home}\lib\rt.jar</lib>
+                        <lib>${java.home}\lib\jsse.jar</lib>
+                    </libs>
+                    <options>
+                        <option>@PG-ShrinkObfuscateAndOptimize-MAVEN.pro</option>
+                    </options>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>${parent.groupId}.${parent.artifactId}</groupId>
+                            <artifactId>coherent-datafeed-assembly</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>${parent.groupId}.${parent.artifactId}</groupId>
+                            <artifactId>coherent-datafeed-config</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>${parent.groupId}.${parent.artifactId}</groupId>
+                            <artifactId>coherent-datafeed-misc</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>${parent.groupId}.${parent.artifactId}</groupId>
+                            <artifactId>coherent-datafeed-client-core</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </configuration>
+            </plugin -->
+            <!-- C:\development\projects\CDATAFEED-SVN-CO\java> mvn clean test package 
+                gpg:sign -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>license-maven-plugin</artifactId> 
+                <version>1.3</version> <executions> <execution> <id>download-licenses</id> 
+                <goals> <goal>download-licenses</goal> </goals> </execution> </executions> 
+                </plugin -->
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${basedir}/target/</directory>
+                <includes>
+                    <include>assembly-0.9-SNAPSHOT.jar</include>
+                </includes>
+                <targetPath>C:/development/projects/CDATAFEED/trunk/r-package/inst/java/</targetPath>
+            </resource>
+        </resources>
+    </build>
+</project>

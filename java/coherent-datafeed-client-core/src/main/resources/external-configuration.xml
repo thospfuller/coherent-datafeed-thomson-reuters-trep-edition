@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE preferences SYSTEM "http://java.sun.com/dtd/preferences.dtd">
+<preferences EXTERNAL_XML_VERSION="1.0">
+  <root type="user">
+    <map/>
+    <node name="com">
+      <map/>
+      <node name="reuters">
+        <map/>
+        <node name="rfa">
+          <map/>
+          <node name="_System">
+            <map/>
+            <node name="DataDictionaries">
+              <map>
+                <entry key="autoDictionaryDownload" value="true"/>
+              </map>
+            </node>
+            <node name="EventQueue">
+              <map>
+                <entry key="batchSize" value="100"/>
+              </map>
+            </node>
+            <node name="StandbyLists">
+              <map/>
+            </node>
+            <node name="tools">
+              <map/>
+              <node name="config">
+                <map/>
+                <node name="editor">
+                  <map>
+                    <entry key="validationMode" value="Full"/>
+                  </map>
+                </node>
+              </node>
+            </node>
+          </node>
+          <node name="myNamespace">
+            <map/>
+            <node name="Connections">
+              <map/>
+              <node name="TRP2PS1Connection">
+                <map>
+                  <entry key="connectionType" value="RSSL"/>
+                  <entry key="serverList" value="TRP2PS1"/>
+                  <entry key="portNumber" value="14002"/>
+                </map>
+              </node>
+              <node name="consConnection">
+                <map>
+                  <entry key="connectionType" value="RSSL"/>
+                  <entry key="serverList" value="localhost"/>
+                  <entry key="portNumber" value="14002"/>
+                </map>
+              </node>
+              <node name="provConnection">
+                <map>
+                  <entry key="connectionType" value="RSSL_PROV"/>
+                  <entry key="portNumber" value="14002"/>
+                </map>
+              </node>
+            </node>
+            <node name="Sessions">
+              <map/>
+              <node name="P2PS1Session">
+                <map>
+                  <entry key="connectionList" value="myNamespace::TRP2PS1Connection"/>
+                </map>
+              </node>
+              <node name="consSession">
+                <map>
+                  <entry key="connectionList" value="myNamespace::TRP2PS1Connection"/>
+                </map>
+              </node>
+              <node name="mySession">
+                <map>
+                  <entry key="connectionList" value="myNamespace::TRP2PS1Connection"/>
+                </map>
+              </node>
+              <node name="provSession">
+                <map>
+                  <entry key="connectionList" value="myNamespace::provConnection"/>
+                </map>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </root>
+</preferences>

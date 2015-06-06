@@ -1,0 +1,139 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <!--
+      WARNING: If you're using the FileBasedFieldDictionaryFactory don't forget
+               to assign the init method! DefaultFieldDictionaryFactory
+
+      Use the FileBasedFieldDictionaryFactory when running this outside of
+      Eclipse, however note that calling mvn package will fail unless you've
+      copied the data directory into the module's root folder.
+      No ctor args for:
+      DefaultFieldDictionaryFactory works when running Example in Eclipse.
+      RPackageDictionaryFactory is used when deploying in R.
+      -->
+    <!-- bean id="fieldDictionaryFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultFieldDictionaryFactory"
+     init-method="start">
+    </bean>
+
+    <bean id="fieldDictionary" class="com.reuters.rfa.dictionary.FieldDictionary"
+     factory-bean="fieldDictionaryFactory" factory-method="getInstance"/>
+
+    <bean id="dictionaryService"
+     class="com.coherentlogic.coherent.datafeed.services.FieldDictionaryHolder">
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+    </bean>
+    -->
+
+    <bean id="fieldDictionaryFactory" class="com.coherentlogic.coherent.datafeed.factories.BasicFieldDictionaryFactory"/>
+
+    <bean id="fieldDictionary" class="com.reuters.rfa.dictionary.FieldDictionary"
+     factory-bean="fieldDictionaryFactory" factory-method="getInstance"/>
+
+    <bean id="fieldDefinitionsDictionaryDecoder"
+     class="com.coherentlogic.coherent.datafeed.services.FieldDictionaryDecoder">
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="dictionaryType">
+            <util:constant static-field="com.reuters.rfa.rdm.RDMDictionary.Type.FIELD_DEFINITIONS"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="enumTablesDictionaryDecoder"
+     class="com.coherentlogic.coherent.datafeed.services.FieldDictionaryDecoder">
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="dictionaryType">
+            <util:constant static-field="com.reuters.rfa.rdm.RDMDictionary.Type.ENUM_TABLES"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="dictionaryServiceOrig" class="com.coherentlogic.coherent.datafeed.services.DictionaryService">
+        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.builders.ServiceName).IDN_RDF}"/>
+        <constructor-arg name="msgModelType" value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DICTIONARY}"/>
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="eventDrivenEndpoint"/>
+        <constructor-arg name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="dictionaryService"
+     class="com.coherentlogic.coherent.datafeed.services.ConcurrentDictionaryService">
+        <constructor-arg name="dictionaryService" ref="dictionaryServiceOrig"/>
+        <constructor-arg name="time" value="20"/>
+        <constructor-arg name="timeUnit" value="#{T(java.util.concurrent.TimeUnit).SECONDS}"/>
+    </bean>
+
+    <int:router input-channel="dictionaryChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="payload.msg.msgType">
+        <int:mapping channel="extractOMMMsgChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
+        <int:mapping channel="processStatusResponseChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
+    </int:router>
+
+    <int:channel id="extractOMMMsgChannel"/>
+
+    <int:transformer ref="ommMsgTransformer"
+     input-channel="extractOMMMsgChannel"
+     output-channel="extractSeriesChannel"/>
+
+    <int:channel id="extractSeriesChannel"/>
+
+    <int:transformer ref="ommSeriesTransformer"
+     input-channel="extractSeriesChannel"
+     output-channel="routeByDictionaryTypeChannel"/>
+
+    <int:channel id="routeByDictionaryTypeChannel"/>
+
+    <int:router input-channel="routeByDictionaryTypeChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="@ommSeriesHelper.getDictionaryType(payload)">
+        <int:mapping channel="decodeEnumTablesChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMDictionary$Type).ENUM_TABLES}"/>
+        <int:mapping channel="decodeFieldDefinitionsChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMDictionary$Type).FIELD_DEFINITIONS}"/>
+    </int:router>
+
+    <int:channel id="decodeEnumTablesChannel"/>
+    <int:channel id="decodeFieldDefinitionsChannel"/>
+
+    <int:service-activator input-channel="decodeFieldDefinitionsChannel"
+     output-channel="errorChannel"
+     ref="fieldDefinitionsDictionaryDecoder"
+     method="decode"/>
+
+    <int:service-activator input-channel="decodeEnumTablesChannel"
+     output-channel="errorChannel"
+     ref="enumTablesDictionaryDecoder"
+     method="decode"/>
+
+    <bean id="dictionaryLoadCompleteService"
+     class="com.coherentlogic.coherent.datafeed.services.DictionaryLoadCompleteService">
+        <constructor-arg name="dictionaryService" ref="dictionaryService"/>
+    </bean>
+
+    <int:channel id="reviewDictionariesLoadedChannelX"/>
+
+    <int:service-activator input-channel="reviewDictionariesLoadedChannel"
+     output-channel="errorChannel"
+     ref="dictionaryLoadCompleteService"
+     method="checkTaskCompleted"/>
+</beans>
