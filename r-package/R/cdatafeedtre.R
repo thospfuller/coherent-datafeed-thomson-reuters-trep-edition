@@ -1,6 +1,9 @@
+#' 
 #'
-#' @import rJava
+#' @title The Coherent Datafeed Thomson Reuters Edition.
+#'
 #' @import RJSONIO
+#' @import rJava
 #'
 #' @docType package
 #'
@@ -8,24 +11,20 @@
 #'
 NULL
 
-#'
 #' An environment which is used by this package when managing package-scope
 #' variables.
 #'
 cdatafeedtrep.env <- new.env()
 
+#' Function instantiates the client which is used to bridge the gap between the
+#' R script and the underlying API.
+#'
+#' @param libname The library name.
+#'
+#' @param pkgname The package name.
+#'
 .onLoad <- function (libname, pkgname) {
-    library("rJava")
-    library("RJSONIO")
-    #
-    # From the RJava documentation:
-    # If a package needs special Java parameters, "java.parameters" option can
-    # be used to set them on initialization. Note, however, that Java
-    # parameters can only be used during JVM initialization and other package
-    # may have intialized JVM already.
-    #
-    # It may be a better idea to allow the user to set this theselves.
-    #
+
     targetDir = paste ("-Djava.util.logging.config.file=", tempdir (), sep="")
 
     packageDir = paste ("-DrpackagePath=", system.file(package="cdatafeedtre"), sep="")
@@ -43,46 +42,26 @@ cdatafeedtrep.env <- new.env()
     })
 }
 
+#' This function must be called exactly one time before the package can be used.
+#'
+#' @export
+#'
 Initialize <- function () {
     tryCatch(client$start(), Throwable = function (e) {
 
-        #
-        # If an exception is thrown from here check that the
-        # fieldDictionaryFactory is set to use the
-        # RPackageDictionaryFactory.
-        #
         stop (paste ("An exception was thrown when starting the client -- ",
             "details follow.", e$getMessage(), sep=""))
     })
 }
 
-InstallLicense <- function (licenseFile) {
-    #
-    # This function only needs to be called once in order to install a
-    # license.
-    #
-    tryCatch(client$installLicense(licenseFile), Throwable = function (e) {
-        stop (paste ("Unable to install the license '", licenseFile,"' -- ",
-            "details follow. ", e$getMessage(), sep=""))
-    })
-}
-
-UninstallLicense <- function () {
-    #
-    # This function only needs to be called once in order to uninstall a
-    # license.
-    #    
-    tryCatch(client$uninstallLicense(), Throwable = function (e) {
-        stop (paste ("Unable to uninstall the license -- ",
-            "details follow. ", e$getMessage(), sep=""))
-    })
-}
-
+#' Establishes a session with Thomson Reuters.
+#'
+#' @param dacsId The user's Thomson Reuters DACS id.
+#'
+#' @export
+#'
 Login <- function (dacsId) {
-    # Establishes a session with Thomson Reuters.
-    #
-    # Args:
-    #   dacsId: The user's Thomson Reuters DACS id.
+
     authenticationService <- client$getAuthenticationService()
 
     tryCatch(
@@ -93,7 +72,7 @@ Login <- function (dacsId) {
             )
         }
     )
-    
+
     tryCatch(
         client$waitForInitialisationToComplete(), Throwable = function (e) {
             stop(
@@ -106,9 +85,11 @@ Login <- function (dacsId) {
     )
 }
 
-# MOVE STOP TO A TEARDOWN METHOD.
+#' Terminates the session with Thomson Reuters.
+#'
+#' @export
+#'
 Logout <- function () {
-    # Terminates the session with Thomson Reuters.
 
     authenticationService <- client$getAuthenticationService()
 
@@ -122,18 +103,17 @@ Logout <- function () {
     )
 }
 
+#' Sends a request to Thomson Reuters to receive market price updates for the
+#' specified symbols.
+#'
+#' @param serviceName For example "dIDN_RDF" (defaults to "IDN_RDF").
+#' @param symbols One or more symbols, for example "GOOG.O".
+#'
+#' @export
+#'
 Query <- function (serviceName="IDN_RDF", symbols) {
-    # Sends a request to Thomson Reuters to receive market price updates for
-    # the specified symbols.
-    #
-    # Args:
-    #   symbols: A vector of one or more symbols, for example "GOOG.O".
 
     marketPriceService <- client$getMarketPriceService()
-
-    #if ( is.null (serviceName) ) {
-    #    serviceName <- "IDN_RDF"
-    #}
 
     tryCatch(marketPriceService$query(serviceName, loginHandle, symbols),
         Throwable = function (e) {
@@ -145,11 +125,17 @@ Query <- function (serviceName="IDN_RDF", symbols) {
     )
 }
 
+#' Allows the user to inspect the dictionaries that have been loaded by this
+#' package.
+#'
+#' @return The dictionaries that have been loaded.
+#'
+#' @export
+#'
 GetDictionaries <- function () {
-    # Returns the dictionaries that have been loaded into this application.
-    #
+
     dictionaryService <- client$getDictionaryService()
-    
+
     tryCatch(result <- dictionaryService$getDictionaryEntriesAsJSON(),
         Throwable = function (e) {
             stop(
@@ -164,11 +150,17 @@ GetDictionaries <- function () {
     return(resultantFrame)
 }
 
+#' Allows the user to inspect the directories that have been loaded by this
+#' package.
+#'
+#' @return The directories that have been loaded.
+#'
+#' @export
+#'
 GetDirectories <- function () {
-    # Returns the directories that have been loaded into this application.
-    #
+
     directoryService <- client$getDirectoryService()
-    
+
     tryCatch(result <- directoryService$getDirectoryEntriesAsJSON(),
         Throwable = function (e) {
             stop(
@@ -183,11 +175,16 @@ GetDirectories <- function () {
     return(resultantFrame)
 }
 
-AsDataFrame <- function (result) {
-    #
-    # Function returns either NULL if result is equal to "null" or the
-    # result as a data frame.
-    #
+#' Returns either NULL if result is equal to "null" or the
+#' result as a data frame.
+#'
+#' @param result Result will be converted into a data frame.
+#'
+#' @return The result as a data frame.
+#'
+#' TODO Improve this documentation.
+#'
+.AsDataFrame <- function (result) {
 
     resultantFrame <- NULL
     resultantObject <- NULL
@@ -201,12 +198,17 @@ AsDataFrame <- function (result) {
     return(resultantFrame)
 }
 
+#' Retrieves the next update from Thomson Reuters.
+#'
+#' @param timeout Wait for timeout millis and then return null -- defaults to
+#'  zero (forever).
+#'
+#' @return The market price as a data frame.
+#'
+#' @export
+#'
 GetNextUpdate <- function (timeout="0") {
-    # Function retrieves the next update from Thomson Reuters.
-    #
-    # Returns:
-    #   A market price as a data frame consisting of the symbols, fields, and field values.
-    
+
     marketPriceService <- client$getMarketPriceService()
 
      tryCatch(
@@ -218,18 +220,32 @@ GetNextUpdate <- function (timeout="0") {
             )
         }
     )
-    return (AsDataFrame (result))
+    return (.AsDataFrame (result))
 }
 
+#' Sends a request to Thomson Reuters to receive time series data for the
+#' specified symbols.
+#'
+#' @param serviceName The service can be, for example, dIDN_RDF -- the default
+#' is IDN_RDF.
+#'
+#' @param symbol A single simbol -- for example "GOOG.O".
+#'
+#' @param period One of weekly, monthly, or yearly.
+#'
+#' @param timeout The milliseconds to wait for a response to be returned. If
+#' nothing is returned when the timeout has elapsed this function will return
+#' NULL. Defaults to zero (forever).
+#'
+#' @return A data frame containing the time series data for the specified
+#' symbol.
+#'
+#' @export
+#'
 GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period, timeout="0") {
-    # Sends a request to Thomson Reuters to receive time series data for
-    # the specified symbols.
-    #
-    # Args:
-    #   symbols: A vector of one or more symbols, for example "GOOG.O".
-    
+
     timeSeriesService <- client$getTimeSeriesService()
-    
+
     tryCatch(timeSeriesService$queryTimeSeriesFor(serviceName, loginHandle, symbol, period),
         Throwable = function (e) {
             stop(
@@ -239,8 +255,6 @@ GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period, timeout
         }
     )
 
-    # Timeout is set to ten seconds -- if the result is null, then the symbol is
-    # likely to be incorrect.
     tryCatch(result <- timeSeriesService$getNextUpdateAsJSON(timeout),
         Throwable = function (e) {
             stop(
@@ -257,12 +271,18 @@ GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period, timeout
     return (resultTDf)
 }
 
+#' Function retrieves the next status response update from Thomson Reuters.
+#'
+#' @param timeout The milliseconds to wait for a response to be returned. If
+#'  nothing is returned when the timeout has elapsed this function will return
+#'  NULL. Defaults to zero (forever).
+#'
+#' @return status response as a data frame or NULL if the timeout has elapsed.
+#'
+#' @export
+#'
 GetNextStatusResponse <- function (timeout="0") {
-    # Function retrieves the next status response update from Thomson Reuters.
-    #
-    # Returns:
-    #   A status response as a data frame.
-    
+
     statusResponseService <- client$getStatusResponseService()
 
      tryCatch(
@@ -274,5 +294,5 @@ GetNextStatusResponse <- function (timeout="0") {
             )
         }
     )
-    return (AsDataFrame (result))
+    return (.AsDataFrame (result))
 }
