@@ -5,10 +5,13 @@ Version: 1.0.1
 Date: 2015-06-07
 Author: Support <support@coherentlogic.com>
 Maintainer: Support <support@coherentlogic.com>
-Description: Allows the user to retrieve market price updates and tick history data from Thomson Reuters.
-Imports: rJava, RJSONIO
-Depends: R (>= 3.0.1), rJava, RJSONIO
+Description: Allows the user to retrieve market price updates and tick history
+    data from the Thomson Reuters Enterprise Platform (TREP).
+Depends: R (>= 3.2.0)
 SystemRequirements: Java (>= 7.0)
+Imports:
+    RCurl,
+    rJava
 LazyLoad: yes
 License: LGPL-3
 Copyright: (C) 2015 Coherent Logic Limited; ALL RIGHTS RESERVED.

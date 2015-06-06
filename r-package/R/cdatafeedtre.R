@@ -296,3 +296,31 @@ GetNextStatusResponse <- function (timeout="0") {
     )
     return (.AsDataFrame (result))
 }
+
+#' Function prints some information about this package.
+#'
+#' @examples
+#'  \dontrun{
+#'      About()
+#'  }
+#'
+#' @export
+#'
+About <- function () {
+    cat (
+        " ***********************************************************\n",
+        "***                                                     ***\n",
+        "***  Coherent Datafeed: Thomson Reuters Edition Package ***\n",
+        "***                                                     ***\n",
+        "***                   version 1.0.1.                    ***\n",
+        "***                                                     ***\n",
+        "***                Follow us on LinkedIn:               ***\n",
+        "***                                                     ***\n",
+        "***       https://www.linkedin.com/company/229316       ***\n",
+        "***                                                     ***\n",
+        "***                Follow us on Twitter:                ***\n",
+        "***                                                     ***\n",
+        "***        https://twitter.com/CoherentLogicCo          ***\n",
+        "***                                                     ***\n",
+        "***********************************************************\n")
+}
