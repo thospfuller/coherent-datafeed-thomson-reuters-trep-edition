@@ -4,7 +4,6 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX_PATH;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.LICENSE_INSTALLATION_SERVICE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_PRICE_SERVICE_GATEWAY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 

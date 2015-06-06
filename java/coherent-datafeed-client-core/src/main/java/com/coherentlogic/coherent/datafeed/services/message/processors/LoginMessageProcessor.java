@@ -56,7 +56,7 @@ public class LoginMessageProcessor
          * @TODO: Investigate using transactions and the cache lock method as an
          *  alternative.
          */
-//        synchronized (sessionCache) {
+        synchronized (sessionCache) {
 
             String dacsId = message.getPayload();
 
@@ -78,7 +78,7 @@ public class LoginMessageProcessor
                 .withPayload(loginHandle)
                 .setHeader(SESSION, session)
                 .build();
-//        }
+        }
         return result;
     }
 }

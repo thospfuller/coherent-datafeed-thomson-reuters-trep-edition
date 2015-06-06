@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.client.Client;
-import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;

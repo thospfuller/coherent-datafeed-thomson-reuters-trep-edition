@@ -47,7 +47,7 @@ public class AuthenticationMessageEnricher extends AbstractMessageEnricher {
          * @TODO: Investigate using transactions and the cache lock method as an
          *  alternative.
          */
-//        synchronized (cache) {
+        synchronized (cache) {
 
             log.info("enrich: method begins; message: " + message);
 
@@ -61,7 +61,7 @@ public class AuthenticationMessageEnricher extends AbstractMessageEnricher {
 
             log.info("enrich: method ends; enrichedMessage: " +
                 enrichedMessage);
-//        }
+        }
         return enrichedMessage;
     }
 }
