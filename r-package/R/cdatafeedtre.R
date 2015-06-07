@@ -1,4 +1,3 @@
-#' 
 #'
 #' @title The Coherent Datafeed Thomson Reuters Edition.
 #'
@@ -231,7 +230,7 @@ GetNextUpdate <- function (timeout="0") {
 #'
 #' @param symbol A single simbol -- for example "GOOG.O".
 #'
-#' @param period One of weekly, monthly, or yearly.
+#' @param period One of daily, weekly, or monthly -- the default is "daily".
 #'
 #' @param timeout The milliseconds to wait for a response to be returned. If
 #' nothing is returned when the timeout has elapsed this function will return
@@ -242,7 +241,11 @@ GetNextUpdate <- function (timeout="0") {
 #'
 #' @export
 #'
-GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period, timeout="0") {
+GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period = "daily", timeout="0") {
+
+    if (!(period == "daily" || period == "weekly" || period == "monthly")) {
+        stop (paste ("The '", period,"' period is invalid -- use on of daily, weekly, or monthly.", sep=""))
+    }
 
     timeSeriesService <- client$getTimeSeriesService()
 
@@ -264,11 +267,15 @@ GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period, timeout
         }
     )
 
-    resultT <- t (result)
+    convertedResult <- RJSONIO::fromJSON(result)
 
-    resultTDf <- as.data.frame (resultT)
+    return (convertedResult)
 
-    return (resultTDf)
+    #resultT <- t (result)
+
+    #resultTDf <- as.data.frame (resultT)
+
+    # return (resultTDf)
 }
 
 #' Function retrieves the next status response update from Thomson Reuters.
