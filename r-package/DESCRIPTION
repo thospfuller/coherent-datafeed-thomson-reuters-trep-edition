@@ -10,7 +10,7 @@ Description: Allows the user to retrieve market price updates and tick history
 Depends: R (>= 3.2.0)
 SystemRequirements: Java (>= 7.0)
 Imports:
-    RCurl,
+    RJSONIO,
     rJava
 LazyLoad: yes
 License: LGPL-3
