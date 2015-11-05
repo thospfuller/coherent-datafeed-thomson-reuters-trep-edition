@@ -5,7 +5,7 @@
 
     <groupId>com.coherentlogic.coherent.datafeed</groupId>
     <artifactId>client</artifactId>
-    <version>1.0.1-RELEASE</version>
+    <version>1.0.2-RELEASE</version>
     <packaging>pom</packaging>
     <name>Coherent Datafeed Client</name>
     <description>Java client for accessing market data via Thomson Reuters Realtime Enterprise Platform (TREP).</description>
@@ -122,13 +122,13 @@
                     -Dfile=./rfa.jar
                     -DgroupId=com.reuters
                     -DartifactId=rfa 
-                    -Dversion=7.2.1.L1.all
+                    -Dversion=8.0.0.L2.all / 7.6.0.L1.all
                     -Dpackaging=jar
               -->
             <dependency>
                 <groupId>com.reuters</groupId>
                 <artifactId>rfa</artifactId>
-                <version>7.6.1.L1.all</version>
+                <version>7.6.0.L1.all</version>
             </dependency>
             <dependency>
                 <groupId>com.coherentlogic.coherent.data-model</groupId>
