@@ -44,6 +44,10 @@
         </dependency>
         <dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-client-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-misc</artifactId>
         </dependency>
         <dependency>
