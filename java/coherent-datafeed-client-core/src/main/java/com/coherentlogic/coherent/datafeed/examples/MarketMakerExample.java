@@ -55,7 +55,7 @@ public class MarketMakerExample {
         Handle handle = authenticationService.getHandle();
 
         List<Handle> itemHandles = marketMakerService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             handle,
             "GOOG.O",
             "MSFT.O",

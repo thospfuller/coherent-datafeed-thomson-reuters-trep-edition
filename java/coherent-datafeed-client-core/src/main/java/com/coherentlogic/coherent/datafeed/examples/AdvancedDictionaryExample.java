@@ -68,7 +68,7 @@ public class AdvancedDictionaryExample {
             (FieldDictionary) applicationContext.getBean(FIELD_DICTIONARY);
 
         dictionaryService.loadDictionaries(
-            Constants.IDN_RDF,
+            Constants.ELEKTRON_DD,
             handle,
             "RWFFld",
             "RWFEnum"

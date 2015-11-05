@@ -2,12 +2,18 @@ package com.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.jms.JMSException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.client.Client;
+import com.coherentlogic.coherent.datafeed.domain.Sample;
+import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
@@ -38,62 +44,64 @@ public class TimeSeriesExample {
         final StatusResponseServiceSpecification statusResponseService =
             client.getStatusResponseService();
 
-//        client.installLicense(
-//            "C:/Temp/CDatafeedTrialLicenseForCMEGroup-Expires10Jan2014.lic");
-
         final Handle loginHandle = client.login(dacsId);
 
         client.waitForInitialisationToComplete();
 
         log.info("Login handle is: " + loginHandle);
 
-//        StatusResponse statusResponse =
-//            statusResponseService.getNextUpdate(5000L);
+//        new Thread (
+//            new Runnable () {
 //
-//        log.info("statusResponse: " + statusResponse);
+//                @Override
+//                public void run() {
+//                    StatusResponse statusResponse =
+//                        statusResponseService.getNextUpdate(500L);
+//
+//                    log.error("statusResponse: " + statusResponse);
+//                    System.out.println("statusResponse: " + statusResponse);
+//                }
+//            }
+//        ).start();
 
         final TimeSeriesGatewaySpecification timeSeriesService =
             client.getTimeSeriesService();
 
         timeSeriesService.queryTimeSeriesFor(
-            Constants.IDN_RDF,
+            Constants.ELEKTRON_DD,
             loginHandle,
             "TRI.N",
-            TS1Constants.WEEKLY_PERIOD
+            TS1Constants.MONTHLY_PERIOD
         );
 
-//        TimeSeries timeSeries =
-//            timeSeriesService.getNextUpdate(2500L);
+        TimeSeries timeSeries =
+            timeSeriesService.getNextUpdate(15000L);
 
-        String json = timeSeriesService.getNextUpdateAsJSON(7500L);
+        System.out.print("timeSeries: " + timeSeries + ", sampleSize: " + timeSeries.getSamples().size());
 
-        System.out.println ("json: " + json);
+        DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
 
-//        System.out.print("timeSeries: " + timeSeries + ", sampleSize: " + timeSeries.getSamples().size());
-//
-//        DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
-//
-//        String TABS = "\t\t\t";
-//
-//        System.out.print ("\tDATE");
-//
-//        for (String nextHeader : timeSeries.getHeaders())
-//            System.out.print(TABS + nextHeader);
-//
-//        for (Sample sample : timeSeries.getSamples()) {
-//
-//            long timeMillis = sample.getDate();
-//
-//            Calendar calendar = Calendar.getInstance();
-//
-//            calendar.setTimeInMillis(timeMillis);
-//
-//            String date = formatter.format(calendar.getTime());
-//
-//            System.out.print("\n" + date);
-//
-//            for (String nextPoint : sample.getPoints())
-//                System.out.print (TABS + nextPoint);
-//        }
+        String TABS = "\t\t\t";
+
+        System.out.print ("\tDATE");
+
+        for (String nextHeader : timeSeries.getHeaders())
+            System.out.print(TABS + nextHeader);
+
+        for (Sample sample : timeSeries.getSamples()) {
+
+            long timeMillis = sample.getDate();
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTimeInMillis(timeMillis);
+
+            String date = formatter.format(calendar.getTime());
+
+            System.out.print("\n" + date);
+
+            for (String nextPoint : sample.getPoints())
+                System.out.print (TABS + nextPoint);
+        }
     }
 }

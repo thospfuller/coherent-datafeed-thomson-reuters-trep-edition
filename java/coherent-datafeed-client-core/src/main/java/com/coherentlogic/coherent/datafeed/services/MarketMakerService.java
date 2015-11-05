@@ -27,7 +27,7 @@ public class MarketMakerService
         BasicAdapter<MarketMaker, String> jsonGenerator
     ) {
         super(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             RDMMsgTypes.MARKET_MAKER,
             factory,
             client,

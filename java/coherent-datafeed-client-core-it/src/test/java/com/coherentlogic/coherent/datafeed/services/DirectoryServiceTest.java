@@ -96,7 +96,7 @@ public class DirectoryServiceTest {
     private void reviewDIDN_RDFDirectoryEntry (
         Set<DirectoryEntry> directoryEntrySet
     ) {
-        DirectoryEntry actual = find ("dIDN_RDF", directoryEntrySet);
+        DirectoryEntry actual = find ("dELEKTRON_DD", directoryEntrySet);
 
         List<String> expectedDictionariesUsed = new ArrayList<String> ();
         expectedDictionariesUsed.add("RWFFld");

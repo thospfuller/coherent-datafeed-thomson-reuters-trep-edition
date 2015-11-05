@@ -139,7 +139,7 @@ public class RequestMessageBuilder
             .setIndicationFlags(OMMMsg.Indication.REFRESH)
             .setPriority((byte) 1, 1) // what are these values?
             .setAssociatedMetaInfo(loginHandle)
-            .register(client, Constants.dIDN_RDF, "TRI.N", "MSFT.O");
+            .register(client, Constants.dELEKTRON_DD, "TRI.N", "MSFT.O");
 
     }
 }

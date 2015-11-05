@@ -66,6 +66,6 @@ public class RequestMessageBuilderTest {
 
     @Test(expected=MissingDataException.class)
     public void testRegister() {
-        builder.register(client, Constants.dIDN_RDF);
+        builder.register(client, Constants.dELEKTRON_DD);
     }
 }

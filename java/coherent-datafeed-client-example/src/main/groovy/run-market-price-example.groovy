@@ -21,7 +21,7 @@ client.waitForInitialisationToComplete()
 def marketPriceService = client.getMarketPriceService ()
 
 def itemHandles = marketPriceService.query(
-    ServiceName.dIDN_RDF,
+    ServiceName.dELEKTRON_DD,
     loginHandle,
     "GOOG.O",
     "MSFT.O",

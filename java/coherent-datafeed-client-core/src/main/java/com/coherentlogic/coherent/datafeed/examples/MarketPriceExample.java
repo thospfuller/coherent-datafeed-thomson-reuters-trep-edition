@@ -120,7 +120,7 @@ public class MarketPriceExample {
         final Handle loginHandle
     ) {
         List<Handle> itemHandles = marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             loginHandle,
             "LCOc1",
             "GOOG.O",

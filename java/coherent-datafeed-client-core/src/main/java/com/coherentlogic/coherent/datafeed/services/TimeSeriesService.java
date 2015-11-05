@@ -68,7 +68,7 @@ public class TimeSeriesService
         CommonRequestExecutor commonRequestExecutor
     ) {
         super(
-            Constants.IDN_RDF,
+            Constants.ELEKTRON_DD,
             RDMMsgTypes.MARKET_PRICE,
             factory,
             client,

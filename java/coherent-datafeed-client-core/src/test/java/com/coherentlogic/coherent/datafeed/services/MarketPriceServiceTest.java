@@ -131,7 +131,7 @@ public class MarketPriceServiceTest {
         ).thenReturn(handle);
 
         List<Handle> handles = marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             handle,
             RIC
         );
@@ -144,7 +144,7 @@ public class MarketPriceServiceTest {
     public void queryPassingNullStringArray() {
         Handle handle = mock (Handle.class);
         marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             handle,
             (String[])null
         );
@@ -154,7 +154,7 @@ public class MarketPriceServiceTest {
     public void queryPassingEmptyStringArray() {
         Handle handle = mock (Handle.class);
         marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             handle,
             new String[] {}
         );

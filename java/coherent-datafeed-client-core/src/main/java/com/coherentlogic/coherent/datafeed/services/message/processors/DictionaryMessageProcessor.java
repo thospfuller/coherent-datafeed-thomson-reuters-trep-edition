@@ -72,7 +72,7 @@ public class DictionaryMessageProcessor
 
             assertNotNull (session);
 
-            // eg. dIDN_RDF, IDN_RDF, etc.
+            // eg. dIDN_RDF, IDN_RDF, dELEKTRON_DD, etc.
             Set<String> directoryNameSet = session.getAllDirectoryNames();
 
             Iterator<String> iterator = directoryNameSet.iterator();

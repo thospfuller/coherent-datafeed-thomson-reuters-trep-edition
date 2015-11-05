@@ -109,7 +109,7 @@ public class AdvancedClient extends Client {
         log.info("result: " + result);
 
         marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             loginHandle,
             "GOOG.O",
             "MSFT.O",

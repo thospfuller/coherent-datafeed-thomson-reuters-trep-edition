@@ -47,7 +47,7 @@
 
     <!-- DEPRECATED: THIS WILL SOON BE UNNECESSARY. -->
     <bean id="dictionaryService" class="com.coherentlogic.coherent.datafeed.services.DictionaryService">
-        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.misc.Constants).IDN_RDF}"/>
+        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.misc.Constants).dELEKTRON_DD}"/>
         <constructor-arg name="msgModelType" value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DICTIONARY}"/>
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="dictionaryEventDrivenEndpoint"/>

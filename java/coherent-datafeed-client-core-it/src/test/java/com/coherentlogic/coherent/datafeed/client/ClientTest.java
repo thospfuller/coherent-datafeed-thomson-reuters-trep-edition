@@ -81,7 +81,7 @@ public class ClientTest {
             new ArrayList<String> ();
 
         marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             loginHandle,
             DEFAULT_RICS
         );
@@ -100,7 +100,7 @@ public class ClientTest {
     public void getMarketPricesForInvalidRICS()
         throws InterruptedException {
 
-        marketPriceService.query(Constants.dIDN_RDF, loginHandle, "foo.bar");
+        marketPriceService.query(Constants.dELEKTRON_DD, loginHandle, "foo.bar");
         // Note that if this test just ends here that RFA will still try to send
         // events to be processed -- in particular status events, since the ric
         // provided here is invalid.

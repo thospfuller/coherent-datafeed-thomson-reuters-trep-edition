@@ -56,7 +56,7 @@ public class MarketByOrderExample {
 
         // IBM.ARC
         List<Handle> itemHandles = marketByOrderService.query(
-            Constants.IDN_RDF,
+            Constants.ELEKTRON_DD,
             handle,
             "IBM.O"
         );

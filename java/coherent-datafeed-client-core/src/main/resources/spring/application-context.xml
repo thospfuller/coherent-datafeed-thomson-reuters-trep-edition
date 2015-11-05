@@ -270,7 +270,7 @@
     <!-- TODO: Does this service need a serviceName? We're querying directories,
                NOT a specific directory. -->
     <bean id="directoryService" class="com.coherentlogic.coherent.datafeed.services.DirectoryService">
-        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.misc.Constants).IDN_RDF}"/>
+        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.misc.Constants).dELEKTRON_DD}"/>
         <constructor-arg name="msgModelType" value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DIRECTORY}"/>
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="directoryEventDrivenEndpoint"/>
@@ -498,7 +498,7 @@
     <!-- TS1-related beans -->
 
     <bean id="ts1DefService" class="com.coherentlogic.coherent.datafeed.services.TS1DefService">
-        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.misc.Constants).IDN_RDF}"/>
+        <constructor-arg name="serviceName" value="#{T(com.coherentlogic.coherent.datafeed.misc.Constants).dELEKTRON_DD}"/>
         <constructor-arg name="msgModelType" value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_PRICE}"/>
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="ts1DefEventDrivenEndpoint"/>

@@ -46,7 +46,7 @@ public class AdvancedClient extends Client {
             advancedClient.getMarketPriceService();
 
         marketPriceService.query(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             handle,
             "GOOG.O",
             "MSFT.O",

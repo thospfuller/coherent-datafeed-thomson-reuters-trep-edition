@@ -30,7 +30,7 @@ public class MarketByOrderService
     ) {
         // Should this be dIDN_RDF?
         super(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             RDMMsgTypes.MARKET_BY_ORDER,
             factory,
             client,

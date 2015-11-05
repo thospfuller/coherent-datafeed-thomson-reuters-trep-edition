@@ -41,7 +41,7 @@ public class MarketPriceService
         BasicAdapter<MarketPrice, String> jsonGenerator
     ) {
         super(
-            Constants.dIDN_RDF,
+            Constants.dELEKTRON_DD,
             RDMMsgTypes.MARKET_PRICE,
             factory,
             client,
