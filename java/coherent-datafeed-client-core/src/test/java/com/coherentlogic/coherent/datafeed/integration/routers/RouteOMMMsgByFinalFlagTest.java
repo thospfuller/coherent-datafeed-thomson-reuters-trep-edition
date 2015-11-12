@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.integration.routers;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -7,14 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageChannel;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 
 import com.reuters.rfa.omm.OMMMsg;
 

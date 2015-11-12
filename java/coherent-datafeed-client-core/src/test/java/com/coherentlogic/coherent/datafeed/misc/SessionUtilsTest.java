@@ -10,8 +10,8 @@ import org.infinispan.Cache;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 import com.coherentlogic.coherent.datafeed.services.Session;

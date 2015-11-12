@@ -146,6 +146,7 @@ public interface Constants {
         YEARLY = "yearly";
 
     static final String SESSION = "session",
+        TIME_SERIES_RIC = "timeSeriesRic",
         HANDLE = "handle",
         // Apparently we can't have a null payload in Spring Integration.
         NULL_PAYLOAD = "Null Payload";

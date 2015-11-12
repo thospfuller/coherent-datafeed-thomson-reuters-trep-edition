@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 /**
  * Specification for classes that will process messages from the Spring

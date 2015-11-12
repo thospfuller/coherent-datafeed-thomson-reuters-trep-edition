@@ -6,9 +6,9 @@ import org.infinispan.notifications.cachelistener.annotation.CacheEntryRemoved;
 import org.infinispan.notifications.cachelistener.event.CacheEntryCreatedEvent;
 import org.infinispan.notifications.cachelistener.event.CacheEntryModifiedEvent;
 import org.infinispan.notifications.cachelistener.event.CacheEntryRemovedEvent;
-import org.springframework.integration.MessageChannel;
 import org.springframework.integration.endpoint.AbstractEndpoint;
-import org.springframework.integration.history.TrackableComponent;
+import org.springframework.integration.support.management.TrackableComponent;
+import org.springframework.messaging.MessageChannel;
 
 import com.coherentlogic.coherent.datafeed.beans.CachedEntry;
 import com.coherentlogic.coherent.datafeed.listeners.infinispan.CachedObjectListener;

@@ -5,9 +5,9 @@ import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.MarketPriceAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;

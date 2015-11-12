@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.ImbalancedCollectionsException;

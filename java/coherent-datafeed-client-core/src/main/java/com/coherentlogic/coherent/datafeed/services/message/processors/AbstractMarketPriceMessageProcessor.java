@@ -1,7 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;

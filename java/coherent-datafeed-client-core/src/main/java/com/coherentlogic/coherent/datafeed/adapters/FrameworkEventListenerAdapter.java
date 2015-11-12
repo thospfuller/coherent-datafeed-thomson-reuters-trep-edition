@@ -1,16 +1,15 @@
 package com.coherentlogic.coherent.datafeed.adapters;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
-
-import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.Session;

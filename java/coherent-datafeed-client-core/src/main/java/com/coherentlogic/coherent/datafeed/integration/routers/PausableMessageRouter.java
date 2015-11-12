@@ -3,9 +3,9 @@ package com.coherentlogic.coherent.datafeed.integration.routers;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageChannel;
 import org.springframework.integration.router.AbstractMessageRouter;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 
 import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
 

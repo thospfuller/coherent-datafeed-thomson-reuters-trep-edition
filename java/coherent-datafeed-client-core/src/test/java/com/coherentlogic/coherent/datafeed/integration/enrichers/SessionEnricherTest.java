@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.services.Session;
 

@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 import com.reuters.rfa.common.Event;
 

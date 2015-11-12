@@ -6,9 +6,9 @@ import java.util.Map;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;

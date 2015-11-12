@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageChannel;
-import org.springframework.integration.MessageHeaders;
 import org.springframework.integration.router.AbstractMessageRouter;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.exceptions.SessionNotFoundException;
 import com.coherentlogic.coherent.datafeed.services.Session;

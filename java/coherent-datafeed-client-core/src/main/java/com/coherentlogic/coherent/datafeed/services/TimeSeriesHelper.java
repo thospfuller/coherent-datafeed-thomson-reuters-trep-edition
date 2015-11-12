@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.services;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
-import org.springframework.integration.MessageHeaders;
+import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.reuters.rfa.common.Handle;

@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.Session;
