@@ -5,9 +5,9 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
@@ -74,7 +74,7 @@ public class QueryTimeSeriesMessageProcessor
          *
          * @TODO Use the SessionUtils to get the session.
          */
-//        synchronized (sessionCache) {
+        synchronized (sessionCache) {
 
             log.info("parameters: " + parameters);
 
@@ -105,9 +105,7 @@ public class QueryTimeSeriesMessageProcessor
 
             addRicsFromSeriesTo (series, timeSeriesEntries);
 
-            TimeSeriesEntry timeSeriesEntry = newTimeSeriesEntry (
-                series
-            );
+            TimeSeriesEntry timeSeriesEntry = newTimeSeriesEntry (series);
 
             timeSeriesEntries.putTimeSeriesEntry(handle, timeSeriesEntry);
 
@@ -121,7 +119,7 @@ public class QueryTimeSeriesMessageProcessor
                     .copyHeaders(headers)
                     .setHeader(SESSION, session)
                     .build();
-//        }
+        }
 
         log.info("queryTimeSeriesMessageProcessor.process: method ends; " +
             "result: " + result);
@@ -134,7 +132,7 @@ public class QueryTimeSeriesMessageProcessor
      * handle and if this is null it will create a new instance of {@link
      * TimeSeriesEntries} and add it to the session.
      */
-    static TimeSeriesEntries getTimeSeriesEntries (
+    public static TimeSeriesEntries getTimeSeriesEntries (
         Session session,
         String serviceName,
         Handle handle,
@@ -157,7 +155,7 @@ public class QueryTimeSeriesMessageProcessor
         return timeSeriesEntries;
     }
 
-    static void addRicsFromSeriesTo (
+    public static void addRicsFromSeriesTo (
         TS1Series series,
         TimeSeriesEntries timeSeriesEntries
     ) {
@@ -172,7 +170,7 @@ public class QueryTimeSeriesMessageProcessor
         }
     }
 
-    static TimeSeriesEntry newTimeSeriesEntry (
+    public static TimeSeriesEntry newTimeSeriesEntry (
         TS1Series ts1Series
     ) {
         String primaryRic = ts1Series.getPrimaryRic();
