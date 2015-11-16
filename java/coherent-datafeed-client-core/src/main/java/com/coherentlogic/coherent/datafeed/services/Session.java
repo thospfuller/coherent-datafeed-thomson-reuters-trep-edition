@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +86,8 @@ public class Session extends SerializableBean {
     private final Map<Handle, TimeSeriesEntries> timeSeriesEntryCache;
 
     private PropertyChangeSupport propertyChangeSupport = null;
+
+    private String timeSeriesRIC = null;
 
     public Session(
         Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache,
@@ -531,6 +534,14 @@ public class Session extends SerializableBean {
 
     public TimeSeriesEntries getTimeSeriesEntries (Handle handle) {
         return timeSeriesEntryCache.get(handle);
+    }
+
+    public String getTimeSeriesRIC() {
+        return timeSeriesRIC;
+    }
+
+    public void setTimeSeriesRIC(String timeSeriesRIC) {
+        this.timeSeriesRIC = timeSeriesRIC;
     }
 
     public void putTimeSeriesEntries (
