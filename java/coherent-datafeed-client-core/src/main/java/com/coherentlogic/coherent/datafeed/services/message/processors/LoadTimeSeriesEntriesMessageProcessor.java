@@ -4,14 +4,14 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.assertNotNull;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
+import com.coherentlogic.coherent.datafeed.misc.Utils;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesLoader;
@@ -28,18 +28,14 @@ public class LoadTimeSeriesEntriesMessageProcessor
     implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {
 
     private static final Logger log =
-        LoggerFactory.getLogger(TimeSeriesLoader.class);
+        LoggerFactory.getLogger(LoadTimeSeriesEntriesMessageProcessor.class);
 
     private final TimeSeriesLoader timeSeriesLoader;
 
-    private final Cache<Handle, Session> sessionCache;
-
     public LoadTimeSeriesEntriesMessageProcessor (
-        TimeSeriesLoader timeSeriesLoader,
-        Cache<Handle, Session> sessionCache
+        TimeSeriesLoader timeSeriesLoader
     ) {
         this.timeSeriesLoader = timeSeriesLoader;
-        this.sessionCache = sessionCache;
     }
 
     @Override
@@ -51,15 +47,16 @@ public class LoadTimeSeriesEntriesMessageProcessor
 
         // We need to sync here as the timeSeriesEntries may still be null when
         // the message is returned from RFA.
-//        synchronized (session.) {
 
-            OMMItemEvent itemEvent = message.getPayload();
+        OMMItemEvent itemEvent = message.getPayload();
 
-            Handle handle = itemEvent.getHandle();
+        Handle handle = itemEvent.getHandle();
 
-            MessageHeaders headers = message.getHeaders();
+        MessageHeaders headers = message.getHeaders();
 
-            Session session = (Session) headers.get(SESSION);
+        Session session = (Session) headers.get(SESSION);
+
+        synchronized (session) {
 
             assertNotNull (session);
 
@@ -70,7 +67,7 @@ public class LoadTimeSeriesEntriesMessageProcessor
             log.info("handle: " + ToStringBuilder.reflectionToString(handle));
 
             timeSeriesLoader.load(itemEvent, timeSeriesEntries);
-//        }
+        }
 
         log.info("loadTimeSeriesEntriesMessageProcessor.process: method " +
             "ends; message: " + message);
