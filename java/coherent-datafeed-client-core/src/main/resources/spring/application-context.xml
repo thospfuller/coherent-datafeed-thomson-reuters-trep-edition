@@ -238,8 +238,12 @@
         <constructor-arg name="messageConsumer" ref="timeSeriesConsumer"/>
         <constructor-arg name="jsonGenerator" ref="timeSeriesJSONGenerator"/>
         <constructor-arg name="commonRequestExecutor" ref="timeSeriesRequestExecutor"/>
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/>
+        <constructor-arg name="ricToCompletableFutureCache" ref="ricToCompletableFutureCache"/>
     </bean>
 
+    <!-- TPF: Upgrading this service and RFA 8 does not have the Event constant needed so this is broken. -->
     <bean id="marketPriceEventDrivenEndpoint"
      class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
         <property name="requestChannel" ref="onMarketPriceAddSessionToHeadersChannel"/>
@@ -291,7 +295,9 @@
         <constructor-arg name="serviceEntryAdapter" ref="serviceEntryAdapter"/>
     </bean>
 
-    <bean id="authenticationHelper" class="com.coherentlogic.coherent.datafeed.misc.AuthenticationHelper"/>
+    <bean id="authenticationHelper" class="com.coherentlogic.coherent.datafeed.misc.AuthenticationHelper">
+        <!-- constructor-arg ref="mainUI"/ -->
+    </bean>
 
     <bean id="timeSeriesLoader"
      class="com.coherentlogic.coherent.datafeed.services.TimeSeriesLoader">
@@ -334,7 +340,7 @@
     <bean id="loadTimeSeriesEntriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.LoadTimeSeriesEntriesMessageProcessor">
         <constructor-arg name="timeSeriesLoader" ref="timeSeriesLoader"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <!-- constructor-arg name="sessionCache" ref="sessionCache"/ -->
      </bean>
 
     <bean id="queryNextRICMessageProcessor"
@@ -346,6 +352,7 @@
     <bean id="transformTimeSeriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor">
         <constructor-arg name="timeSeriesAdapter" ref="timeSeriesAdapter"/>
+        <!-- constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/ -->
      </bean>
 
     <bean id="statusInterpreter"
@@ -533,4 +540,8 @@
 
     <bean id="timeSeriesHelper"
      class="com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper"/>
+
+    <!-- bean id="mainUI" class="com.coherentlogic.coherent.datafeed.client.ui.MainUI" init-method="initialize">
+        <constructor-arg ref="timeSeriesServiceGateway"/>
+    </bean -->
 </beans>
