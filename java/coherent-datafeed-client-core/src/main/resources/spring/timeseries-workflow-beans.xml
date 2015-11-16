@@ -83,14 +83,22 @@
 
     <int:service-activator
      input-channel="timeSeriesConvertToTimeSeriesChannel"
-     output-channel="timeSeriesAddTimeSeriesToQueueChannel"
+     output-channel="updateTimeSeriesPromiseChannel"
      ref="transformTimeSeriesMessageProcessor"
      method="process"/>
 
-    <int:channel id="timeSeriesAddTimeSeriesToQueueChannel"/>
+    <int:channel id="updateTimeSeriesPromiseChannel"/>
+
+    <int:service-activator
+     input-channel="updateTimeSeriesPromiseChannel"
+     output-channel="workflowEndsChannel"
+     ref="timeSeriesService"
+     method="onTimeSeriesArrival"/>
+
+    <!-- int:channel id="timeSeriesAddTimeSeriesToQueueChannel"/>
 
     <int-jms:outbound-channel-adapter
      channel="timeSeriesAddTimeSeriesToQueueChannel"
      connection-factory="jmsConnectionFactory"
-     destination="timeSeriesUpdatesTopic"/>
+     destination="timeSeriesUpdatesTopic"/ -->
 </beans>
