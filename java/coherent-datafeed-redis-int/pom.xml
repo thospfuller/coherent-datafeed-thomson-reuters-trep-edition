@@ -11,7 +11,7 @@
 
     <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
     <artifactId>coherent-datafeed-redis-int</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
     <name>coherent-datafeed-db-int</name>
     <description>Integration of the Coherent Datafeed with the Redis database.</description>
