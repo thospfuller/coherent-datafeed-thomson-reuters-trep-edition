@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.adapters;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.BIG_DATE;
+
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,9 +15,6 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
 import com.coherentlogic.coherent.datafeed.domain.Sample;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
-
-import static com.coherentlogic.coherent.datafeed.misc.Constants.BIG_DATE;
-
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Def;
 import com.reuters.ts1.TS1DefDb;
@@ -99,7 +98,9 @@ public class TimeSeriesAdapter extends
     ) {
         int factCount = series.getFactCount();
 
-        log.info("factCount: " + factCount);
+        String primaryRic = series.getPrimaryRic();
+
+        log.info("primaryRic: " + primaryRic + ", factCount: " + factCount);
 
         timeSeries.addHeader(BIG_DATE);
 
@@ -110,12 +111,13 @@ public class TimeSeriesAdapter extends
 
             if (def != null) {
                 String longName = def.getLongName();
+                log.debug ("longName: " + longName);
                 timeSeries.addHeader(longName);
             } else {
                 // See the TimeSeriesLoader if this happens.
-                log.warn ("The def is null for the fid " + fid +
-                    "; defDb.size: " + defDb.size() + "; this indicates " +
-                    "the defDb load logic has failed.");
+
+                log.warn("The def is null for the fid " + fid + "; defDb.size: " +
+                    defDb.size() + "; this indicates that the defDb load logic has failed.");
             }
         }
     }
