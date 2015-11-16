@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.reuters.rfa.common.Handle;
 
@@ -22,7 +24,7 @@ public interface TimeSeriesGatewaySpecification
      * Method queries the time series service passing the loginHandle, Reuters
      * Instrument Code (RIC), for the specified period.
      */
-    Handle queryTimeSeriesFor(
+/*    Handle queryTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
         String ric,
@@ -30,6 +32,25 @@ public interface TimeSeriesGatewaySpecification
     );
 
     Handle queryTimeSeriesFor(
+        String serviceName,
+        Handle loginHandle,
+        String ric,
+        String period
+    );
+*/
+
+    /**
+     * Method queries the time series service passing the loginHandle, Reuters
+     * Instrument Code (RIC), for the specified period.
+     */
+    CompletableFuture<TimeSeries> getTimeSeriesFor(
+        String serviceName,
+        Handle loginHandle,
+        String ric,
+        int period
+    );
+
+    CompletableFuture<TimeSeries> getTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
         String ric,
