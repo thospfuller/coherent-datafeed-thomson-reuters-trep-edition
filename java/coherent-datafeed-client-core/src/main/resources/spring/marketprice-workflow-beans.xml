@@ -35,8 +35,8 @@
          value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
         <int:mapping channel="ommItemEventChannel"
          value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
-        <int:mapping channel="marketDataItemEventChannel"
-         value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/>
+        <!-- int:mapping channel="marketDataItemEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/ -->
     </int:router>
 
     <!-- This transformer casts the Event into an instance of OMMItemEvent.
