@@ -1,18 +1,20 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.*;
 import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
+import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
  * This class is used to enrich the message returned from the RFA api by using
@@ -42,6 +44,9 @@ public class TimeSeriesMessageEnricher extends AbstractMessageEnricher {
 
         log.info("enrich: method begins; message: " + message);
 
+        // TODO: Add comments regarding why this is necessary.
+        MessageHeaders headers = message.getHeaders();
+
         Cache<Handle, Session> sessionCache = getSessionCache();
 
         Message<Event> enrichedMessage = null;
@@ -55,16 +60,17 @@ public class TimeSeriesMessageEnricher extends AbstractMessageEnricher {
          * @TODO: Investigate using transactions and the cache lock method as an
          *  alternative.
          */
-//        synchronized (sessionCache) {
+        synchronized (sessionCache) {
 
             Session session = getSession (message, sessionCache);
 
             enrichedMessage =
                 MessageBuilder
                     .fromMessage(message)
+                    .copyHeaders(headers)
                     .setHeader(SESSION, session)
                     .build ();
-//        }
+        }
         log.info("enrich: method ends; enrichedMessage: " +
             enrichedMessage);
 
