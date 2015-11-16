@@ -46,7 +46,7 @@ import com.reuters.ts1.TS1Series;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class TimeSeriesLoader { //extends BasicLoader<OMMItemEvent> {
+public class TimeSeriesLoader {
 
     private static final Logger log =
         LoggerFactory.getLogger(TimeSeriesLoader.class);
@@ -247,71 +247,6 @@ public class TimeSeriesLoader { //extends BasicLoader<OMMItemEvent> {
         }
         return result;
     }
-
-//    /**
-//     * Method loads the headers, which are contained in the itemEvent parameter,
-//     * into the {@link TS1DefDb} database.
-//     *
-//     * "The problem appears to be an oversight on my part: the example RefChain
-//     *  ctor makes a series of requests for QQ?? rics and I was not doing this.
-//     *  If I disable this call in the example application, zero headers are
-//     *  displayed, so I hope that when I sort out this issue everything else
-//     *  will fall into place.
-//     *
-//     *  I'll update this entry when this issue has been addressed to my
-//     *  satisfaction." (a later entry notes this was, in fact, the issue)
-//     */
-//    void loadHeadersIntoDefDb (OMMItemEvent itemEvent, TS1DefDb defDb) {
-//
-//        // FieldDictionary fieldDictionary = getFieldDictionary();
-//
-//        FidDef row64_3FidDef = fieldDictionary.getFidDef(ROW64_3);
-//
-//        short row64_3 = row64_3FidDef.getFieldId();
-//
-//        for (short i = 0; i < 9; i++) {
-//
-//            short nextRow = (short)(row64_3 + i);
-//
-//            byte[] bytes = getDefDbBytes(itemEvent, nextRow);
-//
-//            String test = new String (bytes).trim ();
-//
-//            if (
-//                bytes != null
-//                &&
-//                0 < bytes.length
-//                && (!test.equals(EMPTY_STRING))
-//            ) {
-//            	/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                 * NOTE: This class loads the header information, the actual
-//                 *       time series data is loaded by the {@link
-//                 *       TS1DefDbLoader} class.
-//                 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                 */
-//
-//                // TS1DefDb - Invalid TS1 data will not be added: 37 22 2f 7b...
-//                // happens on this line.
-//                log.info("defDb.size (before): " + defDb.size());
-//                boolean parsed = defDb.add(bytes);
-//                log.info("defDb.size (after): " + defDb.size());
-//
-//                int sizeAfter = defDb.size();
-//
-//                if (!parsed)
-//                    log.warn("Adding the following bytes to the defDb " +
-//                        "failed: " + new String(bytes));
-//                else log.info("The defDb was able to parse the bytes " +
-//                    "provided -- the defDb.size is now: " + sizeAfter + ", bytes: " + new String (bytes));
-//
-//            } else {
-//                log.warn(
-//                    "The string '" + test + "' was not added to the defDb.");
-//            }
-//        }
-//    }
-
-    // -----
 
     /**
      * Method retrieves the bytes for the {@link TS1DefDb} using the itemEvent
