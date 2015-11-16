@@ -36,8 +36,8 @@
          value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
         <int:mapping channel="ts1DefTransformToOMMItemEventReceivedChannel"
          value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
-        <int:mapping channel="ts1DefWorkflowEndsDueToMarketDataItemEventChannel"
-         value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/>
+        <!-- int:mapping channel="ts1DefWorkflowEndsDueToMarketDataItemEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/ -->
     </int:router>
 
     <int:channel id="ts1DefCompletionEventReceivedChannel"/>
