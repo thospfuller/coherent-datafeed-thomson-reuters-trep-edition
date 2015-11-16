@@ -25,183 +25,196 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
+import com.coherentlogic.coherent.datafeed.misc.Action;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import com.reuters.rfa.common.Handle;
-import java.awt.Component;
 
 public class MainUI {
 
     private static final Logger log =
         LoggerFactory.getLogger(MainUI.class);
 
-	public JFrame mainFrame;
+    public JFrame mainFrame;
 
-	private final JTextArea statusResponseTextArea = new JTextArea();
+    private final JTextArea authenticationTextArea = new JTextArea();
 
-	private final TimeSeriesGatewaySpecification timeSeriesGatewaySpecification;
+    private final JTextArea statusResponseTextArea = new JTextArea();
 
-	private Handle loginHandle = null;
+    private final TimeSeriesGatewaySpecification timeSeriesGatewaySpecification;
 
-	/**
-	 * Create the application.
-	 */
-	public MainUI() {
-		initialize();
-		timeSeriesGatewaySpecification=null;
-	}
+    private Handle loginHandle = null;
 
-	/**
-	 * @param timeSeriesGatewaySpecification
-	 */
-	public MainUI (
-		TimeSeriesGatewaySpecification timeSeriesGatewaySpecification
-	) {
-		this.timeSeriesGatewaySpecification = timeSeriesGatewaySpecification;
-	}
+    /**
+     * Create the application.
+     */
+    public MainUI() {
+        initialize();
+        timeSeriesGatewaySpecification = null;
+    }
 
-	public Handle getLoginHandle() {
-		return loginHandle;
-	}
+    /**
+     * @param timeSeriesGatewaySpecification
+     */
+    public MainUI (
+        TimeSeriesGatewaySpecification timeSeriesGatewaySpecification
+    ) {
+        this.timeSeriesGatewaySpecification = timeSeriesGatewaySpecification;
+    }
 
-	public void setLoginHandle(Handle loginHandle) {
-		this.loginHandle = loginHandle;
-	}
+    public Handle getLoginHandle() {
+        return loginHandle;
+    }
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		mainFrame = new JFrame();
-		mainFrame.setTitle("Coherent Datafeed: Thomson Reuters (TREP) Edition");
-		mainFrame.setBounds(100, 100, 450, 300);
-		mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		
-		JMenuBar menuBar = new JMenuBar();
-		mainFrame.setJMenuBar(menuBar);
-		mainFrame.setSize(550, 550);
-		
-		JMenu mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
-		
-		JMenuItem mntmAbout = new JMenuItem("About");
-		mnHelp.add(mntmAbout);
-		mainFrame.getContentPane().setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.X_AXIS));
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setFont(new Font("Arial", Font.PLAIN, 12));
-		mainFrame.getContentPane().add(tabbedPane);
-		
-		JPanel statusResponsePanel = new JPanel();
-		JPanel timeSeriesPanel = new JPanel();
-		
-		JPanel authenticationPanel = new JPanel();
-		tabbedPane.addTab("Authentication", null, authenticationPanel, null);
-		authenticationPanel.setLayout(new BorderLayout(0, 0));
+    public void setLoginHandle(Handle loginHandle) {
+        this.loginHandle = loginHandle;
+    }
 
-		JTextArea authenticationTextArea = new JTextArea();
-		authenticationTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
-		
-		JScrollPane authenticationPane = new JScrollPane(authenticationTextArea);
-		authenticationPanel.add(authenticationPane, BorderLayout.CENTER);
-		authenticationPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		authenticationPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		tabbedPane.addTab("Status Response", statusResponsePanel);
-		tabbedPane.addTab("Time Series", timeSeriesPanel);
-		timeSeriesPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("262px:grow"),
-				ColumnSpec.decode("4px"),},
-			new RowSpec[] {
-				FormSpecs.LINE_GAP_ROWSPEC,
-				RowSpec.decode("26px:grow"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
-		
-		final JTextArea timeSeriesGroovyScriptTextArea = new JTextArea();
-		timeSeriesGroovyScriptTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
-		timeSeriesGroovyScriptTextArea.setText(
-			"Enter your Groovy script here (in context: log, loginHandle, timeSeriesGateway).");
-		timeSeriesPanel.add(timeSeriesGroovyScriptTextArea, "1, 2, fill, fill");
-		
-		JButton btnEvaluate = new JButton("Evaluate");
-		
-		btnEvaluate.addActionListener(
-			new ActionListener () {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					String scriptText = timeSeriesGroovyScriptTextArea.getText();
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        mainFrame = new JFrame();
+        mainFrame.setTitle("Coherent Datafeed: Thomson Reuters (TREP) Edition");
+        mainFrame.setBounds(100, 100, 450, 300);
+        mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        
+        JMenuBar menuBar = new JMenuBar();
+        mainFrame.setJMenuBar(menuBar);
+        mainFrame.setSize(550, 550);
+        
+        JMenu mnHelp = new JMenu("Help");
+        menuBar.add(mnHelp);
+        
+        JMenuItem mntmAbout = new JMenuItem("About");
+        mnHelp.add(mntmAbout);
+        mainFrame.getContentPane().setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.X_AXIS));
+        
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.setFont(new Font("Arial", Font.PLAIN, 12));
+        mainFrame.getContentPane().add(tabbedPane);
+        
+        JPanel statusResponsePanel = new JPanel();
+        JPanel timeSeriesPanel = new JPanel();
+        
+        JPanel authenticationPanel = new JPanel();
+        tabbedPane.addTab("Authentication", null, authenticationPanel, null);
+        authenticationPanel.setLayout(new BorderLayout(0, 0));
 
-					Binding binding = new Binding ();
+        authenticationTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
+        
+        JScrollPane authenticationPane = new JScrollPane(authenticationTextArea);
+        authenticationPanel.add(authenticationPane, BorderLayout.CENTER);
+        authenticationPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        authenticationPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        tabbedPane.addTab("Status Response", statusResponsePanel);
+        tabbedPane.addTab("Time Series", timeSeriesPanel);
+        timeSeriesPanel.setLayout(new FormLayout(new ColumnSpec[] {
+                ColumnSpec.decode("262px:grow"),
+                ColumnSpec.decode("4px"),},
+            new RowSpec[] {
+                FormSpecs.LINE_GAP_ROWSPEC,
+                RowSpec.decode("26px:grow"),
+                FormSpecs.RELATED_GAP_ROWSPEC,
+                FormSpecs.DEFAULT_ROWSPEC,}));
+        
+        final JTextArea timeSeriesGroovyScriptTextArea = new JTextArea();
+        timeSeriesGroovyScriptTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
+        timeSeriesGroovyScriptTextArea.setText(
+            "Enter your Groovy script here (in context: log, loginHandle, timeSeriesGateway).");
+        timeSeriesPanel.add(timeSeriesGroovyScriptTextArea, "1, 2, fill, fill");
+        
+        JButton btnEvaluate = new JButton("Evaluate");
+        
+        btnEvaluate.addActionListener(
+            new ActionListener () {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    String scriptText = timeSeriesGroovyScriptTextArea.getText();
 
-					binding.setVariable("log", log);
-					binding.setVariable("loginHandle", loginHandle);
-					binding.setVariable("timeSeriesGateway", timeSeriesGatewaySpecification);
+                    Binding binding = new Binding ();
 
-					GroovyShell groovyShell = new GroovyShell(binding);
-					
-					groovyShell.evaluate(scriptText);
-				}
-			}
-		);
-		
-		btnEvaluate.setFont(new Font("Arial", Font.PLAIN, 12));
-		timeSeriesPanel.add(btnEvaluate, "1, 4");
-		
-		statusResponsePanel.setLayout(new BorderLayout(0, 0));
-		
-		JScrollPane scrollPane = new JScrollPane(statusResponseTextArea);
-		
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
-		statusResponsePanel.add(scrollPane);
-		
-		statusResponseTextArea.setTabSize(4);
-		statusResponseTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
-		statusResponseTextArea.setEditable(false);
-		
-		statusResponseTextArea.setText("");
-	}
+                    binding.setVariable("log", log);
+                    binding.setVariable("loginHandle", loginHandle);
+                    binding.setVariable("timeSeriesGateway", timeSeriesGatewaySpecification);
 
-	public void addStatusResponseText (final String text) {
-		SwingUtilities.invokeLater(
-			new Runnable() {
-				@Override
-				public void run() {
-					String currentText = statusResponseTextArea.getText();
-					final String newText = currentText + "\n" + text;
-					statusResponseTextArea.setText(newText);
-				}
-			}
-		);
-	}
+                    GroovyShell groovyShell = new GroovyShell(binding);
+                    
+                    groovyShell.evaluate(scriptText);
+                }
+            }
+        );
+        
+        btnEvaluate.setFont(new Font("Arial", Font.PLAIN, 12));
+        timeSeriesPanel.add(btnEvaluate, "1, 4");
+        
+        statusResponsePanel.setLayout(new BorderLayout(0, 0));
+        
+        JScrollPane scrollPane = new JScrollPane(statusResponseTextArea);
+        
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
+        statusResponsePanel.add(scrollPane);
+        
+        statusResponseTextArea.setTabSize(4);
+        statusResponseTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
+        statusResponseTextArea.setEditable(false);
+        
+        statusResponseTextArea.setText("");
+    }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
+    public void addAuthenticationResponseText (final String text) {
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    String currentText = authenticationTextArea.getText();
+                    final String newText = currentText + "\n" + text;
+                    authenticationTextArea.setText(newText);
+                }
+            }
+        );
+    }
 
-		final MainUI window = new MainUI();
+    public void addStatusResponseText (final String text) {
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    String currentText = statusResponseTextArea.getText();
+                    final String newText = currentText + "\n" + text;
+                    statusResponseTextArea.setText(newText);
+                }
+            }
+        );
+    }
 
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				window.mainFrame.pack();
-				window.mainFrame.setVisible(true);
-			}
-		});
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
 
-		for (int ctr = 1; ctr < 5000; ctr++) {
-			window.addStatusResponseText("New text:" + ctr);
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-				throw new RuntimeException("Failed to add the text with id " + ctr, e);
-			}
-		}
-	}
+        final MainUI window = new MainUI();
+        
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                window.mainFrame.pack();
+                window.mainFrame.setVisible(true);
+            }
+        });
+
+        for (int ctr = 1; ctr < 5000; ctr++) {
+            window.addStatusResponseText("New text:" + ctr);
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                throw new RuntimeException("Failed to add the text with id " + ctr, e);
+            }
+        }
+    }
 }
