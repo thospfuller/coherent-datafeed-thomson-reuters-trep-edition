@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <infinispan
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="urn:infinispan:config:6.0 http://www.infinispan.org/schemas/infinispan-config-6.0.xsd"
-      xmlns="urn:infinispan:config:6.0">
-    <namedCache name="sessionCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="queryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="directoryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="directoryEntryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="dictionaryEntryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="marketPriceEntryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="ts1DefEntryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="timeSeriesEntryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="dictionaryCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="marketPriceCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
-    <namedCache name="ts1DefCache">
-        <transaction transactionMode="TRANSACTIONAL" lockingMode="OPTIMISTIC"/>
-    </namedCache>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:infinispan:config:8.0 http://www.infinispan.org/schemas/infinispan-config-8.0.xsd"
+    xmlns="urn:infinispan:config:8.0">
+
+    <!-- TODO: Consider changing these caches to FULL_XA but we'll need to add @Transactional annotations where appropriate. -->
+    <cache-container default-cache="defaultCache">
+        <local-cache name="sessionCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="handleToCompletableFutureCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="ricToCompletableFutureCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="queryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="directoryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="directoryEntryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="dictionaryEntryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="marketPriceEntryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="ts1DefEntryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="timeSeriesEntryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="dictionaryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="marketPriceCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="ts1DefCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+    </cache-container>
 </infinispan>
