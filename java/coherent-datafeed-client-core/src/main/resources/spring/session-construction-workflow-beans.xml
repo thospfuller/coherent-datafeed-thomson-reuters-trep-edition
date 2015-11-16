@@ -18,22 +18,6 @@
         http://www.springframework.org/schema/integration/jms
         http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
 
-    <!-- TODO: Create specific workflowEnds so that we can read exactly what is
-               ending.
-      -->
-
-    <!-- This workflow contains logic specifically for the construction of the
-         session object. Note that this workflow calls channels to other work-
-         -flows and vice-versa.
-
-         The session is passed from one point to the next and must be included
-         in each point.
-      -->
-
-    <!-- The following workflow pertains to authentication however keep in mind
-         that this is a proxied call into Spring Integration.
-      -->
-
     <int:gateway id="statusResponseServiceGateway"
         service-interface="com.coherentlogic.coherent.datafeed.services.StatusResponseServiceGateway">
           <!-- NOTE: There's refer to the links below for the reasons why there's a
@@ -214,20 +198,20 @@
      ref="getNextStatusResponseUpdateAsJSONMessageProcessor"
      method="process"/>
 
+<!-- TPF: Upgrade broken begins. -->
+
     <!--
-        -->
+          NOTE: There's refer to the links below for the reasons why there's a
+                payload when getNextUpdateAsJSON is a getter method:
+                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
+                ONLY APPLICABLE WHEN THE METHOD HAS ZERO PARAMS payload-expression="new Object ()"
+          -->
     <int:gateway id="queryMarketPriceUpdates"
         service-interface="com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification">
         <int:method name="query"
          request-channel="queryMarketPriceUpdatesChannel"
          reply-channel="queryMarketPriceUpdatesReplyChannel"
          payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
-        <!--
-          NOTE: There's refer to the links below for the reasons why there's a
-                payload when getNextUpdateAsJSON is a getter method:
-                http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
-                ONLY APPLICABLE WHEN THE METHOD HAS ZERO PARAMS payload-expression="new Object ()"
-          -->
         <int:method name="getNextUpdateAsJSON"
          payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
          request-channel="getNextMarketPriceUpdateAsJSONRequestChannel"
@@ -244,16 +228,6 @@
     <bean id="getNextMarketPriceUpdateAsJSONMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketPriceUpdateAsJSONMessageProcessor">
         <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketPriceService"/>
-    </bean>
-
-    <bean id="getNextStatusResponseUpdateAsJSONMessageProcessor"
-     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextStatusResponseUpdateAsJSONMessageProcessor">
-        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="statusResponseService"/>
-    </bean>
-
-    <bean id="getNextTimeSeriesUpdateAsJSONMessageProcessor"
-     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextTimeSeriesUpdateAsJSONMessageProcessor">
-        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="timeSeriesService"/>
     </bean>
 
     <bean id="queryMarketPriceUpdatesMessageProcessor"
@@ -286,6 +260,26 @@
         <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketPriceService"/>
     </bean>
 
+     <int:channel id="marketPriceUpdateAsJSONChannel"/>
+
+    <int:service-activator
+     input-channel="queryMarketPriceUpdatesChannel"
+     output-channel="queryMarketPriceUpdatesReplyChannel"
+     ref="queryMarketPriceUpdatesMessageProcessor"
+     method="process"/>
+
+<!-- TPF: Upgrade broken ends. -->
+
+    <bean id="getNextStatusResponseUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextStatusResponseUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="statusResponseService"/>
+    </bean>
+
+    <bean id="getNextTimeSeriesUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextTimeSeriesUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="timeSeriesService"/>
+    </bean>
+
     <int:service-activator
      input-channel="getNextStatusResponseUpdateAsJSONRequestChannel"
      output-channel="getNextStatusResponseUpdateAsJSONReplyChannel"
@@ -299,14 +293,6 @@
      input-channel="getNextTimeSeriesUpdateAsJSONRequestChannel"
      output-channel="getNextTimeSeriesUpdateAsJSONReplyChannel"
      ref="getNextTimeSeriesUpdateAsJSONMessageProcessor"
-     method="process"/>
-
-     <int:channel id="marketPriceUpdateAsJSONChannel"/>
-
-    <int:service-activator
-     input-channel="queryMarketPriceUpdatesChannel"
-     output-channel="queryMarketPriceUpdatesReplyChannel"
-     ref="queryMarketPriceUpdatesMessageProcessor"
      method="process"/>
 
     <!-- NOTE: ONCE THE LOGIN HAS SUCCEEEDED OR FAILED THE NEXT STEP IS TO
@@ -405,30 +391,44 @@
      ref="frameworkEventListenerAdapter"
      method="initialisationSuccessful"/>
 
+    <!--
+      For async-executor as it relates to CompletableFuture, see:
+
+      http://docs.spring.io/spring-integration/reference/html/messaging-endpoints-chapter.html
+
+      -->
     <int:gateway id="timeSeriesServiceGateway"
         service-interface="com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification"
         default-request-channel="logChannel"
-        default-reply-channel="logChannel">
-        <int:method name="queryTimeSeriesFor"
+        default-reply-channel="logChannel"
+        async-executor="">
+        <!-- int:method name="queryTimeSeriesFor"
          request-channel="queryTimeSeriesForRequestChannel"
          reply-channel="queryTimeSeriesForReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/ -->
+        <int:method name="getTimeSeriesFor"
+         request-channel="getTimeSeriesForRequestChannel"
+         reply-channel="getTimeSeriesForReplyChannel"
          payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/>
         <!-- ONLY APPLICABLE IF THE METHOD HAS ZERO PARAMS payload-expression="new Object ()" -->
-        <int:method name="getNextUpdateAsJSON"
+        <!-- int:method name="getNextUpdateAsJSON"
          request-channel="getNextTimeSeriesUpdateAsJSONRequestChannel"
          reply-channel="getNextTimeSeriesUpdateAsJSONReplyChannel"
          payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"/>
         <int:method name="getNextUpdate"
          payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
          request-channel="getNextTimeSeriesUpdateRequestChannel"
-         reply-channel="getNextTimeSeriesUpdateReplyChannel"/>
+         reply-channel="getNextTimeSeriesUpdateReplyChannel"/ -->
     </int:gateway>
 
-    <int:channel id="queryTimeSeriesForRequestChannel"/>
-    <int:channel id="queryTimeSeriesForReplyChannel"/>
+    <!-- int:channel id="queryTimeSeriesForRequestChannel"/>
+    <int:channel id="queryTimeSeriesForReplyChannel"/ -->
 
-    <int:channel id="getNextTimeSeriesUpdateRequestChannel"/>
-    <int:channel id="getNextTimeSeriesUpdateReplyChannel"/>
+    <int:channel id="getTimeSeriesForRequestChannel" />
+    <int:channel id="getTimeSeriesForReplyChannel"/>
+
+    <!-- int:channel id="getNextTimeSeriesUpdateRequestChannel"/>
+    <int:channel id="getNextTimeSeriesUpdateReplyChannel"/ -->
 
     <bean id="queryTimeSeriesUpdatesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor">
@@ -436,11 +436,23 @@
         <constructor-arg name="sessionCache" ref="sessionCache"/>
     </bean>
 
+    <bean id="getTimeSeriesForMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetTimeSeriesForMessageProcessor">
+        <constructor-arg name="timeSeriesService" ref="timeSeriesService"/>
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+    </bean>
+
     <int:service-activator
+     input-channel="getTimeSeriesForRequestChannel"
+     output-channel="getTimeSeriesForReplyChannel"
+     ref="getTimeSeriesForMessageProcessor"
+     method="process"/>
+
+    <!-- int:service-activator
      input-channel="queryTimeSeriesForRequestChannel"
      output-channel="queryTimeSeriesForReplyChannel"
      ref="queryTimeSeriesUpdatesMessageProcessor"
-     method="process"/>
+     method="process"/ -->
 
     <!-- int:service-activator
      input-channel="getNextTimeSeriesUpdateAsJSONRequestChannel"
@@ -453,9 +465,9 @@
         <constructor-arg name="asynchronouslyUpdatableSpecification" ref="timeSeriesService"/>
     </bean>
 
-    <int:service-activator
+    <!-- int:service-activator
      input-channel="getNextTimeSeriesUpdateRequestChannel"
      output-channel="getNextTimeSeriesUpdateReplyChannel"
      ref="getNextTimeSeriesUpdateMessageProcessor"
-     method="process"/>
+     method="process"/ -->
 </beans>
