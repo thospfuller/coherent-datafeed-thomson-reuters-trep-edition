@@ -111,7 +111,6 @@
     <bean id="timeSeriesEntryCache" class="org.infinispan.Cache"
         factory-bean="timeSeriesEntryCacheFactory" factory-method="getInstance" />
 
-    <!-- TPF: Copy/paste error was here. -->
     <bean id="handleToCompletableFutureCache" class="org.infinispan.Cache"
         factory-bean="handleToCompletableFutureCacheFactory" factory-method="getInstance" />
     <bean id="ricToCompletableFutureCache" class="org.infinispan.Cache"
