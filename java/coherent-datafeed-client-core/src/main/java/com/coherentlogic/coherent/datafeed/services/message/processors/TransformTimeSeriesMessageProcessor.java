@@ -1,11 +1,12 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.HANDLE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.AbstractAdapter;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
@@ -51,6 +52,7 @@ public class TransformTimeSeriesMessageProcessor
         Message<TimeSeries> result = MessageBuilder
             .withPayload(timeSeries)
             .copyHeaders(headers)
+            .setHeader(HANDLE, handle)
             .build();
 
         return result;
