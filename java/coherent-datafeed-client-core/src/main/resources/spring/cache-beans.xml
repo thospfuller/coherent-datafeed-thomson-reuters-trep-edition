@@ -96,8 +96,26 @@
         <constructor-arg name="cacheName" value="timeSeriesEntryCache" />
     </bean>
 
+    <bean id="handleToCompletableFutureCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="handleToCompletableFutureCache" />
+    </bean>
+
+    <bean id="ricToCompletableFutureCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="ricToCompletableFutureCache" />
+    </bean>
+
     <bean id="timeSeriesEntryCache" class="org.infinispan.Cache"
         factory-bean="timeSeriesEntryCacheFactory" factory-method="getInstance" />
+
+    <!-- TPF: Copy/paste error was here. -->
+    <bean id="handleToCompletableFutureCache" class="org.infinispan.Cache"
+        factory-bean="handleToCompletableFutureCacheFactory" factory-method="getInstance" />
+    <bean id="ricToCompletableFutureCache" class="org.infinispan.Cache"
+        factory-bean="ricToCompletableFutureCacheFactory" factory-method="getInstance" />
 
     <!-- /////////////////////////////////////////////////////////////////// -->
 
