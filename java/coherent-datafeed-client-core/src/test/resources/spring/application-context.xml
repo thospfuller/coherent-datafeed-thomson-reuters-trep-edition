@@ -360,7 +360,6 @@
     <bean id="loadTimeSeriesEntriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.LoadTimeSeriesEntriesMessageProcessor">
         <constructor-arg name="timeSeriesLoader" ref="timeSeriesLoader"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
      </bean>
 
     <bean id="queryNextRICMessageProcessor"
