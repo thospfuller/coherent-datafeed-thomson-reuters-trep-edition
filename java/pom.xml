@@ -22,10 +22,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.framework.version>4.0.4.RELEASE</spring.framework.version>
-        <spring.integration.version>2.2.6.RELEASE</spring.integration.version>
-        <infinispan.version>6.0.2.Final</infinispan.version>
+        <spring.framework.version>4.2.2.RELEASE</spring.framework.version>
+        <spring.integration.version>4.2.1.RELEASE</spring.integration.version>
+        <spring.boot.version>1.2.7.RELEASE</spring.boot.version>
+        <infinispan.version>8.0.1.Final</infinispan.version>
         <hornetq.version>2.2.21.Final</hornetq.version>
+        <java.version>1.8</java.version>
+        <start-class>com.coherentlogic.coherent.datafeed.examples.TimeSeriesExample</start-class>
     </properties>
 
     <scm>
@@ -74,6 +77,13 @@
             <url>http://repository.springsource.com/maven/bundles/external</url>
         </repository>
         <repository>
+            <id>spring-releases</id>
+            <url>http://repo.spring.io/libs-release</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>JBoss Release Repository</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
             <snapshots>
@@ -86,6 +96,15 @@
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <url>http://repo.spring.io/libs-releases</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <modules>
         <module>coherent-datafeed-assembly</module>
@@ -128,12 +147,12 @@
             <dependency>
                 <groupId>com.reuters</groupId>
                 <artifactId>rfa</artifactId>
-                <version>7.6.0.L1.all</version>
+                <version>8.0.0.L2.all</version>
             </dependency>
             <dependency>
                 <groupId>com.coherentlogic.coherent.data-model</groupId>
                 <artifactId>bom</artifactId>
-                <version>1.0.16-RELEASE</version>
+                <version>1.0.17-RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -160,7 +179,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>4.2.7.Final</version>
+                <version>5.0.3.Final</version>
             </dependency>
             <dependency>
                 <groupId>javax.persistence</groupId>
@@ -213,6 +232,69 @@
                 <artifactId>spring-aop</artifactId>
                 <version>${spring.framework.version}</version>
             </dependency>
+            <!-- Required for Spring Boot, remove otherwise. -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.framework.version}</version>
+            </dependency>
+            <!-- dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-actuator</artifactId>
+                <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-remote-shell</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency -->
+            <!-- dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-cli</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency -->
+            <!-- TODO: Not sure we need this. ========================================= -->
+            <!-- dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-integration</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency -->
+            <!-- dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>test</scope>
+            </dependency -->
+            <!-- ====================================================================== -->
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-spring</artifactId>
@@ -225,14 +307,19 @@
                 <version>${infinispan.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-commons</artifactId>
+                <version>${infinispan.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
-                <version>1.7.4</version>
+                <version>1.8.7</version>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
-                <version>1.7.4</version>
+                <version>1.8.7</version>
             </dependency>
             <dependency>
 	    	<groupId>com.google.code.gson</groupId>
@@ -326,9 +413,9 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.jboss.netty</groupId>
+                <groupId>io.netty</groupId>
                 <artifactId>netty</artifactId>
-                <version>3.2.10.Final</version>
+                <version>3.10.5.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.javaee</groupId>
@@ -343,7 +430,7 @@
             <dependency>
                 <groupId>org.jboss.logging</groupId>
                 <artifactId>jboss-logging</artifactId>
-                <version>3.1.3.GA</version>
+                <version>3.3.0.Final</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -386,12 +473,29 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- version>1.2.0.M2</version -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!-- TODO: This is Spring Boot-specific so move the examples to their own module. -->
+                <configuration>
+                    <mainClass>${start-class}</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <!-- @TODO: Remove the executable as we really don't want to have this 
                         here in order to make this work as this destroys platform independence. -->
                     <executable>C:/Program Files/Java/jdk1.7.0_09/bin/javac</executable>
