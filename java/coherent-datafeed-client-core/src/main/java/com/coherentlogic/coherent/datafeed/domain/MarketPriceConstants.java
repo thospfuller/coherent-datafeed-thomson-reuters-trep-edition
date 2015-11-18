@@ -362,4 +362,23 @@ public interface MarketPriceConstants {
         ROW64_12 = "ROW64_12",
         ROW64_13 = "ROW64_13",
         ROW64_14 = "ROW64_14";
+
+    static final String
+        ORDER_ID = "ORDER_ID",
+        ORDER_PRC = "ORDER_PRC",
+        ORDER_SIDE = "ORDER_SIDE",
+        ORDER_SIZE = "ORDER_SIZE",
+        ORDER_TONE = "ORDER_TONE",
+        PR_TIM_MS = "PR_TIM_MS";
+
+    static final String
+        MKT_MKR_NM = "MKT_MKR_NM",
+        MMID = "MMID",
+        ASK_TIM_MS = "ASK_TIM_MS",
+        TIMACT_MS = "TIMACT_MS",
+        BID_TIM_MS = "BID_TIM_MS",
+        PRIMARY_MM = "PRIMARY_MM",
+        MM_MODE = "MM_MODE",
+        MM_STATE = "MM_STATE",
+        PR_DATE = "PR_DATE";
 }
