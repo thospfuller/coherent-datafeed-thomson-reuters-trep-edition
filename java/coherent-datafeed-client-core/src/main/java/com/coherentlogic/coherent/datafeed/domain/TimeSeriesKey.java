@@ -52,6 +52,41 @@ public class TimeSeriesKey {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + period;
+        result = prime * result + ((ric == null) ? 0 : ric.hashCode());
+        result = prime * result
+                + ((serviceName == null) ? 0 : serviceName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TimeSeriesKey other = (TimeSeriesKey) obj;
+        if (period != other.period)
+            return false;
+        if (ric == null) {
+            if (other.ric != null)
+                return false;
+        } else if (!ric.equals(other.ric))
+            return false;
+        if (serviceName == null) {
+            if (other.serviceName != null)
+                return false;
+        } else if (!serviceName.equals(other.serviceName))
+            return false;
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "TimeSeriesKey [serviceName=" + serviceName + ", ric=" + ric
                 + ", period=" + period + "]";
