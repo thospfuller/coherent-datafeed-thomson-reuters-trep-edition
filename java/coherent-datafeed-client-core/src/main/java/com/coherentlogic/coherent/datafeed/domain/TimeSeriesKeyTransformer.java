@@ -15,7 +15,7 @@ public class TimeSeriesKeyTransformer implements Transformer {
 
     static final String DIVIDER = "|";
 
-    static final int EXPECTED_TOKENS = 2;
+    static final int EXPECTED_TOKENS = 3;
 
     public TimeSeriesKeyTransformer() {
     }
