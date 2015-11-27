@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.UserBean;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
+import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDacsIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.SessionFinalizationFailedException;
 import com.coherentlogic.coherent.datafeed.factories.PositionFactory;
@@ -63,6 +64,9 @@ public class AuthenticationService
 
     private OMMItemIntSpec ommItemIntSpec = null;
 
+    // Was 257
+    static final String DEFAULT_APPLICATION_ID = "257";//Coherent Datafeed: Thomson Reuters Elektron Edition";
+
     public AuthenticationService(
         LoginMessageBuilder loginMessageBuilder,
         EventQueue eventQueue,
@@ -84,6 +88,10 @@ public class AuthenticationService
         this.userBean = userBean;
     }
 
+    public Handle login (String dacsId) {
+        return login (dacsId, DEFAULT_APPLICATION_ID);
+    }
+
     /**
      * Call this method to authenticate with Thomson Reuters.
      *
@@ -94,12 +102,17 @@ public class AuthenticationService
      * @todo Do we want to return the handle and hence keep this class
      *  stateless?
      */
-    public Handle login (String dacsId) {
+    public Handle login (String dacsId, String applicationId) {
         if (dacsId == null || "".equals(dacsId))
             throw new InvalidDacsIdException ("The dacs id cannot be null " +
                 "or an empty string (dacsId: '" + dacsId + "').");
 
-        log.info("dacsId: " + dacsId);
+        if (applicationId == null || "".equals(applicationId))
+            throw new InvalidApplicationIdException ("The application id "
+                + "cannot be null or an empty string (applicationId: '"
+                + applicationId + "').");
+
+        log.info("dacsId: " + dacsId + ", applicationId: " + applicationId);
 
         try {
             userBean.setDacsId(dacsId);
@@ -118,7 +131,7 @@ public class AuthenticationService
                         OMMElementList.HAS_STANDARD_DATA, (short) 0, (short) 0)
                     .encodeElementEntryInit(
                         RDMUser.Attrib.ApplicationId, OMMTypes.ASCII_STRING)
-                    .encodeAsASCIIString("257")
+                    .encodeAsASCIIString(applicationId)
                     .encodeElementEntryInit(
                         RDMUser.Attrib.Position, OMMTypes.ASCII_STRING)
                     .encodeAsASCIIString(position)
