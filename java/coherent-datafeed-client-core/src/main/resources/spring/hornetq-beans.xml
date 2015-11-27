@@ -41,6 +41,10 @@
         <constructor-arg name="name" value="marketPriceUpdates" type="String"/>
         <constructor-arg name="bindings" value="/tr/marketPriceUpdates" type="String[]"/> 
     </bean>
+    <bean id="marketByOrderTopicConfig" class="org.hornetq.jms.server.config.impl.TopicConfigurationImpl">
+        <constructor-arg name="name" value="marketByOrderUpdates" type="String"/>
+        <constructor-arg name="bindings" value="/tr/marketByOrderUpdates" type="String[]"/> 
+    </bean>
     <bean id="timeSeriesTopicConfig" class="org.hornetq.jms.server.config.impl.TopicConfigurationImpl">
         <constructor-arg name="name" value="timeSeriesUpdates" type="String"/>
         <constructor-arg name="bindings" value="/tr/timeSeriesUpdates" type="String[]"/> 
@@ -51,6 +55,7 @@
             <util:list>
                 <ref bean="statusResponseTopicConfig"/>
                 <ref bean="marketPriceTopicConfig"/>
+                <ref bean="marketByOrderTopicConfig"/>
                 <ref bean="timeSeriesTopicConfig"/>
             </util:list>
         </constructor-arg>
@@ -71,12 +76,16 @@
     <bean id="marketPriceTopicFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.JMSTopicFactory">
         <constructor-arg name="topicName" value="marketPriceUpdates"/>
     </bean>
+    <bean id="marketByOrderTopicFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.JMSTopicFactory">
+        <constructor-arg name="topicName" value="marketByOrderUpdates"/>
+    </bean>
     <bean id="timeSeriesTopicFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.JMSTopicFactory">
         <constructor-arg name="topicName" value="timeSeriesUpdates"/>
     </bean>
 
     <bean id="statusResponseUpdatesTopic" class="javax.jms.Topic" factory-bean="statusResponseTopicFactory" factory-method="getInstance"/>
     <bean id="marketPriceUpdatesTopic" class="javax.jms.Topic" factory-bean="marketPriceTopicFactory" factory-method="getInstance"/>
+    <bean id="marketByOrderUpdatesTopic" class="javax.jms.Topic" factory-bean="marketByOrderTopicFactory" factory-method="getInstance"/>
     <bean id="timeSeriesUpdatesTopic" class="javax.jms.Topic" factory-bean="timeSeriesTopicFactory" factory-method="getInstance"/>
 
     <bean id="transportConfiguration" class="org.hornetq.api.core.TransportConfiguration">
@@ -115,12 +124,18 @@
         <constructor-arg name="session" ref="jmsSession"/>
         <constructor-arg name="destination" ref="marketPriceUpdatesTopic"/>
     </bean>
+    <!-- @TODO: Deprecated, no longer being used. -->
     <bean id="timeSeriesConsumerFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.ConsumerFactory">
         <constructor-arg name="session" ref="jmsSession"/>
         <constructor-arg name="destination" ref="timeSeriesUpdatesTopic"/>
+    </bean>
+    <bean id="marketByOrderConsumerFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.ConsumerFactory">
+        <constructor-arg name="session" ref="jmsSession"/>
+        <constructor-arg name="destination" ref="marketByOrderUpdatesTopic"/>
     </bean>
 
     <bean id="statusResponseConsumer" class="javax.jms.MessageConsumer" factory-bean="statusResponseConsumerFactory" factory-method="getInstance"/>
     <bean id="marketPriceConsumer" class="javax.jms.MessageConsumer" factory-bean="marketPriceConsumerFactory" factory-method="getInstance"/>
     <bean id="timeSeriesConsumer" class="javax.jms.MessageConsumer" factory-bean="timeSeriesConsumerFactory" factory-method="getInstance"/>
+    <bean id="marketByOrderConsumer" class="javax.jms.MessageConsumer" factory-bean="marketByOrderConsumerFactory" factory-method="getInstance"/>
 </beans>

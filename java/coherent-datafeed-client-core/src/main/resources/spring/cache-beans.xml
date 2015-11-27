@@ -81,6 +81,15 @@
     <bean id="marketPriceEntryCache" class="org.infinispan.Cache"
         factory-bean="marketPriceEntryCacheFactory" factory-method="getInstance" />
 
+    <bean id="marketByOrderEntryCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="marketByOrderEntryCache" />
+    </bean>
+
+    <bean id="marketByOrderEntryCache" class="org.infinispan.Cache"
+        factory-bean="marketByOrderEntryCacheFactory" factory-method="getInstance" />
+
     <bean id="ts1DefEntryCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
         <constructor-arg name="cacheManager" ref="cacheManager" />
@@ -102,10 +111,10 @@
         <constructor-arg name="cacheName" value="handleToCompletableFutureCache" />
     </bean>
 
-    <bean id="ricToCompletableFutureCacheFactory"
+    <bean id="timeSeriesKeyToCompletableFutureCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
         <constructor-arg name="cacheManager" ref="cacheManager" />
-        <constructor-arg name="cacheName" value="ricToCompletableFutureCache" />
+        <constructor-arg name="cacheName" value="timeSeriesKeyToCompletableFutureCache" />
     </bean>
 
     <bean id="timeSeriesEntryCache" class="org.infinispan.Cache"
@@ -113,8 +122,8 @@
 
     <bean id="handleToCompletableFutureCache" class="org.infinispan.Cache"
         factory-bean="handleToCompletableFutureCacheFactory" factory-method="getInstance" />
-    <bean id="ricToCompletableFutureCache" class="org.infinispan.Cache"
-        factory-bean="ricToCompletableFutureCacheFactory" factory-method="getInstance" />
+    <bean id="timeSeriesKeyToCompletableFutureCache" class="org.infinispan.Cache"
+        factory-bean="timeSeriesKeyToCompletableFutureCacheFactory" factory-method="getInstance" />
 
     <!-- /////////////////////////////////////////////////////////////////// -->
 
@@ -139,6 +148,15 @@
 
     <bean id="marketPriceCache" class="org.infinispan.Cache"
         factory-bean="marketPriceCacheFactory" factory-method="getInstance" />
+
+    <bean id="marketByOrderCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="marketByOrderCache" />
+    </bean>
+
+    <bean id="marketByOrderCache" class="org.infinispan.Cache"
+        factory-bean="marketByOrderCacheFactory" factory-method="getInstance" />
 
     <bean id="ts1DefCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">

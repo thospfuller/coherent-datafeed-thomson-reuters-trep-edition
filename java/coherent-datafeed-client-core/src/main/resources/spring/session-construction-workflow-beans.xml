@@ -206,6 +206,10 @@
                 http://static.springsource.org/spring-integration/docs/2.1.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods
                 ONLY APPLICABLE WHEN THE METHOD HAS ZERO PARAMS payload-expression="new Object ()"
           -->
+    <!--
+      @TODO: RENAME THIS BEAN TO MarketPriceServiceGATEWAY or something more
+             consistent. 
+      -->
     <int:gateway id="queryMarketPriceUpdates"
         service-interface="com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification">
         <int:method name="query"
@@ -268,7 +272,73 @@
      ref="queryMarketPriceUpdatesMessageProcessor"
      method="process"/>
 
-<!-- TPF: Upgrade broken ends. -->
+
+    <!-- /////////////////////////////////////////////////////////////////// -->
+
+    <int:gateway id="queryMarketByOrderUpdates"
+        service-interface="com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification">
+        <int:method name="query"
+         request-channel="queryMarketByOrderUpdatesChannel"
+         reply-channel="queryMarketByOrderUpdatesReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
+        <int:method name="getNextUpdateAsJSON"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextMarketByOrderUpdateAsJSONRequestChannel"
+         reply-channel="getNextMarketByOrderUpdateAsJSONReplyChannel"/>
+        <int:method name="getNextUpdate"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextMarketByOrderUpdateRequestChannel"
+         reply-channel="getNextMarketByOrderUpdateReplyChannel"/>
+    </int:gateway>
+
+    <int:channel id="queryMarketByOrderUpdatesChannel"/>
+    <int:channel id="queryMarketByOrderUpdatesReplyChannel"/>
+
+    <bean id="getNextMarketByOrderUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketByOrderUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketByOrderService"/>
+    </bean>
+
+    <bean id="queryMarketByOrderUpdatesMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketByOrderMessageProcessor">
+        <constructor-arg name="marketByOrderService" ref="marketByOrderService"/>
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="marketByOrderCache" ref="marketByOrderCache"/>
+    </bean>
+
+    <int:channel id="getNextMarketByOrderUpdateAsJSONRequestChannel"/>
+    <int:channel id="getNextMarketByOrderUpdateAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextMarketByOrderUpdateAsJSONRequestChannel"
+     output-channel="getNextMarketByOrderUpdateAsJSONReplyChannel"
+     ref="getNextMarketByOrderUpdateAsJSONMessageProcessor"
+     method="process"/>
+
+    <int:channel id="getNextMarketByOrderUpdateRequestChannel"/>
+    <int:channel id="getNextMarketByOrderUpdateReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextMarketByOrderUpdateRequestChannel"
+     output-channel="getNextMarketByOrderUpdateReplyChannel"
+     ref="getNextMarketByOrderUpdateMessageProcessor"
+     method="process"/>
+
+    <bean id="getNextMarketByOrderUpdateMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketByOrderUpdateMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketByOrderService"/>
+    </bean>
+
+     <int:channel id="marketByOrderUpdateAsJSONChannel"/>
+
+    <int:service-activator
+     input-channel="queryMarketByOrderUpdatesChannel"
+     output-channel="queryMarketByOrderUpdatesReplyChannel"
+     ref="queryMarketByOrderUpdatesMessageProcessor"
+     method="process"/>
+
+    <!-- /////////////////////////////////////////////////////////////////// -->
+
 
     <bean id="getNextStatusResponseUpdateAsJSONMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextStatusResponseUpdateAsJSONMessageProcessor">

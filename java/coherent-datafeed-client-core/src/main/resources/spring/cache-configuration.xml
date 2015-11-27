@@ -12,7 +12,7 @@
         <local-cache name="handleToCompletableFutureCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
-        <local-cache name="ricToCompletableFutureCache">
+        <local-cache name="timeSeriesKeyToCompletableFutureCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
         <local-cache name="queryCache">
@@ -30,6 +30,9 @@
         <local-cache name="marketPriceEntryCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
+        <local-cache name="marketByOrderEntryCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
         <local-cache name="ts1DefEntryCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
@@ -40,6 +43,9 @@
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
         <local-cache name="marketPriceCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
+        <local-cache name="marketByOrderCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
         <local-cache name="ts1DefCache">
