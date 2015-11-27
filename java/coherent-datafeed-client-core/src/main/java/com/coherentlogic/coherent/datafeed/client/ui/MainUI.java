@@ -3,11 +3,18 @@ package com.coherentlogic.coherent.datafeed.client.ui;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,15 +29,29 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RefineryUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.misc.Action;
+import com.coherentlogic.coherent.datafeed.domain.Authentication;
+import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
+import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
 
 public class MainUI {
@@ -44,7 +65,11 @@ public class MainUI {
 
     private final JTextArea statusResponseTextArea = new JTextArea();
 
+    private final Authentication authentication;
+
     private final TimeSeriesGatewaySpecification timeSeriesGatewaySpecification;
+
+    private final MarketPriceServiceSpecification marketPriceGatewaySpecification;
 
     private Handle loginHandle = null;
 
@@ -52,17 +77,23 @@ public class MainUI {
      * Create the application.
      */
     public MainUI() {
-        initialize();
+        authentication = new Authentication();
         timeSeriesGatewaySpecification = null;
+        marketPriceGatewaySpecification = null;
+        initialize();
     }
 
     /**
      * @param timeSeriesGatewaySpecification
      */
     public MainUI (
-        TimeSeriesGatewaySpecification timeSeriesGatewaySpecification
+        Authentication authentication,
+        TimeSeriesGatewaySpecification timeSeriesGatewaySpecification,
+        MarketPriceServiceSpecification marketPriceGatewaySpecification
     ) {
+        this.authentication = authentication;
         this.timeSeriesGatewaySpecification = timeSeriesGatewaySpecification;
+        this.marketPriceGatewaySpecification = marketPriceGatewaySpecification;
     }
 
     public Handle getLoginHandle() {
@@ -96,20 +127,54 @@ public class MainUI {
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setFont(new Font("Arial", Font.PLAIN, 12));
         mainFrame.getContentPane().add(tabbedPane);
-        
+
+        JPanel throughputPanel = new JPanel();
+        tabbedPane.addTab("Throughput", null, throughputPanel, null);
+        throughputPanel.setLayout(new BorderLayout(0, 0));
+
+        addLineChart (throughputPanel);
+
         JPanel statusResponsePanel = new JPanel();
         JPanel timeSeriesPanel = new JPanel();
-        
+        JPanel marketPricePanel = new JPanel();
+
         JPanel authenticationPanel = new JPanel();
         tabbedPane.addTab("Authentication", null, authenticationPanel, null);
         authenticationPanel.setLayout(new BorderLayout(0, 0));
 
         authenticationTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
-        
+
+        authentication.addPropertyChangeListener(
+             new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+
+                    String oldText = authenticationTextArea.getText();
+
+                    if (oldText == null)
+                        oldText = "";
+
+                    Date now = Calendar.getInstance().getTime();
+
+                    String newText = "[" + now + "] " + authentication;
+
+                    SwingUtilities.invokeLater(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                authenticationTextArea.setText(newText);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+
         JScrollPane authenticationPane = new JScrollPane(authenticationTextArea);
-        authenticationPanel.add(authenticationPane, BorderLayout.CENTER);
         authenticationPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         authenticationPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        authenticationPanel.add(authenticationPane, BorderLayout.CENTER);
         
         tabbedPane.addTab("Status Response", statusResponsePanel);
         tabbedPane.addTab("Time Series", timeSeriesPanel);
@@ -148,7 +213,46 @@ public class MainUI {
                 }
             }
         );
+
+        // -----
+
+        tabbedPane.addTab("Market Price", marketPricePanel);
+        marketPricePanel.setLayout(new FormLayout(new ColumnSpec[] {
+                ColumnSpec.decode("262px:grow"),
+                ColumnSpec.decode("4px"),},
+            new RowSpec[] {
+                FormSpecs.LINE_GAP_ROWSPEC,
+                RowSpec.decode("26px:grow"),
+                FormSpecs.RELATED_GAP_ROWSPEC,
+                FormSpecs.DEFAULT_ROWSPEC,}));
         
+        final JTextArea marketPriceGroovyScriptTextArea = new JTextArea();
+        marketPriceGroovyScriptTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
+        marketPriceGroovyScriptTextArea.setText(
+            "Enter your Groovy script here (in context: log, loginHandle, marketPriceGateway).");
+        marketPricePanel.add(marketPriceGroovyScriptTextArea, "1, 2, fill, fill");
+
+        JButton evaluateMarketPriceScriptBtn = new JButton("Evaluate");
+
+        evaluateMarketPriceScriptBtn.addActionListener(
+            new ActionListener () {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    String scriptText = marketPriceGroovyScriptTextArea.getText();
+
+                    Binding binding = new Binding ();
+
+                    binding.setVariable("log", log);
+                    binding.setVariable("loginHandle", loginHandle);
+                    binding.setVariable("marketPriceGateway", marketPriceGatewaySpecification);
+
+                    GroovyShell groovyShell = new GroovyShell(binding);
+                    
+                    groovyShell.evaluate(scriptText);
+                }
+            }
+        );
+
         btnEvaluate.setFont(new Font("Arial", Font.PLAIN, 12));
         timeSeriesPanel.add(btnEvaluate, "1, 4");
         
@@ -164,8 +268,65 @@ public class MainUI {
         statusResponseTextArea.setTabSize(4);
         statusResponseTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
         statusResponseTextArea.setEditable(false);
-        
+
         statusResponseTextArea.setText("");
+
+        RefineryUtilities.centerFrameOnScreen(mainFrame);
+    }
+
+    final DefaultCategoryDataset throughputDataset
+        = new DefaultCategoryDataset();
+
+    void addLineChart (JPanel target) {
+
+        final JFreeChart throughputChart = ChartFactory.createLineChart(
+            "Throughput",
+            "Time",
+            "Updates",
+            throughputDataset,
+            PlotOrientation.VERTICAL,
+            true,                      // include legend
+            true,                      // tooltips
+            false                      // urls
+        );
+
+        ChartPanel throughputChartPanel = new ChartPanel (throughputChart);
+
+        target.add(throughputChartPanel);
+
+        final CategoryPlot plot = (CategoryPlot) throughputChart.getPlot();
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setRangeGridlinePaint(Color.white);
+
+        // customise the range axis...
+        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        rangeAxis.setRange(0, 100);
+        rangeAxis.setAutoRangeIncludesZero(true);
+
+        final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
+
+        renderer.setSeriesStroke(
+            0,
+            new BasicStroke(
+                2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                1.0f, new float[] {10.0f, 6.0f}, 0.0f
+            )
+        );
+        renderer.setSeriesStroke(
+            1,
+            new BasicStroke(
+                2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                1.0f, new float[] {6.0f, 6.0f}, 0.0f
+            )
+        );
+        renderer.setSeriesStroke(
+            2,
+            new BasicStroke(
+                2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                1.0f, new float[] {2.0f, 6.0f}, 0.0f
+            )
+        );
     }
 
     public void addAuthenticationResponseText (final String text) {
@@ -181,7 +342,12 @@ public class MainUI {
         );
     }
 
-    public void addStatusResponseText (final String text) {
+    public void addStatusResponse (StatusResponse statusResponse) {
+        log.warn("addStatusResponse: method begins; statusResponse: " + statusResponse);
+        addStatusResponseText (statusResponse.toString());
+    }
+
+    void addStatusResponseText (final String text) {
         SwingUtilities.invokeLater(
             new Runnable() {
                 @Override
@@ -192,6 +358,46 @@ public class MainUI {
                 }
             }
         );
+    }
+
+    public void onInitializationSuccessful (Message<Event> message) {
+
+    }
+
+    public void onMarketPriceUpdate (MarketPrice marketPrice) {
+
+//        final Random rand = new Random ();
+//
+//        Thread thread = new Thread (
+//            new Runnable () {
+//
+//                int ctr = 0;
+//
+//                @Override
+//                public void run() {
+//                    for (int x = 0; x < 5000; x++) {
+//                        int value = rand.nextInt(100);
+//    
+//                        ctr++;
+//    
+//                        System.out.println("ctr: " + ctr + ", value: " + value);
+//
+//                        throughputDataset.addValue(value, "marketPrice.getDisplayName ()", "blah"+ctr);
+//
+//                        if (25 < ctr)
+//                            throughputDataset.removeColumn(0);
+//
+//                        try {
+//                            Thread.sleep(250);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//        );
+//
+//        thread.start();
     }
 
     /**
