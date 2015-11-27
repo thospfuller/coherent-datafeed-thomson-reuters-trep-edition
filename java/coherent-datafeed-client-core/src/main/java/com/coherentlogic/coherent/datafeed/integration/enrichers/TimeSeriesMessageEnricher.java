@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.*;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
 
 import org.infinispan.Cache;
@@ -11,10 +11,11 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
+import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
-import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
  * This class is used to enrich the message returned from the RFA api by using
@@ -63,6 +64,17 @@ public class TimeSeriesMessageEnricher extends AbstractMessageEnricher {
         synchronized (sessionCache) {
 
             Session session = getSession (message, sessionCache);
+
+            Event event = message.getPayload();
+
+            Handle handle = event.getHandle();
+
+            TimeSeriesKey timeSeriesKey = session.getTimeSeriesKey(handle);
+
+            if (timeSeriesKey != null)
+                log.info("enrich: method in progress; handle: " + handle + ", timeSeriesKey: " + timeSeriesKey);
+            else
+                throw new NullPointerRuntimeException("The ric is null for the handle: " + handle);
 
             enrichedMessage =
                 MessageBuilder
