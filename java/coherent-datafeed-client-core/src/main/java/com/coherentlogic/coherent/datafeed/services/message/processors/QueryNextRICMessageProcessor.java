@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
+import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesServiceSpecification;
@@ -58,6 +59,11 @@ public class QueryNextRICMessageProcessor implements
 
         Session session = getSession(message);
 
+        TimeSeriesKey parentTimeSeriesKey = session.getTimeSeriesKey(handle);
+
+        log.info("process: method in progress; parentTimeSeriesKey: " +
+            parentTimeSeriesKey);
+
         Handle loginHandle = session.getLoginHandle();
 
 //        synchronized (sessionCache) {
@@ -81,6 +87,15 @@ public class QueryNextRICMessageProcessor implements
                 serviceName, loginHandle, nextRic);
 
             log.info("nextRic: " + nextRic + ", queryHandle: " + queryHandle);
+
+            /* We have to do this because we need to keep track of the parent
+             * RIC (ie. TRI.N) otherwise when this workflow ends, we won't know
+             * what ric the time series is associated with because every time
+             * the queryTimeSeriesFor method is called, a new handle is returned
+             * so we need to pass the parent RIC from handle to handle until
+             * there are no more RICs to query.
+             */
+            session.putTimeSeriesKey(queryHandle, parentTimeSeriesKey);
 
             TimeSeriesEntry timeSeriesEntry = new TimeSeriesEntry(nextRic);
 
