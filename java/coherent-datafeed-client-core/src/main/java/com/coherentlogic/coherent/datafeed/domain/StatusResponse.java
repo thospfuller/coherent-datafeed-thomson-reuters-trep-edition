@@ -69,4 +69,10 @@ public class StatusResponse extends RFABean {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public String toString() {
+        return "StatusResponse [code=" + code + ", dataState=" + dataState
+            + ", streamState=" + streamState + ", text=" + text + "]";
+    }
 }
