@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.services;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DAILY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.HANDLE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MONTHLY;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.*;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.YEARLY;
 import static com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor.addRicsFromSeriesTo;
 import static com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor.getTimeSeriesEntries;
@@ -26,10 +26,10 @@ import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
+import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
-import com.coherentlogic.coherent.datafeed.services.message.processors.TimeSeriesPromise;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.rdm.RDMMsgTypes;
@@ -78,7 +78,7 @@ public class TimeSeriesService
 
     private final Map<Handle, CompletableFuture<TimeSeries>> handleToCompletableFutureCache;
 
-    private final Map<String, CompletableFuture<TimeSeries>> ricToCompletableFutureCache;
+    private final Map<TimeSeriesKey, CompletableFuture<TimeSeries>> timeSeriesKeyToCompletableFutureCache;
 
     public TimeSeriesService(
         RequestMessageBuilderFactory factory,
@@ -88,7 +88,7 @@ public class TimeSeriesService
         CommonRequestExecutor commonRequestExecutor,
         final Cache<Handle, Session> sessionCache,
         final Map<Handle, CompletableFuture<TimeSeries>> handleToCompletableFutureCache,
-        final Map<String, CompletableFuture<TimeSeries>> ricToCompletableFutureCache
+        final Map<TimeSeriesKey, CompletableFuture<TimeSeries>> timeSeriesKeyToCompletableFutureCache
     ) {
         super(
             Constants.ELEKTRON_DD,
@@ -103,7 +103,7 @@ public class TimeSeriesService
 
         this.sessionCache = sessionCache;
         this.handleToCompletableFutureCache = handleToCompletableFutureCache;
-        this.ricToCompletableFutureCache = ricToCompletableFutureCache;
+        this.timeSeriesKeyToCompletableFutureCache = timeSeriesKeyToCompletableFutureCache;
 
         ts1ConstantsMap.put(DAILY, TS1Constants.DAILY_PERIOD);
         ts1ConstantsMap.put(MONTHLY, TS1Constants.WEEKLY_PERIOD);
@@ -168,7 +168,7 @@ public class TimeSeriesService
 
         CompletableFuture<TimeSeries> result = null;
 
-        CompletableFuture<TimeSeries> existingTimeSeriesPromise = ricToCompletableFutureCache.get(ric);
+        CompletableFuture<TimeSeries> existingTimeSeriesPromise = timeSeriesKeyToCompletableFutureCache.get(ric);
 
         if (existingTimeSeriesPromise != null) {
             log.info("We have a cache hit for the ric " + ric + " and a non-null time series promise: " +
@@ -190,7 +190,11 @@ public class TimeSeriesService
 
                 Handle handle = queryTimeSeriesFor(serviceName, loginHandle, primaryRic);
 
-                log.error("1. loginHandle: " + loginHandle + ", handle: " + handle + ", primaryRic: " + primaryRic);
+                TimeSeriesKey timeSeriesKey = new TimeSeriesKey (serviceName, ric, period);
+
+                session.putTimeSeriesKey(handle, timeSeriesKey);
+
+                log.error("1. loginHandle: " + loginHandle + ", handle: " + handle + ", ric: " + ric + ", primaryRic: " + primaryRic);
 
                 TimeSeriesEntries timeSeriesEntries = getTimeSeriesEntries (session, serviceName, handle, period);
 
@@ -208,7 +212,7 @@ public class TimeSeriesService
 
 //                handleToCompletableFutureCache.put(handle, newTimeSeriesPromise);
 
-                ricToCompletableFutureCache.put(ric, newTimeSeriesPromise);
+                timeSeriesKeyToCompletableFutureCache.put(timeSeriesKey, newTimeSeriesPromise);
 
                 result = newTimeSeriesPromise;
             }
@@ -236,7 +240,7 @@ public class TimeSeriesService
         TimeSeries timeSeries = message.getPayload();
 
         // NOTE: The SAME newTimeSeriesPromise from the #getTimeSeriesFor method is used in the
-        //       handleToCompletableFutureCache ** AS WELL AS THE ** ricToCompletableFutureCache (again see the method
+        //       handleToCompletableFutureCache ** AS WELL AS THE ** timeSeriesKeyToCompletableFutureCache (again see the method
         //       above) which means we don't need to associate the handle with a ric and then get the promise -- all we
         //       need is the handle and we're good.
 
@@ -254,22 +258,22 @@ public class TimeSeriesService
 //
 //            log.error("2. newTimeSeriesPromise: " + newTimeSeriesPromise + ", timeSeries: " + timeSeries);
 
-            String ric = session.getTimeSeriesRIC();
+            TimeSeriesKey timeSeriesKey = session.getTimeSeriesKey(handle);
 
-            if (ric == null) {
-                throw new NullPointerRuntimeException("The ric is null for the timeSeries associated with the "
+            if (timeSeriesKey == null) {
+                throw new NullPointerRuntimeException("The timeSeriesKey is null for the timeSeries associated with the "
                     + "handle: " + handle + "; this is definitely a bug and should never happen.");
             } else {
-                log.info ("ric: " + ric);
+                log.info ("timeSeriesKey: " + timeSeriesKey);
             }
 
-            CompletableFuture<TimeSeries> timeSeriesPromise = ricToCompletableFutureCache.get(ric);
+            CompletableFuture<TimeSeries> timeSeriesPromise = timeSeriesKeyToCompletableFutureCache.get(timeSeriesKey);
 
             if (timeSeriesPromise != null) {
                 boolean completed = timeSeriesPromise.complete(timeSeries);
-                log.info("onTimeSeriesArrival: method ends; completed: " + completed + " for ric " + ric + " and timeSeries: " + timeSeries);
+                log.info("onTimeSeriesArrival: method ends; completed: " + completed + " for timeSeriesKey " + timeSeriesKey + " and timeSeries: " + timeSeries);
             } else {
-                throw new NullPointerRuntimeException("onTimeSeriesArrival: method ends; note that the newTimeSeriesPromise is null for the ric: " + ric);
+                throw new NullPointerRuntimeException("onTimeSeriesArrival: method ends; note that the newTimeSeriesPromise is null for the timeSeriesKey: " + timeSeriesKey);
             }
         }
     }
