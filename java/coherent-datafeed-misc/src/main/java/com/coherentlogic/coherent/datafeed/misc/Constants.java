@@ -66,6 +66,10 @@ public interface Constants {
         DICTIONARY_SERVICE_GATEWAY = "dictionaryServiceGateway",
         DIRECTORY_SERVICE_GATEWAY = "directoryServiceGateway";
 
+    /**
+     * @deprecated And also see the Authentication domain class, which is not
+     *  using these constants (and I'm not sure it should).
+     */
     static final String
         CODE = "code",
         DATA_STATE = "dataState",
@@ -163,4 +167,6 @@ public interface Constants {
 
     static final String MARKET_PRICE_DAO = "marketPriceDAO",
         TIME_SERIES_DAO = "timeSeriesDAO";
+
+    static final String AUTHENTICATION = "authentication";
 }
