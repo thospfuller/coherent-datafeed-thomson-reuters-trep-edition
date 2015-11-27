@@ -1,10 +1,11 @@
 package com.coherentlogic.coherent.datafeed.examples;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_SERVICE;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX_PATH;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DICTIONARY_SERVICE;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER_SERVICE;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER_SERVICE_GATEWAY;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
 import java.util.List;
 
@@ -15,10 +16,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.FieldDictionaryHolder;
-import com.coherentlogic.coherent.datafeed.services.MarketByOrderService;
+import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification;
+import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -40,43 +45,92 @@ public class MarketByOrderExample {
 
         applicationContext.registerShutdownHook();
 
-        AuthenticationServiceSpecification authenticationService =
-            (AuthenticationServiceSpecification) applicationContext.getBean(
-                AUTHENTICATION_SERVICE);
+        final StatusResponseServiceSpecification statusResponseService =
+            (StatusResponseServiceSpecification) applicationContext.
+                getBean(STATUS_RESPONSE_SERVICE_GATEWAY);
 
-        MarketByOrderService marketByOrderService = (MarketByOrderService)
-            applicationContext.getBean(MARKET_BY_ORDER_SERVICE);
+        final AuthenticationServiceSpecification authenticationService =
+            (AuthenticationServiceSpecification) applicationContext.getBean(
+            AUTHENTICATION_ENTRY_POINT);
+
+        final FrameworkEventListenerAdapter frameworkEventListenerAdapter =
+            (FrameworkEventListenerAdapter)
+                applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
+
+        final MarketByOrderServiceSpecification marketByOrderService =
+            (MarketByOrderServiceSpecification)
+            applicationContext.getBean(MARKET_BY_ORDER_SERVICE_GATEWAY);
+
+        final PauseResumeService pauseResumeService = new PauseResumeService ();
+
+        frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
+            new FrameworkEventListener() {
+                @Override
+                public void onEventReceived(Session session) {
+                    pauseResumeService.resume(true);
+                }
+            }
+        );
+
+        frameworkEventListenerAdapter.addInitialisationFailedListeners (
+            new FrameworkEventListener () {
+                @Override
+                public void onEventReceived(Session session) {
+                    pauseResumeService.resume(false);
+                }
+        });
 
         // This needs to be set in the operating system environment variables.
         String dacsId = System.getenv(DACS_ID);
 
-        authenticationService.login(dacsId);
+        Handle loginHandle = authenticationService.login(dacsId);
 
-        Handle handle = authenticationService.getHandle();
+        log.info("main thread: " + Thread.currentThread());
 
-        // IBM.ARC
-        List<Handle> itemHandles = marketByOrderService.query(
-            Constants.ELEKTRON_DD,
-            handle,
-            "IBM.O"
+        boolean result = pauseResumeService.pause();
+
+        log.info("result: " + result);
+
+        queryMarketByOrderService (
+            statusResponseService,
+            marketByOrderService,
+            loginHandle
         );
 
-        for (Handle nextHandle : itemHandles)
-            log.debug("nextHandle: " + nextHandle);
+        log.info("...done!");
 
-        FieldDictionaryHolder fieldDictionaryHolder =
-            (FieldDictionaryHolder) applicationContext.getBean(DICTIONARY_SERVICE);
+        applicationContext.close();
 
-        log.info("fieldDictionary: " + fieldDictionaryHolder.getFieldDictionary());
+        System.exit(-9999);
+        // NOTE: If we end too soon this may be part of the reason why we're
+        //       seeing an ommMsg with the final flag set -- one way of proving
+        //       this would be to wait and then see if we consistently can
+        //       login.
+    }
 
-//        long ctr = 0;
-//
-//        while (true) {
-//            String next = marketByOrderService.getNextUpdateAsJSON();
-//
-//            System.out.println ("next[" + ctr + "]: " + next);
-//
-//            ctr++;
-//        }
+    static void queryMarketByOrderService (
+        final StatusResponseServiceSpecification statusResponseService,
+        final MarketByOrderServiceSpecification marketByOrderService,
+        final Handle loginHandle
+    ) {
+        List<Handle> itemHandles = marketByOrderService.query(
+            Constants.dELEKTRON_DD, loginHandle, "ANZ.AX");
+
+        log.info ("The query is complete, now we will wait " +
+            "for replies; itemHandles: " + itemHandles);
+
+        long ctr = 0;
+
+        while (true) {
+
+            String nextMarketPriceUpdate =
+                marketByOrderService.getNextUpdateAsJSON(2500L);
+            log.info ("nextMarketPriceUpdate[" + ctr + "]: " +
+                nextMarketPriceUpdate);
+            System.out.println ("nextMarketPriceUpdate[" + ctr + "]: " +
+                nextMarketPriceUpdate);
+
+            ctr++;
+        }
     }
 }
