@@ -1,0 +1,116 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms
+        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <int:channel id="onMarketByOrderAddSessionToHeadersChannel"/>
+
+    <int:service-activator
+     input-channel="onMarketByOrderAddSessionToHeadersChannel"
+     output-channel="routeByMarketByOrderEventTypeChannel"
+     ref="marketByOrderMessageEnricher"
+     method="enrich"/>
+
+    <int:channel id="routeByMarketByOrderEventTypeChannel"/>
+
+    <int:router input-channel="routeByMarketByOrderEventTypeChannel"
+     default-output-channel="errorChannel"
+     expression="payload.type">
+        <int:mapping channel="completionEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
+        <int:mapping channel="ommItemEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
+    </int:router>
+
+    <int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
+     output-channel="ommItemEventChannel"/>
+
+    <int:channel id="completionEventChannel"/>
+
+    <!-- @TODO Remove this and add a workflow that eventually adds a message to
+               a queue. This will be called if the dacsId is incorrect, for
+               example, and the user should be alerted of the problem with
+               their dacs id.
+      -->
+    <int:service-activator
+     input-channel="completionEventChannel"
+     output-channel="workflowEndsChannel"
+     ref="completionEventHandler"
+     method="onCompletionEventReceived"/>
+
+    <int:channel id="ommItemEventChannel"/>
+    <int:channel id="marketByOrderItemEventChannel"/>
+
+    <!-- See rfa.example.framework.OMMSubAppContext.java
+      -->
+    <int:router input-channel="ommItemEventChannel"
+     default-output-channel="workflowEndsChannel"
+     expression="payload.msg.msgModelType">
+        <int:mapping channel="processMarketByOrderChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_BY_ORDER}"/>
+    </int:router>
+
+    <int:channel id="marketByOrderChannel"/>
+
+    <!-- See the bean with id routeByQueryType in the application-context file.
+      -->
+    <int:channel id="processMarketByOrderChannel"/>
+
+    <int:router input-channel="processMarketByOrderChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="payload.msg.msgType">
+        <int:mapping channel="refreshMarketByOrderChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
+        <int:mapping channel="updateMarketByOrderChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).UPDATE_RESP}"/>
+        <int:mapping channel="processStatusResponseChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
+    </int:router>
+
+    <int:channel id="refreshMarketByOrderChannel"/>
+
+    <int:service-activator
+     input-channel="refreshMarketByOrderChannel"
+     output-channel="addMarketByOrderToQueueChannel"
+     ref="refreshMarketByOrderMessageProcessor"
+     method="process"/>
+
+    <int:channel id="updateMarketByOrderChannel"/>
+
+    <int:service-activator
+     input-channel="updateMarketByOrderChannel"
+     output-channel="addMarketByOrderToQueueChannel"
+     ref="updateMarketByOrderMessageProcessor"
+     method="process"/>
+
+    <!--
+      A status response message needs to be extracted from an instance of
+      {@link OMMMsg} only when there is state to be processed, so below we
+      first extract the message, check if there is state and, if so, transfer
+      that state into an instance of {@link StatusResponse} which is then added
+      to the appropriate queue.
+      -->
+
+    <int:channel id="addMarketByOrderToQueueChannel"/>
+
+    <int-jms:outbound-channel-adapter
+     channel="addMarketByOrderToQueueChannel"
+        connection-factory="jmsConnectionFactory"
+        destination="marketByOrderUpdatesTopic"/>
+</beans>
