@@ -19,6 +19,9 @@ import com.reuters.rfa.common.Handle;
  * the message payload handle to find the associated session; this session is
  * then added to the message headers under the Constants.SESSION key.
  *
+ * @TODO: This should be made generic as it could be shared between the market
+ *  price and market by order integration workflows.
+ *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class MarketPriceMessageEnricher extends AbstractMessageEnricher {
@@ -55,7 +58,7 @@ public class MarketPriceMessageEnricher extends AbstractMessageEnricher {
          */
 //        synchronized (marketPriceCache) {
 
-            Session session = getSession (message, getSessionCache());
+            Session session = getSession (message, marketPriceCache);
 
             enrichedMessage =
                 MessageBuilder
