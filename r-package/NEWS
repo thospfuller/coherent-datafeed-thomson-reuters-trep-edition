@@ -1,6 +1,7 @@
  NEWS/ChangeLog for The Coherent Datafeed: Thomson Reuters Edition
 --------------------------
 
-0.1	2012-08-10	[Initial release]
-0.9.1   2013-07-10      [Major update]
-1.0.1   2015-06-07      [Major release]
+0.1	    2012-08-10      Initial release
+0.9.1   2013-07-10      Major update
+1.0.1   2015-06-07      Major release
+1.0.2   2015-11-05      Migration from IDN_RDF to Elektron, other changes.
