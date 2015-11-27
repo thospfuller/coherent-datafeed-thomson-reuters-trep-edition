@@ -51,51 +51,74 @@ public class Authentication extends RFABean {
         return code;
     }
 
-    public void setCode(short code) {
+    public Authentication setCode(short code) {
 
         short oldValue = this.code;
 
-        this.code = code;
+        if (oldValue != code) {
 
-        firePropertyChange(CODE, oldValue, code);
+            this.code = code;
+
+            firePropertyChange(CODE, oldValue, code);
+        }
+        return this;
     }
 
     public boolean isStreamStateOpen() {
         return streamStateOpen;
     }
 
-    public void setStreamStateOpen(boolean streamStateOpen) {
+    public Authentication setStreamStateOpen(boolean streamStateOpen) {
 
         boolean oldValue = this.streamStateOpen;
 
-        this.streamStateOpen = streamStateOpen;
+        if (oldValue != streamStateOpen) {
 
-        firePropertyChange("streamStateOpen", oldValue, streamStateOpen);
+            this.streamStateOpen = streamStateOpen;
+
+            firePropertyChange("streamStateOpen", oldValue, streamStateOpen);
+        }
+        return this;
     }
 
     public boolean isDataStateOK() {
         return dataStateOK;
     }
 
-    public void setDataStateOK(boolean dataStateOK) {
+    public Authentication setDataStateOK(boolean dataStateOK) {
 
         boolean oldValue = this.dataStateOK;
 
-        this.dataStateOK = dataStateOK;
+        if (oldValue != dataStateOK) {
 
-        firePropertyChange("dataStateOK", oldValue, dataStateOK);
+            this.dataStateOK = dataStateOK;
+
+            firePropertyChange("dataStateOK", oldValue, dataStateOK);
+        }
+        return this;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public Authentication setText(String text) {
 
         String oldValue = this.text;
 
-        this.text = text;
+        if (oldValue == null || (oldValue != null && !oldValue.equals(text))) {
 
-        firePropertyChange("text", oldValue, text);
+            this.text = text;
+
+            firePropertyChange("text", oldValue, text);
+        }
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Authentication [code=" + code + ", streamStateOpen="
+            + streamStateOpen + ", dataStateOK=" + dataStateOK + ", text="
+            + text + "]";
     }
 }
