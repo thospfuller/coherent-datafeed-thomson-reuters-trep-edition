@@ -299,6 +299,11 @@
                 <version>${infinispan.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-query</artifactId>
+                <version>${infinispan.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
                 <version>1.8.7</version>
@@ -309,10 +314,10 @@
                 <version>1.8.7</version>
             </dependency>
             <dependency>
-	    	<groupId>com.google.code.gson</groupId>
-	    	<artifactId>gson</artifactId>
-	    	<version>2.3.1</version>
-	    </dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
+        </dependency>
             <dependency>
                 <groupId>org.codehaus.jettison</groupId>
                 <artifactId>jettison</artifactId>
@@ -355,6 +360,12 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jfree</groupId>
+                <artifactId>jfreechart</artifactId>
+                <version>1.0.19</version>
             </dependency>
 
             <dependency>
@@ -479,13 +490,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <!-- TODO: Update this to 3.1 but see the notes in the bom re
+                           the potential problem this can cause. -->
                 <version>2.3.2</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <!-- @TODO: Remove the executable as we really don't want to have this 
                         here in order to make this work as this destroys platform independence. -->
-                    <executable>C:/Program Files/Java/jdk1.7.0_09/bin/javac</executable>
+                    <executable>C:/Program Files/Java/jdk1.8.0_66/bin/javac</executable>
                 </configuration>
             </plugin>
                         <plugin>
