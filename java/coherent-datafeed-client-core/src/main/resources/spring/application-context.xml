@@ -167,6 +167,7 @@
         <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
         <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
         <constructor-arg name="marketPriceEntryCache" ref="marketPriceEntryCache"/>
+        <constructor-arg name="marketByOrderEntryCache" ref="marketByOrderEntryCache"/>
         <constructor-arg name="ts1DefEntryCache" ref="ts1DefEntryCache"/>
         <constructor-arg name="timeSeriesEntryCache" ref="timeSeriesEntryCache"/>
     </bean>
@@ -197,6 +198,7 @@
             <array value-type="java.lang.Class">
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketByOrder</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.StatusResponse</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DirectoryEntries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DictionaryEntries</value>
@@ -240,10 +242,10 @@
         <constructor-arg name="commonRequestExecutor" ref="timeSeriesRequestExecutor"/>
         <constructor-arg name="sessionCache" ref="sessionCache"/>
         <constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/>
-        <constructor-arg name="ricToCompletableFutureCache" ref="ricToCompletableFutureCache"/>
+        <constructor-arg name="timeSeriesKeyToCompletableFutureCache" ref="timeSeriesKeyToCompletableFutureCache"/>
     </bean>
 
-    <!-- TPF: Upgrading this service and RFA 8 does not have the Event constant needed so this is broken. -->
+    <!-- @TODO: Upgrading this service and RFA 8 does not have the Event constant needed so this is broken. -->
     <bean id="marketPriceEventDrivenEndpoint"
      class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
         <property name="requestChannel" ref="onMarketPriceAddSessionToHeadersChannel"/>
@@ -254,6 +256,19 @@
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketPriceEventDrivenEndpoint"/>
         <constructor-arg name="messageConsumer" ref="marketPriceConsumer"/>
+        <constructor-arg name="jsonGenerator" ref="jsonAdapter"/>
+    </bean>
+
+    <bean id="marketByOrderEventDrivenEndpoint"
+     class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
+        <property name="requestChannel" ref="onMarketByOrderAddSessionToHeadersChannel"/>
+    </bean>
+
+    <bean id="marketByOrderService" class="com.coherentlogic.coherent.datafeed.services.MarketByOrderService"
+     depends-on="loggingService">
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="marketByOrderEventDrivenEndpoint"/>
+        <constructor-arg name="messageConsumer" ref="marketByOrderConsumer"/>
         <constructor-arg name="jsonGenerator" ref="jsonAdapter"/>
     </bean>
 
@@ -327,6 +342,16 @@
         <constructor-arg ref="marketPriceAdapter"/>
      </bean>
 
+    <bean id="refreshMarketByOrderMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketByOrderMessageProcessor">
+        <constructor-arg ref="marketByOrderAdapter"/>
+     </bean>
+
+    <bean id="updateMarketByOrderMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketByOrderMessageProcessor">
+        <constructor-arg ref="marketByOrderAdapter"/>
+     </bean>
+
     <bean id="statusResponseMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
         <constructor-arg ref="statusResponseAdapter"/>
@@ -391,12 +416,19 @@
 
     <bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
+    <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/>
     <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
 
     <bean id="statusResponseAdapter" class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter"/>
 
     <bean id="marketPriceAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketPriceAdapter">
         <constructor-arg name="marketPriceFactory" ref="marketPriceFactory"/>
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+    </bean>
+
+    <bean id="marketByOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketByOrderAdapter">
+        <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
@@ -485,6 +517,10 @@
         <constructor-arg name="marketPriceCache" ref="marketPriceCache"/>
     </bean>
 
+    <bean id="marketByOrderMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.MarketByOrderMessageEnricher">
+        <constructor-arg name="marketByOrderCache" ref="marketByOrderCache"/>
+    </bean>
+
     <bean id="ts1DefMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.TS1DefMessageEnricher">
         <constructor-arg name="ts1DefCache" ref="ts1DefCache"/>
     </bean>
@@ -541,7 +577,17 @@
     <bean id="timeSeriesHelper"
      class="com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper"/>
 
-    <!-- bean id="mainUI" class="com.coherentlogic.coherent.datafeed.client.ui.MainUI" init-method="initialize">
+    <bean id="authentication"
+     class="com.coherentlogic.coherent.datafeed.domain.Authentication"/>
+
+    <bean id="authenticationAdapter"
+     class="com.coherentlogic.coherent.datafeed.adapters.AuthenticationAdapter">
+        <constructor-arg ref="authentication"/>
+    </bean>
+
+    <bean id="mainUI" class="com.coherentlogic.coherent.datafeed.client.ui.MainUI" init-method="initialize">
+        <constructor-arg ref="authentication"/>
         <constructor-arg ref="timeSeriesServiceGateway"/>
-    </bean -->
+        <constructor-arg ref="queryMarketPriceUpdates"/>
+    </bean>
 </beans>
