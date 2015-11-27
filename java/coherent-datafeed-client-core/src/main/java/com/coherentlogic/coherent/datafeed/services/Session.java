@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,9 @@ import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
 import com.reuters.rfa.common.Handle;
 
@@ -42,6 +44,9 @@ import com.reuters.rfa.common.Handle;
  *
  * @todo Clean up this class as there are several methods here which could be
  *  combined and/or simplified.
+ *
+ * @todo Handle is not serializable so this bean cannot be serializable either
+ *  -- might as well remove it.
  *
  * @todo Can we have just one cache?
  *
@@ -81,24 +86,32 @@ public class Session extends SerializableBean {
 
     private final Map<Handle, MarketPrice> marketPriceEntryCache;
 
+    private final Map<Handle, MarketByOrder> marketByOrderEntryCache;
+
     private final Map<Handle, TS1DefEntry> ts1DefEntryCache;
 
     private final Map<Handle, TimeSeriesEntries> timeSeriesEntryCache;
 
-    private PropertyChangeSupport propertyChangeSupport = null;
+    /** @TODO: Set this property via the ctor.
+     *  @deprecated See comment above.
+     */
+    private final Map<Handle, TimeSeriesKey> timeSeriesKeyCache =
+        new HashMap<Handle, TimeSeriesKey> ();
 
-    private String timeSeriesRIC = null;
+    private PropertyChangeSupport propertyChangeSupport = null;
 
     public Session(
         Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache,
         Map<Handle, DictionaryEntry> dictionaryEntryCache,
         Map<Handle, MarketPrice> marketPriceEntryCache,
+        Map<Handle, MarketByOrder> marketByOrderEntryCache,
         Map<Handle, TS1DefEntry> ts1DefEntryCache,
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache
     ) {
         this.directoryEntryCache = directoryEntryCache;
         this.dictionaryEntryCache = dictionaryEntryCache;
         this.marketPriceEntryCache = marketPriceEntryCache;
+        this.marketByOrderEntryCache = marketByOrderEntryCache;
         this.ts1DefEntryCache = ts1DefEntryCache;
         this.timeSeriesEntryCache = timeSeriesEntryCache;
     }
@@ -133,6 +146,9 @@ public class Session extends SerializableBean {
         return directoryEntryCache;
     }
 
+    /**
+     * @todo Rename this method to put or addDirectoryEntry.
+     */
     public void putDirectory (
         Handle handle,
         DirectoryEntry directoryEntry
@@ -155,13 +171,13 @@ public class Session extends SerializableBean {
         String name = directoryEntry.getName();
 
         assertNotNull ("directoryServiceEntry.name", name);
-//        if (name == null)
-//            throw new NullPointerRuntimeException(
-//                "The directory name is null.");
 
         nameToDirectoryMap.put(name, directoryEntry);
     }
 
+    /**
+     * @todo Rename this method to put or addDictionaryEntry.
+     */
     public void putDictionary (
         Handle handle,
         DictionaryEntry dictionaryEntry
@@ -524,8 +540,16 @@ public class Session extends SerializableBean {
         marketPriceEntryCache.put(handle, marketPrice);
     }
 
+    public void putMarketByOrder (Handle handle, MarketByOrder marketByOrder) {
+        marketByOrderEntryCache.put(handle, marketByOrder);
+    }
+
     public MarketPrice getMarketPrice (Handle handle) {
         return marketPriceEntryCache.get (handle);
+    }
+
+    public MarketByOrder getMarketByOrder (Handle handle) {
+        return marketByOrderEntryCache.get (handle);
     }
 
     public MarketPrice removeMarketPrice (Handle handle) {
@@ -536,12 +560,16 @@ public class Session extends SerializableBean {
         return timeSeriesEntryCache.get(handle);
     }
 
-    public String getTimeSeriesRIC() {
-        return timeSeriesRIC;
+    public TimeSeriesKey getTimeSeriesKey(Handle handle) {
+        return timeSeriesKeyCache.get (handle);
     }
 
-    public void setTimeSeriesRIC(String timeSeriesRIC) {
-        this.timeSeriesRIC = timeSeriesRIC;
+    /**
+     * @param handle
+     * @param timeSeriesKey
+     */
+    public void putTimeSeriesKey(Handle handle, TimeSeriesKey timeSeriesKey) {
+        timeSeriesKeyCache.put (handle, timeSeriesKey);
     }
 
     public void putTimeSeriesEntries (
@@ -549,6 +577,14 @@ public class Session extends SerializableBean {
         TimeSeriesEntries timeSeriesEntries
     ) {
         timeSeriesEntryCache.put(handle, timeSeriesEntries);
+    }
+
+    public void end (Handle handle) {
+        // Remove all entries in all caches associated with the given handle.
+        // This should be handled differently for time series vs market price
+        // workflows because, for example, the market price updates will
+        // continue to come in as long as the request hasn't been terminated.
+        throw new NotImplementedException();
     }
 
     public void addPropertyChangeListener (
