@@ -47,19 +47,6 @@
 
     <int:channel id="ommItemEventReceivedChannel"/>
 
-    <!-- This transformer casts the Event into an instance of OMMItemEvent.
-
-         TODO: See OMMClient.java
-               OMMMsg msg = ((OMMItemEvent)event).getMsg();
-               if (msg.isSet(OMMMsg.Indication.CLEAR_CACHE)) {
-                   clearDataAndTables();
-               }
-               OMMMsg.Indication.CLEAR_CACHE then we need to go to a channel
-               which will ultimately clear the MarketPriceUpdate map, or other
-               map if this is for something else.
-
-               See also for ripple.
-      -->
     <int:transformer ref="ommItemEventTransformer"
      input-channel="ommItemEventReceivedChannel"
      output-channel="ommItemEventChannel"/>
@@ -122,6 +109,26 @@
          value="#{T(java.lang.Boolean).FALSE}"/>
     </int:router>
 
+    <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+    <!-- The authentication will be updated in parallel with other branches
+         in the workflow.
+
+         This step will transfer the OMMMsg properties to the singleton
+         Authentication instance.
+
+         TPF: STRANGE: If we enable this then the workflow breaks and I'm not
+                       sure why because IIRC this was working fine earlier
+                       today.
+      -->
+    <!-- int:service-activator
+     input-channel="loginEventReceivedChannel"
+     output-channel="workflowEndsChannel"
+     ref="authenticationAdapter"
+     method="adapt"/ -->
+
+    <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
     <!-- NOTE: loginSuccessful will only be called once the dictionaries
                have been loaded.
       -->
@@ -132,4 +139,16 @@
      output-channel="workflowEndsChannel"
      ref="frameworkEventListenerAdapter"
      method="initialisationFailed"/>
+
+    <!-- int:service-activator
+     input-channel="loginFailedChannel"
+     output-channel="workflowEndsChannel"
+     ref="mainUI"
+     method="addStatusResponseText"/>
+
+    <int:service-activator
+     input-channel="hasLoginSucceededChannel"
+     output-channel="workflowEndsChannel"
+     ref="mainUI"
+     method="addStatusResponseText"/ -->
 </beans>
