@@ -7,9 +7,9 @@ import static org.mockito.Mockito.mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.integration.support.MessageBuilder;
 
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 import com.coherentlogic.coherent.datafeed.services.Session;
@@ -22,7 +22,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  */
 public class AbstractMarketPriceMessageProcessorTest {
 
-    private final Session session = new Session (null, null, null, null, null);
+    private final Session session = new Session (
+        null, null, null, null, null, null);
 
     private final OMMItemEvent itemEvent = mock (OMMItemEvent.class);
 

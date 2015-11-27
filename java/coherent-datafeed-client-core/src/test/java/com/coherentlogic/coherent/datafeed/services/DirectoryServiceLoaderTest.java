@@ -2,10 +2,10 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.any;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -128,7 +127,7 @@ public class DirectoryServiceLoaderTest {
         Handle handle = mock (Handle.class);
 
         Session session = new Session (
-            directoryEntryCache, null, null, null, null);
+            directoryEntryCache, null, null, null, null, null);
 
         Iterator<OMMMapEntry> iterator = mock (Iterator.class);
         OMMMapEntry mapEntry = mock (OMMMapEntry.class);
