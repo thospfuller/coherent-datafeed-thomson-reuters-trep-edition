@@ -680,6 +680,10 @@ public class MarketPrice
     @XStreamAlias(QUOTIM_MS)
     private Long quoteTimeMillis = null;
 
+    /**
+     * @deprecated Convert type to Long.
+     * @TODO: Convert type to Long.
+     */
     @XStreamAlias(TIMCOR_MS)
     private BigInteger correctionTimeMillis = null;
 
