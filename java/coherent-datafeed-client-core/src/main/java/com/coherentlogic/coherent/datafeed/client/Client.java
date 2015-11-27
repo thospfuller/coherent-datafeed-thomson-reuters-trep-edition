@@ -17,6 +17,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.ClientNotInitializedException;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
@@ -54,6 +55,10 @@ public class Client {
     private boolean started = false;
 
     public Client (){
+    }
+
+    public MainUI getMainUI () {
+        return applicationContext.getBean(MainUI.class);
     }
 
     /**
