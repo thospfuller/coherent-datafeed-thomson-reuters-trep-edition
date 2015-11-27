@@ -20,6 +20,7 @@ import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
@@ -42,6 +43,8 @@ public class RefreshMarketPriceMessageProcessorTest {
     private Session session = null;
 
     private Map<Handle, MarketPrice> marketPriceEntryCache = null;
+
+    private Map<Handle, MarketByOrder> marketByOrderEntryCache = null;
 
     private MarketPriceAdapter marketPriceAdapter = null;
 
@@ -66,6 +69,8 @@ public class RefreshMarketPriceMessageProcessorTest {
             mock (Map.class);
         marketPriceEntryCache =
             mock (Map.class);
+        marketByOrderEntryCache =
+            mock (Map.class);
         Map<Handle, TS1DefEntry> ts1DefEntryCache =
             mock (Map.class);
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache =
@@ -75,6 +80,7 @@ public class RefreshMarketPriceMessageProcessorTest {
             directoryEntryCache,
             dictionaryEntryCache,
             marketPriceEntryCache,
+            marketByOrderEntryCache,
             ts1DefEntryCache,
             timeSeriesEntryCache
         );
