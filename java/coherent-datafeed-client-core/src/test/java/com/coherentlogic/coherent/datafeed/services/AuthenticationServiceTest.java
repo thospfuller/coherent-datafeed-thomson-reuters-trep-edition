@@ -14,6 +14,7 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.UserBean;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDacsIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.SessionFinalizationFailedException;
@@ -44,6 +45,7 @@ public class AuthenticationServiceTest {
         Map<Handle, Map<String, DirectoryEntry>> directoryMap = mock(Map.class);
         Map<Handle, DictionaryEntry> dictionaryMap = mock(Map.class);
         Map<Handle, MarketPrice> marketPriceMap = mock(Map.class);
+        Map<Handle, MarketByOrder> marketByOrderMap = mock(Map.class);
         Map<Handle, TS1DefEntry> ts1DefEntryMap = mock(Map.class);
         Map<Handle, TimeSeriesEntries> timeSeriesEntriesMap = mock(Map.class);
 
@@ -53,6 +55,7 @@ public class AuthenticationServiceTest {
             directoryMap,
             dictionaryMap,
             marketPriceMap,
+            marketByOrderMap,
             ts1DefEntryMap,
             timeSeriesEntriesMap
         );
