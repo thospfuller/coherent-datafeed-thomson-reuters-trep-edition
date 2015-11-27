@@ -2,8 +2,8 @@ package com.coherentlogic.coherent.datafeed.domain;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -71,8 +71,8 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
 
     static final String DSPLY_NAME = "DSPLY_NAME",
         ACTIV_DATE = "ACTIV_DATE",
-        TRD_UNITS = "TRD_UNITS",
-        RECORDTYPE = "RECORDTYPE",
+//        TRD_UNITS = "TRD_UNITS",
+//        RECORDTYPE = "RECORDTYPE",
 //        RDN_EXCHD2 = "RDN_EXCHD2",
 //        PROV_SYMB = "PROV_SYMB",
         PR_RNK_RUL = "PR_RNK_RUL",
@@ -105,17 +105,17 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
     @XStreamAlias(DSPLY_NAME)
     private String displayName;
 
-    @XStreamAlias(CURRENCY)
-    private String currency;
-    
     @XStreamAlias(ACTIV_DATE)
-    private String activeDate;
+    private Date activeDate;
 
     @XStreamAlias(TRD_UNITS)
     private Integer tradingUnits; // enum
 
     @XStreamAlias(RECORDTYPE)
     private Integer recordType; // uint32
+
+    @XStreamAlias(CURRENCY)
+    private String currency;
 
     /**
      * @see Appears in MarketPrice as well.
@@ -164,37 +164,11 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
 
     @XStreamAlias(HALT_RSN)
     private String haltReasonCode;
+
+//    @XStreamAlias(ORDERS)
     
     // Probably RMTES_STRING -- same as orderId so probably not needed.
     // private String key;
-
-    // RMTES_STRING
-    @XStreamAlias(ORDER_ID)
-    private String orderId;
-
-    // REAL64
-    @XStreamAlias(ORDER_PRC)
-    private BigDecimal orderPrice;
-
-    // ENUM
-    @XStreamAlias(ORDER_SIDE)
-    private Object orderSide;
-
-    // REAL64
-    @XStreamAlias(ORDER_SIZE)
-    private Long orderSize;
-
-    // UINT64
-    // QUOTIM_MS
-    @XStreamAlias(QUOTIM_MS)
-    private Long quoteTimeMillis;
-
-    // RMTES_STRING
-    @XStreamAlias(ORDER_TONE)
-    String orderTone;
-
-    @XStreamAlias(PR_TIM_MS)
-    private Long priorityTimeMillis;
 
     public BigInteger getPermission() {
         return permission;
@@ -219,7 +193,40 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         this.displayName = displayName;
     }
 
-    @UsingKey(type=CURRENCY)
+    @UsingKey(type=ACTIV_DATE)
+    public Date getActiveDate() {
+		return activeDate;
+	}
+
+	@RFAType(type=ACTIV_DATE)
+    @Adapt(using=OMMDateTimeAdapter.class)
+	public void setActiveDate(Date activeDate) {
+		this.activeDate = activeDate;
+	}
+
+	@UsingKey(type=TRD_UNITS)
+	public Integer getTradingUnits() {
+		return tradingUnits;
+	}
+
+	@RFAType(type=TRD_UNITS)
+    @Adapt(using=OMMEnumAdapter.class)
+	public void setTradingUnits(Integer tradingUnits) {
+		this.tradingUnits = tradingUnits;
+	}
+
+	@UsingKey(type=RECORDTYPE)
+	public Integer getRecordType() {
+		return recordType;
+	}
+
+    @RFAType(type=RECORDTYPE)
+    @Adapt(using=OMMNumericAdapter.class)
+	public void setRecordType(Integer recordType) {
+		this.recordType = recordType;
+	}
+
+	@UsingKey(type=CURRENCY)
     public String getCurrency() {
         return currency;
     }
@@ -257,7 +264,7 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return orderRankRule;
     }
 
-    @RFAType(type=PR_RNK_RUL)
+    @RFAType(type=OR_RNK_RUL)
     @Adapt(using=OMMEnumAdapter.class)
     public void setOrderRankRule(String orderRankRule) {
         this.orderRankRule = orderRankRule;
@@ -357,93 +364,23 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
 
     @UsingKey(type=TRD_STATUS)
     public String getTradingStatus() {
-		return tradingStatus;
-	}
+        return tradingStatus;
+    }
 
     @RFAType(type=TRD_STATUS)
     @Adapt(using=OMMEnumAdapter.class)
-	public void setTradingStatus(String tradingStatus) {
-		this.tradingStatus = tradingStatus;
-	}
+    public void setTradingStatus(String tradingStatus) {
+        this.tradingStatus = tradingStatus;
+    }
 
     @UsingKey(type=HALT_RSN)
     public String getHaltReasonCode() {
-		return haltReasonCode;
-	}
+        return haltReasonCode;
+    }
 
     @RFAType(type=HALT_RSN)
     @Adapt(using=OMMEnumAdapter.class)
-	public void setHaltReasonCode(String haltReasonCode) {
-		this.haltReasonCode = haltReasonCode;
-	}
-
-	// -----
-
-	public String getOrderId() {
-        return orderId;
-    }
-
-	@RFAType(type=ORDER_ID)
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public BigDecimal getOrderPrice() {
-        return orderPrice;
-    }
-
-    @RFAType(type=ORDER_PRC)
-    @Adapt(using=OMMNumericAdapter.class)
-    public void setOrderPrice(BigDecimal orderPrice) {
-        this.orderPrice = orderPrice;
-    }
-
-    public Object getOrderSide() {
-        return orderSide;
-    }
-
-    @RFAType(type=ORDER_SIDE)
-    @Adapt(using=OMMEnumAdapter.class)
-    public void setOrderSide(Object orderSide) {
-        this.orderSide = orderSide;
-    }
-
-    public Long getOrderSize() {
-        return orderSize;
-    }
-
-    @RFAType(type=ORDER_SIZE)
-    @Adapt(using=OMMNumericAdapter.class)
-    public void setOrderSize(Long orderSize) {
-        this.orderSize = orderSize;
-    }
-
-    public Long getQuoteTimeMillis() {
-        return quoteTimeMillis;
-    }
-
-    @RFAType(type=QUOTIM_MS)
-    @Adapt(using=OMMNumericAdapter.class)
-    public void setQuoteTimeMillis(Long quoteTimeMillis) {
-        this.quoteTimeMillis = quoteTimeMillis;
-    }
-
-    public String getOrderTone() {
-        return orderTone;
-    }
-
-    @RFAType(type=ORDER_TONE)
-    public void setOrderTone(String orderTone) {
-        this.orderTone = orderTone;
-    }
-
-    public Long getPriorityTimeMillis() {
-        return priorityTimeMillis;
-    }
-
-    @RFAType(type=PR_TIM_MS)
-    @Adapt(using=OMMNumericAdapter.class)
-    public void setPriorityTimeMillis(Long priorityTimeMillis) {
-        this.priorityTimeMillis = priorityTimeMillis;
+    public void setHaltReasonCode(String haltReasonCode) {
+        this.haltReasonCode = haltReasonCode;
     }
 }
