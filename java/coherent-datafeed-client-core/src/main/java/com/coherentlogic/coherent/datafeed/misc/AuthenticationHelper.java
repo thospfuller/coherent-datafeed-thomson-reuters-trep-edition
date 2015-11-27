@@ -6,6 +6,7 @@ import static com.reuters.rfa.omm.OMMState.Stream.OPEN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.reuters.rfa.internal.rwf.RwfMsgOverride;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMState;
@@ -46,7 +47,7 @@ public class AuthenticationHelper {
     private static final Logger log =
         LoggerFactory.getLogger(AuthenticationHelper.class);
 
-    public boolean loginSucceeded (OMMItemEvent itemEvent) {
+	public boolean loginSucceeded (OMMItemEvent itemEvent) {
 
         OMMMsg msg = itemEvent.getMsg();
 
@@ -80,6 +81,8 @@ public class AuthenticationHelper {
 
         OMMState state = ommMsg.getState();
 
+        short code = state.getCode();
+
         byte streamState = state.getStreamState();
 
         byte dataState = state.getDataState();
@@ -97,13 +100,16 @@ public class AuthenticationHelper {
             &&
             dataStateOK;
 
-        log.info("loginSucceeded: method ends; loginSuccessful: " +
-            loginSuccessful +
-            ", hasStatusResp: " + hasStatusResp +
-            ", hasState: " + hasState +
-            ", streamStateOpen: " + streamStateOpen +
-            ", dataStateOK: " + dataStateOK
-        );
+        String text = "loginSucceeded: method ends; loginSuccessful: " +
+                loginSuccessful +
+                ", code: " + code +
+                ", hasStatusResp: " + hasStatusResp +
+                ", hasState: " + hasState +
+                ", streamStateOpen: " + streamStateOpen +
+                ", dataStateOK: " + dataStateOK +
+                ", toString: " + state.getText();
+
+        log.info(text);
 
         return loginSuccessful;
     }
