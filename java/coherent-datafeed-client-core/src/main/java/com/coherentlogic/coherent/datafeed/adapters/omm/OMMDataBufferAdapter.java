@@ -6,7 +6,7 @@ import com.reuters.rfa.omm.OMMDataBuffer;
 import com.reuters.rfa.omm.OMMFieldEntry;
 
 /**
- * An adapter for {@link OMMDataBuffer} objects.
+ * An adapter for {@link OMMDataBuffer} objects (text/string data).
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
