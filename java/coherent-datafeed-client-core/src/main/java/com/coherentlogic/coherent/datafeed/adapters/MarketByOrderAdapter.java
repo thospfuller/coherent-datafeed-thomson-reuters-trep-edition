@@ -2,14 +2,26 @@ package com.coherentlogic.coherent.datafeed.adapters;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.Order;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
+import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
+import com.coherentlogic.coherent.datafeed.exceptions.DeleteFailedException;
+import com.coherentlogic.coherent.datafeed.exceptions.UpdateFailedException;
 import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FieldDictionary;
+import com.reuters.rfa.omm.OMMAttribInfo;
 import com.reuters.rfa.omm.OMMData;
+import com.reuters.rfa.omm.OMMFieldList;
+import com.reuters.rfa.omm.OMMMap;
+import com.reuters.rfa.omm.OMMMapEntry;
 import com.reuters.rfa.omm.OMMMsg;
 
 /**
@@ -20,35 +32,27 @@ import com.reuters.rfa.omm.OMMMsg;
 public class MarketByOrderAdapter
     extends RFABeanAdapter<MarketByOrder> {
 
-    public MarketByOrderAdapter (
-        Factory<MarketByOrder> marketByOrderFactory,
-        FieldDictionary fieldDictionary,
-        Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
-            OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
-        throws SecurityException, NoSuchMethodException {
-        this (
-            marketByOrderFactory,
-            fieldDictionary,
-            fieldEntryAdapters,
-            new HashMap<String, Method> (),
-            MarketByOrder.class
-        );
-    }
+    private static final Logger log =
+        LoggerFactory.getLogger(MarketByOrderAdapter.class);
+
+    private final OrderAdapter orderAdapter;
 
     public MarketByOrderAdapter (
         Factory<MarketByOrder> marketByOrderFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
-        Class<? extends RFABean> rfaBeanClass)
+        OrderAdapter orderAdapter)
         throws SecurityException, NoSuchMethodException {
         this (
             marketByOrderFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),
-            rfaBeanClass
+            MarketByOrder.class,
+            orderAdapter
         );
+        
     }
 
     public MarketByOrderAdapter (
@@ -57,7 +61,8 @@ public class MarketByOrderAdapter
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
         Map<String, Method> methodMap,
-        Class<? extends RFABean> rfaBeanClass)
+        Class<? extends RFABean> rfaBeanClass,
+        OrderAdapter orderAdapter)
         throws SecurityException, NoSuchMethodException {
 
         super (
@@ -66,8 +71,11 @@ public class MarketByOrderAdapter
             fieldEntryAdapters,
             rfaBeanClass
         );
+
+        this.orderAdapter = orderAdapter;
     }
 
+    @Override
     public MarketByOrder adapt (OMMMsg ommMsg) {
 
         Factory<? extends RFABean> rfaFactory = getRFABeanFactory();
@@ -78,4 +86,137 @@ public class MarketByOrderAdapter
 
         return marketByOrder;
     }
+
+    /**
+     * @see RFABeanAdapter for ideas re how to convert this using reflection.
+     */
+    @Override
+    public void adapt(OMMMsg ommMsg, MarketByOrder marketByOrder) {
+
+        log.info ("adapt: method begins; ommMsg: " + ommMsg +
+            ", marketByOrder: " + marketByOrder);
+
+        OMMData marketByOrderData = ommMsg.getPayload();
+
+        OMMMap marketByOrderMap = (OMMMap) marketByOrderData;
+
+        toRFABean(marketByOrderMap, marketByOrder);
+
+        OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
+
+        toRFABean (attribInfo, marketByOrder);
+
+        Iterator iterator = marketByOrderMap.iterator();
+
+        while (iterator.hasNext()) {
+
+            OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
+
+            OMMData ommKey = (OMMData) mapEntry.getKey();
+
+            String key = ommKey.toString();
+
+            byte action = mapEntry.getAction();
+
+            if (action == OMMMapEntry.Action.ADD) {
+                addOrder (marketByOrder, key, mapEntry);
+            } else if (action == OMMMapEntry.Action.DELETE) {
+                deleteOrder (marketByOrder, key, mapEntry);
+            } else if (action == OMMMapEntry.Action.UPDATE) {
+                updateOrder (marketByOrder, key, mapEntry);
+            }
+        }
+        log.info ("adapt: method ends.");
+    }
+
+    void addOrder (MarketByOrder marketByOrder, String key,
+        OMMMapEntry mapEntry) {
+
+        log.info("addOrder: method begins; marketByOrder: " + marketByOrder +
+            ", key: " + key + ", mapEntry: " + mapEntry);
+
+        Map<String, Order> orders = marketByOrder.getOrders();
+
+        Order order = orders.get(key);
+
+        if (order != null) {
+            throw new AddFailedException("An order already exists under the " +
+                "key" + key + " (order: " + order + ").");
+        }
+
+        order = new Order ();
+
+        OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
+
+        orderAdapter.toRFABean(fieldList, order);
+
+        orders.put(key,  order);
+
+        log.info("addOrder: method ends; order: " + order);
+    }
+
+    void deleteOrder (MarketByOrder marketByOrder, String key,
+        OMMMapEntry mapEntry) {
+
+        log.info("deleteOrder: method begins; marketByOrder: " + marketByOrder +
+            ", key: " + key + ", mapEntry: " + mapEntry);
+
+         Map<String, Order> orders = marketByOrder.getOrders();
+
+         Order order = orders.remove(key);
+
+         if (order == null) {
+             throw new DeleteFailedException("An order did not already exist " +
+                 "under the key: " + key + ".");
+         }
+         log.info("deleteOrder: method ends; order: " + order);
+    }
+
+    void updateOrder (MarketByOrder marketByOrder, String key,
+        OMMMapEntry mapEntry) {
+
+        log.info("updateOrder: method begins; marketByOrder: " + marketByOrder +
+            ", key: " + key + ", mapEntry: " + mapEntry);
+
+        Map<String, Order> orders = marketByOrder.getOrders();
+
+        Order order = orders.get(key);
+
+        if (order == null) {
+            throw new UpdateFailedException("An order did not already exist " +
+                "under the key" + key + ".");
+        }
+
+        OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
+
+        orderAdapter.toRFABean(fieldList, order);
+
+        log.info("updateOrder: method ends; order: " + order);
+    }
 }
+//OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
+//
+//String name = attribInfo.getName();
+//
+//short sType = attribInfo.getType();
+//
+//String type = OMMTypes.toString(sType);
+//
+//String serviceName = attribInfo.getServiceName();
+
+
+//OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
+//
+//Map<String, Order> orders = marketByOrder.getOrders();
+//
+//Order order = orders.get(key);
+//
+//if (order == null) {
+//  order = new Order ();
+//  orders.put(key,  order);
+//}
+//
+//orderAdapter.toRFABean(fieldList, order);
+//
+//log.info ("Adding the order with key: " + key + " and order: " +
+//  order);
