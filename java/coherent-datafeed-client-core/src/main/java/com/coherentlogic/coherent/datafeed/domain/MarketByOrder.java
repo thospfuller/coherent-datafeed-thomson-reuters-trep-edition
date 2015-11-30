@@ -4,6 +4,8 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -85,9 +87,8 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         BOOK_STATE = "BOOK_STATE",
         HALT_REASN = "HALT_REASN",
         TRD_STATUS = "TRD_STATUS",
-        HALT_RSN = "HALT_RSN";
-
-
+        HALT_RSN = "HALT_RSN",
+        ORDERS = "orders";
 
     /**
      * WARNING: COPY/PASTED FROM MARKETPRICE SIMPLY TO TEST THIS, SO I'M NOT
@@ -165,16 +166,25 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
     @XStreamAlias(HALT_RSN)
     private String haltReasonCode;
 
-//    @XStreamAlias(ORDERS)
+    @XStreamAlias(ORDERS)
+    private final Map<String, Order> orders;
     
     // Probably RMTES_STRING -- same as orderId so probably not needed.
     // private String key;
 
+    public MarketByOrder() {
+		this (new HashMap<String, Order> ());
+	}
+
+    public MarketByOrder(Map<String, Order> orders) {
+		this.orders = orders;
+	}
+    
     public BigInteger getPermission() {
         return permission;
     }
 
-    /**
+	/**
      *
      */
     @RFAType(type=PROD_PERM)
@@ -383,4 +393,8 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
     public void setHaltReasonCode(String haltReasonCode) {
         this.haltReasonCode = haltReasonCode;
     }
+
+	public Map<String, Order> getOrders() {
+		return orders;
+	}
 }
