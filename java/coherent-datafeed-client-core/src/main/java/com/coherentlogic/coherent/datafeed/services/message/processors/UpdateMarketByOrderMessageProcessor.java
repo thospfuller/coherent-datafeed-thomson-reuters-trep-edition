@@ -63,11 +63,11 @@ public class UpdateMarketByOrderMessageProcessor
 
         Session session = getSession(message);
 
-        MarketPrice currentMarketByOrder = session.getMarketPrice(handle);
+        MarketByOrder currentMarketByOrder = session.getMarketByOrder(handle);
 
-        assertNotNull("currentMarketPrice", currentMarketByOrder);
+        assertNotNull("currentMarketByOrder", currentMarketByOrder);
 
-        log.info ("Updating the following marketPrice: " + currentMarketByOrder);
+        log.info ("Updating the currentMarketByOrder: " + currentMarketByOrder);
 
         MarketByOrder updatedMarketByOrder =
             (MarketByOrder) SerializationUtils.clone(currentMarketByOrder);
