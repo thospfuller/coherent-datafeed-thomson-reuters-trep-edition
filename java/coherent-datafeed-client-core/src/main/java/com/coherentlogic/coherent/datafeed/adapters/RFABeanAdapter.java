@@ -13,15 +13,20 @@ import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
+import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FidDef;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMAttribInfo;
 import com.reuters.rfa.omm.OMMData;
+import com.reuters.rfa.omm.OMMElementEntry;
+import com.reuters.rfa.omm.OMMElementList;
 import com.reuters.rfa.omm.OMMFieldEntry;
 import com.reuters.rfa.omm.OMMFieldList;
+import com.reuters.rfa.omm.OMMMap;
 import com.reuters.rfa.omm.OMMMsg;
 
 /**
@@ -96,6 +101,10 @@ public class RFABeanAdapter<T extends RFABean> {
         return rfaBean;
     }
 
+//    OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
+//
+//    toRFABean(attribInfo, rfaBean);
+    
     /**
      * This variant of the <i>adapt</i> method is used for updating an existing
      * marketPrice bean.
@@ -118,106 +127,154 @@ public class RFABeanAdapter<T extends RFABean> {
     }
 
     void toRFABean (
-        OMMAttribInfo attribInfo,
-        T rfaBean) {
+        OMMAttribInfo ommAttribInfo, T rfaBean) {
 
-        Integer id = getId (attribInfo);
-        Integer filter = getFilter(attribInfo);
-        String serviceName = getServiceName (attribInfo);
-        String name = getName (attribInfo);
-        Integer serviceId = getServiceId (attribInfo);
-        Short nameType =  getNameType (attribInfo);
+        Integer id = getId (ommAttribInfo);
+        Integer filter = getFilter(ommAttribInfo);
+        String serviceName = getServiceName (ommAttribInfo);
+        String name = getName (ommAttribInfo);
+        Integer serviceId = getServiceId (ommAttribInfo);
+        Short nameType =  getNameType (ommAttribInfo);
 
-        rfaBean.setId(id);
-        rfaBean.setFilter(filter);
-        rfaBean.setServiceName(serviceName);
-        rfaBean.setName(name);
-        rfaBean.setServiceId(serviceId);
-        rfaBean.setNameType(nameType);
+        AttribInfo attribInfo = new AttribInfo ();
+
+        OMMElementList elementList = (OMMElementList) ommAttribInfo.getAttrib();
+
+        Map<String, String> elements = getElements (elementList);
+
+        attribInfo
+            .withId(id)
+            .withFilter(filter)
+            .withName(name)
+            .withServiceName(serviceName)
+            .withServiceId(serviceId)
+            .withNameType(nameType)
+            .withElements(elements);
+
+        rfaBean.withAttribInfo(attribInfo);
+    }
+
+    void toRFABean (OMMData data, T t) {
+
+        if (data != null && data instanceof OMMFieldList) {
+
+            OMMFieldList fieldList = (OMMFieldList) data;
+
+            toRFABean (fieldList, t);
+
+        } else if (data != null && data instanceof OMMMap) {
+
+            OMMMap map = (OMMMap) data;
+
+            toRFABean (map, t);
+
+        } else {
+
+            String text = data == null ? "null" : data.getClass().getName();
+
+            throw new NullPointerRuntimeException(
+                "The data param is null or cannot be converted; data: " + text);
+        }
     }
 
     /**
+     * Need to check the type -- if this is an OMMMap then handle it as a map
+     * juxtaposed with an OMMFieldList.
+     * 
+     * 
      * @todo Unit test this method.
      */
-    void toRFABean (OMMData data, T t) {
+    void toRFABean (OMMFieldList fieldList, T t) {
 
-      if (data != null) {
+        short dictId = fieldList.getDictId();
 
-          OMMFieldList fieldList = (OMMFieldList) data;
+        log.debug("dictId: " + dictId);
 
-          short dictId = fieldList.getDictId();
+        Iterator<OMMFieldEntry> iterator = 
+            (Iterator<OMMFieldEntry>) fieldList.iterator();
 
-          log.debug("dictId: " + dictId);
+        while (iterator.hasNext ()) {
+            OMMFieldEntry fieldEntry = iterator.next();
 
-          Iterator<OMMFieldEntry> iterator = 
-              (Iterator<OMMFieldEntry>) fieldList.iterator();
+            short fieldId = fieldEntry.getFieldId();
+            FidDef fidDef = fieldDictionary.getFidDef(fieldId);
 
-          while (iterator.hasNext ()) {
-                OMMFieldEntry fieldEntry = iterator.next();
+            // TODO: Note that if the FidDef is null, this is likely to be
+            //       due to the dictionary not being loaded properly -- we
+            //       should add a unit test to check for this.
 
-                short fieldId = fieldEntry.getFieldId();
-                FidDef fidDef = fieldDictionary.getFidDef(fieldId);
+            if (fidDef == null) {
+                log.warn ("The fidDef is null for the dictionary with " +
+                    "the dictId " + dictId + ".");
+            } else {
 
-                // TODO: Note that if the FidDef is null, this is likely to be
-                //       due to the dictionary not being loaded properly -- we
-                //       should add a unit test to check for this.
+                String name = fidDef.getName();
 
-                if (fidDef == null) {
-                    log.warn ("The fidDef is null for the dictionary with " +
-                        "the dictId " + dictId + ".");
-                } else {
+                log.debug("Next fieldEntry details include fieldId: " +
+                    fieldId + ", name: " + name + ", longName: " +
+                    fidDef.getLongName() + ", ommType: " +
+                    fidDef.getOMMType() + ", t: " + t);
 
-                    String name = fidDef.getName();
+                Method method = methodMap.get(name);
 
-                    log.debug("Next fieldEntry details include fieldId: " +
-                        fieldId + ", name: " + name + ", longName: " +
-                        fidDef.getLongName() + ", ommType: " +
-                        fidDef.getOMMType() + ", t: " + t);
+                if (method != null) {
+                    try {
+                        if (!method.isAnnotationPresent(Adapt.class))
+                            throw new FatalRuntimeException("The method " +
+                                method + " is missing an " +
+                                Adapt.class.getName() + " annotation.");
 
-                    Method method = methodMap.get(name);
+                        Adapt adapt = method.getAnnotation(Adapt.class);
 
-                    if (method != null) {
-                        try {
-                            if (!method.isAnnotationPresent(Adapt.class))
-                                throw new FatalRuntimeException("The method " +
-                                    method + " is missing an " +
-                                    Adapt.class.getName() + " annotation.");
+                        Class<? extends OMMFieldEntryAdapter
+                            <? extends OMMData>> usingAdapter =
+                                adapt.using();
 
-                            Adapt adapt = method.getAnnotation(Adapt.class);
+                        OMMFieldEntryAdapter<? extends OMMData>
+                            fieldEntryAdapter = fieldEntryAdapters.get(
+                                usingAdapter);
 
-                            Class<? extends OMMFieldEntryAdapter
-                                <? extends OMMData>> usingAdapter =
-                                    adapt.using();
+                        Class<?>[] parameterTypes = method.getParameterTypes();
 
-                            OMMFieldEntryAdapter<? extends OMMData>
-                                fieldEntryAdapter = fieldEntryAdapters.get(
-                                    usingAdapter);
+                        if (parameterTypes == null
+                            || parameterTypes.length != 1)
+                            throw new FatalRuntimeException("The " +
+                                "parameterTypes length should be one however " +
+                                "it appears to be either null or an invalid " +
+                                "length; parameterTypes: " +
+                                ToStringBuilder.reflectionToString(
+                                    parameterTypes));
 
-                            Class<?>[] parameterTypes = method.getParameterTypes();
+                        Class<?> type = parameterTypes[0];
 
-                            if (parameterTypes == null
-                                || parameterTypes.length != 1)
-                                throw new FatalRuntimeException("The " +
-                                    "parameterTypes length should be one however " +
-                                    "it appears to be either null or an invalid " +
-                                    "length; parameterTypes: " +
-                                    ToStringBuilder.reflectionToString(
-                                        parameterTypes));
+                        Object value = fieldEntryAdapter.adapt(
+                            fieldEntry, type);
 
-                            Class<?> type = parameterTypes[0];
-
-                            Object value = fieldEntryAdapter.adapt(
-                                fieldEntry, type);
-
-                            method.invoke(t, value);
-                        } catch (Throwable thrown) {
-                            throw new FatalRuntimeException(
-                                "The call to the method under the key " + name +
-                                " failed for entry " + fieldEntry, thrown);
-                        }
+                        method.invoke(t, value);
+                    } catch (Throwable thrown) {
+                        throw new FatalRuntimeException(
+                            "The call to the method under the key " + name +
+                            " failed for entry " + fieldEntry, thrown);
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 
+     * @param map
+     * @param t
+     *
+     * @todo 
+     */
+    void toRFABean (OMMMap map, T t) {
+
+        OMMData summaryData = map.getSummaryData();
+
+        if (summaryData != null) {
+            OMMFieldList fieldList = (OMMFieldList) summaryData;
+            toRFABean(fieldList, t);
         }
     }
 
@@ -265,6 +322,33 @@ public class RFABeanAdapter<T extends RFABean> {
         if (attribInfo.has(OMMAttribInfo.HAS_SERVICE_ID))
             result = attribInfo.getServiceID();
 
+        return result;
+    }
+
+    /**
+     * @TODO: Unit test this method.
+     */
+    Map<String, String> getElements (OMMElementList elementList) {
+
+        Map<String, String> result = new HashMap<String, String> ();
+
+        if (elementList != null) {
+
+            Iterator<OMMElementEntry> iterator = elementList.iterator();
+
+            while (iterator.hasNext()) {
+
+                OMMElementEntry next = iterator.next();
+
+                String name = next.getName();
+
+                OMMData data = next.getData();
+
+                String dataText = data.toString();
+
+                result.put(name, dataText);
+            }
+        }
         return result;
     }
 

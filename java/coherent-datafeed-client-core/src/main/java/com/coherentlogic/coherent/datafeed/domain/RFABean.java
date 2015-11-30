@@ -1,10 +1,5 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
-import static com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants.NAME;
-import static com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants.NAME_TYPE;
-import static com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants.SVC_ID;
-import static com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants.SVC_NAME;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,7 +13,6 @@ import com.coherentlogic.coherent.data.model.core.domain.IdentityBean;
 import com.coherentlogic.coherent.data.model.core.domain.IdentitySpecification;
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.reuters.rfa.common.Handle;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  *
@@ -28,6 +22,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * a primary key.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ *
+ * @deprecated Rename this to OMMBean.
  *
  * @todo Extend from IdentityBean.
  */
@@ -53,23 +49,7 @@ public class RFABean extends SerializableBean
     @GeneratedValue(strategy=GenerationType.TABLE)
     private Long uniqueId = null;
 
-    private Integer filter = null;
-
-    @XStreamAlias(SVC_NAME)
-    private String serviceName = null;
-
-    /**
-     * The ommMsg.attribInfo.name -- see page 7 of the GenericOMMParser
-     * (HAS_ATTRIB_INFO).
-     */
-    @XStreamAlias(NAME)
-    private String name = null;
-
-    @XStreamAlias(SVC_ID)
-    private Integer serviceId = null;
-
-    @XStreamAlias(NAME_TYPE)
-    private Short nameType = null;
+    private AttribInfo attribInfo;
 
     private transient Handle handle = null;
 
@@ -97,44 +77,19 @@ public class RFABean extends SerializableBean
         return uniqueId;
     }
 
-    public Integer getFilter() {
-        return filter;
+    public AttribInfo getAttribInfo() {
+        return attribInfo;
     }
 
-    public void setFilter(Integer filter) {
-        this.filter = filter;
+    public void setAttribInfo(AttribInfo attribInfo) {
+        this.attribInfo = attribInfo;
     }
 
-    public String getServiceName() {
-        return serviceName;
-    }
+    public RFABean withAttribInfo (AttribInfo attribInfo) {
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
+        setAttribInfo(attribInfo);
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(Integer serviceId) {
-        this.serviceId = serviceId;
-    }
-
-    public Short getNameType() {
-        return nameType;
-    }
-
-    public void setNameType(Short nameType) {
-        this.nameType = nameType;
+        return this;
     }
 
     public Handle getHandle() {
@@ -145,11 +100,25 @@ public class RFABean extends SerializableBean
         this.handle = handle;
     }
 
+    public RFABean withHandle (Handle handle) {
+
+        setHandle (handle);
+
+        return this;
+    }
+
     public Date getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public RFABean withTimestamp (Date timestamp) {
+
+        setTimestamp(timestamp);
+
+        return this;
     }
 }
