@@ -364,6 +364,7 @@ public interface MarketPriceConstants {
         ROW64_14 = "ROW64_14";
 
     static final String
+        ORDER = "order",
         ORDER_ID = "ORDER_ID",
         ORDER_PRC = "ORDER_PRC",
         ORDER_SIDE = "ORDER_SIDE",
@@ -381,4 +382,6 @@ public interface MarketPriceConstants {
         MM_MODE = "MM_MODE",
         MM_STATE = "MM_STATE",
         PR_DATE = "PR_DATE";
+    
+    static final String ELEMENTS = "elements";
 }
