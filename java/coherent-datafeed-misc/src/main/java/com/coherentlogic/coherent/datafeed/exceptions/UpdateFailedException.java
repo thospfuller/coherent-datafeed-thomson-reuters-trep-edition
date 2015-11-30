@@ -1,8 +1,8 @@
 package com.coherentlogic.coherent.datafeed.exceptions;
 
 /**
- * An exception that indicates that there was a problem receiving the next
- * update.
+ * An exception that indicates that there was a problem when executing an update
+ * operation.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
