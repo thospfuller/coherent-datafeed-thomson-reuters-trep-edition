@@ -17,6 +17,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
+import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
@@ -32,7 +34,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class MarketPriceExample {
+public class MarketPriceExample implements MarketPriceConstants {
 
     private static final Logger log =
         LoggerFactory.getLogger(MarketPriceExample.class);
@@ -43,6 +45,11 @@ public class MarketPriceExample {
         AbstractApplicationContext applicationContext =
             new ClassPathXmlApplicationContext (
                 DEFAULT_APP_CTX_PATH);
+
+        final MainUI mainUI = applicationContext.getBean(MainUI.class);
+
+        mainUI.mainFrame.pack();
+        mainUI.mainFrame.setVisible(true);
 
         applicationContext.registerShutdownHook();
 
@@ -80,12 +87,6 @@ public class MarketPriceExample {
                     pauseResumeService.resume(false);
                 }
         });
-
-//        licenseInstallationService.install(
-//            new File (
-//                "C:/Temp/CDatafeedTrialLicenseForCMEGroup-Expires10Jan2014.lic"
-//            )
-//        );
 
         String dacsId = System.getenv(DACS_ID);
 
