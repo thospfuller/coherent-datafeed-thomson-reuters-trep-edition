@@ -63,8 +63,10 @@ public class RFABean extends SerializableBean
 
         boolean result = false;
 
-        if (oldValue == null
-            || (oldValue != null && !oldValue.equals(newValue))
+        if (
+            (oldValue == null && newValue !=null)
+            ||
+            (oldValue != null && !oldValue.equals(newValue))
         ) {
             result = true;
         }
