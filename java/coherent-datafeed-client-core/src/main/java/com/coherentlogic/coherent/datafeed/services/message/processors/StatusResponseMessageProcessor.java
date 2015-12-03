@@ -7,11 +7,10 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
+import com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.reuters.rfa.omm.OMMMsg;
-import com.reuters.rfa.omm.OMMState;
 import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
@@ -26,10 +25,10 @@ public class StatusResponseMessageProcessor
     private static final Logger log =
         LoggerFactory.getLogger(StatusResponseMessageProcessor.class);
 
-    private final BasicAdapter<OMMState, StatusResponse> statusResponseAdapter;
+    private final StatusResponseAdapter statusResponseAdapter;
 
     public StatusResponseMessageProcessor (
-        BasicAdapter<OMMState, StatusResponse> statusResponseAdapter
+        StatusResponseAdapter statusResponseAdapter
     ) {
         this.statusResponseAdapter = statusResponseAdapter;
     }
@@ -46,21 +45,15 @@ public class StatusResponseMessageProcessor
 
         OMMMsg ommMsg = itemEvent.getMsg();
 
-        StatusResponse statusResponse = null;
+        StatusResponse statusResponse = statusResponseAdapter.adapt(ommMsg);
 
-        if (ommMsg.has(OMMMsg.HAS_STATE)) {
-            OMMState state = ommMsg.getState();
-            statusResponse = statusResponseAdapter.adapt(state);
-        } else {
-            log.warn("The message does not have state so the reference to " +
-                "the statusResponse returned will be null.");
-        }
-
-        log.info("statusResponse: " + ToStringBuilder.reflectionToString(statusResponse));
+        log.info("statusResponse: "
+            + ToStringBuilder.reflectionToString(statusResponse));
 
         Message<StatusResponse> result = MessageBuilder
             .withPayload(statusResponse)
-            .copyHeaders(headers).build();
+            .copyHeaders(headers)
+            .build();
 
         log.info("statusResponseMessageProcessor.process: method ends; result: "
             + result);
