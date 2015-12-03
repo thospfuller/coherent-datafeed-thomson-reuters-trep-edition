@@ -21,36 +21,6 @@
         http://www.springframework.org/schema/integration/stream
         http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.2.xsd">
 
-<!--
-
-    <int:channel id="routeByEventTypeChannel"/>
-
-    <int:router input-channel="routeByEventTypeChannel"
-     default-output-channel="errorChannel"
-     expression="payload.type">
-        <int:mapping channel="directoryCompletionEventReceivedChannel"
-         value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
-        <int:mapping channel="routeByDirectoryRDMMsgTypeChannel"
-         value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
-    </int:router>
-
-    <int:channel id="processDirectoryCompletionEventReceivedChannel"/>
-
-    <int:transformer ref="ommItemEventTransformer"
-     input-channel="processDirectoryCompletionEventReceivedChannel"
-     output-channel="routeByDirectoryRDMMsgTypeChannel"/>
-
-    <int:channel id="routeByDirectoryRDMMsgTypeChannel"/>
-
-    <int:router input-channel="routeByDirectoryRDMMsgTypeChannel"
-     default-output-channel="errorChannel"
-     expression="payload.msg.msgModelType">
-        <int:mapping channel="processDirectoryEventsChannel"
-         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).DIRECTORY}"/>
-    </int:router>
-
-    -->
-
     <int:service-activator
      input-channel="onDirectoryAddSessionToHeadersChannel"
      output-channel="routeByDirectoryEventTypeChannel"
@@ -77,6 +47,8 @@
         <int:mapping channel="workflowEndsChannel"
          value="#{T(com.reuters.rfa.omm.OMMTypes).NO_DATA}"/>
         <int:mapping channel="loadAllDirectoryServicesChannel"
+         value="#{T(com.reuters.rfa.omm.OMMTypes).MAP}"/>
+                <int:mapping channel="loadAllDirectoryServicesChannel"
          value="#{T(com.reuters.rfa.omm.OMMTypes).MAP}"/>
     </int:router>
 
