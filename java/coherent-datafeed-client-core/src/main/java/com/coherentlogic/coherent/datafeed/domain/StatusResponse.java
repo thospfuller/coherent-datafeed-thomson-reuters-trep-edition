@@ -19,6 +19,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 
+ * @TODO: Rename this class State.
+ * 
  * @TODO: Unit test this class.
  * @TODO: Remove XStream.
  * @TODO: Refactor the conditional such that a single method (something like
