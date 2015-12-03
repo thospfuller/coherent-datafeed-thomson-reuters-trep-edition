@@ -79,7 +79,7 @@
      resolution-required="true"
      expression="payload.msg.msgType">
         <int:mapping channel="routeByDictionaryTypeChannel"
-         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/> <!-- was extractDictionaryOMMMsgChannel -->
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
         <int:mapping channel="processStatusResponseChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
     </int:router>
