@@ -1,38 +1,83 @@
 package com.coherentlogic.coherent.datafeed.adapters;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
+import com.reuters.rfa.dictionary.FieldDictionary;
+import com.reuters.rfa.omm.OMMData;
+import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMState;
+import com.reuters.rfa.omm.OMMState.Stream;
 
 /**
- * An adapter that converts the OMMMsg into an instance of
- * {@link StatusResponse}.
+ * 
  *
- * The OMMState is not like other OMMMsg objects so it will not be converted
- * using annotations.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ *
  */
 public class StatusResponseAdapter
-    implements BasicAdapter<OMMState, StatusResponse> {
+    extends RFABeanAdapter<StatusResponse> {
+
+    private static final Logger log =
+        LoggerFactory.getLogger(StatusResponseAdapter.class);
+
+    public StatusResponseAdapter(
+        FieldDictionary fieldDictionary,
+        Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
+        OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters
+    ) throws SecurityException, NoSuchMethodException {
+        super(
+            null,
+            fieldDictionary,
+            fieldEntryAdapters,
+            new HashMap<String, Method> (),
+            StatusResponse.class
+        );
+    }
 
     @Override
-    public StatusResponse adapt(OMMState ommState) {
+    public StatusResponse adapt(OMMMsg msg) {
 
-        StatusResponse result = new StatusResponse ();
+        log.info("adapt: method begins; msg: " + msg);
 
-        short code = ommState.getCode();
+        StatusResponse statusResponse = new StatusResponse ();
 
-        byte dataState = ommState.getDataState();
+        adapt(msg, statusResponse);
 
-        byte streamState = ommState.getStreamState();
+        if (msg.has(OMMMsg.HAS_STATE)) {
 
-        String text = ommState.getText();
+            OMMState state = msg.getState();
 
-        result.setCode(code);
-        result.setDataState(dataState);
-        result.setStreamState(streamState);
-        result.setText(text);
+            short codeShort = state.getCode();
 
-        return result;
+            String code = OMMState.Code.toString(codeShort);
+
+            byte dataStateByte = state.getDataState();
+
+            String dataState = OMMState.Data.toString(dataStateByte);
+
+            byte streamStateByte = state.getStreamState();
+
+            String streamState = OMMState.Stream.toString(streamStateByte);
+
+            String text = state.getText();
+
+            statusResponse
+                .withCode(code)
+                .withDataState(dataState)
+                .withStreamState(streamState)
+                .withText(text);
+        }
+
+        log.info("adapt: method ends; statusResponse: " + statusResponse);
+
+        return statusResponse;
     }
 }
