@@ -21,6 +21,8 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 /**
  * Class which represents the domain model for a quote.
  *
+ * @TODO: Consider adding StatusResponseEventListener capabilities.
+ *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 @Entity
