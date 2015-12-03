@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
-import com.coherentlogic.coherent.datafeed.domain.Order;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.DeleteFailedException;
@@ -102,9 +102,12 @@ public class MarketByOrderAdapter
 
         toRFABean(marketByOrderMap, marketByOrder);
 
-        OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
+        if (ommMsg.has(OMMMsg.HAS_ATTRIB_INFO)) {
 
-        toRFABean (attribInfo, marketByOrder);
+            OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
+
+            toRFABean (attribInfo, marketByOrder);
+        }
 
         Iterator iterator = marketByOrderMap.iterator();
 
@@ -193,30 +196,49 @@ public class MarketByOrderAdapter
 
         log.info("updateOrder: method ends; order: " + order);
     }
+
+    /**
+     * An adapter that converts the OMMMsg into an instance of
+     * MarketByOrder.Order.
+     *
+     * @author <a href="mailto:support@coherentlogic.com">Support</a>
+     */
+    public static class OrderAdapter
+        extends RFABeanAdapter<Order> {
+
+        private static final Logger log =
+            LoggerFactory.getLogger(OrderAdapter.class);
+
+        public OrderAdapter (
+            Factory<Order> orderFactory,
+            FieldDictionary fieldDictionary,
+            Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
+                OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
+            throws SecurityException, NoSuchMethodException {
+            this (
+                orderFactory,
+                fieldDictionary,
+                fieldEntryAdapters,
+                new HashMap<String, Method> (),
+                Order.class
+            );
+        }
+
+        public OrderAdapter (
+            Factory<Order> orderFactory,
+            FieldDictionary fieldDictionary,
+            Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
+            OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
+            Map<String, Method> methodMap,
+            Class<? extends RFABean> rfaBeanClass)
+            throws SecurityException, NoSuchMethodException {
+
+            super (
+                orderFactory,
+                fieldDictionary,
+                fieldEntryAdapters,
+                rfaBeanClass
+            );
+        }
+    }
 }
-//OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
-//
-//String name = attribInfo.getName();
-//
-//short sType = attribInfo.getType();
-//
-//String type = OMMTypes.toString(sType);
-//
-//String serviceName = attribInfo.getServiceName();
-
-
-//OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
-//
-//Map<String, Order> orders = marketByOrder.getOrders();
-//
-//Order order = orders.get(key);
-//
-//if (order == null) {
-//  order = new Order ();
-//  orders.put(key,  order);
-//}
-//
-//orderAdapter.toRFABean(fieldList, order);
-//
-//log.info ("Adding the order with key: " + key + " and order: " +
-//  order);

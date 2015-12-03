@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.factories;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
 
 /**
  * Factory class for creating {@link MarketPrice} objects with a unique id and
@@ -16,5 +17,17 @@ public class DefaultMarketByOrderFactory
     @Override
     public MarketByOrder getInstance() {
         return configure(new MarketByOrder ());
+    }
+
+    public static class DefaultOrderFactory
+        extends AbstractRFABeanFactory<Order> {
+
+        @Override
+        public Order getInstance() {
+
+            MarketByOrder.Order order = new MarketByOrder.Order ();
+
+            return configure(order);
+        }
     }
 }

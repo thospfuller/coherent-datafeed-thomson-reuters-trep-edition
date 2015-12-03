@@ -365,6 +365,7 @@ public interface MarketPriceConstants {
 
     static final String
         ORDER = "order",
+        ORDERS = "orders",
         ORDER_ID = "ORDER_ID",
         ORDER_PRC = "ORDER_PRC",
         ORDER_SIDE = "ORDER_SIDE",
@@ -384,4 +385,21 @@ public interface MarketPriceConstants {
         PR_DATE = "PR_DATE";
     
     static final String ELEMENTS = "elements";
+
+    static final String
+        ACTIV_DATE = "ACTIV_DATE",
+        CONTEXT_ID = "CONTEXT_ID",
+        DDS_DSO_ID = "DDS_DSO_ID",
+        SPS_SP_RIC = "SPS_SP_RIC",
+        BOOK_STATE = "BOOK_STATE",
+        HALT_REASN = "HALT_REASN",
+        TRD_STATUS = "TRD_STATUS",
+        HALT_RSN   = "HALT_RSN",
+        PR_RNK_RUL = "PR_RNK_RUL",
+        OR_RNK_RUL = "OR_RNK_RUL",
+        LOT_SIZE_A = "LOT_SIZE_A",
+        PERIOD_CDE = "PERIOD_CDE",
+        MKT_STATUS = "MKT_STATUS",
+        LIST_MKT   = "LIST_MKT",
+        CLASS_CODE = "CLASS_CODE";
 }

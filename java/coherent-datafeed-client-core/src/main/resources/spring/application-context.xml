@@ -198,8 +198,10 @@
             <array value-type="java.lang.Class">
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketByOrder</value>
-                <value>com.coherentlogic.coherent.datafeed.domain.Order</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.StatusResponse</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DirectoryEntries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DictionaryEntries</value>
@@ -417,7 +419,7 @@
 
     <bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
-    <bean id="orderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultOrderFactory"/>
+    <bean id="marketByOrderOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory"/>
     <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/>
     <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
 
@@ -433,8 +435,8 @@
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
-    <bean id="orderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.OrderAdapter">
-        <constructor-arg name="orderFactory" ref="orderFactory"/>
+    <bean id="marketByOrderOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketByOrderAdapter.OrderAdapter">
+        <constructor-arg name="orderFactory" ref="marketByOrderOrderFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
@@ -443,7 +445,7 @@
         <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
-        <constructor-arg name="orderAdapter" ref="orderAdapter"/>
+        <constructor-arg name="orderAdapter" ref="marketByOrderOrderAdapter"/>
     </bean>
 
     <bean id="marketMakerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter">
