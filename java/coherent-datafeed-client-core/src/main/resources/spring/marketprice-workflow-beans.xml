@@ -127,7 +127,13 @@
       to the appropriate queue.
       -->
 
-    <int:channel id="addMarketPriceToQueueChannel"/>
+    <int:publish-subscribe-channel id="addMarketPriceToQueueChannel"/>
+
+    <int:service-activator
+     input-channel="addMarketPriceToQueueChannel"
+     output-channel="nullChannel"
+     ref="mainUI"
+     method="onMarketPriceUpdate"/>
 
     <int-jms:outbound-channel-adapter
      channel="addMarketPriceToQueueChannel"
