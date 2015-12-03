@@ -25,7 +25,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @deprecated Rename this to OMMBean.
  *
- * @todo Extend from IdentityBean.
+ * @TODO: Consider adding StatusResponseEventListener capabilities.
  */
 public class RFABean extends SerializableBean
     implements IdentitySpecification<Integer> {
@@ -52,6 +52,25 @@ public class RFABean extends SerializableBean
     private AttribInfo attribInfo;
 
     private transient Handle handle = null;
+
+    /**
+     * Returns true if the oldValue and newValue differ with respect to what is
+     * required for a bean's property change event to be fired.
+     *
+     * @TODO: Unit test this method.
+     */
+    protected static boolean differs (Object oldValue, Object newValue) {
+
+        boolean result = false;
+
+        if (oldValue == null
+            || (oldValue != null && !oldValue.equals(newValue))
+        ) {
+            result = true;
+        }
+
+        return result;
+    }
 
     @Override
     public Integer getId() {
