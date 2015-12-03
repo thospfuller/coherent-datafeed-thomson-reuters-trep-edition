@@ -78,8 +78,6 @@ public class GetTimeSeriesForMessageProcessor
         if (session == null)
             throw new NullPointerRuntimeException ("The session is null!");
 
-        session.setTimeSeriesRIC(ric);
-
         // This service method will query for the *primary ric*, which happens inside the method whereas for the
         // Query, we do this *outside* the method (in the message processor).
         CompletableFuture<TimeSeries> payload = timeSeriesService.getTimeSeriesFor(
