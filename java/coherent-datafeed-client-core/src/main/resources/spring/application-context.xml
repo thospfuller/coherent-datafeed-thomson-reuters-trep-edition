@@ -199,6 +199,7 @@
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketByOrder</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.Order</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.StatusResponse</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DirectoryEntries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DictionaryEntries</value>
@@ -416,13 +417,24 @@
 
     <bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
+    <bean id="orderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultOrderFactory"/>
     <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/>
     <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
 
-    <bean id="statusResponseAdapter" class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter"/>
+    <bean id="statusResponseAdapter"
+     class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter">
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+    </bean>
 
     <bean id="marketPriceAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketPriceAdapter">
         <constructor-arg name="marketPriceFactory" ref="marketPriceFactory"/>
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+    </bean>
+
+    <bean id="orderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.OrderAdapter">
+        <constructor-arg name="orderFactory" ref="orderFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
@@ -431,6 +443,7 @@
         <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+        <constructor-arg name="orderAdapter" ref="orderAdapter"/>
     </bean>
 
     <bean id="marketMakerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter">
@@ -577,16 +590,7 @@
     <bean id="timeSeriesHelper"
      class="com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper"/>
 
-    <bean id="authentication"
-     class="com.coherentlogic.coherent.datafeed.domain.Authentication"/>
-
-    <bean id="authenticationAdapter"
-     class="com.coherentlogic.coherent.datafeed.adapters.AuthenticationAdapter">
-        <constructor-arg ref="authentication"/>
-    </bean>
-
     <bean id="mainUI" class="com.coherentlogic.coherent.datafeed.client.ui.MainUI" init-method="initialize">
-        <constructor-arg ref="authentication"/>
         <constructor-arg ref="timeSeriesServiceGateway"/>
         <constructor-arg ref="queryMarketPriceUpdates"/>
     </bean>
