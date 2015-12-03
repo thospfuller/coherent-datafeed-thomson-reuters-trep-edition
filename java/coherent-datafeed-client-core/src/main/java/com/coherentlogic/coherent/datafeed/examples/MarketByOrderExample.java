@@ -17,6 +17,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
@@ -44,6 +45,11 @@ public class MarketByOrderExample {
                 DEFAULT_APP_CTX_PATH);
 
         applicationContext.registerShutdownHook();
+
+        MainUI mainUI = applicationContext.getBean(MainUI.class);
+
+        mainUI.mainFrame.pack();
+        mainUI.mainFrame.setVisible(true);
 
         final StatusResponseServiceSpecification statusResponseService =
             (StatusResponseServiceSpecification) applicationContext.
