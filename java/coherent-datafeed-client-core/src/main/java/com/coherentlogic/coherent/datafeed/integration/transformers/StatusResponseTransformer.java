@@ -1,10 +1,12 @@
 package com.coherentlogic.coherent.datafeed.integration.transformers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.integration.transformer.AbstractPayloadTransformer;
 
 import com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
-import com.reuters.rfa.omm.OMMState;
+import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
@@ -23,7 +25,10 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class StatusResponseTransformer
-    extends AbstractPayloadTransformer<OMMState, StatusResponse> {
+    extends AbstractPayloadTransformer<OMMMsg, StatusResponse> {
+
+    private static final Logger log =
+        LoggerFactory.getLogger(StatusResponseTransformer.class);
 
     private final StatusResponseAdapter statusResponseAdapter;
 
@@ -34,8 +39,15 @@ public class StatusResponseTransformer
     }
 
     @Override
-    protected StatusResponse transformPayload(OMMState ommState)
+    protected StatusResponse transformPayload(OMMMsg ommMsg)
         throws Exception {
-        return statusResponseAdapter.adapt(ommState);
+
+        log.info("transformPayload: method begins; ommMsg: " + ommMsg);
+
+        StatusResponse result = statusResponseAdapter.adapt(ommMsg);
+
+        log.info("transformPayload: method ends; result: " + result);
+
+        return result;
     }
 }
