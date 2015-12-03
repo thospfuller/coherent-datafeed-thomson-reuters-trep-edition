@@ -60,22 +60,32 @@
          value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).LOGIN}"/>
     </int:router>
 
-    <int:channel id="loginEventReceivedChannel"/>
+    <int:publish-subscribe-channel id="loginEventReceivedChannel"/>
 
-    <!-- REFRESH_RESP messages WILL BE IGNORED FOR NOW -->
     <int:router input-channel="loginEventReceivedChannel"
      resolution-required="true"
      expression="payload.msg.msgType">
         <!-- previously loadDirectoriesChannel but adding this here ends up
              querying the directories twice-->
-        <int:mapping channel="workflowEndsChannel"
+        <int:mapping channel="processStatusResponseChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
          <!-- TODO: We need to send this status response message to a queue as
                     well, however for the moment we have refactored this such
                     that we can cause the login to fail. -->
-        <int:mapping channel="isMsgFinalChannel"
+        <int:mapping channel="processAuthenticationStatusResponseChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
     </int:router>
+
+    <int:channel id="processAuthenticationStatusResponseChannel"/>
+
+    <int:recipient-list-router id="authenticationStatusResponseRouter"
+     input-channel="processAuthenticationStatusResponseChannel"
+        timeout="60000"
+        ignore-send-failures="false"
+        apply-sequence="true">
+        <int:recipient channel="isMsgFinalChannel"/>
+        <int:recipient channel="processStatusResponseChannel"/>
+    </int:recipient-list-router>
 
     <int:channel id="isMsgFinalChannel"/>
 
@@ -89,7 +99,7 @@
 
     <int:service-activator
      input-channel="loginFailedChannelDueToFinalMsg"
-     output-channel="processStatusResponseChannel"
+     output-channel="workflowEndsChannel"
      ref="frameworkEventListenerAdapter"
      method="initialisationFailed"/>
 
@@ -108,26 +118,6 @@
         <int:mapping channel="loginFailedChannel"
          value="#{T(java.lang.Boolean).FALSE}"/>
     </int:router>
-
-    <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
-    <!-- The authentication will be updated in parallel with other branches
-         in the workflow.
-
-         This step will transfer the OMMMsg properties to the singleton
-         Authentication instance.
-
-         TPF: STRANGE: If we enable this then the workflow breaks and I'm not
-                       sure why because IIRC this was working fine earlier
-                       today.
-      -->
-    <!-- int:service-activator
-     input-channel="loginEventReceivedChannel"
-     output-channel="workflowEndsChannel"
-     ref="authenticationAdapter"
-     method="adapt"/ -->
-
-    <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
     <!-- NOTE: loginSuccessful will only be called once the dictionaries
                have been loaded.
