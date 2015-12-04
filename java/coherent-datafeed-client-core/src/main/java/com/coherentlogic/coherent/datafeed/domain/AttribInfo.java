@@ -34,8 +34,13 @@ public class AttribInfo extends SerializableBean
     @XStreamAlias(SVC_ID)
     private Integer serviceId = null;
 
+    /**
+     * @TODO: Convert this to a string.
+     *
+     * RDMUser.NameType.toString(nameType)
+     */
     @XStreamAlias(NAME_TYPE)
-    private Short nameType = null;
+    private String nameType = null;
 
     @XStreamAlias(ELEMENTS)
     private Map<String, String> elements;
@@ -196,13 +201,13 @@ public class AttribInfo extends SerializableBean
         return this;
     }
 
-    public Short getNameType() {
+    public String getNameType() {
         return nameType;
     }
 
-    public void setNameType(Short nameType) {
+    public void setNameType(String nameType) {
 
-        Short oldValue = this.nameType;
+        String oldValue = this.nameType;
 
         if (RFABean.differs (oldValue, nameType)) {
 
@@ -212,7 +217,7 @@ public class AttribInfo extends SerializableBean
         }
     }
 
-    public AttribInfo withNameType(Short nameType) {
+    public AttribInfo withNameType(String nameType) {
 
         setNameType(nameType);
 
