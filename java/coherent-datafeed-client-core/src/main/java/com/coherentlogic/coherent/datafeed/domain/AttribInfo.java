@@ -49,7 +49,15 @@ public class AttribInfo extends SerializableBean
     }
 
     public void setElements(Map<String, String> elements) {
-        this.elements = elements;
+
+        Map<String, String> oldValue = this.elements;
+
+        if (RFABean.differs (oldValue, elements)) {
+
+            this.elements = elements;
+
+            firePropertyChange("elements", oldValue, elements);
+        }
     }
 
     public AttribInfo withElements (Map<String, String> elements) {
@@ -76,7 +84,15 @@ public class AttribInfo extends SerializableBean
     }
 
     public void setFilter(Integer filter) {
-        this.filter = filter;
+
+        Integer oldValue = this.filter;
+
+        if (RFABean.differs(oldValue, filter)) {
+
+            this.filter = filter;
+
+            firePropertyChange("filter", oldValue, filter);
+        }
     }
 
     public AttribInfo withFilter(Integer filter) {
@@ -93,7 +109,15 @@ public class AttribInfo extends SerializableBean
 
     @Override
     public void setId(Integer id) {
-        this.id = id;
+
+        Integer oldValue = id;
+
+        if (RFABean.differs(oldValue, id)) {
+
+            this.id = id;
+
+            firePropertyChange("id", oldValue, id);
+        }
     }
 
     public AttribInfo withId(Integer id) {
@@ -108,7 +132,15 @@ public class AttribInfo extends SerializableBean
     }
 
     public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+
+        String oldValue = this.serviceName;
+
+        if (RFABean.differs (oldValue, serviceName)) {
+
+            this.serviceName = serviceName;
+
+            firePropertyChange("serviceName", oldValue, serviceName);
+        }
     }
 
     public AttribInfo withServiceName(String serviceName) {
@@ -123,7 +155,15 @@ public class AttribInfo extends SerializableBean
     }
 
     public void setName(String name) {
-        this.name = name;
+
+        String oldValue = this.name;
+
+        if (RFABean.differs (oldValue, name)) {
+
+            this.name = name;
+
+            firePropertyChange("name", oldValue, name);
+        }
     }
 
     public AttribInfo withName(String name) {
@@ -138,7 +178,15 @@ public class AttribInfo extends SerializableBean
     }
 
     public void setServiceId(Integer serviceId) {
-        this.serviceId = serviceId;
+
+        Integer oldValue = this.serviceId;
+
+        if (RFABean.differs (oldValue, serviceId)) {
+
+            this.serviceId = serviceId;
+
+            firePropertyChange("serviceId", oldValue, serviceId);
+        }
     }
 
     public AttribInfo withServiceId(Integer serviceId) {
@@ -153,7 +201,15 @@ public class AttribInfo extends SerializableBean
     }
 
     public void setNameType(Short nameType) {
-        this.nameType = nameType;
+
+        Short oldValue = this.nameType;
+
+        if (RFABean.differs (oldValue, nameType)) {
+
+            this.nameType = nameType;
+
+            firePropertyChange("nameType", oldValue, nameType);
+        }
     }
 
     public AttribInfo withNameType(Short nameType) {
@@ -161,6 +217,71 @@ public class AttribInfo extends SerializableBean
         setNameType(nameType);
 
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result
+            + ((elements == null) ? 0 : elements.hashCode());
+        result = prime * result + ((filter == null) ? 0 : filter.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result
+            + ((nameType == null) ? 0 : nameType.hashCode());
+        result = prime * result
+            + ((serviceId == null) ? 0 : serviceId.hashCode());
+        result = prime * result
+            + ((serviceName == null) ? 0 : serviceName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AttribInfo other = (AttribInfo) obj;
+        if (elements == null) {
+            if (other.elements != null)
+                return false;
+        } else if (!elements.equals(other.elements))
+            return false;
+        if (filter == null) {
+            if (other.filter != null)
+                return false;
+        } else if (!filter.equals(other.filter))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (nameType == null) {
+            if (other.nameType != null)
+                return false;
+        } else if (!nameType.equals(other.nameType))
+            return false;
+        if (serviceId == null) {
+            if (other.serviceId != null)
+                return false;
+        } else if (!serviceId.equals(other.serviceId))
+            return false;
+        if (serviceName == null) {
+            if (other.serviceName != null)
+                return false;
+        } else if (!serviceName.equals(other.serviceName))
+            return false;
+        return true;
     }
 
     @Override
