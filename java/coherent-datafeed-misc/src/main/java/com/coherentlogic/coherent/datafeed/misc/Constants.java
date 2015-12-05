@@ -163,4 +163,9 @@ public interface Constants {
 
     static final String MARKET_PRICE_DAO = "marketPriceDAO",
         TIME_SERIES_DAO = "timeSeriesDAO";
+
+    /**
+     * @deprecated
+     */
+    static final String AUTHENTICATION = "authentication";
 }
