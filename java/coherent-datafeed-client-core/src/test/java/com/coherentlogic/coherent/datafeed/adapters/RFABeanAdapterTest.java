@@ -158,7 +158,7 @@ public class RFABeanAdapterTest extends AdapterUnitTestHelper {
      * It is possible (??) that an instance of OMMData not have a field list --
      * if this happens an exception should not be thrown.
      */
-    @Ignore("Review this test.")
+    @Ignore("Review this test as we may need to add null-checking.")
     public void toRFABeanWhereFieldListIsNull() {
         adapter.toRFABean((OMMFieldList)null, new MarketPrice());
     }
