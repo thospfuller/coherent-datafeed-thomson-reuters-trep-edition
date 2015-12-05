@@ -24,7 +24,7 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
  * and BigInteger instances will have quotes as this is how XStream handles
  * these types when converting into JSON.
  *
- * @TODO: Review all commented tests.
+ * @TODO: Review all commented tests and fix where appropriate.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
