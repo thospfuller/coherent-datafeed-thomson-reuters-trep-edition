@@ -16,7 +16,6 @@ import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
-import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FidDef;
 import com.reuters.rfa.dictionary.FieldDictionary;
@@ -28,6 +27,8 @@ import com.reuters.rfa.omm.OMMFieldEntry;
 import com.reuters.rfa.omm.OMMFieldList;
 import com.reuters.rfa.omm.OMMMap;
 import com.reuters.rfa.omm.OMMMsg;
+import com.reuters.rfa.omm.OMMState;
+import com.reuters.rfa.rdm.RDMUser;
 
 /**
  * An adapter that converts the OMMMsg into an instance of {@link RFABean}.
@@ -101,10 +102,6 @@ public class RFABeanAdapter<T extends RFABean> {
         return rfaBean;
     }
 
-//    OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
-//
-//    toRFABean(attribInfo, rfaBean);
-    
     /**
      * This variant of the <i>adapt</i> method is used for updating an existing
      * marketPrice bean.
@@ -134,7 +131,10 @@ public class RFABeanAdapter<T extends RFABean> {
         String serviceName = getServiceName (ommAttribInfo);
         String name = getName (ommAttribInfo);
         Integer serviceId = getServiceId (ommAttribInfo);
-        Short nameType =  getNameType (ommAttribInfo);
+
+        Short nameTypeShort =  getNameType (ommAttribInfo);
+
+        String nameType = RDMUser.NameType.toString(nameTypeShort);
 
         AttribInfo attribInfo = new AttribInfo ();
 
@@ -154,6 +154,9 @@ public class RFABeanAdapter<T extends RFABean> {
         rfaBean.withAttribInfo(attribInfo);
     }
 
+    /**
+     * @TODO: Should the warn be converted to an exception?
+     */
     void toRFABean (OMMData data, T t) {
 
         if (data != null && data instanceof OMMFieldList) {
@@ -168,12 +171,18 @@ public class RFABeanAdapter<T extends RFABean> {
 
             toRFABean (map, t);
 
+        } else if (data != null && data instanceof OMMState) {
+
+            OMMState state = (OMMState) data;
+
+            toRFABean (state, t);
+
         } else {
 
-            String text = data == null ? "null" : data.getClass().getName();
+            String text = (data == null) ? "null" : data.toString();
 
-            throw new NullPointerRuntimeException(
-                "The data param is null or cannot be converted; data: " + text);
+            log.warn("The data param is null or cannot be converted; "
+                + "data: " + text);
         }
     }
 
