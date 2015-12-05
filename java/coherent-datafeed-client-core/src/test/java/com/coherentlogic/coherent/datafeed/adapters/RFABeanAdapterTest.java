@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
@@ -157,7 +158,7 @@ public class RFABeanAdapterTest extends AdapterUnitTestHelper {
      * It is possible (??) that an instance of OMMData not have a field list --
      * if this happens an exception should not be thrown.
      */
-    @Test
+    @Ignore("Review this test.")
     public void toRFABeanWhereFieldListIsNull() {
         adapter.toRFABean((OMMFieldList)null, new MarketPrice());
     }
