@@ -6,7 +6,6 @@ import java.util.Map;
 import com.coherentlogic.coherent.data.model.core.domain.IdentitySpecification;
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicitCollection;
 
 /**
  * @TODO: Add firePropertyChangeListener logic.
