@@ -10,11 +10,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -42,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.domain.Authentication;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
@@ -65,8 +59,6 @@ public class MainUI {
 
     private final JTextArea statusResponseTextArea = new JTextArea();
 
-    private final Authentication authentication;
-
     private final TimeSeriesGatewaySpecification timeSeriesGatewaySpecification;
 
     private final MarketPriceServiceSpecification marketPriceGatewaySpecification;
@@ -77,7 +69,6 @@ public class MainUI {
      * Create the application.
      */
     public MainUI() {
-        authentication = new Authentication();
         timeSeriesGatewaySpecification = null;
         marketPriceGatewaySpecification = null;
         initialize();
@@ -87,11 +78,9 @@ public class MainUI {
      * @param timeSeriesGatewaySpecification
      */
     public MainUI (
-        Authentication authentication,
         TimeSeriesGatewaySpecification timeSeriesGatewaySpecification,
         MarketPriceServiceSpecification marketPriceGatewaySpecification
     ) {
-        this.authentication = authentication;
         this.timeSeriesGatewaySpecification = timeSeriesGatewaySpecification;
         this.marketPriceGatewaySpecification = marketPriceGatewaySpecification;
     }
@@ -144,38 +133,38 @@ public class MainUI {
 
         authenticationTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
 
-        authentication.addPropertyChangeListener(
-             new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-
-                    String oldText = authenticationTextArea.getText();
-
-                    if (oldText == null)
-                        oldText = "";
-
-                    Date now = Calendar.getInstance().getTime();
-
-                    String newText = "[" + now + "] " + authentication;
-
-                    SwingUtilities.invokeLater(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                authenticationTextArea.setText(newText);
-                            }
-                        }
-                    );
-                }
-            }
-        );
+//        statusResponse.addPropertyChangeListener(
+//             new PropertyChangeListener() {
+//                @Override
+//                public void propertyChange(PropertyChangeEvent evt) {
+//
+//                    String oldText = authenticationTextArea.getText();
+//
+//                    if (oldText == null)
+//                        oldText = "";
+//
+//                    Date now = Calendar.getInstance().getTime();
+//
+//                    String newText = "[" + now + "] " + statusResponse;
+//
+//                    SwingUtilities.invokeLater(
+//                        new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                authenticationTextArea.setText(newText);
+//                            }
+//                        }
+//                    );
+//                }
+//            }
+//        );
 
         JScrollPane authenticationPane = new JScrollPane(authenticationTextArea);
         authenticationPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         authenticationPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
+
         authenticationPanel.add(authenticationPane, BorderLayout.CENTER);
-        
+
         tabbedPane.addTab("Status Response", statusResponsePanel);
         tabbedPane.addTab("Time Series", timeSeriesPanel);
         timeSeriesPanel.setLayout(new FormLayout(new ColumnSpec[] {
@@ -301,7 +290,7 @@ public class MainUI {
         // customise the range axis...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        rangeAxis.setRange(0, 100);
+        rangeAxis.setRange(0, 1000);
         rangeAxis.setAutoRangeIncludesZero(true);
 
         final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
@@ -342,12 +331,14 @@ public class MainUI {
         );
     }
 
-    public void addStatusResponse (StatusResponse statusResponse) {
-        log.warn("addStatusResponse: method begins; statusResponse: " + statusResponse);
+    public void onStatusResponseUpdate (StatusResponse statusResponse) {
         addStatusResponseText (statusResponse.toString());
     }
 
     void addStatusResponseText (final String text) {
+
+        log.warn("addStatusResponseText: method begins; text: " + text);
+
         SwingUtilities.invokeLater(
             new Runnable() {
                 @Override
@@ -358,46 +349,42 @@ public class MainUI {
                 }
             }
         );
+
+        log.warn("addStatusResponseText: method ends.");
     }
 
     public void onInitializationSuccessful (Message<Event> message) {
 
     }
 
+    int marketPriceUpdatesTotal = 0;
+
     public void onMarketPriceUpdate (MarketPrice marketPrice) {
 
-//        final Random rand = new Random ();
-//
-//        Thread thread = new Thread (
-//            new Runnable () {
-//
-//                int ctr = 0;
-//
-//                @Override
-//                public void run() {
-//                    for (int x = 0; x < 5000; x++) {
-//                        int value = rand.nextInt(100);
-//    
-//                        ctr++;
-//    
-//                        System.out.println("ctr: " + ctr + ", value: " + value);
-//
-//                        throughputDataset.addValue(value, "marketPrice.getDisplayName ()", "blah"+ctr);
-//
-//                        if (25 < ctr)
-//                            throughputDataset.removeColumn(0);
-//
-//                        try {
-//                            Thread.sleep(250);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        );
-//
-//        thread.start();
+        marketPriceUpdatesTotal++;
+
+        if (System.currentTimeMillis() % 10 == 0) {
+
+            System.out.println("marketPriceUpdatesTotal: " + marketPriceUpdatesTotal);
+
+            SwingUtilities.invokeLater(
+                new Runnable() {
+
+                    final long value = marketPriceUpdatesTotal;
+
+                    @Override
+                    public void run() {
+
+                        marketPriceUpdatesTotal = 0;
+
+                        throughputDataset.addValue(value, "marketPrice", "blah" + value);
+
+                        if (value % 1000 == 0)
+                            throughputDataset.removeColumn(0);
+                    }
+                }
+            );
+        }
     }
 
     /**
@@ -424,3 +411,35 @@ public class MainUI {
         }
     }
 }
+//final Random rand = new Random ();
+//
+//Thread thread = new Thread (
+//  new Runnable () {
+//
+//      int ctr = 0;
+//
+//      @Override
+//      public void run() {
+//          for (int x = 0; x < 5000; x++) {
+//              int value = rand.nextInt(100);
+//
+//              ctr++;
+//
+//              System.out.println("ctr: " + ctr + ", value: " + value);
+//
+//              throughputDataset.addValue(value, "marketPrice.getDisplayName ()", "blah"+ctr);
+//
+//              if (25 < ctr)
+//                  throughputDataset.removeColumn(0);
+//
+//              try {
+//                  Thread.sleep(250);
+//              } catch (InterruptedException e) {
+//                  e.printStackTrace();
+//              }
+//          }
+//      }
+//  }
+//);
+//thread.start();
+//}
