@@ -57,7 +57,7 @@ public class RFABean extends SerializableBean
      * Returns true if the oldValue and newValue differ with respect to what is
      * required for a bean's property change event to be fired.
      *
-     * @TODO: Unit test this method.
+     * @TODO: Move this method to the parent class.
      */
     protected static boolean differs (Object oldValue, Object newValue) {
 
@@ -81,14 +81,30 @@ public class RFABean extends SerializableBean
 
     @Override
     public void setId(Integer id) {
-        this.id = id;
+
+        Integer oldValue = this.id;
+
+        if (differs (oldValue, id)) {
+
+            this.id = id;
+
+            firePropertyChange("id", oldValue, id);
+        }
     }
 
     /**
      * @deprecated Should be removed once this object extends from IdentityBean.
      */
     public void setUniqueId(Long uniqueId) {
-        this.uniqueId = uniqueId;
+
+        Long oldValue = this.uniqueId;
+
+        if (differs(oldValue, uniqueId)) {
+
+            this.uniqueId = uniqueId;
+
+            firePropertyChange("uniqueId", oldValue, uniqueId);
+        }
     }
 
     /**
@@ -103,7 +119,15 @@ public class RFABean extends SerializableBean
     }
 
     public void setAttribInfo(AttribInfo attribInfo) {
-        this.attribInfo = attribInfo;
+
+        AttribInfo oldValue = this.attribInfo;
+
+        if (RFABean.differs (oldValue, attribInfo)) {
+
+            this.attribInfo = attribInfo;
+
+            firePropertyChange("attribInfo", oldValue, attribInfo);
+        }
     }
 
     public RFABean withAttribInfo (AttribInfo attribInfo) {
@@ -118,7 +142,15 @@ public class RFABean extends SerializableBean
     }
 
     public void setHandle(Handle handle) {
-        this.handle = handle;
+
+        Handle oldValue = this.handle;
+
+        if (RFABean.differs (oldValue, handle)) {
+
+            this.handle = handle;
+
+            firePropertyChange("handle", oldValue, handle);
+        }
     }
 
     public RFABean withHandle (Handle handle) {
@@ -133,7 +165,15 @@ public class RFABean extends SerializableBean
     }
 
     public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+
+        Date oldValue = this.timestamp;
+
+        if (RFABean.differs (oldValue, timestamp)) {
+
+            this.timestamp = timestamp;
+
+            firePropertyChange("timestamp", oldValue, timestamp);
+        }
     }
 
     public RFABean withTimestamp (Date timestamp) {
