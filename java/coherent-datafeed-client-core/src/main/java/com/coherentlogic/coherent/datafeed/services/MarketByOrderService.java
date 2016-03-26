@@ -55,7 +55,7 @@ public class MarketByOrderService
         short msgModelType,
         String... itemNames
     ) {
-    	RequestMessageBuilderFactory factory =
+        RequestMessageBuilderFactory factory =
             getRequestMessageBuilderFactory();
         Client client = getClient();
 
@@ -74,37 +74,3 @@ public class MarketByOrderService
         return handles;
     }
 }
-
-
-//encoder.initialize(OMMTypes.MSG, 5000);
-//OMMItemIntSpec ommItemIntSpec = new OMMItemIntSpec();
-//
-//// Preparing to send item request message
-//OMMMsg ommmsg = pool.acquireMsg();
-//
-//ommmsg.setMsgType(OMMMsg.MsgType.REQUEST);
-//ommmsg.setMsgModelType(RDMMsgTypes.MARKET_BY_ORDER);
-//ommmsg.setIndicationFlags(OMMMsg.Indication.REFRESH);
-//
-//ommmsg.setAttribInfo(svcName, itemName, RDMInstrument.NameType.RIC);
-//
-//// Set the message into interest spec
-//ommItemIntSpec.setMsg(ommmsg);
-//mboHandle = _ommConsumer.registerClient(_eventQueue, ommItemIntSpec, this, null);
-//
-//pool.releaseMsg(ommmsg);
-//String str = "Sent MarketByOrder request for: " + svcName + " : " + itemName;
-//myCallback.notifyStatus(str);
-//
-//m_bPopulateSummaryData = true;
-//
-//return true;
-//}
-//else
-//{
-//if ((_dictLocation == 2) && !m_bSubscribedToDictionary)
-//{
-//    sendRequest(RDMMsgTypes.DICTIONARY, svcName);
-//    m_bSubscribedToDictionary = true;
-//}
-//}
