@@ -26,11 +26,17 @@
      ref="statusResponseMessageProcessor"
      method="process"/>
 
-    <int:channel id="addStatusResponseToQueueChannel"/>
+    <int:publish-subscribe-channel id="addStatusResponseToQueueChannel"/>
 
-    <int-jms:outbound-channel-adapter
+    <int:service-activator
+     input-channel="addStatusResponseToQueueChannel"
+     output-channel="workflowEndsChannel"
+     ref="mainUI"
+     method="onStatusResponseUpdate"/>
+
+    <!-- int-jms:outbound-channel-adapter
      channel="addStatusResponseToQueueChannel"
         connection-factory="jmsConnectionFactory"
-        destination="statusResponseUpdatesTopic"/>
+        destination="statusResponseUpdatesTopic"/ -->
 
 </beans>
