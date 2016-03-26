@@ -29,18 +29,10 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @Table(name=MARKET_PRICE)
 @XStreamAlias(MARKET_PRICE)
 public class MarketPrice
-    extends RFABean
+    extends AbstractCommonProperties
     implements MarketPriceConstants {
 
     private static final long serialVersionUID = -8330990635265356088L;
-
-    /**
-     * Product permissions information.
-     *
-     * PROD_PERM: UINT
-     */
-    @XStreamAlias(PROD_PERM)
-    private BigInteger permission = null;
 
     /**
      * Display information for the IDN terminal device.
@@ -171,8 +163,8 @@ public class MarketPrice
     @XStreamAlias(PRCTCK_1)
     private Integer tickArrow = null;
 
-    @XStreamAlias(CURRENCY)
-    private String currency = null;
+//    @XStreamAlias(CURRENCY)
+//    private String currency = null;
 
     @XStreamAlias(TRADE_DATE)
     private Long tradeDateMillis = null;
@@ -330,8 +322,8 @@ public class MarketPrice
     @XStreamAlias(NUM_BIDS)
     private BigInteger numberOfBids = null;
 
-    @XStreamAlias(RECORDTYPE)
-    private BigInteger recordType = null;
+//    @XStreamAlias(RECORDTYPE)
+//    private BigInteger recordType = null;
 
     @XStreamAlias(OPTION_XID)
     private String optionExchangeId = null;
@@ -501,8 +493,8 @@ public class MarketPrice
     @XStreamAlias(IMP_VOLT)
     private BigDecimal impliedVolatility = null;
 
-    @XStreamAlias(RDN_EXCHD2)
-    private String exchangeId2 = null;
+//    @XStreamAlias(RDN_EXCHD2)
+//    private String exchangeId2 = null;
 
     @XStreamAlias(CP_ADJ_FCT)
     private BigDecimal capitalAdjustmentFactor = null;
@@ -640,8 +632,8 @@ public class MarketPrice
     @XStreamAlias(VWAP)
     private BigDecimal volumeWeightedAveragePrice = null;
 
-    @XStreamAlias(PROV_SYMB)
-    private String providerSymbol = null;
+//    @XStreamAlias(PROV_SYMB)
+//    private String providerSymbol = null;
 
     @XStreamAlias(BID_ASK_DT)
     private Long bidAskDate = null;
@@ -652,8 +644,8 @@ public class MarketPrice
     @XStreamAlias(ISIN_CODE)
     private String isinCode = null;
 
-    @XStreamAlias(MNEMONIC)
-    private String exchangeId = null;
+//    @XStreamAlias(MNEMONIC)
+//    private String exchangeId = null;
 
     @XStreamAlias(RTR_OPN_PR)
     private BigDecimal rtrsOpeningPrice = null;
@@ -967,20 +959,6 @@ public class MarketPrice
     @XStreamAlias(SETTLEDATE)
     private Long settleDate = null;
 
-    @UsingKey(type=PROD_PERM)
-    public BigInteger getPermission() {
-        return permission;
-    }
-
-    /**
-     *
-     */
-    @RFAType(type=PROD_PERM)
-    @Adapt(using=OMMNumericAdapter.class)
-    public void setPermission(BigInteger permission) {
-        this.permission = permission;
-    }
-
     @UsingKey(type=RDN_EXCHID)
     public String getIdnExchangeId() {
         return idnExchangeId;
@@ -993,20 +971,6 @@ public class MarketPrice
     @Adapt(using=OMMEnumAdapter.class)
     public void setIdnExchangeId(String idnExchangeId) {
         this.idnExchangeId = idnExchangeId;
-    }
-
-    @UsingKey(type=DSPLY_NAME)
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * @todo Test this.
-     */
-    @RFAType(type=DSPLY_NAME)
-    @Adapt(using=OMMDataBufferAdapter.class)
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     @UsingKey(type=BID)
@@ -1258,16 +1222,16 @@ public class MarketPrice
         this.tickArrow = tickArrow;
     }
 
-    @UsingKey(type=CURRENCY)
-    public String getCurrency() {
-        return currency;
-    }
-
-    @RFAType(type=CURRENCY)
-    @Adapt(using=OMMEnumAdapter.class)
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+//    @UsingKey(type=CURRENCY)
+//    public String getCurrency() {
+//        return currency;
+//    }
+//
+//    @RFAType(type=CURRENCY)
+//    @Adapt(using=OMMEnumAdapter.class)
+//    public void setCurrency(String currency) {
+//        this.currency = currency;
+//    }
 
     @UsingKey(type=TRADE_DATE)
     public Long getTradeDateMillis() {
@@ -1844,16 +1808,16 @@ public class MarketPrice
         this.numberOfBids = numberOfBids;
     }
 
-    @UsingKey(type=RECORDTYPE)
-    public BigInteger getRecordType() {
-        return recordType;
-    }
-
-    @RFAType(type=RECORDTYPE)
-    @Adapt(using=OMMNumericAdapter.class)
-    public void setRecordType(BigInteger recordType) {
-        this.recordType = recordType;
-    }
+//    @UsingKey(type=RECORDTYPE)
+//    public BigInteger getRecordType() {
+//        return recordType;
+//    }
+//
+//    @RFAType(type=RECORDTYPE)
+//    @Adapt(using=OMMNumericAdapter.class)
+//    public void setRecordType(BigInteger recordType) {
+//        this.recordType = recordType;
+//    }
 
     @UsingKey(type=BID_MMID1)
     public String getMarketParticipantBidId() {
@@ -2479,16 +2443,16 @@ public class MarketPrice
         this.impliedVolatility = impliedVolatility;
     }
 
-    @UsingKey(type=RDN_EXCHD2)
-    public String getExchangeId2() {
-        return exchangeId2;
-    }
-
-    @RFAType(type=RDN_EXCHD2)
-    @Adapt(using=OMMEnumAdapter.class)
-    public void setExchangeId2(String exchangeId2) {
-        this.exchangeId2 = exchangeId2;
-    }
+//    @UsingKey(type=RDN_EXCHD2)
+//    public String getExchangeId2() {
+//        return exchangeId2;
+//    }
+//
+//    @RFAType(type=RDN_EXCHD2)
+//    @Adapt(using=OMMEnumAdapter.class)
+//    public void setExchangeId2(String exchangeId2) {
+//        this.exchangeId2 = exchangeId2;
+//    }
 
     @UsingKey(type=CP_ADJ_FCT)
     public BigDecimal getCapitalAdjustmentFactor() {
@@ -2917,16 +2881,16 @@ public class MarketPrice
         this.volumeWeightedAveragePrice = volumeWeightedAveragePrice;
     }
 
-    @UsingKey(type=PROV_SYMB)
-    public String getProviderSymbol() {
-        return providerSymbol;
-    }
-
-    @RFAType(type=PROV_SYMB)
-    @Adapt(using=OMMDataBufferAdapter.class)
-    public void setProviderSymbol(String providerSymbol) {
-        this.providerSymbol = providerSymbol;
-    }
+//    @UsingKey(type=PROV_SYMB)
+//    public String getProviderSymbol() {
+//        return providerSymbol;
+//    }
+//
+//    @RFAType(type=PROV_SYMB)
+//    @Adapt(using=OMMDataBufferAdapter.class)
+//    public void setProviderSymbol(String providerSymbol) {
+//        this.providerSymbol = providerSymbol;
+//    }
 
     @UsingKey(type=BID_ASK_DT)
     public Long getBidAskDate() {
@@ -2950,16 +2914,16 @@ public class MarketPrice
         this.isinCode = isinCode;
     }
 
-    @UsingKey(type=MNEMONIC)
-    public String getExchangeId() {
-        return exchangeId;
-    }
-
-    @RFAType(type=MNEMONIC)
-    @Adapt(using=OMMDataBufferAdapter.class)
-    public void setExchangeId(String exchangeId) {
-        this.exchangeId = exchangeId;
-    }
+//    @UsingKey(type=MNEMONIC)
+//    public String getExchangeId() {
+//        return exchangeId;
+//    }
+//
+//    @RFAType(type=MNEMONIC)
+//    @Adapt(using=OMMDataBufferAdapter.class)
+//    public void setExchangeId(String exchangeId) {
+//        this.exchangeId = exchangeId;
+//    }
 
     @UsingKey(type=RTR_OPN_PR)
     public BigDecimal getRtrsOpeningPrice() {
