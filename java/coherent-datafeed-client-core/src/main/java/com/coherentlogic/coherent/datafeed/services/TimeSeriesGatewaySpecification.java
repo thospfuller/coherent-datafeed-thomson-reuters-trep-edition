@@ -24,25 +24,6 @@ public interface TimeSeriesGatewaySpecification
      * Method queries the time series service passing the loginHandle, Reuters
      * Instrument Code (RIC), for the specified period.
      */
-/*    Handle queryTimeSeriesFor(
-        String serviceName,
-        Handle loginHandle,
-        String ric,
-        int period
-    );
-
-    Handle queryTimeSeriesFor(
-        String serviceName,
-        Handle loginHandle,
-        String ric,
-        String period
-    );
-*/
-
-    /**
-     * Method queries the time series service passing the loginHandle, Reuters
-     * Instrument Code (RIC), for the specified period.
-     */
     CompletableFuture<TimeSeries> getTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
