@@ -196,6 +196,8 @@
     <bean id="jsonAdapter" class="com.coherentlogic.coherent.datafeed.adapters.json.RFABeanToJSONAdapter">
         <constructor-arg name="targets" index="0" type="Class[]">
             <array value-type="java.lang.Class">
+                <value>com.coherentlogic.coherent.datafeed.domain.AbstractCommonProperties</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.AbstractAdvancedCommonProperties</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker</value>
