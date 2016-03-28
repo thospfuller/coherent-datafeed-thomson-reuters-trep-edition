@@ -36,6 +36,8 @@ public class TimeSeriesAdapter extends
     private static final Logger log =
         LoggerFactory.getLogger(TimeSeriesAdapter.class);
 
+    public static final String BEAN_NAME = "timeSeriesAdapter";
+
     private final TS1DefDb ts1DefDb;
 
     public TimeSeriesAdapter(TS1DefDb ts1DefDb) {
@@ -117,7 +119,10 @@ public class TimeSeriesAdapter extends
                 // See the TimeSeriesLoader if this happens.
 
                 log.warn("The def is null for the fid " + fid + "; defDb.size: " +
-                    defDb.size() + "; this indicates that the defDb load logic has failed.");
+                    defDb.size() + "; this indicates that the defDb load " +
+                    "logic has failed; setting the header to UNKNOWN" + ctr);
+
+                //timeSeries.addHeader("UNKNOWN" + ctr);
             }
         }
     }

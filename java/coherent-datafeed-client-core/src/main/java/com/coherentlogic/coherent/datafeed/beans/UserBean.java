@@ -15,10 +15,15 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  */
 public class UserBean extends RFABean {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8695566861166579215L;
+
+    public static final String BEAN_NAME = "userBean";
 
     private String dacsId;
 
+    /**
+     * @todo Remove.
+     */
     public UserBean () {
         super ();
     }

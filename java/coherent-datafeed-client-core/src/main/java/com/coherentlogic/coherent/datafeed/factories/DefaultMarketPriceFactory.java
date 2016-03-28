@@ -12,6 +12,8 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 public class DefaultMarketPriceFactory
     extends AbstractRFABeanFactory<MarketPrice> {
 
+    public static final String BEAN_NAME = "marketPriceFactory";
+
     @Override
     public MarketPrice getInstance() {
         return configure(new MarketPrice());

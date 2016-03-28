@@ -44,6 +44,8 @@ public class StatusInterpreter {
     private static final Logger log =
         LoggerFactory.getLogger(StatusInterpreter.class);
 
+    public static final String BEAN_NAME = "statusInterpreter";
+
     /**
      * Determine if we can route via the ommMsg characteristics.
      *

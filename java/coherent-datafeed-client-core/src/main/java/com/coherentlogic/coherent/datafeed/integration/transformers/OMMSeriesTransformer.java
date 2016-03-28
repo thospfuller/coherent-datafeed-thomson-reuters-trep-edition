@@ -17,6 +17,8 @@ import com.reuters.rfa.omm.OMMSeries;
 public class OMMSeriesTransformer
     extends AbstractPayloadTransformer<OMMMsg, OMMSeries> {
 
+    public static final String BEAN_NAME = "ommSeriesTransformer";
+
     @Override
     public OMMSeries transformPayload(OMMMsg payload) throws Exception {
 

@@ -21,6 +21,8 @@ public class OMMDateTimeAdapter extends OMMFieldEntryAdapter<OMMDateTime> {
     private static final Logger log =
         LoggerFactory.getLogger(OMMDateTimeAdapter.class);
 
+    public static final String BEAN_NAME = "ommDateTimeAdapter";
+
     public OMMDateTimeAdapter(FieldDictionary fieldDictionary,
         OMMDataAdapter dataAdapter) {
         super(fieldDictionary, dataAdapter);

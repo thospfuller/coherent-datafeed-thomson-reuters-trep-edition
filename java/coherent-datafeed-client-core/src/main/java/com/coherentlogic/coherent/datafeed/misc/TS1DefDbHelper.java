@@ -20,6 +20,8 @@ public class TS1DefDbHelper {
     private static final Logger log =
         LoggerFactory.getLogger(TS1DefDbHelper.class);
 
+    public static final String BEAN_NAME = "ts1DefDbHelper";
+
     public boolean allTS1DefDbEntriesAreLoaded (Event event, Session session) {
         log.info ("allTS1DefDbEntriesAreLoaded: method begins; event: " + event
             + ", session: " + session);

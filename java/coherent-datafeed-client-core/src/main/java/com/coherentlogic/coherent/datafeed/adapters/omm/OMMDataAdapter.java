@@ -15,6 +15,8 @@ public class OMMDataAdapter extends AbstractAdapter<OMMFieldEntry, OMMData> {
 
     private final FieldDictionary fieldDictionary;
 
+    public static final String BEAN_NAME = "dataAdapter";
+
     public OMMDataAdapter(FieldDictionary fieldDictionary) {
         this.fieldDictionary = fieldDictionary;
     }

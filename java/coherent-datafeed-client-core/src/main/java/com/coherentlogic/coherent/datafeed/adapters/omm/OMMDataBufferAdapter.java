@@ -10,8 +10,9 @@ import com.reuters.rfa.omm.OMMFieldEntry;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class OMMDataBufferAdapter extends
-        OMMFieldEntryAdapter<OMMDataBuffer> {
+public class OMMDataBufferAdapter extends OMMFieldEntryAdapter<OMMDataBuffer> {
+
+    public static final String BEAN_NAME = "ommDataBufferAdapter";
 
     public OMMDataBufferAdapter(FieldDictionary fieldDictionary,
             OMMDataAdapter dataAdapter) {

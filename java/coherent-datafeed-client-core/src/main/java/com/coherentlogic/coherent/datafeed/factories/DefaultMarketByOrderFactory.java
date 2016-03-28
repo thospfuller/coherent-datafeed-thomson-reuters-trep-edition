@@ -14,13 +14,20 @@ import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
 public class DefaultMarketByOrderFactory
     extends AbstractRFABeanFactory<MarketByOrder> {
 
+    public static final String BEAN_NAME = "marketByOrderFactory";
+
     @Override
     public MarketByOrder getInstance() {
         return configure(new MarketByOrder ());
     }
 
+    /**
+     * @todo Extract this class.
+     */
     public static class DefaultOrderFactory
         extends AbstractRFABeanFactory<Order> {
+
+        public static final String BEAN_NAME = "marketByOrderOrderFactory";
 
         @Override
         public Order getInstance() {

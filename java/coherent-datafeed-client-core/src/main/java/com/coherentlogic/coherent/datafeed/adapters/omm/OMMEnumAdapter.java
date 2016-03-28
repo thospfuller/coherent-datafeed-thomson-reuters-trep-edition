@@ -13,6 +13,8 @@ import com.reuters.rfa.omm.OMMFieldEntry;
 public class OMMEnumAdapter
     extends OMMFieldEntryAdapter<OMMEnum> {
 
+    public static final String BEAN_NAME = "ommEnumAdapter";
+
     public OMMEnumAdapter(
         FieldDictionary fieldDictionary,
         OMMDataAdapter dataAdapter

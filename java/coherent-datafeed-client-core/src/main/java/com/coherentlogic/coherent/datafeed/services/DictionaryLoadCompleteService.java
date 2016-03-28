@@ -27,6 +27,8 @@ public class DictionaryLoadCompleteService
     private static final Logger log =
         LoggerFactory.getLogger(DictionaryLoadCompleteService.class);
 
+    public static final String BEAN_NAME = "dictionaryLoadCompleteService";
+
     @Override
     public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
         throw new RuntimeException ("This method has not been implemented.");

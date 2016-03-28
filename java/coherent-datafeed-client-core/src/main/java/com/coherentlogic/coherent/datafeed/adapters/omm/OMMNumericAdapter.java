@@ -17,6 +17,8 @@ import com.reuters.rfa.omm.OMMNumeric;
 public class OMMNumericAdapter
     extends OMMFieldEntryAdapter<OMMNumeric> {
 
+    public static final String BEAN_NAME = "ommNumericAdapter";
+
     public OMMNumericAdapter(
         FieldDictionary fieldDictionary,
         OMMDataAdapter dataAdapter

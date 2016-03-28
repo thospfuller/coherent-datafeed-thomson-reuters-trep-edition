@@ -19,6 +19,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
 public class TransformTimeSeriesMessageProcessor
     implements MessageProcessorSpecification<OMMItemEvent, TimeSeries> {
 
+    public static final String BEAN_NAME = "transformTimeSeriesMessageProcessor";
+
     private final AbstractAdapter<TimeSeriesEntries, TimeSeries>
         timeSeriesAdapter;
 

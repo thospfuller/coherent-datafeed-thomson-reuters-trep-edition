@@ -41,6 +41,8 @@ public class LoggingService {
     private static final String ROOT_PROPERTIES_FILE_PATH
         = "/logging.properties";
 
+    public static final String BEAN_NAME = "loggingService";
+
     public void initialize () {
         InputStream inputStream = LoggingService.class.getResourceAsStream(
             ROOT_PROPERTIES_FILE_PATH);

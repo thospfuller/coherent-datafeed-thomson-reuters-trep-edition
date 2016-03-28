@@ -13,6 +13,8 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 public class DefaultMarketMakerFactory
     extends AbstractRFABeanFactory<MarketMaker> {
 
+    public static final String BEAN_NAME = "marketMakerFactory";
+
     @Override
     public MarketMaker getInstance() {
         return configure(new MarketMaker ());

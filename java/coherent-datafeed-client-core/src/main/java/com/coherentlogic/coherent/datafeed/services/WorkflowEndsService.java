@@ -16,6 +16,8 @@ public class WorkflowEndsService {
     private static final Logger log =
         LoggerFactory.getLogger(WorkflowEndsService.class);
 
+    public static final String BEAN_NAME = "workflowEndsService";
+
     private final String note;
 
     public WorkflowEndsService(String note) {

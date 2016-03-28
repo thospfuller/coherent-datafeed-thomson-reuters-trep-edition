@@ -13,6 +13,8 @@ import com.reuters.rfa.omm.OMMState;
 public class OMMStateTransformer
     extends AbstractPayloadTransformer<OMMMsg, OMMState> {
 
+    public static final String BEAN_NAME = "ommStateTransformer";
+
     @Override
     protected OMMState transformPayload(OMMMsg payload) throws Exception {
 

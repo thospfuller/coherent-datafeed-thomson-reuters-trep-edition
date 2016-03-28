@@ -12,6 +12,8 @@ import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 public class DefaultStatusResponseFactory
     implements Factory<StatusResponse> {
 
+    public static final String BEAN_NAME = "statusResponseFactory";
+
     @Override
     public StatusResponse getInstance() {
         return new StatusResponse();
