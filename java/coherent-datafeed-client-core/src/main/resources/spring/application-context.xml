@@ -26,6 +26,7 @@
 
     <aop:aspectj-autoproxy/>
 
+    <context:annotation-config/>
     <context:component-scan base-package="com.coherentlogic"/>
 
     <import resource="hornetq-beans.xml"/>
@@ -38,14 +39,14 @@
 
     <cache:annotation-driven cache-manager="springCacheManager"/>
 
-    <bean id="springCacheManager"
-     class="org.springframework.cache.concurrent.ConcurrentMapCacheManager"/>
+    <!--bean id="springCacheManager"
+     class="org.springframework.cache.concurrent.ConcurrentMapCacheManager"/ -->
 
-    <bean id="userBean" class="com.coherentlogic.coherent.datafeed.beans.UserBean"/>
+    <!-- bean id="userBean" class="com.coherentlogic.coherent.datafeed.beans.UserBean"/ -->
 
-    <bean id="loggingService"
+    <!-- bean id="loggingService"
      class="com.coherentlogic.coherent.datafeed.services.LoggingService"
-     init-method="initialize"/>
+     init-method="initialize"/ -->
 
     <bean id="context"
      class="com.coherentlogic.coherent.datafeed.configuration.ContextInitializer"
@@ -379,20 +380,20 @@
         <constructor-arg name="sessionCache" ref="sessionCache"/>
      </bean>
 
-    <bean id="transformTimeSeriesMessageProcessor"
+    <!-- bean id="transformTimeSeriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor">
         <constructor-arg name="timeSeriesAdapter" ref="timeSeriesAdapter"/>
-        <!-- constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/ -->
-     </bean>
+        COMMENTED: constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/
+     </bean -->
 
-    <bean id="statusInterpreter"
-     class="com.coherentlogic.coherent.datafeed.integration.endpoints.StatusInterpreter"/>
+    <!-- bean id="statusInterpreter"
+     class="com.coherentlogic.coherent.datafeed.integration.endpoints.StatusInterpreter"/ -->
 
-    <bean id="dataAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataAdapter">
+    <!-- bean id="dataAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataAdapter">
         <constructor-arg ref="fieldDictionary"/>
-    </bean>
+    </bean -->
 
-    <bean id="ommDataBufferAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter">
+    <!-- bean id="ommDataBufferAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter">
         <constructor-arg ref="fieldDictionary"/>
         <constructor-arg ref="dataAdapter"/>
     </bean>
@@ -410,7 +411,7 @@
     <bean id="ommDateTimeAdapter" class="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter">
         <constructor-arg ref="fieldDictionary"/>
         <constructor-arg ref="dataAdapter"/>
-    </bean>
+    </bean -->
 
     <util:map id="fieldEntryAdapters" key-type="java.lang.Class">
         <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter" value-ref="ommDataBufferAdapter"/>
@@ -419,11 +420,11 @@
         <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter" value-ref="ommDateTimeAdapter"/>
     </util:map>
 
-    <bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
+    <!-- bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
     <bean id="marketByOrderOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory"/>
     <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/>
-    <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
+    <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/ -->
 
     <bean id="statusResponseAdapter"
      class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter">
@@ -456,17 +457,17 @@
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
-    <bean id="ommStateTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTransformer"/>
+    <!-- bean id="ommStateTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTransformer"/ -->
 
     <bean id="statusResponseTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.StatusResponseTransformer">
         <constructor-arg name="statusResponseAdapter" ref="statusResponseAdapter"/>
     </bean>
 
-    <bean id="ts1DefDb" class="com.reuters.ts1.TS1DefDb"/>
+    <!-- bean id="ts1DefDb" class="com.reuters.ts1.TS1DefDb"/>
 
     <bean id="timeSeriesAdapter" class="com.coherentlogic.coherent.datafeed.adapters.TimeSeriesAdapter">
         <constructor-arg name="ts1DefDb" ref="ts1DefDb"/>
-    </bean>
+    </bean -->
 
     <bean id="timeSeriesTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.TimeSeriesTransformer">
         <constructor-arg name="timeSeriesAdapter" ref="timeSeriesAdapter"/>
@@ -496,7 +497,7 @@
         <constructor-arg name="marketMakerAdapter" ref="marketMakerAdapter"/>
     </bean>
 
-    <bean id="ommSeriesTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMSeriesTransformer"/>
+    <!-- bean id="ommSeriesTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMSeriesTransformer"/ -->
 
     <bean id="authenticationMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.AuthenticationMessageEnricher">
         <constructor-arg name="sessionCache" ref="sessionCache"/>
@@ -546,10 +547,10 @@
         <constructor-arg name="sessionCache" ref="sessionCache"/>
     </bean>
 
-    <bean id="dictionaryLoadCompleteService"
+    <!-- bean id="dictionaryLoadCompleteService"
      class="com.coherentlogic.coherent.datafeed.services.DictionaryLoadCompleteService"/>
 
-    <bean id="workflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService"/>
+    <bean id="workflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService"/ -->
 
     <bean id="workflowEndsDueToFinalMsgService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
         <constructor-arg name="note" value="The payload.isFinal method returned true."/>
@@ -588,11 +589,11 @@
         <constructor-arg name="ts1DefService" ref="ts1DefService"/>
     </bean>
 
-    <bean id="ts1DefDbHelper"
+    <!-- bean id="ts1DefDbHelper"
      class="com.coherentlogic.coherent.datafeed.misc.TS1DefDbHelper"/>
 
     <bean id="timeSeriesHelper"
-     class="com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper"/>
+     class="com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper"/ -->
 
     <bean id="mainUI" class="com.coherentlogic.coherent.datafeed.client.ui.MainUI" init-method="initialize">
         <constructor-arg ref="timeSeriesServiceGateway"/>
