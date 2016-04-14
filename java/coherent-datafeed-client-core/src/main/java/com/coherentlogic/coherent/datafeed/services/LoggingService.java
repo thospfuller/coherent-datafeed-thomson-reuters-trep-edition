@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 
+import javax.annotation.PostConstruct;
+
 import com.coherentlogic.coherent.datafeed.exceptions.
     ApplicationInitializationFailedException;
 
@@ -43,6 +45,7 @@ public class LoggingService {
 
     public static final String BEAN_NAME = "loggingService";
 
+    @PostConstruct
     public void initialize () {
         InputStream inputStream = LoggingService.class.getResourceAsStream(
             ROOT_PROPERTIES_FILE_PATH);
