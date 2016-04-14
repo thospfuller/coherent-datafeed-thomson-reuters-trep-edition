@@ -11,6 +11,8 @@ import com.reuters.rfa.rdm.RDMUser;
  */
 public class LoginMessageBuilder extends OMMMsgBuilder<LoginMessageBuilder> {
 
+    public static final String BEAN_NAME = "loginMessageBuilder";
+
     public LoginMessageBuilder(OMMPool pool, OMMEncoder encoder) {
         super(pool, encoder);
     }

@@ -30,6 +30,8 @@ import com.reuters.rfa.session.omm.OMMItemIntSpec;
 public class RequestMessageBuilder
     extends OMMMsgBuilder<RequestMessageBuilder> {
 
+    public static final String BEAN_NAME = "defaultRequestMessageBuilder";
+
     private final OMMConsumer consumer;
     private final EventQueue eventQueue;
 
