@@ -12,11 +12,18 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.beans.UserBean;
+import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
+import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory;
+import com.coherentlogic.coherent.datafeed.factories.LoginMessageBuilderFactory;
+import com.coherentlogic.coherent.datafeed.factories.OMMEncoderFactory;
+import com.coherentlogic.coherent.datafeed.factories.OMMPoolFactory;
+import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
+import com.coherentlogic.coherent.datafeed.factories.rfa.EventQueueFactory;
 import com.coherentlogic.coherent.datafeed.integration.endpoints.StatusInterpreter;
 import com.coherentlogic.coherent.datafeed.integration.transformers.OMMSeriesTransformer;
 import com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTransformer;
@@ -26,7 +33,11 @@ import com.coherentlogic.coherent.datafeed.services.LoggingService;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper;
 import com.coherentlogic.coherent.datafeed.services.WorkflowEndsService;
 import com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor;
+import com.reuters.rfa.common.EventQueue;
 import com.reuters.rfa.dictionary.FieldDictionary;
+import com.reuters.rfa.omm.OMMEncoder;
+import com.reuters.rfa.omm.OMMPool;
+import com.reuters.rfa.session.omm.OMMConsumer;
 import com.reuters.ts1.TS1DefDb;
 
 /**
@@ -35,7 +46,10 @@ import com.reuters.ts1.TS1DefDb;
 @Configuration
 public class GlobalConfiguration {
 
-    static final String FIELD_DICTIONARY = "fieldDictionary", SPRING_CACHE_MANAGER = "springCacheManager";
+    static final String FIELD_DICTIONARY = "fieldDictionary", SPRING_CACHE_MANAGER = "springCacheManager",
+        POOL = "pool", ENCODER = "encoder", EVENT_QUEUE = "eventQueue", OMM_CONSUMER = "defaultOMMConsumer";
+
+    public static final String DEFAULT_EVENT_QUEUE_NAME = "myEventQueue";
 
     @Bean(name=SPRING_CACHE_MANAGER)
     public ConcurrentMapCacheManager getConcurrentMapCacheManager () {
@@ -52,9 +66,114 @@ public class GlobalConfiguration {
 
         LoggingService loggingService = new LoggingService ();
 
-        loggingService.initialize();
-
         return loggingService;
+    }
+
+    @Bean(name=ContextInitializer.BEAN_NAME)
+    public ContextInitializer getContextInitializer () {
+
+        ContextInitializer contextInitializer = new ContextInitializer ();
+
+        return contextInitializer;
+    }
+
+    @Bean(name=OMMPoolFactory.BEAN_NAME)
+    public OMMPoolFactory getOMMPoolFactory () {
+
+        OMMPoolFactory ommPoolFactory = new OMMPoolFactory ();
+
+        return ommPoolFactory;
+    }
+
+    @Bean(name=POOL)
+    public OMMPool getOMMPool (@Qualifier(OMMPoolFactory.BEAN_NAME) OMMPoolFactory ommPoolFactory) {
+        return ommPoolFactory.getInstance();
+    }
+
+    /**
+     * <bean id="encoderFactory" class="com.coherentlogic.coherent.datafeed.factories.OMMEncoderFactory">
+     *  <constructor-arg name="pool" ref="pool"/>
+     *  <constructor-arg name="msgType">
+     *      <util:constant static-field="com.reuters.rfa.omm.OMMTypes.MSG"/>
+     *  </constructor-arg>
+     *  <constructor-arg name="size" value="500"/>
+     * </bean>
+     */
+    @Bean(name=OMMEncoderFactory.BEAN_NAME)
+    public OMMEncoderFactory getOMMEncoderFactory (@Qualifier(POOL) OMMPool pool) {
+        return new OMMEncoderFactory (pool, com.reuters.rfa.omm.OMMTypes.MSG, 500);
+    }
+
+    /**
+     * <bean id="encoder" class="com.reuters.rfa.omm.OMMEncoder"
+     *  factory-bean="encoderFactory" factory-method="getInstance">
+     * </bean>
+     */
+    @Bean(name=ENCODER)
+    public OMMEncoder getOMMEncoder (@Qualifier(OMMEncoderFactory.BEAN_NAME) OMMEncoderFactory encoderFactory) {
+        return encoderFactory.getInstance();
+    }
+
+//    <bean id="eventQueueFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.EventQueueFactory">
+//        <constructor-arg name="eventQueueName" value="myEventQueue"/>
+//    </bean>
+//    
+//    <bean id="eventQueue" class="com.reuters.rfa.common.EventQueue"
+//     factory-bean="eventQueueFactory" factory-method="getInstance"/>
+
+    @Bean(name=EventQueueFactory.BEAN_NAME)
+    public EventQueueFactory getEventQueueFactory () {
+        return new EventQueueFactory (DEFAULT_EVENT_QUEUE_NAME);
+    };
+
+    @Bean(name=EVENT_QUEUE)
+    public EventQueue getEventQueue (@Qualifier(EventQueueFactory.BEAN_NAME) EventQueueFactory eventQueueFactory) {
+        return eventQueueFactory.getInstance();
+    }
+
+    /*
+    <bean id="defaultRequestMessageBuilderFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory">
+        <constructor-arg name="consumer" ref="defaultOMMConsumer"/>
+        <constructor-arg name="eventQueue" ref="eventQueue"/>
+        <constructor-arg name="pool" ref="pool"/>
+        <constructor-arg name="encoder" ref="encoder"/>
+    </bean>
+
+    <bean id="defaultRequestMessageBuilder" class="com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder"
+     factory-bean="defaultRequestMessageBuilderFactory" factory-method="getInstance"/>
+     */
+
+    @Bean(name=RequestMessageBuilderFactory.BEAN_NAME)
+    public RequestMessageBuilderFactory getRequestMessageBuilderFactory (
+        @Qualifier(OMM_CONSUMER) OMMConsumer defaultOMMConsumer,
+        @Qualifier(EVENT_QUEUE) EventQueue eventQueue,
+        @Qualifier(POOL) OMMPool pool,
+        @Qualifier(ENCODER) OMMEncoder encoder
+    ) {
+        return new RequestMessageBuilderFactory (defaultOMMConsumer, eventQueue, pool, encoder);
+    }
+
+    @Bean(name=RequestMessageBuilder.BEAN_NAME)
+    public RequestMessageBuilder getRequestMessageBuilder (
+        @Qualifier(RequestMessageBuilderFactory.BEAN_NAME) RequestMessageBuilderFactory requestMessageBuilderFactory
+    ) {
+        return requestMessageBuilderFactory.getInstance();
+    }
+
+    @Bean(name=LoginMessageBuilderFactory.BEAN_NAME)
+    public LoginMessageBuilderFactory getLoginMessageBuilderFactory (
+        @Qualifier(POOL) OMMPool pool,
+        @Qualifier(ENCODER) OMMEncoder encoder
+    ) {
+        return new LoginMessageBuilderFactory (pool, encoder);
+    }
+
+    @Bean(name=LoginMessageBuilder.BEAN_NAME)
+    public LoginMessageBuilder getLoginMessageBuilder (
+        @Qualifier(LoginMessageBuilderFactory.BEAN_NAME) LoginMessageBuilderFactory loginMessageBuilderFactory
+    ) {
+        return loginMessageBuilderFactory.getInstance();
     }
 
     @Bean(name=OMMDataBufferAdapter.BEAN_NAME)

@@ -48,35 +48,35 @@
      class="com.coherentlogic.coherent.datafeed.services.LoggingService"
      init-method="initialize"/ -->
 
-    <bean id="context"
+    <!-- bean id="context"
      class="com.coherentlogic.coherent.datafeed.configuration.ContextInitializer"
-     init-method="start" destroy-method="stop"/>
+     init-method="start" destroy-method="stop"/ -->
 
-    <bean id="poolFactory"
-     class="com.coherentlogic.coherent.datafeed.factories.OMMPoolFactory"/>
+    <!-- bean id="poolFactory"
+     class="com.coherentlogic.coherent.datafeed.factories.OMMPoolFactory"/ -->
 
-    <bean id="pool" class="com.reuters.rfa.omm.OMMPool"
-     factory-bean="poolFactory" factory-method="getInstance"/>
+    <!-- bean id="pool" class="com.reuters.rfa.omm.OMMPool"
+     factory-bean="poolFactory" factory-method="getInstance"/ -->
 
-    <bean id="encoderFactory"
+    <!-- bean id="encoderFactory"
      class="com.coherentlogic.coherent.datafeed.factories.OMMEncoderFactory">
         <constructor-arg name="pool" ref="pool"/>
         <constructor-arg name="msgType">
             <util:constant static-field="com.reuters.rfa.omm.OMMTypes.MSG"/>
         </constructor-arg>
         <constructor-arg name="size" value="500"/>
-    </bean>
+    </bean -->
 
-    <bean id="encoder" class="com.reuters.rfa.omm.OMMEncoder"
+    <!-- bean id="encoder" class="com.reuters.rfa.omm.OMMEncoder"
      factory-bean="encoderFactory" factory-method="getInstance">
-    </bean>
+    </bean -->
 
-    <bean id="eventQueueFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.EventQueueFactory">
+    <!-- bean id="eventQueueFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.EventQueueFactory">
         <constructor-arg name="eventQueueName" value="myEventQueue"/>
     </bean>
 
     <bean id="eventQueue" class="com.reuters.rfa.common.EventQueue"
-     factory-bean="eventQueueFactory" factory-method="getInstance"/>
+     factory-bean="eventQueueFactory" factory-method="getInstance"/ -->
 
     <!-- The context must be created before the session factory is instantiated,
          which explains why we have the depends-on attribute below.
@@ -89,16 +89,16 @@
     <bean id="defaultSession" class="com.reuters.rfa.session.Session"
      factory-bean="defaultSessionFactory" factory-method="getInstance"/>
 
-    <bean id="loginMessageBuilderFactory"
+    <!-- bean id="loginMessageBuilderFactory"
      class="com.coherentlogic.coherent.datafeed.factories.LoginMessageBuilderFactory">
         <constructor-arg name="pool" ref="pool"/>
         <constructor-arg name="encoder" ref="encoder"/>
     </bean>
 
     <bean id="loginMessageBuilder" class="com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder"
-     factory-bean="loginMessageBuilderFactory" factory-method="getInstance"/>
+     factory-bean="loginMessageBuilderFactory" factory-method="getInstance"/ -->
 
-    <bean id="defaultRequestMessageBuilderFactory"
+    <!-- bean id="defaultRequestMessageBuilderFactory"
      class="com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory">
         <constructor-arg name="consumer" ref="defaultOMMConsumer"/>
         <constructor-arg name="eventQueue" ref="eventQueue"/>
@@ -107,7 +107,7 @@
     </bean>
 
     <bean id="defaultRequestMessageBuilder" class="com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder"
-     factory-bean="defaultRequestMessageBuilderFactory" factory-method="getInstance"/>
+     factory-bean="defaultRequestMessageBuilderFactory" factory-method="getInstance"/ -->
 
     <bean id="defaultOMMConsumerFactory"
      class="com.coherentlogic.reuters.rfa.session.omm.OMMConsumerFactory">
