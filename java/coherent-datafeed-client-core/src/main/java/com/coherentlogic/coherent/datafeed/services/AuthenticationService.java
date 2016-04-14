@@ -65,8 +65,8 @@ public class AuthenticationService
     private OMMItemIntSpec ommItemIntSpec = null;
 
     // Was 257
-    static final String DEFAULT_APPLICATION_ID =
-        "Coherent Datafeed: Thomson Reuters Elektron Edition";
+    static final String DEFAULT_APPLICATION_ID = "257";
+        //"Coherent Datafeed: Thomson Reuters Elektron Edition";
 
     public AuthenticationService(
         LoginMessageBuilder loginMessageBuilder,
