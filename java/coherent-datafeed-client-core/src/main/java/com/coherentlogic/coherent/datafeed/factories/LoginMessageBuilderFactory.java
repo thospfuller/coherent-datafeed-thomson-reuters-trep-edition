@@ -16,6 +16,8 @@ import com.reuters.rfa.omm.OMMPool;
 public class LoginMessageBuilderFactory
     implements Factory<LoginMessageBuilder> {
 
+    public static final String BEAN_NAME = "loginMessageBuilderFactory";
+
     private final OMMPool pool;
 
     private final OMMEncoder encoder;

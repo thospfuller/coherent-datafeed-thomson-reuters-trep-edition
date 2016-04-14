@@ -18,6 +18,8 @@ import com.reuters.rfa.session.omm.OMMConsumer;
 public class RequestMessageBuilderFactory implements
     Factory<RequestMessageBuilder> {
 
+    public static final String BEAN_NAME = "defaultRequestMessageBuilderFactory";
+
     private final OMMConsumer consumer;
 
     private final EventQueue eventQueue;

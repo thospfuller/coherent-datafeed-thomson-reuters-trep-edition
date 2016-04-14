@@ -11,6 +11,8 @@ import com.reuters.rfa.common.EventQueue;
  */
 public class EventQueueFactory implements Factory<EventQueue> {
 
+    public static final String BEAN_NAME = "eventQueueFactory";
+
     private final String eventQueueName;
 
     public EventQueueFactory(String eventQueueName) {

@@ -13,6 +13,8 @@ import com.reuters.rfa.omm.OMMPool;
  */
 public class OMMPoolFactory implements Factory<OMMPool> {
 
+	public static final String BEAN_NAME = "poolFactory";
+
     @Override
     public OMMPool getInstance() {
         return OMMPool.create();

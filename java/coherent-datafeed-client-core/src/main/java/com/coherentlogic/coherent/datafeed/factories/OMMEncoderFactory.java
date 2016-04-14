@@ -14,6 +14,8 @@ import com.reuters.rfa.omm.OMMPool;
  */
 public class OMMEncoderFactory implements Factory<OMMEncoder> {
 
+    public static final String BEAN_NAME = "encoderFactory";
+
     private final OMMPool pool;
 
     private final short msgType;
