@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.Lifecycle;
@@ -32,7 +35,7 @@ import com.reuters.rfa.common.RFAVersionInfo;
 public class ContextInitializer implements Lifecycle {
 
     public static final String CONFIGURATION_FILE =
-        "CDATAFEED_CONFIGURATION_FILE";
+        "CDATAFEED_CONFIGURATION_FILE", BEAN_NAME = "context";
 
     private static final Logger log =
         LoggerFactory.getLogger(ContextInitializer.class);
@@ -55,6 +58,7 @@ public class ContextInitializer implements Lifecycle {
         return result;
     }
 
+    @PostConstruct
     @Override
     public void start() {
 
@@ -151,6 +155,7 @@ public class ContextInitializer implements Lifecycle {
      * therefore we no longer throw an exception if the result is false, we
      * simply log a warning message and move on.
      */
+    @PreDestroy
     @Override
     public void stop() {
 
