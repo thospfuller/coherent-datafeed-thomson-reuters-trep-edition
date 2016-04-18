@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.configuration;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -30,10 +32,14 @@ import com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTran
 import com.coherentlogic.coherent.datafeed.misc.TS1DefDbHelper;
 import com.coherentlogic.coherent.datafeed.services.DictionaryLoadCompleteService;
 import com.coherentlogic.coherent.datafeed.services.LoggingService;
+import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.services.TS1DefService;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper;
 import com.coherentlogic.coherent.datafeed.services.WorkflowEndsService;
+import com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefMessageProcessor;
 import com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor;
 import com.reuters.rfa.common.EventQueue;
+import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMEncoder;
 import com.reuters.rfa.omm.OMMPool;
@@ -46,8 +52,15 @@ import com.reuters.ts1.TS1DefDb;
 @Configuration
 public class GlobalConfiguration {
 
-    static final String FIELD_DICTIONARY = "fieldDictionary", SPRING_CACHE_MANAGER = "springCacheManager",
-        POOL = "pool", ENCODER = "encoder", EVENT_QUEUE = "eventQueue", OMM_CONSUMER = "defaultOMMConsumer";
+    static final String
+        FIELD_DICTIONARY = "fieldDictionary",
+        SPRING_CACHE_MANAGER = "springCacheManager",
+        POOL = "pool",
+        ENCODER = "encoder",
+        EVENT_QUEUE = "eventQueue",
+        OMM_CONSUMER = "defaultOMMConsumer",
+        SESSION_CACHE = "sessionCache",
+        TS1_DEF_CACHE = "ts1DefCache";
 
     public static final String DEFAULT_EVENT_QUEUE_NAME = "myEventQueue";
 
@@ -289,6 +302,23 @@ public class GlobalConfiguration {
     public TimeSeriesHelper getTimeSeriesHelper () {
         return new TimeSeriesHelper ();
     }
+
+    /*
+         <bean id="ts1DefMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefMessageProcessor">
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="ts1DefCache" ref="ts1DefCache"/>
+        <constructor-arg name="ts1DefService" ref="ts1DefService"/>
+    </bean>
+     */
+//    @Bean(name=TS1DefMessageProcessor.BEAN_NAME)
+//    public TS1DefMessageProcessor getTS1DefMessageProcessor (
+//        @Qualifier(SESSION_CACHE) Map<Handle, Session> sessionCache,
+//        @Qualifier(TS1_DEF_CACHE) Map<Handle, Session> ts1DefCache,
+//        @Qualifier(TS1DefService.BEAN_NAME) TS1DefService ts1DefService
+//    ) {
+//        return new TS1DefMessageProcessor (sessionCache, ts1DefCache, ts1DefService);
+//    }
 
 //
 //    @Bean(name="authentication")
