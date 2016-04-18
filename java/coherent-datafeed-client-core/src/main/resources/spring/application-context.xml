@@ -31,7 +31,7 @@
 
     <import resource="hornetq-beans.xml"/>
     <import resource="integration-beans.xml"/>
-    <import resource="cache-beans.xml"/>
+    <!-- import resource="cache-beans.xml"/ -->
     <!-- The dictionary-beans are ONLY used when loading the dictionaries from
          the local file system.
       -->
