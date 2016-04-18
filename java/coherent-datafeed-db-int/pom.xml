@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.coherentlogic.coherent.datafeed</groupId>
         <artifactId>client</artifactId>
-        <version>1.0.2-RELEASE</version>
+        <version>1.0.3-RELEASE</version>
     </parent>
 
     <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
@@ -49,7 +49,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.3.174</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
