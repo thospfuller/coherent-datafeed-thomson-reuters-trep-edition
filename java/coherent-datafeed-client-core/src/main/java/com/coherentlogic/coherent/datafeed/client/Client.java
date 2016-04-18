@@ -1,7 +1,6 @@
 package com.coherentlogic.coherent.datafeed.client;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX_PATH;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_INT_RETURN_VALUE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DICTIONARY_SERVICE_GATEWAY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DIRECTORY_SERVICE_GATEWAY;
@@ -13,8 +12,9 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.TS1_DEF_SERVICE
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
 import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
@@ -47,6 +47,7 @@ public class Client {
     private static final Logger log =
         LoggerFactory.getLogger(Client.class);
 
+//    @Autowired
     private AbstractApplicationContext applicationContext;
 
     private final PauseResumeService pauseResumeService =
@@ -71,7 +72,7 @@ public class Client {
         this.applicationContext = applicationContext;
     }
 
-    protected AbstractApplicationContext getApplicationContext(){
+    protected ApplicationContext getApplicationContext(){
         return applicationContext;
     }
 
@@ -81,11 +82,12 @@ public class Client {
     }
 
     public void start(){
-        if (applicationContext == null) {
-            applicationContext = new ClassPathXmlApplicationContext(
-                DEFAULT_APP_CTX_PATH);
-            applicationContext.registerShutdownHook();
-            applicationContext.start();
+
+        if (!isStarted()) {//applicationContext == null) {
+//            applicationContext = new ClassPathXmlApplicationContext(
+//                DEFAULT_APP_CTX_PATH);
+//            applicationContext.registerShutdownHook();
+//            applicationContext.start();
 
             FrameworkEventListenerAdapter frameworkEventListenerAdapter =
                 getFrameworkEventListenerAdapter ();
@@ -107,12 +109,14 @@ public class Client {
                     }
                 }
             );
+
+            setStarted(true);
+
         } else {
             log.warn ("The start method was called however the " +
                 "applicationContext pointed to a non-null application " +
                 "context reference.");
         }
-        setStarted(true);
     }
 
     /**
