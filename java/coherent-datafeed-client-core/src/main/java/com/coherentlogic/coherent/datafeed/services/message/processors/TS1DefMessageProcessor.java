@@ -31,6 +31,8 @@ public class TS1DefMessageProcessor
     private static final Logger log =
         LoggerFactory.getLogger(TS1DefMessageProcessor.class);
 
+    public static final String BEAN_NAME = "ts1DefMessageProcessor";
+
     private final Map<Handle, Session> sessionCache;
 
     private final Map<Handle, Session> ts1DefCache;
@@ -41,7 +43,7 @@ public class TS1DefMessageProcessor
      * 
      * @param ts1DefService
      */
-    private TS1DefMessageProcessor(
+    public TS1DefMessageProcessor(
         Map<Handle, Session> sessionCache,
         Map<Handle, Session> ts1DefCache,
         TS1DefServiceSpecification ts1DefService
