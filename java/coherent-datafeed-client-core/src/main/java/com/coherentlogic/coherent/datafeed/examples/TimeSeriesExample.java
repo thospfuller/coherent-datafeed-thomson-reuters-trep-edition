@@ -6,14 +6,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import javax.jms.JMSException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.client.Client;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
@@ -33,29 +36,31 @@ import com.reuters.ts1.TS1Constants;
  * @see http://docs.spring.io/spring-boot/docs/1.2.7.RELEASE/reference/htmlsingle/#getting-started-installing-the-cli
  * @see https://spring.io/guides/gs/consuming-rest/
  */
-//@SpringBootApplication
-//@EnableAutoConfiguration
-//@Configuration
-////@ImportResource("classpath:spring/timeseries-example-application-context.xml")
-public class TimeSeriesExample { //implements CommandLineRunner {
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+public class TimeSeriesExample implements CommandLineRunner {
 
     private static final Logger log =
         LoggerFactory.getLogger(TimeSeriesExample.class);
 
-//    public static void main (String[] unused) {
-//        SpringApplication.run(TimeSeriesExample.class, unused);
-//    }
-//
-//    @Override
-//    public void run(String... args) throws Exception {
-//        System.out.println("FEEEEEEEEE!");
-//        log.info("args: " + args);
-//    }
+    @Autowired
+    private AbstractApplicationContext applicationContext;
 
-    public static void main (String[] unused)
-        throws JMSException, InterruptedException, ExecutionException, TimeoutException {
+    public static void main (String[] unused) throws Exception {
 
-        Client client = new Client ();
+        SpringApplicationBuilder builder = new SpringApplicationBuilder (TimeSeriesExample.class);
+
+        builder
+            .web(false)
+            .headless(false)
+            .run(unused);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+
+        Client client = new Client (applicationContext);
 
         client.start();
 
