@@ -6,14 +6,14 @@
     <parent>
         <groupId>com.coherentlogic.coherent.datafeed</groupId>
         <artifactId>client</artifactId>
-        <version>1.0.2-RELEASE</version>
+        <version>1.0.3-RELEASE</version>
     </parent>
 
     <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
     <artifactId>coherent-datafeed-redis-int</artifactId>
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
-    <name>coherent-datafeed-db-int</name>
+    <name>coherent-datafeed-redis-int</name>
     <description>Integration of the Coherent Datafeed with the Redis database.</description>
     <url>www.coherentlogic.com</url>
 
