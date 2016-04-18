@@ -5,7 +5,7 @@
 
     <groupId>com.coherentlogic.coherent.datafeed</groupId>
     <artifactId>client</artifactId>
-    <version>1.0.2-RELEASE</version>
+    <version>1.0.3-RELEASE</version>
     <packaging>pom</packaging>
     <name>Coherent Datafeed Client</name>
     <description>Java client for accessing market data via Thomson Reuters Realtime Enterprise Platform (TREP).</description>
@@ -22,9 +22,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.framework.version>4.2.2.RELEASE</spring.framework.version>
+        <spring.framework.version>4.2.5.RELEASE</spring.framework.version>
         <spring.integration.version>4.2.1.RELEASE</spring.integration.version>
-        <spring.boot.version>1.2.7.RELEASE</spring.boot.version>
+        <spring.boot.version>1.3.3.RELEASE</spring.boot.version>
         <infinispan.version>8.0.1.Final</infinispan.version>
         <hornetq.version>2.2.21.Final</hornetq.version>
         <java.version>1.8</java.version>
@@ -107,7 +107,7 @@
     </pluginRepositories>
 
     <modules>
-        <module>coherent-datafeed-assembly</module>
+        <!-- module>coherent-datafeed-assembly</module -->
         <module>coherent-datafeed-config</module>
         <module>coherent-datafeed-misc</module>
         <module>coherent-datafeed-client-core</module>
@@ -115,6 +115,7 @@
         <!-- module>coherent-datafeed-client-core-it</module -->
         <module>coherent-datafeed-db-int</module>
         <module>coherent-datafeed-redis-int</module>
+        <module>coherent-datafeed-storm-int</module>
     </modules>
 
     <dependencyManagement>
@@ -153,10 +154,27 @@
             <dependency>
                 <groupId>com.coherentlogic.coherent.data-model</groupId>
                 <artifactId>bom</artifactId>
-                <version>1.0.16-RELEASE</version>
+                <version>1.0.20-RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- dependency>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>2.0.3.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency -->
+
+            <!-- TODO: We should be able to remove this dependency as the only reason it was added here was due to
+                       an error that kept appearing in Eclipse.
+              -->
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>app</artifactId>
+                <version>1.0.0-v20070606</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
                 <artifactId>coherent-datafeed-config</artifactId>
@@ -177,15 +195,15 @@
                 <artifactId>coherent-datafeed-db-int</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!-- dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
                 <version>5.0.3.Final</version>
-            </dependency>
+            </dependency -->
             <dependency>
-                <groupId>javax.persistence</groupId>
-                <artifactId>persistence-api</artifactId>
-                <version>1.0-rev-1</version>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                <version>1.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
@@ -315,25 +333,26 @@
                 <version>1.8.7</version>
             </dependency>
             <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.3.1</version>
-        </dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.3.1</version>
+            </dependency>
             <dependency>
                 <groupId>org.codehaus.jettison</groupId>
                 <artifactId>jettison</artifactId>
                 <version>1.3.4</version>
             </dependency>
-            <dependency>
+            <!-- TODO: Dependencies moved to the BOM so these should be removed. -->
+            <!-- dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
-            </dependency>
-            <dependency>
+            </dependency -->
+            <!-- dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>1.3.2</version>
-            </dependency>
+            </dependency -->
             <dependency>
                 <groupId>commons-cli</groupId>
                 <artifactId>commons-cli</artifactId>
