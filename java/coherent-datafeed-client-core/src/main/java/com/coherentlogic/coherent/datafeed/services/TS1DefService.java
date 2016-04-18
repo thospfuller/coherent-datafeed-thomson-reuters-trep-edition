@@ -29,6 +29,8 @@ public class TS1DefService
     private static final Logger log =
         LoggerFactory.getLogger(TS1DefService.class);
 
+    public static final String BEAN_NAME = "ts1DefService";
+
     private final CommonRequestExecutor commonRequestExecutor;
 
     public TS1DefService (
