@@ -4,7 +4,7 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
 import javax.jms.JMSException;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

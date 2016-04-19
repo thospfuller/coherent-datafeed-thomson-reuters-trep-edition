@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.coherentlogic.coherent.datafeed.annotations.OMMType;
 import com.reuters.rfa.common.QualityOfService;
@@ -227,52 +227,3 @@ public class DirectoryEntry implements Serializable {
         return ToStringBuilder.reflectionToString(this);
     }
 }
-//
-//public Map<String, String> getAttributes() {
-//  return attributeMap;
-//}
-//
-//public int getData() {
-//return data;
-//}
-//
-//@FilterId(value=RDMService.FilterId.DATA)
-//public void setData(int data) {
-//this.data = data;
-//}
-//
-//public int getGroup() {
-//return group;
-//}
-//
-//@FilterId(value=RDMService.FilterId.GROUP)
-//public void setGroup(int group) {
-//this.group = group;
-//}
-//
-//public int getInfo() {
-//return info;
-//}
-//
-//@FilterId(value=RDMService.FilterId.INFO)
-//public void setInfo(int info) {
-//this.info = info;
-//}
-//
-//public int getLink() {
-//return link;
-//}
-//
-//@FilterId(value=RDMService.FilterId.LINK)
-//public void setLink(int link) {
-//this.link = link;
-//}
-//
-//public int getLoad() {
-//return load;
-//}
-//
-//@FilterId(value=RDMService.FilterId.LOAD)
-//public void setLoad(int load) {
-//this.load = load;
-//}

@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.beans;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 

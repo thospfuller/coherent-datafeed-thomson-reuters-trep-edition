@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -584,7 +584,7 @@ public class Session extends SerializableBean {
         // This should be handled differently for time series vs market price
         // workflows because, for example, the market price updates will
         // continue to come in as long as the request hasn't been terminated.
-        throw new NotImplementedException();
+        throw new NotImplementedException("The 'end' method has not been implemented.");
     }
 
     public void addPropertyChangeListener (

@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.integration.transformers;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.integration.transformer.AbstractPayloadTransformer;
 
 import com.coherentlogic.coherent.datafeed.exceptions.EventProcessingFailedException;

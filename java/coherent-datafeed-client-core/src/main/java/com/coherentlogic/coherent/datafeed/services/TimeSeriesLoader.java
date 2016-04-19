@@ -5,8 +5,8 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.MAX_ROW_VALUE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.ROW64_1;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

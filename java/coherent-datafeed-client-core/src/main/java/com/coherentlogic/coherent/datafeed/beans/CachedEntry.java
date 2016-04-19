@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.reuters.rfa.common.Handle;

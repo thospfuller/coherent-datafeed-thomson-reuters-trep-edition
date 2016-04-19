@@ -2,7 +2,7 @@ package com.coherentlogic.coherent.datafeed.adapters.json;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.coherentlogic.coherent.datafeed.exceptions.InstantiationException;
 import com.thoughtworks.xstream.XStream;
