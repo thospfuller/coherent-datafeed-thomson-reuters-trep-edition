@@ -2,14 +2,20 @@ package com.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
-import javax.jms.JMSException;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.client.Client;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntries;
+import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification;
 import com.reuters.rfa.common.Handle;
 
@@ -24,12 +30,29 @@ import com.reuters.rfa.common.Handle;
  * 
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DirectoryServiceExample {
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+public class DirectoryServiceExample implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log = LoggerFactory
         .getLogger(DirectoryServiceExample.class);
 
-    public static void main(String[] unused) {
+    @Autowired
+    private AbstractApplicationContext applicationContext;
+
+    public static void main (String[] unused) {
+
+        SpringApplicationBuilder builder = new SpringApplicationBuilder (DirectoryServiceExample.class);
+
+        builder
+            .web(false)
+            .headless(false)
+            .run(unused);
+    }
+
+    @Override
+    public void run (String... unused) throws InterruptedException {
 
         log.info("main: method begins.");
 
@@ -37,7 +60,7 @@ public class DirectoryServiceExample {
 
         // For some reason, including the appCtx below causes the waitFor
         // method to not return -- not sure what's going on here.
-        Client client = new Client(); // applicationContext);
+        Client client = new Client(applicationContext);
 
         client.start();
 
@@ -45,7 +68,7 @@ public class DirectoryServiceExample {
 
         log.info("waitForInitialisationToComplete: method begins.");
 
-        client.waitForInitialisationToComplete();
+        //client.waitForInitialisationToComplete();
 
         log.info("waitForInitialisationToComplete: method returned.");
 
@@ -54,11 +77,13 @@ public class DirectoryServiceExample {
 
         log.info("Will invoke the getDictionaryEntries method.");
 
-        log.info("The getDirectoryEntries method has returned.");
-
         DirectoryEntries directoryEntries = directoryService.getDirectoryEntries();
 
+        log.info("The getDirectoryEntries method has returned.");
+
         log.info("directoryEntries: " + ToStringBuilder.reflectionToString(directoryEntries));
+
+        Thread.sleep(5000L);
 
         log.info("main: method ends.");
     }

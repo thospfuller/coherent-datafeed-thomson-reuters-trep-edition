@@ -8,10 +8,13 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.FIELD_DICTIONAR
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.THREE_MINUTES;
 
-import javax.jms.JMSException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -30,13 +33,26 @@ import com.reuters.rfa.dictionary.FieldDictionary;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class AdvancedDictionaryExample {
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+public class AdvancedDictionaryExample implements CommandLineRunner {
 
     private static final Logger log =
         LoggerFactory.getLogger(AdvancedDictionaryExample.class);
 
-    public static void main (String[] unused)
-        throws JMSException, InterruptedException {
+    public static void main (String[] unused) {
+
+        SpringApplicationBuilder builder = new SpringApplicationBuilder (AdvancedDictionaryExample.class);
+
+        builder
+            .web(false)
+            .headless(false)
+            .run(unused);
+    }
+
+    @Override
+    public void run (String... unused) {
 
         AbstractApplicationContext applicationContext =
             new ClassPathXmlApplicationContext (

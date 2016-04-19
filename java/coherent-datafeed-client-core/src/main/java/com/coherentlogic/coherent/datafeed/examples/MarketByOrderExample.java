@@ -2,19 +2,21 @@ package com.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX_PATH;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER_SERVICE_GATEWAY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
 import java.util.List;
 
-import javax.jms.JMSException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
 import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
@@ -33,16 +35,29 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class MarketByOrderExample {
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+public class MarketByOrderExample implements CommandLineRunner {
 
     private static final Logger log =
         LoggerFactory.getLogger(MarketByOrderExample.class);
 
-    public static void main (String[] unused) throws JMSException {
+    @Autowired
+    private AbstractApplicationContext applicationContext;
 
-        AbstractApplicationContext applicationContext =
-            new ClassPathXmlApplicationContext (
-                DEFAULT_APP_CTX_PATH);
+    public static void main (String[] unused) throws Exception {
+
+        SpringApplicationBuilder builder = new SpringApplicationBuilder (MarketByOrderExample.class);
+
+        builder
+            .web(false)
+            .headless(false)
+            .run(unused);
+    }
+
+    @Override
+    public void run (String... unused) {
 
         applicationContext.registerShutdownHook();
 

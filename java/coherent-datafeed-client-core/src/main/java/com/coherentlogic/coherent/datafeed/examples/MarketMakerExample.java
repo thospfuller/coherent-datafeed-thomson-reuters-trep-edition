@@ -12,9 +12,16 @@ import javax.jms.JMSException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.FieldDictionaryHolder;
@@ -27,18 +34,34 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class MarketMakerExample {
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+public class MarketMakerExample implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log =
         LoggerFactory.getLogger(MarketMakerExample.class);
 
-    public static void main (String[] unused) throws JMSException {
+    @Autowired
+    private AbstractApplicationContext applicationContext;
 
-        AbstractApplicationContext applicationContext =
-            new ClassPathXmlApplicationContext (
-                DEFAULT_APP_CTX_PATH);
+    public static void main (String[] unused) {
 
-        applicationContext.registerShutdownHook();
+        SpringApplicationBuilder builder = new SpringApplicationBuilder (MarketMakerExample.class);
+
+        builder
+            .web(false)
+            .headless(false)
+            .run(unused);
+    }
+
+    public void run (String... unused) throws JMSException {
+
+//        AbstractApplicationContext applicationContext =
+//            new ClassPathXmlApplicationContext (
+//                DEFAULT_APP_CTX_PATH);
+//
+//        applicationContext.registerShutdownHook();
 
         AuthenticationServiceSpecification authenticationService =
             (AuthenticationServiceSpecification) applicationContext.getBean(
