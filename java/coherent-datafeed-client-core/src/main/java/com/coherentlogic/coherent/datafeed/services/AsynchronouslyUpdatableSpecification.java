@@ -8,6 +8,9 @@ package com.coherentlogic.coherent.datafeed.services;
  *  methods that are not strictly returning JSON -- that or move that method to
  *  a base class.
  *
+ * @todo This interface should not return JSON -- upon refresh complete it should return a copy of the domain object
+ *  associated with the ie. MarketPriceServiceSpecification.query call.
+ *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface AsynchronouslyUpdatableSpecification<R> {
