@@ -70,8 +70,6 @@ public class TimeSeriesExample implements CommandLineRunner {
         // This needs to be set in the operating system environment variables.
         String dacsId = System.getenv(DACS_ID);
 
-//        dacsId += "ZZZZZ";
-
 //        final StatusResponseServiceSpecification statusResponseService =
 //            client.getStatusResponseService();
 
