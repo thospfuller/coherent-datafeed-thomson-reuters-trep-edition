@@ -964,7 +964,7 @@ public class MarketPrice
         return idnExchangeId;
     }
 
-    private static final String IDN_EXCHANGE_ID = "idnExchangeId";
+    public static final String IDN_EXCHANGE_ID = "idnExchangeId";
 
     /**
      * @todo Test this.
@@ -985,7 +985,7 @@ public class MarketPrice
         return bid;
     }
 
-    private static final String BID = "bid";
+    public static final String BID = "bid";
 
     @RFAType(type=BID)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1003,7 +1003,7 @@ public class MarketPrice
         return bid1;
     }
 
-    private static final String BID_1 = "bid1";
+    public static final String BID_1 = "bid1";
 
     @RFAType(type=MarketPriceConstants.BID_1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1021,7 +1021,7 @@ public class MarketPrice
         return bid2;
     }
 
-    private static final String BID_2 = "bid2";
+    public static final String BID_2 = "bid2";
 
     @RFAType(type=MarketPriceConstants.BID_2)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1039,7 +1039,7 @@ public class MarketPrice
         return ask;
     }
 
-    private static final String ASK = "ask";
+    public static final String ASK = "ask";
 
     /**
      * REAL64
@@ -1062,7 +1062,7 @@ public class MarketPrice
         return ask1;
     }
 
-    private static final String ASK1 = "ask1";
+    public static final String ASK1 = "ask1";
 
     /**
      * REAL64
@@ -1085,7 +1085,7 @@ public class MarketPrice
         return ask2;
     }
 
-    private static final String ASK2 = "ask2";
+    public static final String ASK2 = "ask2";
 
     /**
      * REAL64
@@ -1107,7 +1107,7 @@ public class MarketPrice
         return bidSize;
     }
 
-    private static final String BID_SIZE = "bidSize";
+    public static final String BID_SIZE = "bidSize";
 
     /**
      * REAL64
@@ -1129,7 +1129,7 @@ public class MarketPrice
         return askSize;
     }
 
-    private static final String ASK_SIZE = "askSize";
+    public static final String ASK_SIZE = "askSize";
 
     /**
      * REAL64
@@ -1151,7 +1151,7 @@ public class MarketPrice
         return last;
     }
 
-    private static final String LAST = "last";
+    public static final String LAST = "last";
 
     /**
      * REAL64
@@ -1173,8 +1173,8 @@ public class MarketPrice
         return last1;
     }
 
-    private static final String LAST_1 = "last1";
-    
+    public static final String LAST_1 = "last1";
+
     /**
      * REAL64
      *
@@ -1195,80 +1195,107 @@ public class MarketPrice
         return last2;
     }
 
-//    private static final String 
+    public static final String LAST_2 = "last2";
 
     /**
      * REAL64
      *
      * @param last2
+     * 
+     * @todo Verify that TRDPRC_3 actually is for last2 and assuming it is, add clarifying documentation.
      */
-    @RFAType(type=TRDPRC_3)
+    @RFAType(type=MarketPriceConstants.TRDPRC_3)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLast2(BigDecimal last2) {
+
+    	BigDecimal oldValue = this.last2;
+
         this.last2 = last2;
+
+        firePropertyChange(MarketPrice.LAST_2, oldValue, last2);
     }
 
     public BigDecimal getLast3() {
         return last3;
     }
 
-//    private static final String 
+    public static final String LAST_3 = "last3";
 
     /**
      * REAL64
      *
      * @param last3
      */
-    @RFAType(type=TRDPRC_4)
+    @RFAType(type=MarketPriceConstants.TRDPRC_4)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLast3(BigDecimal last3) {
+
+    	BigDecimal oldValue = this.last3;
+
         this.last3 = last3;
+
+        firePropertyChange(MarketPrice.LAST_3, oldValue, last3);
     }
 
     public BigDecimal getLast4() {
         return last4;
     }
 
-//    private static final String 
+    public static final String LAST_4 = "last4";
 
     /**
      * REAL64
      *
      * @param last4
      */
-    @RFAType(type=TRDPRC_5)
+    @RFAType(type=MarketPriceConstants.TRDPRC_5)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLast4(BigDecimal last4) {
+
+    	BigDecimal oldValue = this.last4;
+
         this.last4 = last4;
+
+        firePropertyChange(MarketPrice.LAST_4, oldValue, last4);
     }
 
     public BigInteger getDisplayTemplate() {
         return displayTemplate;
     }
 
-//    private static final String 
+    public static final String DISPLAY_TEMPLATE = "displayTemplate";
 
     /**
      * UINT32
      *
-     * @param rdnDisplay
+     * @param displayTemplate aka rdnDisplay
      */
-    @RFAType(type=RDNDISPLAY)
+    @RFAType(type=MarketPriceConstants.RDNDISPLAY)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setDisplayTemplate(BigInteger rdnDisplay) {
-        this.displayTemplate = rdnDisplay;
+    public void setDisplayTemplate(BigInteger displayTemplate) {
+
+    	BigInteger oldValue = this.displayTemplate;
+
+        this.displayTemplate = displayTemplate;
+
+        firePropertyChange(MarketPrice.DISPLAY_TEMPLATE, oldValue, displayTemplate);
     }
 
     public BigDecimal getNetChange() {
         return netChange;
     }
 
-//    private static final String 
+    public static final String NET_CHANGE = "netChange";
 
-    @RFAType(type=NETCHNG_1)
+    @RFAType(type=MarketPriceConstants.NETCHNG_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setNetChange(BigDecimal netChange) {
+
+    	BigDecimal oldValue = this.netChange;
+
         this.netChange = netChange;
+
+        firePropertyChange(MarketPrice.NET_CHANGE, oldValue, netChange);
     }
 
     @UsingKey(type=HIGH_1)
@@ -1276,12 +1303,17 @@ public class MarketPrice
         return todaysHigh;
     }
 
-//    private static final String 
+    public static final String TODAYS_HIGH = "todaysHigh";
 
-    @RFAType(type=HIGH_1)
+    @RFAType(type=MarketPriceConstants.HIGH_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTodaysHigh(BigDecimal todaysHigh) {
+
+    	BigDecimal oldValue = this.todaysHigh;
+
         this.todaysHigh = todaysHigh;
+
+        firePropertyChange(MarketPrice.TODAYS_HIGH, oldValue, todaysHigh);
     }
 
     @UsingKey(type=LOW_1)
@@ -4629,11 +4661,11 @@ public class MarketPrice
         return PUT_CALL_NOT_ALLOCATED.equals(putCall) ? NOT_ALLOCATED : putCall;
     }
 
+    public static final String PUT_CALL = "putCall";
+
     /**
      * Setter method for the {@link MarketPriceConstants#PUT_CALL}.
      */
-    public static final String PUT_CALL = "putCall";
-
     @RFAType(type=MarketPriceConstants.PUT_CALL)
     @Adapt(using=OMMEnumAdapter.class)
     public void setPutCall(String putCall) {
@@ -4752,9 +4784,6 @@ public class MarketPrice
         return strikePrice;
     }
 
-    /**
-     * Getter method for the {@link MarketPriceConstants#STRIKE_PRC}.
-     */
     public static final String STRIKE_PRICE = "strikePrice";
 
     @RFAType(type=STRIKE_PRC)
