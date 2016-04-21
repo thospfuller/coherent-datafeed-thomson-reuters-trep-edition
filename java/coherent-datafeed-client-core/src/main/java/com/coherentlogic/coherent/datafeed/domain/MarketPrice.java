@@ -964,13 +964,20 @@ public class MarketPrice
         return idnExchangeId;
     }
 
+    private static final String IDN_EXCHANGE_ID = "idnExchangeId";
+
     /**
      * @todo Test this.
      */
     @RFAType(type=RDN_EXCHID)
     @Adapt(using=OMMEnumAdapter.class)
     public void setIdnExchangeId(String idnExchangeId) {
+
+        String oldValue = this.idnExchangeId;
+
         this.idnExchangeId = idnExchangeId;
+
+        firePropertyChange(IDN_EXCHANGE_ID, oldValue, idnExchangeId);
     }
 
     @UsingKey(type=BID)
@@ -978,10 +985,17 @@ public class MarketPrice
         return bid;
     }
 
+    private static final String BID = "bid";
+
     @RFAType(type=BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBid(BigDecimal bid) {
+
+        BigDecimal oldValue = this.bid;
+
         this.bid = bid;
+
+        firePropertyChange(BID, oldValue, bid);
     }
 
     @UsingKey(type=BID_1)
@@ -989,10 +1003,17 @@ public class MarketPrice
         return bid1;
     }
 
-    @RFAType(type=BID_1)
+    private static final String BID_1 = "bid1";
+
+    @RFAType(type=MarketPriceConstants.BID_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBid1(BigDecimal bid1) {
+
+        BigDecimal oldValue = this.bid1;
+
         this.bid1 = bid1;
+
+        firePropertyChange(MarketPrice.BID_1, oldValue, bid1);
     }
 
     @UsingKey(type=BID_2)
@@ -1000,10 +1021,17 @@ public class MarketPrice
         return bid2;
     }
 
-    @RFAType(type=BID_2)
+    private static final String BID_2 = "bid2";
+
+    @RFAType(type=MarketPriceConstants.BID_2)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBid2(BigDecimal bid2) {
+
+        BigDecimal oldValue = this.bid2;
+
         this.bid2 = bid2;
+
+        firePropertyChange(MarketPrice.BID_2, oldValue, bid2);
     }
 
     @UsingKey(type=ASK)
@@ -1011,15 +1039,22 @@ public class MarketPrice
         return ask;
     }
 
+    private static final String ASK = "ask";
+
     /**
      * REAL64
      *
      * @param ask
      */
-    @RFAType(type=ASK)
+    @RFAType(type=MarketPriceConstants.ASK)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAsk(BigDecimal ask) {
+
+        BigDecimal oldValue = this.ask;
+
         this.ask = ask;
+
+        firePropertyChange(MarketPrice.ASK, oldValue, ask);
     }
 
     @UsingKey(type=ASK_1)
@@ -1027,21 +1062,30 @@ public class MarketPrice
         return ask1;
     }
 
+    private static final String ASK1 = "ask1";
+
     /**
      * REAL64
      *
      * @param ask1
      */
-    @RFAType(type=ASK_1)
+    @RFAType(type=MarketPriceConstants.ASK_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAsk1(BigDecimal ask1) {
+
+        BigDecimal oldValue = this.ask1;
+
         this.ask1 = ask1;
+
+        firePropertyChange(MarketPrice.ASK1, oldValue, ask1);
     }
 
     @UsingKey(type=ASK_2)
     public BigDecimal getAsk2() {
         return ask2;
     }
+
+    private static final String ASK2 = "ask2";
 
     /**
      * REAL64
@@ -1051,72 +1095,107 @@ public class MarketPrice
     @RFAType(type=ASK_2)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAsk2(BigDecimal ask2) {
+
+        BigDecimal oldValue = this.ask2;
+
         this.ask2 = ask2;
+
+        firePropertyChange(MarketPrice.ASK2, oldValue, ask2);
     }
 
     public BigInteger getBidSize() {
         return bidSize;
     }
 
+    private static final String BID_SIZE = "bidSize";
+
     /**
      * REAL64
      *
      * @param bidSize
      */
-    @RFAType(type=BIDSIZE)
+    @RFAType(type=MarketPriceConstants.BIDSIZE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBidSize(BigInteger bidSize) {
+
+        BigInteger oldValue = this.bidSize;
+
         this.bidSize = bidSize;
+
+        firePropertyChange(MarketPrice.BID_SIZE, oldValue, bidSize);
     }
 
     public BigInteger getAskSize() {
         return askSize;
     }
 
+    private static final String ASK_SIZE = "askSize";
+
     /**
      * REAL64
      *
      * @param askSize
      */
-    @RFAType(type=ASKSIZE)
+    @RFAType(type=MarketPriceConstants.ASKSIZE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAskSize(BigInteger askSize) {
+
+        BigInteger oldValue = this.askSize;
+
         this.askSize = askSize;
+
+        firePropertyChange(MarketPrice.ASK_SIZE, oldValue, askSize);
     }
 
     public BigDecimal getLast() {
         return last;
     }
 
+    private static final String LAST = "last";
+
     /**
      * REAL64
      *
      * @param last
      */
-    @RFAType(type=TRDPRC_1)
+    @RFAType(type=MarketPriceConstants.TRDPRC_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLast(BigDecimal last) {
+
+    	BigDecimal oldValue = this.last;
+
         this.last = last;
+
+        firePropertyChange(MarketPrice.LAST, oldValue, last);
     }
 
     public BigDecimal getLast1() {
         return last1;
     }
 
+    private static final String LAST_1 = "last1";
+    
     /**
      * REAL64
      *
      * @param last1
      */
-    @RFAType(type=TRDPRC_2)
+    @RFAType(type=MarketPriceConstants.TRDPRC_2)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLast1(BigDecimal last1) {
+
+    	BigDecimal oldValue = this.last1;
+
         this.last1 = last1;
+
+        firePropertyChange(MarketPrice.LAST_1, oldValue, last1);
     }
 
     public BigDecimal getLast2() {
         return last2;
     }
+
+//    private static final String 
 
     /**
      * REAL64
@@ -1133,6 +1212,8 @@ public class MarketPrice
         return last3;
     }
 
+//    private static final String 
+
     /**
      * REAL64
      *
@@ -1147,6 +1228,8 @@ public class MarketPrice
     public BigDecimal getLast4() {
         return last4;
     }
+
+//    private static final String 
 
     /**
      * REAL64
@@ -1163,6 +1246,8 @@ public class MarketPrice
         return displayTemplate;
     }
 
+//    private static final String 
+
     /**
      * UINT32
      *
@@ -1178,6 +1263,8 @@ public class MarketPrice
         return netChange;
     }
 
+//    private static final String 
+
     @RFAType(type=NETCHNG_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setNetChange(BigDecimal netChange) {
@@ -1189,6 +1276,8 @@ public class MarketPrice
         return todaysHigh;
     }
 
+//    private static final String 
+
     @RFAType(type=HIGH_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTodaysHigh(BigDecimal todaysHigh) {
@@ -1199,6 +1288,8 @@ public class MarketPrice
     public BigDecimal getTodaysLow() {
         return todaysLow;
     }
+
+//    private static final String 
 
     /**
      * REAL64
@@ -1215,6 +1306,8 @@ public class MarketPrice
     public Integer getTickArrow() {
         return tickArrow;
     }
+
+//    private static final String 
 
     @RFAType(type=PRCTCK_1)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1238,6 +1331,8 @@ public class MarketPrice
         return tradeDateMillis;
     }
 
+//    private static final String 
+
     @RFAType(type=TRADE_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setTradeDateMillis(Long tradeDateMillis) {
@@ -1248,6 +1343,8 @@ public class MarketPrice
     public Long getTradeTimeMillis() {
         return tradeTimeMillis;
     }
+
+//    private static final String 
 
     @RFAType(type=TRDTIM_1)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1260,6 +1357,8 @@ public class MarketPrice
         return openPrice;
     }
 
+//    private static final String 
+
     @RFAType(type=OPEN_PRC)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenPrice(BigDecimal openPrice) {
@@ -1270,6 +1369,8 @@ public class MarketPrice
     public BigDecimal getHistoricClose() {
         return historicClose;
     }
+
+//    private static final String 
 
     @RFAType(type=HST_CLOSE)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1282,6 +1383,8 @@ public class MarketPrice
         return news;
     }
 
+//    private static final String 
+
     @RFAType(type=NEWS)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setNews(String news) {
@@ -1292,6 +1395,8 @@ public class MarketPrice
     public Long getNewsTime() {
         return newsTime;
     }
+
+//    private static final String 
 
     @RFAType(type=NEWS_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1304,6 +1409,8 @@ public class MarketPrice
         return volumeAccumulated;
     }
 
+//    private static final String 
+
     @RFAType(type=ACVOL_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setVolumeAccumulated(BigInteger volumeAccumulated) {
@@ -1314,6 +1421,8 @@ public class MarketPrice
     public BigDecimal getEarnings() {
         return earnings;
     }
+
+//    private static final String 
 
     @RFAType(type=EARNINGS)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1326,6 +1435,8 @@ public class MarketPrice
         return yield;
     }
 
+//    private static final String 
+
     @RFAType(type=YIELD)
     @Adapt(using=OMMNumericAdapter.class)
     public void setYield(BigDecimal yield) {
@@ -1336,6 +1447,8 @@ public class MarketPrice
     public BigDecimal getPriceToEarningsRatio() {
         return priceToEarningsRatio;
     }
+
+//    private static final String 
 
     @RFAType(type=PERATIO)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1348,6 +1461,8 @@ public class MarketPrice
         return dividendType;
     }
 
+//    private static final String 
+
     @RFAType(type=DIVIDENDTP)
     @Adapt(using=OMMEnumAdapter.class)
     public void setDividendType(String dividendType) {
@@ -1358,6 +1473,8 @@ public class MarketPrice
     public Long getDividendPayDate() {
         return dividendPayDate;
     }
+
+//    private static final String 
 
     @RFAType(type=DIVPAYDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1370,6 +1487,8 @@ public class MarketPrice
         return exDividendDate;
     }
 
+//    private static final String 
+
     @RFAType(type=EXDIVDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setExDividendDate(Long exDividendDate) {
@@ -1380,6 +1499,8 @@ public class MarketPrice
     public String getTradePriceQualifier() {
         return tradePriceQualifier;
     }
+
+//    private static final String 
 
     @RFAType(type=CTS_QUAL)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1392,6 +1513,8 @@ public class MarketPrice
         return blockCount;
     }
 
+//    private static final String 
+
     @RFAType(type=BLKCOUNT)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBlockCount(BigInteger blockCount) {
@@ -1402,6 +1525,8 @@ public class MarketPrice
     public BigInteger getBlockVolume() {
         return blockVolume;
     }
+
+//    private static final String 
 
     @RFAType(type=BLKVOLUM)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1414,6 +1539,8 @@ public class MarketPrice
         return tradeExchangeId;
     }
 
+//    private static final String 
+
     @RFAType(type=TRDXID_1)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradeExchangeId(String tradeExchangeId) {
@@ -1424,6 +1551,8 @@ public class MarketPrice
     public String getTradingUnits() {
         return tradingUnits;
     }
+
+//    private static final String 
 
     @RFAType(type=TRD_UNITS)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1436,6 +1565,8 @@ public class MarketPrice
         return lotSize;
     }
 
+//    private static final String 
+
     @RFAType(type=LOT_SIZE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLotSize(BigInteger lotSize) {
@@ -1446,6 +1577,8 @@ public class MarketPrice
     public BigDecimal getPercentChange() {
         return percentChange;
     }
+
+//    private static final String 
 
     @RFAType(type=PCTCHNG)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1458,6 +1591,8 @@ public class MarketPrice
         return openBid;
     }
 
+//    private static final String 
+
     @RFAType(type=OPEN_BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenBid(BigDecimal openBid) {
@@ -1468,6 +1603,8 @@ public class MarketPrice
     public Long getLatestDowJonesNewsStoryTime() {
         return latestDowJonesNewsStoryTime;
     }
+
+//    private static final String 
 
     @RFAType(type=DJTIME)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1480,6 +1617,8 @@ public class MarketPrice
         return closeBid;
     }
 
+//    private static final String 
+
     @RFAType(type=CLOSE_BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setCloseBid(BigDecimal closeBid) {
@@ -1490,6 +1629,8 @@ public class MarketPrice
     public BigDecimal getCloseAsk() {
         return closeAsk;
     }
+
+//    private static final String 
 
     @RFAType(type=CLOSE_ASK)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1502,6 +1643,8 @@ public class MarketPrice
         return dividend;
     }
 
+//    private static final String 
+
     @RFAType(type=DIVIDEND)
     @Adapt(using=OMMNumericAdapter.class)
     public void setDividend(BigDecimal dividend) {
@@ -1512,6 +1655,8 @@ public class MarketPrice
     public BigInteger getTotalTradesToday() {
         return totalTradesToday;
     }
+
+//    private static final String 
 
     @RFAType(type=NUM_MOVES)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1524,6 +1669,8 @@ public class MarketPrice
         return officialCode;
     }
 
+//    private static final String 
+
     @RFAType(type=OFFCL_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setOfficialCode(String officialCode) {
@@ -1534,6 +1681,8 @@ public class MarketPrice
     public Long getHistoricCloseDate() {
         return historicCloseDate;
     }
+
+//    private static final String 
 
     @RFAType(type=HSTCLSDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1546,6 +1695,8 @@ public class MarketPrice
         return yearHigh;
     }
 
+//    private static final String 
+
     @RFAType(type=YRHIGH)
     @Adapt(using=OMMNumericAdapter.class)
     public void setYearHigh(BigDecimal yearHigh) {
@@ -1556,6 +1707,8 @@ public class MarketPrice
     public BigDecimal getYearLow() {
         return yearLow;
     }
+
+//    private static final String 
 
     @RFAType(type=YRLOW)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1568,6 +1721,8 @@ public class MarketPrice
         return turnover;
     }
 
+//    private static final String 
+
     @RFAType(type=TURNOVER)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTurnover(BigDecimal turnover) {
@@ -1578,6 +1733,8 @@ public class MarketPrice
     public String getBondType() {
         return bondType;
     }
+
+//    private static final String 
 
     @RFAType(type=BOND_TYPE)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1590,6 +1747,8 @@ public class MarketPrice
         return backgroundPage;
     }
 
+//    private static final String 
+
     @RFAType(type=BCKGRNDPAG)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setBackgroundPage(String backgroundPage) {
@@ -1600,6 +1759,8 @@ public class MarketPrice
     public String getYearOrContractHighIndicator() {
         return yearOrContractHighIndicator;
     }
+
+//    private static final String 
 
     /**
      * Requires visual inspection still as I have not seen this value set to
@@ -1619,6 +1780,8 @@ public class MarketPrice
         return yearOrContractLowIndicator;
     }
 
+//    private static final String 
+
     /**
      * Requires visual inspection still as I have not seen this value set to
      * anything other than "   ".
@@ -1637,6 +1800,8 @@ public class MarketPrice
         return bidNetChange;
     }
 
+//    private static final String 
+
     @RFAType(type=BID_NET_CH)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBidNetChange(BigDecimal bidNetChange) {
@@ -1647,6 +1812,8 @@ public class MarketPrice
     public String getBidTick1() {
         return bidTick1;
     }
+
+//    private static final String 
 
     @RFAType(type=BID_TICK_1)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1659,6 +1826,8 @@ public class MarketPrice
         return cumExMarker;
     }
 
+//    private static final String 
+
     @RFAType(type=CUM_EX_MKR)
     @Adapt(using=OMMEnumAdapter.class)
     public void setCumExMarker(String cumExMarker) {
@@ -1669,6 +1838,8 @@ public class MarketPrice
     public String getPriceCode() {
         return priceCode;
     }
+
+//    private static final String 
 
     @RFAType(type=PRC_QL_CD)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1681,6 +1852,8 @@ public class MarketPrice
         return nasdStatus;
     }
 
+//    private static final String 
+
     @RFAType(type=NASDSTATUS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setNasdStatus(String nasdStatus) {
@@ -1691,6 +1864,8 @@ public class MarketPrice
     public String getPriceCode2() {
         return priceCode2;
     }
+
+//    private static final String 
 
     @RFAType(type=PRC_QL2)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1703,6 +1878,8 @@ public class MarketPrice
         return tradeVolume;
     }
 
+//    private static final String 
+
     @RFAType(type=TRDVOL_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTradeVolume(BigInteger tradeVolume) {
@@ -1713,6 +1890,8 @@ public class MarketPrice
     public BigDecimal getTodaysHighBid() {
         return todaysHighBid;
     }
+
+//    private static final String 
 
     @RFAType(type=BID_HIGH_1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1725,6 +1904,8 @@ public class MarketPrice
         return todaysLowBid;
     }
 
+//    private static final String 
+
     @RFAType(type=BID_LOW_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTodaysLowBid(BigDecimal todaysLowBid) {
@@ -1735,6 +1916,8 @@ public class MarketPrice
     public BigDecimal getYearHighBid() {
         return yearHighBid;
     }
+
+//    private static final String 
 
     @RFAType(type=YRBIDHIGH)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1747,6 +1930,8 @@ public class MarketPrice
         return yearLowBid;
     }
 
+//    private static final String 
+
     @RFAType(type=YRBIDLOW)
     @Adapt(using=OMMNumericAdapter.class)
     public void setYearLowBid(BigDecimal yearLowBid) {
@@ -1757,6 +1942,8 @@ public class MarketPrice
     public BigDecimal getHistoricalClosingBid() {
         return historicalClosingBid;
     }
+
+//    private static final String 
 
     @RFAType(type=HST_CLSBID)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1769,6 +1956,8 @@ public class MarketPrice
         return historicalClosingBidDate;
     }
 
+//    private static final String 
+
     @RFAType(type=HSTCLBDDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setHistoricalClosingBidDate(Long historicalClosingBidDate) {
@@ -1779,6 +1968,8 @@ public class MarketPrice
     public String getYearBidHigh() {
         return yearBidHigh;
     }
+
+//    private static final String 
 
     @RFAType(type=YRBDHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1791,6 +1982,8 @@ public class MarketPrice
         return yearBidLow;
     }
 
+//    private static final String 
+
     @RFAType(type=YRBDLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearBidLow(String yearBidLow) {
@@ -1801,6 +1994,8 @@ public class MarketPrice
     public BigInteger getNumberOfBids() {
         return numberOfBids;
     }
+
+//    private static final String 
 
     @RFAType(type=NUM_BIDS)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1824,6 +2019,8 @@ public class MarketPrice
         return marketParticipantBidId;
     }
 
+//    private static final String 
+
     @RFAType(type=BID_MMID1)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setMarketParticipantBidId(String marketParticipantBidId) {
@@ -1834,6 +2031,8 @@ public class MarketPrice
     public String getMarketParticipantAskId() {
         return marketParticipantAskId;
     }
+
+//    private static final String 
 
     @RFAType(type=ASK_MMID1)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -1846,6 +2045,8 @@ public class MarketPrice
         return optionExchangeId;
     }
 
+//    private static final String 
+
     @RFAType(type=OPTION_XID)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setOptionExchangeId(String optionExchangeId) {
@@ -1856,6 +2057,8 @@ public class MarketPrice
     public Long getYearHighDate() {
         return yearHighDate;
     }
+
+//    private static final String 
 
     @RFAType(type=YRHIGHDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1868,6 +2071,8 @@ public class MarketPrice
         return yearLowDate;
     }
 
+//    private static final String 
+
     @RFAType(type=YRLOWDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setYearLowDate(Long yearLowDate) {
@@ -1878,6 +2083,8 @@ public class MarketPrice
     public BigDecimal getIrgPrice() {
         return irgPrice;
     }
+
+//    private static final String 
 
     @RFAType(type=IRGPRC)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1890,6 +2097,8 @@ public class MarketPrice
         return irgVolume;
     }
 
+//    private static final String 
+
     @RFAType(type=IRGVOL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setIrgVolume(BigInteger irgVolume) {
@@ -1900,6 +2109,8 @@ public class MarketPrice
     public String getIrgPriceType() {
         return irgPriceType;
     }
+
+//    private static final String 
 
     @RFAType(type=IRGCOND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1912,6 +2123,8 @@ public class MarketPrice
         return priceCorrectionTime;
     }
 
+//    private static final String 
+
     @RFAType(type=TIMCOR)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setPriceCorrectionTime(Long priceCorrectionTime) {
@@ -1922,6 +2135,8 @@ public class MarketPrice
     public BigDecimal getInsertPrice() {
         return insertPrice;
     }
+
+//    private static final String 
 
     @RFAType(type=INSPRC)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1934,6 +2149,8 @@ public class MarketPrice
         return insertVolume;
     }
 
+//    private static final String 
+
     @RFAType(type=INSVOL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setInsertVolume(BigInteger insertVolume) {
@@ -1944,6 +2161,8 @@ public class MarketPrice
     public String getInsertPriceType() {
         return insertPriceType;
     }
+
+//    private static final String 
 
     @RFAType(type=INSCOND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1956,6 +2175,8 @@ public class MarketPrice
         return lastTime;
     }
 
+//    private static final String 
+
     @RFAType(type=SALTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setLastTime(Long lastTime) {
@@ -1966,6 +2187,8 @@ public class MarketPrice
     public String getTurnoverScale() {
         return turnoverScale;
     }
+
+//    private static final String 
 
     @RFAType(type=TNOVER_SC)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1978,6 +2201,8 @@ public class MarketPrice
         return broadcastXRef;
     }
 
+//    private static final String 
+
     @RFAType(type=BCAST_REF)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setBroadcastXRef(String broadcastXRef) {
@@ -1988,6 +2213,8 @@ public class MarketPrice
     public String getCrossRateScale() {
         return crossRateScale;
     }
+
+//    private static final String 
 
     @RFAType(type=CROSS_SC)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2000,6 +2227,8 @@ public class MarketPrice
         return amountOutstanding;
     }
 
+//    private static final String 
+
     @RFAType(type=AMT_OS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAmountOutstanding(BigDecimal amountOutstanding) {
@@ -2010,6 +2239,8 @@ public class MarketPrice
     public String getAmountOutstandingScale() {
         return amountOutstandingScale;
     }
+
+//    private static final String 
 
     @RFAType(type=AMT_OS_SC)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2022,6 +2253,8 @@ public class MarketPrice
         return officialCodeIndicator;
     }
 
+//    private static final String 
+
     @RFAType(type=OFF_CD_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setOfficialCodeIndicator(String officialCodeIndicator) {
@@ -2032,6 +2265,8 @@ public class MarketPrice
     public BigDecimal getPriceVolatility() {
         return priceVolatility;
     }
+
+//    private static final String 
 
     @RFAType(type=PRC_VOLTY)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2044,6 +2279,8 @@ public class MarketPrice
         return amountOutstandingDate;
     }
 
+//    private static final String 
+
     @RFAType(type=AMT_OS_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setAmountOutstandingDate(Long amountOutstandingDate) {
@@ -2054,6 +2291,8 @@ public class MarketPrice
     public String getBackgroundReference() {
         return backgroundReference;
     }
+
+//    private static final String 
 
     @RFAType(type=BKGD_REF)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2066,6 +2305,8 @@ public class MarketPrice
         return generalPurposeValue1;
     }
 
+//    private static final String 
+
     @RFAType(type=GEN_VAL1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setGeneralPurposeValue1(BigDecimal generalPurposeValue1) {
@@ -2077,11 +2318,18 @@ public class MarketPrice
         return generalPurposeValue1Description;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_1_DESCRIPTION = "generalPurposeValue1Description";
+
     @RFAType(type=GV1_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue1Description(
         String generalPurposeValue1Description) {
+
+        String oldValue = this.generalPurposeValue1Description;
+
         this.generalPurposeValue1Description = generalPurposeValue1Description;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_1_DESCRIPTION, oldValue, generalPurposeValue1Description);
     }
 
     @UsingKey(type=GEN_VAL2)
@@ -2089,10 +2337,17 @@ public class MarketPrice
         return generalPurposeValue2;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_2 = "generalPurposeValue2";
+
     @RFAType(type=GEN_VAL2)
     @Adapt(using=OMMNumericAdapter.class)
     public void setGeneralPurposeValue2(BigDecimal generalPurposeValue2) {
+
+        BigDecimal oldValue = this.generalPurposeValue2;
+
         this.generalPurposeValue2 = generalPurposeValue2;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_2, oldValue, generalPurposeValue2);
     }
 
     @UsingKey(type=GV2_TEXT)
@@ -2100,11 +2355,18 @@ public class MarketPrice
         return generalPurposeValue2Description;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_2_DESCRIPTION = "generalPurposeValue2Description";
+
     @RFAType(type=GV2_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue2Description(
         String generalPurposeValue2Description) {
+
+        String oldValue = this.generalPurposeValue2Description;
+
         this.generalPurposeValue2Description = generalPurposeValue2Description;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_2_DESCRIPTION, oldValue, generalPurposeValue2Description);
     }
 
     @UsingKey(type=GEN_VAL3)
@@ -2112,10 +2374,17 @@ public class MarketPrice
         return generalPurposeValue3;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_3 = "generalPurposeValue3";
+
     @RFAType(type=GEN_VAL3)
     @Adapt(using=OMMNumericAdapter.class)
     public void setGeneralPurposeValue3(BigDecimal generalPurposeValue3) {
+
+        BigDecimal oldValue = this.generalPurposeValue3;
+
         this.generalPurposeValue3 = generalPurposeValue3;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_3, oldValue, generalPurposeValue3);
     }
 
     @UsingKey(type=GV3_TEXT)
@@ -2123,11 +2392,18 @@ public class MarketPrice
         return generalPurposeValue3Description;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_3_DESCRIPTION = "generalPurposeValue3Description";
+
     @RFAType(type=GV3_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue3Description(
         String generalPurposeValue3Description) {
+
+        String oldValue = this.generalPurposeValue3Description;
+
         this.generalPurposeValue3Description = generalPurposeValue3Description;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_3_DESCRIPTION, oldValue, generalPurposeValue3Description);
     }
 
     @UsingKey(type=GEN_VAL4)
@@ -2135,10 +2411,17 @@ public class MarketPrice
         return generalPurposeValue4;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_4 = "generalPurposeValue4";
+
     @RFAType(type=GEN_VAL4)
     @Adapt(using=OMMNumericAdapter.class)
     public void setGeneralPurposeValue4(BigDecimal generalPurposeValue4) {
+
+        BigDecimal oldValue = this.generalPurposeValue4;
+
         this.generalPurposeValue4 = generalPurposeValue4;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_4, oldValue, generalPurposeValue4);
     }
 
     @UsingKey(type=GV4_TEXT)
@@ -2146,11 +2429,18 @@ public class MarketPrice
         return generalPurposeValue4Description;
     }
 
+    private static final String GENERAL_PURPOSE_VALUE_4_DESCRIPTION = "generalPurposeValue4Description";
+
     @RFAType(type=GV4_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue4Description(
         String generalPurposeValue4Description) {
+
+        String oldValue = this.generalPurposeValue4Description;
+
         this.generalPurposeValue4Description = generalPurposeValue4Description;
+
+        firePropertyChange(GENERAL_PURPOSE_VALUE_4_DESCRIPTION, oldValue, generalPurposeValue4Description);
     }
 
     @UsingKey(type=SEQNUM)
@@ -2158,10 +2448,17 @@ public class MarketPrice
         return sequenceNumber;
     }
 
+    private static final String SEQUENCE_NUMBER = "sequenceNumber";
+
     @RFAType(type=SEQNUM)
     @Adapt(using=OMMNumericAdapter.class)
     public void setSequenceNumber(BigInteger sequenceNumber) {
+
+        BigInteger oldValue = this.sequenceNumber;
+
         this.sequenceNumber = sequenceNumber;
+
+        firePropertyChange(SEQUENCE_NUMBER, oldValue, sequenceNumber);
     }
 
     @UsingKey(type=PRNTYP)
@@ -2169,10 +2466,17 @@ public class MarketPrice
         return printType;
     }
 
+    private static final String PRINT_TYPE = "printType";
+
     @RFAType(type=PRNTYP)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setPrintType(String printType) {
+
+        String oldValue = this.printType;
+
         this.printType = printType;
+
+        firePropertyChange(PRINT_TYPE, oldValue, printType);
     }
 
     @UsingKey(type=PRNTBCK)
@@ -2180,11 +2484,18 @@ public class MarketPrice
         return alteredTradeEventSequenceNumber;
     }
 
+    private static final String ALTERED_TRADE_EVENTS_SEQUENCE_NUMBER = "alteredTradeEventSequenceNumber";
+
     @RFAType(type=PRNTBCK)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAlteredTradeEventSequenceNumber(
         BigInteger alteredTradeEventSequenceNumber) {
+
+        BigInteger oldValue = alteredTradeEventSequenceNumber;
+
         this.alteredTradeEventSequenceNumber = alteredTradeEventSequenceNumber;
+
+        firePropertyChange(ALTERED_TRADE_EVENTS_SEQUENCE_NUMBER, oldValue, alteredTradeEventSequenceNumber);
     }
 
     @UsingKey(type=QUOTIM)
@@ -2192,10 +2503,17 @@ public class MarketPrice
         return quoteTimeSeconds;
     }
 
+    private static final String QUOTE_TIME_SECONDS = "quoteTimeSeconds";
+
     @RFAType(type=QUOTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setQuoteTimeSeconds(Long quoteTimeSeconds) {
+
+        Long oldValue = this.quoteTimeSeconds;
+
         this.quoteTimeSeconds = quoteTimeSeconds;
+
+        firePropertyChange(QUOTE_TIME_SECONDS, oldValue, quoteTimeSeconds);
     }
 
     @UsingKey(type=GV1_FLAG)
@@ -2203,10 +2521,17 @@ public class MarketPrice
         return genericFlag1;
     }
 
+    private static final String GENERIC_FLAG_1 = "genericFlag1";
+
     @RFAType(type=GV1_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGenericFlag1(String genericFlag1) {
+
+        String oldValue = this.genericFlag1;
+
         this.genericFlag1 = genericFlag1;
+
+        firePropertyChange(GENERIC_FLAG_1, oldValue, genericFlag1);
     }
 
     @UsingKey(type=GV2_FLAG)
@@ -2214,10 +2539,17 @@ public class MarketPrice
         return genericFlag2;
     }
 
+    private static final String GENERIC_FLAG_2 = "genericFlag2";
+
     @RFAType(type=GV2_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGenericFlag2(String genericFlag2) {
+
+        String oldValue = this.genericFlag2;
+
         this.genericFlag2 = genericFlag2;
+
+        firePropertyChange(GENERIC_FLAG_2, oldValue, genericFlag2);
     }
 
     @UsingKey(type=GV3_FLAG)
@@ -2225,10 +2557,17 @@ public class MarketPrice
         return genericFlag3;
     }
 
+    private static final String GENERIC_FLAG_3 = "genericFlag3";
+
     @RFAType(type=GV3_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGenericFlag3(String genericFlag3) {
+
+        String oldValue = this.genericFlag3;
+
         this.genericFlag3 = genericFlag3;
+
+        firePropertyChange(GENERIC_FLAG_3, oldValue, genericFlag3);
     }
 
     @UsingKey(type=GV4_FLAG)
@@ -2236,10 +2575,17 @@ public class MarketPrice
         return genericFlag4;
     }
 
+    private static final String GENERIC_FLAG_4 = "genericFlag4";
+
     @RFAType(type=GV4_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGenericFlag4(String genericFlag4) {
+
+        String oldValue = this.genericFlag4;
+
         this.genericFlag4 = genericFlag4;
+
+        firePropertyChange(GENERIC_FLAG_4, oldValue, genericFlag4);
     }
 
     @UsingKey(type=OFF_CD_IN2)
@@ -2247,10 +2593,17 @@ public class MarketPrice
         return uniqueInstrumentId2Source;
     }
 
+    private static final String UNIQUE_INSTRUMENT_ID_2_SOURCE = "uniqueInstrumentId2Source";
+
     @RFAType(type=OFF_CD_IN2)
     @Adapt(using=OMMEnumAdapter.class)
     public void setUniqueInstrumentId2Source(String uniqueInstrumentId2Source) {
+        
+        String oldValue = this.uniqueInstrumentId2Source;
+
         this.uniqueInstrumentId2Source = uniqueInstrumentId2Source;
+
+        firePropertyChange(UNIQUE_INSTRUMENT_ID_2_SOURCE, oldValue, uniqueInstrumentId2Source);
     }
 
     @UsingKey(type=OFFC_CODE2)
@@ -2258,10 +2611,17 @@ public class MarketPrice
         return uniqueInstrumentId2;
     }
 
+    private static final String UNIQUE_INSTRUMENT_ID_2 = "uniqueInstrumentId2";
+
     @RFAType(type=OFFC_CODE2)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setUniqueInstrumentId2(String uniqueInstrumentId2) {
+
+        String oldValue = this.uniqueInstrumentId2;
+
         this.uniqueInstrumentId2 = uniqueInstrumentId2;
+
+        firePropertyChange(UNIQUE_INSTRUMENT_ID_2, oldValue, uniqueInstrumentId2);
     }
 
     @UsingKey(type=GV1_TIME)
@@ -2269,10 +2629,17 @@ public class MarketPrice
         return timeInSeconds1;
     }
 
+    private static final String TIME_IN_SECONDS_1 = "timeInSeconds1";
+
     @RFAType(type=GV1_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setTimeInSeconds1(Long timeInSeconds1) {
+
+        Long oldValue = this.timeInSeconds1;
+
         this.timeInSeconds1 = timeInSeconds1;
+
+        firePropertyChange(TIME_IN_SECONDS_1, oldValue, timeInSeconds1);
     }
 
     @UsingKey(type=GV2_TIME)
@@ -2280,10 +2647,17 @@ public class MarketPrice
         return timeInSeconds2;
     }
 
+    private static final String TIME_IN_SECONDS_2 = "timeInSeconds2";
+
     @RFAType(type=GV2_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setTimeInSeconds2(Long timeInSeconds2) {
+
+    	Long oldValue = this.timeInSeconds2;
+
         this.timeInSeconds2 = timeInSeconds2;
+
+        firePropertyChange(TIME_IN_SECONDS_2, oldValue, timeInSeconds2);
     }
 
     @UsingKey(type=EXCHTIM)
@@ -2291,10 +2665,17 @@ public class MarketPrice
         return exchangeTime;
     }
 
+    private static final String EXCHANGE_TIME = "exchangeTime";
+
     @RFAType(type=EXCHTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setExchangeTime(Long exchangeTime) {
+
+        Long oldValue = this.exchangeTime;
+
         this.exchangeTime = exchangeTime;
+
+        firePropertyChange(EXCHANGE_TIME, oldValue, exchangeTime);
     }
 
     @UsingKey(type=YRHI_IND)
@@ -2302,10 +2683,17 @@ public class MarketPrice
         return yearHighIndicator;
     }
 
+    private static final String YEAR_HIGH_INDICATOR = "yearHighIndicator";
+
     @RFAType(type=YRHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearHighIndicator(String yearHighIndicator) {
+
+        String oldValue = this.yearHighIndicator;
+
         this.yearHighIndicator = yearHighIndicator;
+
+        firePropertyChange(YEAR_HIGH_INDICATOR, oldValue, yearHighIndicator);
     }
 
     @UsingKey(type=YRLO_IND)
@@ -2313,10 +2701,17 @@ public class MarketPrice
         return yearLowIndicator;
     }
 
+    private static final String YEAR_LOW_INDICATOR = "yearLowIndicator";
+
     @RFAType(type=YRLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearLowIndicator(String yearLowIndicator) {
+
+        String oldValue = this.yearLowIndicator;
+
         this.yearLowIndicator = yearLowIndicator;
+
+        firePropertyChange(YEAR_LOW_INDICATOR, oldValue, yearLowIndicator);
     }
 
     @UsingKey(type=BETA_VAL)
@@ -2324,10 +2719,17 @@ public class MarketPrice
         return betaValue;
     }
 
+    private static final String BETA_VALUE = "betaValue";
+
     @RFAType(type=BETA_VAL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBetaValue(BigDecimal betaValue) {
+
+        BigDecimal oldValue = this.betaValue;
+
         this.betaValue = betaValue;
+
+        firePropertyChange(BETA_VALUE, oldValue, betaValue);
     }
 
     @UsingKey(type=PREF_DISP)
@@ -2335,11 +2737,18 @@ public class MarketPrice
         return preferredDisplayTemplateNumber;
     }
 
+    private static final String PREFERRED_DISPLAY_TEMPLATE_NUMBER = "preferredDisplayTemplateNumber";
+
     @RFAType(type=PREF_DISP)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPreferredDisplayTemplateNumber(
         Integer preferredDisplayTemplateNumber) {
+
+        Integer oldValue = this.preferredDisplayTemplateNumber;
+
         this.preferredDisplayTemplateNumber = preferredDisplayTemplateNumber;
+
+        firePropertyChange(PREFERRED_DISPLAY_TEMPLATE_NUMBER, oldValue, preferredDisplayTemplateNumber);
     }
 
     @UsingKey(type=DSPLY_NMLL)
@@ -2347,11 +2756,18 @@ public class MarketPrice
         return localLanguageInstrumentName;
     }
 
+    private static final String LOCAL_LANGUAGE_INSTRUMENT_NAME = "localLanguageInstrumentName";
+
     @RFAType(type=DSPLY_NMLL)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setLocalLanguageInstrumentName(
         String localLanguageInstrumentName) {
+
+        String oldValue = this.localLanguageInstrumentName;
+
         this.localLanguageInstrumentName = localLanguageInstrumentName;
+
+        firePropertyChange(LOCAL_LANGUAGE_INSTRUMENT_NAME, oldValue, localLanguageInstrumentName);
     }
 
     @UsingKey(type=VOL_X_PRC1)
@@ -2359,11 +2775,18 @@ public class MarketPrice
         return latestTradeOrTradeTurnoverValue;
     }
 
+    private static final String LATEST_TRADE_OR_TRADE_TURNOVER_VALUE = "latestTradeOrTradeTurnoverValue";
+
     @RFAType(type=VOL_X_PRC1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLatestTradeOrTradeTurnoverValue(
         BigDecimal latestTradeOrTradeTurnoverValue) {
+
+        BigDecimal oldValue = this.latestTradeOrTradeTurnoverValue;
+
         this.latestTradeOrTradeTurnoverValue = latestTradeOrTradeTurnoverValue;
+
+        firePropertyChange(LATEST_TRADE_OR_TRADE_TURNOVER_VALUE, oldValue, latestTradeOrTradeTurnoverValue);
     }
 
     @UsingKey(type=DSO_ID)
@@ -2371,10 +2794,17 @@ public class MarketPrice
         return dataSourceOwnerId;
     }
 
+    private static final String DATA_SOURCE_OWNER_ID = "dataSourceOwnerId";
+
     @RFAType(type=DSO_ID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setDataSourceOwnerId(Integer dataSourceOwnerId) {
+
+        Integer oldValue = this.dataSourceOwnerId;
+
         this.dataSourceOwnerId = dataSourceOwnerId;
+
+        firePropertyChange(DATA_SOURCE_OWNER_ID, oldValue, dataSourceOwnerId);
     }
 
     @UsingKey(type=AVERG_PRC)
@@ -2382,10 +2812,17 @@ public class MarketPrice
         return averagePrice;
     }
 
+    private static final String AVERAGE_PRICE = "averagePrice";
+
     @RFAType(type=AVERG_PRC)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAveragePrice(BigDecimal averagePrice) {
+
+        BigDecimal oldValue = this.averagePrice;
+
         this.averagePrice = averagePrice;
+
+        firePropertyChange(AVERAGE_PRICE, oldValue, averagePrice);
     }
 
     @UsingKey(type=UPC71_REST)
@@ -2393,10 +2830,17 @@ public class MarketPrice
         return upc71RestrictedFlag;
     }
 
+    private static final String UPC_71_RESTRICTED_FLAG = "upc71RestrictedFlag";
+
     @RFAType(type=UPC71_REST)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setUpc71RestrictedFlag(String upc71RestrictedFlag) {
+
+        String oldValue = this.upc71RestrictedFlag;
+
         this.upc71RestrictedFlag = upc71RestrictedFlag;
+
+        firePropertyChange(UPC_71_RESTRICTED_FLAG, oldValue, upc71RestrictedFlag);
     }
 
     @UsingKey(type=ADJUST_CLS)
@@ -2404,10 +2848,17 @@ public class MarketPrice
         return adjustedClose;
     }
 
+    private static final String ADJUSTED_CLOSE = "adjustedClose";
+
     @RFAType(type=ADJUST_CLS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAdjustedClose(BigDecimal adjustedClose) {
+
+        BigDecimal oldValue = this.adjustedClose;
+
         this.adjustedClose = adjustedClose;
+
+        firePropertyChange(ADJUSTED_CLOSE, oldValue, adjustedClose);
     }
 
     @UsingKey(type=WEIGHTING)
@@ -2415,10 +2866,17 @@ public class MarketPrice
         return weighting;
     }
 
-    @RFAType(type=WEIGHTING)
+    public static final String WEIGHTING = "weighting";
+
+    @RFAType(type=MarketPriceConstants.WEIGHTING)
     @Adapt(using=OMMNumericAdapter.class)
     public void setWeighting(BigDecimal weighting) {
+
+        BigDecimal oldValue = this.weighting;
+
         this.weighting = weighting;
+
+        firePropertyChange(MarketPrice.WEIGHTING, oldValue, weighting);
     }
 
     @UsingKey(type=STOCK_TYPE)
@@ -2426,10 +2884,17 @@ public class MarketPrice
         return stockType;
     }
 
-    @RFAType(type=STOCK_TYPE)
+    public static final String STOCK_TYPE = "stockType";
+
+    @RFAType(type=MarketPriceConstants.STOCK_TYPE)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setStockType(String stockType) {
+
+        String oldValue = this.stockType;
+
         this.stockType = stockType;
+
+        firePropertyChange(MarketPrice.STOCK_TYPE, oldValue, stockType);
     }
 
     @UsingKey(type=IMP_VOLT)
@@ -2437,10 +2902,17 @@ public class MarketPrice
         return impliedVolatility;
     }
 
+    public static final String IMPLIED_VOLATILITY = "impliedVolatility";
+
     @RFAType(type=IMP_VOLT)
     @Adapt(using=OMMNumericAdapter.class)
     public void setImpliedVolatility(BigDecimal impliedVolatility) {
+
+        BigDecimal oldValue = this.impliedVolatility;
+
         this.impliedVolatility = impliedVolatility;
+
+        firePropertyChange(MarketPrice.IMPLIED_VOLATILITY, oldValue, impliedVolatility);
     }
 
 //    @UsingKey(type=RDN_EXCHD2)
@@ -2459,10 +2931,17 @@ public class MarketPrice
         return capitalAdjustmentFactor;
     }
 
+    public static final String CAPITAL_ADJUSTMENT_FACTOR = "capitalAdjustmentFactor";
+
     @RFAType(type=CP_ADJ_FCT)
     @Adapt(using=OMMNumericAdapter.class)
     public void setCapitalAdjustmentFactor(BigDecimal capitalAdjustmentFactor) {
+
+        BigDecimal oldValue = this.capitalAdjustmentFactor;
+
         this.capitalAdjustmentFactor = capitalAdjustmentFactor;
+
+        firePropertyChange(MarketPrice.CAPITAL_ADJUSTMENT_FACTOR, oldValue, capitalAdjustmentFactor);
     }
 
     @UsingKey(type=CP_ADJ_DAT)
@@ -2470,10 +2949,17 @@ public class MarketPrice
         return capitalAdjustmentDate;
     }
 
+    public static final String CAPITAL_ADJUSTMENT_DATE = "capitalAdjustmentDate";
+
     @RFAType(type=CP_ADJ_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setCapitalAdjustmentDate(Long capitalAdjustmentDate) {
+
+        Long oldValue = this.capitalAdjustmentDate;
+
         this.capitalAdjustmentDate = capitalAdjustmentDate;
+
+        firePropertyChange(MarketPrice.CAPITAL_ADJUSTMENT_DATE, oldValue, capitalAdjustmentDate);
     }
 
     @UsingKey(type=AMT_ISSUE)
@@ -2481,10 +2967,17 @@ public class MarketPrice
         return sharesIssuedTotal;
     }
 
+    public static final String SHARES_ISSUED_TOTAL = "sharesIssuedTotal";
+
     @RFAType(type=AMT_ISSUE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setSharesIssuedTotal(BigInteger sharesIssuedTotal) {
+
+        BigInteger oldValue = this.sharesIssuedTotal;
+
         this.sharesIssuedTotal = sharesIssuedTotal;
+
+        firePropertyChange(MarketPrice.SHARES_ISSUED_TOTAL, oldValue, sharesIssuedTotal);
     }
 
     @UsingKey(type=MKT_VALUE)
@@ -2492,10 +2985,17 @@ public class MarketPrice
         return marketValue;
     }
 
+    public static final String MARKET_VALUE = "marketValue";
+
     @RFAType(type=MKT_VALUE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setMarketValue(BigDecimal marketValue) {
+
+        BigDecimal oldValue = this.marketValue;
+
         this.marketValue = marketValue;
+
+        firePropertyChange(MarketPrice.MARKET_VALUE, oldValue, marketValue);
     }
 
     @UsingKey(type=SPEC_TRADE)
@@ -2503,10 +3003,17 @@ public class MarketPrice
         return specialTermsTradingFlag;
     }
 
+    private static final String SPECIAL_TERMS_TRADING_FLAG = "specialTermsTradingFlag";
+
     @RFAType(type=SPEC_TRADE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setSpecialTermsTradingFlag(Integer specialTermsTradingFlag) {
+
+        Integer oldValue = this.specialTermsTradingFlag;
+
         this.specialTermsTradingFlag = specialTermsTradingFlag;
+
+        firePropertyChange(MarketPrice.SPECIAL_TERMS_TRADING_FLAG, oldValue, specialTermsTradingFlag);
     }
 
     @UsingKey(type=FCAST_EARN)
@@ -2514,10 +3021,17 @@ public class MarketPrice
         return forecastedEarnings;
     }
 
+    public static final String FORECASTED_EARNINGS = "forecastedEarnings";
+
     @RFAType(type=FCAST_EARN)
     @Adapt(using=OMMNumericAdapter.class)
     public void setForecastedEarnings(BigDecimal forecastedEarnings) {
+
+        BigDecimal oldValue = this.forecastedEarnings;
+
         this.forecastedEarnings = forecastedEarnings;
+
+        firePropertyChange(MarketPrice.FORECASTED_EARNINGS, oldValue, forecastedEarnings);
     }
 
     @UsingKey(type=EARANK_RAT)
@@ -2525,10 +3039,17 @@ public class MarketPrice
         return earningsRankRatio;
     }
 
+    public static final String EARNINGS_RANK_RATIO = "earningsRankRatio";
+
     @RFAType(type=EARANK_RAT)
     @Adapt(using=OMMNumericAdapter.class)
     public void setEarningsRankRatio(BigDecimal earningsRankRatio) {
+
+        BigDecimal oldValue = this.earningsRankRatio;
+
         this.earningsRankRatio = earningsRankRatio;
+
+        firePropertyChange(MarketPrice.EARNINGS_RANK_RATIO, oldValue, earningsRankRatio);
     }
 
     @UsingKey(type=FCAST_DATE)
@@ -2536,10 +3057,17 @@ public class MarketPrice
         return forecastDate;
     }
 
+    public static final String FORECAST_DATE = "forecastDate";
+
     @RFAType(type=FCAST_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setForecastDate(Long forecastDate) {
+
+        Long oldValue = this.forecastDate;
+
         this.forecastDate = forecastDate;
+
+        firePropertyChange(MarketPrice.FORECAST_DATE, oldValue, forecastDate);
     }
 
     @UsingKey(type=YEAR_FCAST)
@@ -2547,10 +3075,17 @@ public class MarketPrice
         return forecastYear;
     }
 
+    public static final String FORECAST_YEAR = "forecastYear";
+
     @RFAType(type=YEAR_FCAST)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setForecastYear(String forecastYear) {
+
+        String oldValue = this.forecastYear;
+
         this.forecastYear = forecastYear;
+
+        firePropertyChange(MarketPrice.FORECAST_YEAR, oldValue, forecastYear);
     }
 
     @UsingKey(type=IRGMOD)
@@ -2558,10 +3093,17 @@ public class MarketPrice
         return irgPriceTypeModifier;
     }
 
+    public static final String IRG_PRICE_TYPE_MODIFIER = "irgPriceTypeModifier";
+
     @RFAType(type=IRGMOD)
     @Adapt(using=OMMEnumAdapter.class)
     public void setIrgPriceTypeModifier(String irgPriceTypeModifier) {
+
+        String oldValue = this.irgPriceTypeModifier;
+
         this.irgPriceTypeModifier = irgPriceTypeModifier;
+
+        firePropertyChange(MarketPrice.IRG_PRICE_TYPE_MODIFIER, oldValue, irgPriceTypeModifier);
     }
 
     @UsingKey(type=INSMOD)
@@ -2569,10 +3111,17 @@ public class MarketPrice
         return insertPriceTypeModifier;
     }
 
+    public static final String INSERT_PRICE_TYPE_MODIFIER = "insertPriceTypeModifier";
+
     @RFAType(type=INSMOD)
     @Adapt(using=OMMEnumAdapter.class)
     public void setInsertPriceTypeModifier(String insertPriceTypeModifier) {
+
+        String oldValue = this.insertPriceTypeModifier;
+
         this.insertPriceTypeModifier = insertPriceTypeModifier;
+
+        firePropertyChange(MarketPrice.INSERT_PRICE_TYPE_MODIFIER, oldValue, insertPriceTypeModifier);
     }
 
     @UsingKey(type=A_NPLRS_1)
@@ -2580,10 +3129,17 @@ public class MarketPrice
         return askPlayersLevel1;
     }
 
+    public static final String ASK_PLAYERS_LEVEL_1 = "askPlayersLevel1";
+
     @RFAType(type=A_NPLRS_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAskPlayersLevel1(BigInteger askPlayersLevel1) {
+
+        BigInteger oldValue = this.askPlayersLevel1;
+
         this.askPlayersLevel1 = askPlayersLevel1;
+
+        firePropertyChange(MarketPrice.ASK_PLAYERS_LEVEL_1, oldValue, askPlayersLevel1);
     }
 
     @UsingKey(type=B_NPLRS_1)
@@ -2591,10 +3147,17 @@ public class MarketPrice
         return bidPlayersLevel1;
     }
 
+    public static final String BID_PLAYERS_LEVEL_1 = "bidPlayersLevel1";
+
     @RFAType(type=B_NPLRS_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBidPlayersLevel1(BigInteger bidPlayersLevel1) {
+
+        BigInteger oldValue = this.bidPlayersLevel1;
+
         this.bidPlayersLevel1 = bidPlayersLevel1;
+
+        firePropertyChange(BID_PLAYERS_LEVEL_1, oldValue, bidPlayersLevel1);
     }
 
     @UsingKey(type=GV3_TIME)
@@ -2602,10 +3165,17 @@ public class MarketPrice
         return genericTime3;
     }
 
+    public static final String GENERIC_TIME_3 = "genericTime3";
+
     @RFAType(type=GV3_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setGenericTime3(Long genericTime3) {
+
+        Long oldValue = this.genericTime3;
+
         this.genericTime3 = genericTime3;
+
+        firePropertyChange(GENERIC_TIME_3, oldValue, genericTime3);
     }
 
     @UsingKey(type=GV4_TIME)
@@ -2613,10 +3183,17 @@ public class MarketPrice
         return genericTime4;
     }
 
+    public static final String GENERIC_TIME_4 = "genericTime4";
+
     @RFAType(type=GV4_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setGenericTime4(Long genericTime4) {
+
+        Long oldValue = this.genericTime4;
+
         this.genericTime4 = genericTime4;
+
+        firePropertyChange(GENERIC_TIME_4, oldValue, genericTime4);
     }
 
     @UsingKey(type=MKT_CAP)
@@ -2624,10 +3201,17 @@ public class MarketPrice
         return marketCapitalisation;
     }
 
+    public static final String MARKET_CAPITALISATION = "marketCapitalisation";
+
     @RFAType(type=MKT_CAP)
     @Adapt(using=OMMNumericAdapter.class)
     public void setMarketCapitalisation(BigInteger marketCapitalisation) {
+
+        BigInteger oldValue = this.marketCapitalisation;
+
         this.marketCapitalisation = marketCapitalisation;
+
+        firePropertyChange(MARKET_CAPITALISATION, oldValue, marketCapitalisation);
     }
 
     @UsingKey(type=IRGFID)
@@ -2635,10 +3219,17 @@ public class MarketPrice
         return irgCorrectionValueFid;
     }
 
+    public static final String IRG_CORRECTION_VALUE_FID = "irgCorrectionValueFid";
+
     @RFAType(type=IRGFID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setIrgCorrectionValueFid(BigInteger irgCorrectionValueFid) {
+
+        BigInteger oldValue = this.irgCorrectionValueFid;
+
         this.irgCorrectionValueFid = irgCorrectionValueFid;
+
+        firePropertyChange(IRG_CORRECTION_VALUE_FID, oldValue, irgCorrectionValueFid);
     }
 
     @UsingKey(type=IRGVAL)
@@ -2646,10 +3237,17 @@ public class MarketPrice
         return irgCorrectionValue;
     }
 
+    public static final String IRG_CORRECTION_VALUE = "irgCorrectionValue";
+
     @RFAType(type=IRGVAL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setIrgCorrectionValue(BigInteger irgCorrectionValue) {
+
+        BigInteger oldValue = this.irgCorrectionValue;
+
         this.irgCorrectionValue = irgCorrectionValue;
+
+        firePropertyChange(IRG_CORRECTION_VALUE, oldValue, irgCorrectionValue);
     }
 
     @UsingKey(type=PCT_ABNVOL)
@@ -2657,12 +3255,18 @@ public class MarketPrice
         return abnormalVolumeIncreasePercentage;
     }
 
+    public static final String ABNORMAL_VOLUME_INCREASE_PERCENTAGE = "abnormalVolumeIncreasePercentage";
+
     @RFAType(type=PCT_ABNVOL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAbnormalVolumeIncreasePercentage(
         BigDecimal abnormalVolumeIncreasePercentage) {
-        this.abnormalVolumeIncreasePercentage =
-            abnormalVolumeIncreasePercentage;
+
+        BigDecimal oldValue = this.abnormalVolumeIncreasePercentage;
+
+        this.abnormalVolumeIncreasePercentage = abnormalVolumeIncreasePercentage;
+
+        firePropertyChange(ABNORMAL_VOLUME_INCREASE_PERCENTAGE, oldValue, abnormalVolumeIncreasePercentage);
     }
 
     @UsingKey(type=BC_10_50K)
@@ -2670,12 +3274,23 @@ public class MarketPrice
         return blockTransactionsBetween10KAnd50KShares;
     }
 
+    public static final String BLOCK_TRANSACTION_BETWEEN_10K_AND_50K_SHARES
+        = "blockTransactionsBetween10KAnd50KShares";
+
     @RFAType(type=BC_10_50K)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBlockTransactionsBetween10KAnd50KShares(
         BigInteger blockTransactionsBetween10KAnd50KShares) {
-        this.blockTransactionsBetween10KAnd50KShares =
-            blockTransactionsBetween10KAnd50KShares;
+
+        BigInteger oldValue = this.blockTransactionsBetween10KAnd50KShares;
+
+        this.blockTransactionsBetween10KAnd50KShares = blockTransactionsBetween10KAnd50KShares;
+
+        firePropertyChange(
+            BLOCK_TRANSACTION_BETWEEN_10K_AND_50K_SHARES,
+            oldValue,
+            blockTransactionsBetween10KAnd50KShares
+        );
     }
 
     @UsingKey(type=BC_50_100K)
@@ -2683,12 +3298,23 @@ public class MarketPrice
         return blockTransactionsBetween50KAnd100KShares;
     }
 
+    public static final String BLOCK_TRANSACTION_BETWEEN_50K_AND_100K_SHARES
+        = "blockTransactionsBetween50KAnd100KShares";
+
     @RFAType(type=BC_50_100K)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBlockTransactionsBetween50KAnd100KShares(
         BigInteger blockTransactionsBetween50KAnd100KShares) {
-        this.blockTransactionsBetween50KAnd100KShares =
-            blockTransactionsBetween50KAnd100KShares;
+
+        BigInteger oldValue = this.blockTransactionsBetween50KAnd100KShares;
+
+        this.blockTransactionsBetween50KAnd100KShares = blockTransactionsBetween50KAnd100KShares;
+
+        firePropertyChange(
+            BLOCK_TRANSACTION_BETWEEN_50K_AND_100K_SHARES,
+            oldValue,
+            blockTransactionsBetween50KAnd100KShares
+        );
     }
 
     @UsingKey(type=BC_100K)
@@ -2696,12 +3322,22 @@ public class MarketPrice
         return blockTransactionsAbove100KShares;
     }
 
+    public static final String BLOCK_TRANSACTION_ABOVE_100K_SHARES = "blockTransactionsAbove100KShares";
+
     @RFAType(type=BC_100K)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBlockTransactionsAbove100KShares(
         BigInteger blockTransactionsAbove100KShares) {
-        this.blockTransactionsAbove100KShares =
-            blockTransactionsAbove100KShares;
+
+        BigInteger oldValue = this.blockTransactionsAbove100KShares;
+
+        this.blockTransactionsAbove100KShares = blockTransactionsAbove100KShares;
+
+        firePropertyChange(
+            BLOCK_TRANSACTION_ABOVE_100K_SHARES,
+            oldValue,
+            blockTransactionsAbove100KShares
+        );
     }
 
     @UsingKey(type=PMA_50D)
@@ -2709,10 +3345,21 @@ public class MarketPrice
         return priceMovingAverages50D;
     }
 
+    public static final String PRICE_MOVING_AVERAGE_50D = "priceMovingAverages50D";
+
     @RFAType(type=PMA_50D)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPriceMovingAverages50D(BigDecimal priceMovingAverages50D) {
+
+        BigDecimal oldValue = this.priceMovingAverages50D;
+
         this.priceMovingAverages50D = priceMovingAverages50D;
+
+        firePropertyChange(
+            PRICE_MOVING_AVERAGE_50D,
+            oldValue,
+            priceMovingAverages50D
+        );
     }
 
     @UsingKey(type=PMA_150D)
@@ -2720,10 +3367,21 @@ public class MarketPrice
         return priceMovingAverages150D;
     }
 
+    public static final String PRICE_MOVING_AVERAGES_150D = "priceMovingAverages150D";
+
     @RFAType(type=PMA_150D)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPriceMovingAverages150D(BigDecimal priceMovingAverages150D) {
+
+        BigDecimal oldValue = this.priceMovingAverages150D;
+
         this.priceMovingAverages150D = priceMovingAverages150D;
+
+        firePropertyChange(
+            PRICE_MOVING_AVERAGES_150D,
+            oldValue,
+            priceMovingAverages150D
+        );
     }
 
     @UsingKey(type=PMA_200D)
@@ -2731,10 +3389,21 @@ public class MarketPrice
         return priceMovingAverages200D;
     }
 
+    public static final String PRICE_MOVING_AVERAGES_200D = "priceMovingAverages200D";
+
     @RFAType(type=PMA_200D)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPriceMovingAverages200D(BigDecimal priceMovingAverages200D) {
+
+        BigDecimal oldValue = this.priceMovingAverages200D;
+
         this.priceMovingAverages200D = priceMovingAverages200D;
+
+        firePropertyChange(
+            PRICE_MOVING_AVERAGES_200D,
+            oldValue,
+            priceMovingAverages200D
+        );
     }
 
     @UsingKey(type=VMA_10D)
@@ -2742,10 +3411,21 @@ public class MarketPrice
         return volumeMovingAverages10D;
     }
 
+    public static final String VOLUME_MOVING_AVERAGES_10D = "volumeMovingAverages10D";
+
     @RFAType(type=VMA_10D)
     @Adapt(using=OMMNumericAdapter.class)
     public void setVolumeMovingAverages10D(BigInteger volumeMovingAverages10D) {
+
+        BigInteger oldValue = this.volumeMovingAverages10D;
+
         this.volumeMovingAverages10D = volumeMovingAverages10D;
+
+        firePropertyChange(
+            VOLUME_MOVING_AVERAGES_10D,
+            oldValue,
+            volumeMovingAverages10D
+        );
     }
 
     @UsingKey(type=VMA_25D)
@@ -2753,10 +3433,21 @@ public class MarketPrice
         return volumeMovingAverages25D;
     }
 
+    public static final String VOLUME_MOVING_AVERAGES_25D = "volumeMovingAverages25D";
+
     @RFAType(type=VMA_25D)
     @Adapt(using=OMMNumericAdapter.class)
     public void setVolumeMovingAverages25D(BigInteger volumeMovingAverages25D) {
+
+        BigInteger oldValue = this.volumeMovingAverages25D;
+
         this.volumeMovingAverages25D = volumeMovingAverages25D;
+
+        firePropertyChange(
+            VOLUME_MOVING_AVERAGES_25D,
+            oldValue,
+            volumeMovingAverages25D
+        );
     }
 
     @UsingKey(type=VMA_50D)
@@ -2764,10 +3455,21 @@ public class MarketPrice
         return volumeMovingAverages50D;
     }
 
+    public static final String VOLUME_MOVING_AVERAGES_50D = "volumeMovingAverages50D";
+
     @RFAType(type=VMA_50D)
     @Adapt(using=OMMNumericAdapter.class)
     public void setVolumeMovingAverages50D(BigInteger volumeMovingAverages50D) {
+
+        BigInteger oldValue = this.volumeMovingAverages50D;
+
         this.volumeMovingAverages50D = volumeMovingAverages50D;
+
+        firePropertyChange(
+            VOLUME_MOVING_AVERAGES_50D,
+            oldValue,
+            volumeMovingAverages50D
+        );
     }
 
     @UsingKey(type=OPN_NETCH)
@@ -2775,10 +3477,21 @@ public class MarketPrice
         return openPriceNetChange;
     }
 
+    public static final String OPEN_PRICE_NET_CHANGE = "openPriceNetChange";
+
     @RFAType(type=OPN_NETCH)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenPriceNetChange(BigDecimal openPriceNetChange) {
+
+        BigDecimal oldValue = this.openPriceNetChange;
+
         this.openPriceNetChange = openPriceNetChange;
+
+        firePropertyChange(
+            OPEN_PRICE_NET_CHANGE,
+            oldValue,
+            openPriceNetChange
+        );
     }
 
     @UsingKey(type=CASH_EXDIV)
@@ -2786,10 +3499,21 @@ public class MarketPrice
         return latestReportedCashDividend;
     }
 
+    public static final String LATEST_REPORTED_CASH_DIVIDEND = "latestReportedCashDividend";
+
     @RFAType(type=CASH_EXDIV)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLatestReportedCashDividend(BigDecimal latestReportedCashDividend) {
+
+        BigDecimal oldValue = this.latestReportedCashDividend;
+
         this.latestReportedCashDividend = latestReportedCashDividend;
+
+        firePropertyChange(
+            LATEST_REPORTED_CASH_DIVIDEND,
+            oldValue,
+            latestReportedCashDividend
+        );
     }
 
     @UsingKey(type=MKT_VAL_SC)
@@ -2797,10 +3521,21 @@ public class MarketPrice
         return marketValueScalingFactor;
     }
 
+    public static final String MARKET_VALUE_SCALING_FACTOR = "marketValueScalingFactor";
+
     @RFAType(type=MKT_VAL_SC)
     @Adapt(using=OMMEnumAdapter.class)
     public void setMarketValueScalingFactor(String marketValueScalingFactor) {
+
+        String oldValue = this.marketValueScalingFactor;
+
         this.marketValueScalingFactor = marketValueScalingFactor;
+
+        firePropertyChange(
+            MARKET_VALUE_SCALING_FACTOR,
+            oldValue,
+            marketValueScalingFactor
+        );
     }
 
     @UsingKey(type=CASH_EXDAT)
@@ -2808,10 +3543,21 @@ public class MarketPrice
         return exDividendTradeDate;
     }
 
+    public static final String EX_DIVIDEND_TRADE_DATE = "exDividendTradeDate";
+
     @RFAType(type=CASH_EXDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setExDividendTradeDate(Long exDividendTradeDate) {
+
+        Long oldValue = this.exDividendTradeDate;
+
         this.exDividendTradeDate = exDividendTradeDate;
+
+        firePropertyChange(
+            EX_DIVIDEND_TRADE_DATE,
+            oldValue,
+            exDividendTradeDate
+        );
     }
 
     @UsingKey(type=PREV_DISP)
@@ -2819,10 +3565,21 @@ public class MarketPrice
         return previousDisplayTemplate;
     }
 
+    public static final String PREVIOUS_DISPLAY_TEMPLATE = "previousDisplayTemplate";
+
     @RFAType(type=PREV_DISP)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPreviousDisplayTemplate(Integer previousDisplayTemplate) {
+
+        Integer oldValue = this.previousDisplayTemplate;
+
         this.previousDisplayTemplate = previousDisplayTemplate;
+
+        firePropertyChange(
+            PREVIOUS_DISPLAY_TEMPLATE,
+            oldValue,
+            previousDisplayTemplate
+        );
     }
 
     @UsingKey(type=PRC_QL3)
@@ -2830,10 +3587,21 @@ public class MarketPrice
         return extendedPriceQualifierFid;
     }
 
+    public static final String EXTENDED_PRICE_QUALIFIER_FID = "extendedPriceQualifierFid";
+
     @RFAType(type=PRC_QL3)
     @Adapt(using=OMMEnumAdapter.class)
     public void setExtendedPriceQualifierFid(String extendedPriceQualifierFid) {
+
+        String oldValue = this.extendedPriceQualifierFid;
+
         this.extendedPriceQualifierFid = extendedPriceQualifierFid;
+
+        firePropertyChange(
+            EXTENDED_PRICE_QUALIFIER_FID,
+            oldValue,
+            extendedPriceQualifierFid
+        );
     }
 
     @UsingKey(type=MPV)
@@ -2841,10 +3609,21 @@ public class MarketPrice
         return minimumPriceMovement;
     }
 
+    public static final String MINIMUM_PRICE_MOVEMENT = "minimumPriceMovement";
+
     @RFAType(type=MPV)
     @Adapt(using=OMMEnumAdapter.class)
     public void setMinimumPriceMovement(String minimumPriceMovement) {
+
+        String oldValue = this.minimumPriceMovement;
+
         this.minimumPriceMovement = minimumPriceMovement;
+
+        firePropertyChange(
+            MINIMUM_PRICE_MOVEMENT,
+            oldValue,
+            minimumPriceMovement
+        );
     }
 
     @UsingKey(type=OFF_CLOSE)
@@ -2852,10 +3631,21 @@ public class MarketPrice
         return officialClosingPrice;
     }
 
-    @RFAType(type=OFF_CLOSE)
+    public static final String OFFICIAL_CLOSING_PRICE = "officialClosingPrice";
+
+    @RFAType(type=MarketPriceConstants.OFF_CLOSE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOfficialClosingPrice(BigDecimal officialClosingPrice) {
+
+        BigDecimal oldValue = this.officialClosingPrice;
+
         this.officialClosingPrice = officialClosingPrice;
+
+        firePropertyChange(
+            OFFICIAL_CLOSING_PRICE,
+            oldValue,
+            officialClosingPrice
+        );
     }
 
     @UsingKey(type=QUOTE_DATE)
@@ -2863,10 +3653,21 @@ public class MarketPrice
         return quoteDate;
     }
 
-    @RFAType(type=QUOTE_DATE)
+    public static final String QUOTE_DATE = "quoteDate";
+
+    @RFAType(type=MarketPriceConstants.QUOTE_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setQuoteDate(Long quoteDate) {
+
+        Long oldValue = this.quoteDate;
+
         this.quoteDate = quoteDate;
+
+        firePropertyChange(
+            MarketPrice.QUOTE_DATE,
+            oldValue,
+            quoteDate
+        );
     }
 
     @UsingKey(type=VWAP)
@@ -2874,11 +3675,22 @@ public class MarketPrice
         return volumeWeightedAveragePrice;
     }
 
+    public static final String VOLUME_WEIGHTED_AVERAGE_PRICE = "volumeWeightedAveragePrice";
+
     @RFAType(type=VWAP)
     @Adapt(using=OMMNumericAdapter.class)
     public void setVolumeWeightedAveragePrice(
         BigDecimal volumeWeightedAveragePrice) {
+
+        BigDecimal oldValue = this.volumeWeightedAveragePrice;
+
         this.volumeWeightedAveragePrice = volumeWeightedAveragePrice;
+
+        firePropertyChange(
+            MarketPrice.VOLUME_WEIGHTED_AVERAGE_PRICE,
+            oldValue,
+            volumeWeightedAveragePrice
+        );
     }
 
 //    @UsingKey(type=PROV_SYMB)
@@ -2897,10 +3709,21 @@ public class MarketPrice
         return bidAskDate;
     }
 
-    @RFAType(type=BID_ASK_DT)
+    public static final String BID_ASK_DATE = "bidAskDate";
+
+    @RFAType(type=MarketPrice.BID_ASK_DT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setBidAskDate(Long bidAskDate) {
+
+        Long oldValue = this.bidAskDate;
+
         this.bidAskDate = bidAskDate;
+
+        firePropertyChange(
+            MarketPrice.BID_ASK_DATE,
+            oldValue,
+            bidAskDate
+        );
     }
 
     @UsingKey(type=ISIN_CODE)
@@ -2908,10 +3731,21 @@ public class MarketPrice
         return isinCode;
     }
 
-    @RFAType(type=ISIN_CODE)
+    public static final String ISIN_CODE = "isinCode";
+
+    @RFAType(type=MarketPriceConstants.ISIN_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setIsinCode(String isinCode) {
+
+        String oldValue = this.isinCode;
+
         this.isinCode = isinCode;
+
+        firePropertyChange(
+            MarketPrice.ISIN_CODE,
+            oldValue,
+            isinCode
+        );
     }
 
 //    @UsingKey(type=MNEMONIC)
@@ -2930,10 +3764,21 @@ public class MarketPrice
         return rtrsOpeningPrice;
     }
 
+    public static final String RTRS_OPENING_PRICE = "rtrsOpeningPrice";
+
     @RFAType(type=RTR_OPN_PR)
     @Adapt(using=OMMNumericAdapter.class)
     public void setRtrsOpeningPrice(BigDecimal rtrsOpeningPrice) {
+
+        BigDecimal oldValue = this.rtrsOpeningPrice;
+
         this.rtrsOpeningPrice = rtrsOpeningPrice;
+
+        firePropertyChange(
+            MarketPrice.RTRS_OPENING_PRICE,
+            oldValue,
+            rtrsOpeningPrice
+        );
     }
 
     @UsingKey(type=SEDOL)
@@ -2941,10 +3786,21 @@ public class MarketPrice
         return sedolCode;
     }
 
-    @RFAType(type=SEDOL)
+    public static final String SEDOL_CODE = "sedolCode";
+
+    @RFAType(type=MarketPriceConstants.SEDOL)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setSedolCode(String sedolCode) {
+
+        String oldValue = this.sedolCode;
+
         this.sedolCode = sedolCode;
+
+        firePropertyChange(
+            MarketPrice.SEDOL_CODE,
+            oldValue,
+            sedolCode
+        );
     }
 
     @UsingKey(type=MKT_SEGMNT)
@@ -2952,10 +3808,21 @@ public class MarketPrice
         return marketSegment;
     }
 
-    @RFAType(type=MKT_SEGMNT)
+    public static final String MARKET_SEGMENT = "marketSegment";
+
+    @RFAType(type=MarketPriceConstants.MKT_SEGMNT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setMarketSegment(String marketSegment) {
+
+        String oldValue = this.marketSegment;
+
         this.marketSegment = marketSegment;
+
+        firePropertyChange(
+            MarketPrice.MARKET_SEGMENT,
+            oldValue,
+            marketSegment
+        );
     }
 
     @UsingKey(type=TRDTIM_MS)
@@ -2963,10 +3830,21 @@ public class MarketPrice
         return regularTradesTimeMillis;
     }
 
-    @RFAType(type=TRDTIM_MS)
+    public static final String REGULAR_TRADE_TIME_MILLIS = "regularTradesTimeMillis";
+
+    @RFAType(type=MarketPriceConstants.TRDTIM_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setRegularTradesTimeMillis(Long regularTradesTimeMillis) {
+
+        Long oldValue = this.regularTradesTimeMillis;
+
         this.regularTradesTimeMillis = regularTradesTimeMillis;
+
+        firePropertyChange(
+            MarketPrice.REGULAR_TRADE_TIME_MILLIS,
+            oldValue,
+            regularTradesTimeMillis
+        );
     }
 
     @UsingKey(type=SALTIM_MS)
@@ -2974,10 +3852,21 @@ public class MarketPrice
         return allTradesTimeMillis;
     }
 
-    @RFAType(type=SALTIM_MS)
+    public static final String ALL_TRADES_TIME_MILLIS = "allTradesTimeMillis";
+
+    @RFAType(type=MarketPriceConstants.SALTIM_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAllTradesTimeMillis(Long allTradesTimeMillis) {
+
+        Long oldValue = this.allTradesTimeMillis;
+
         this.allTradesTimeMillis = allTradesTimeMillis;
+
+        firePropertyChange(
+            MarketPrice.ALL_TRADES_TIME_MILLIS,
+            oldValue,
+            allTradesTimeMillis
+        );
     }
 
     @UsingKey(type=QUOTIM_MS)
@@ -2985,10 +3874,21 @@ public class MarketPrice
         return quoteTimeMillis;
     }
 
-    @RFAType(type=QUOTIM_MS)
+    public static final String QUOTE_TIME_MILLIS = "quoteTimeMillis";
+
+    @RFAType(type=MarketPriceConstants.QUOTIM_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setQuoteTimeMillis(Long quoteTimeMillis) {
+
+        Long oldValue = this.quoteTimeMillis;
+
         this.quoteTimeMillis = quoteTimeMillis;
+
+        firePropertyChange(
+            MarketPrice.QUOTE_TIME_MILLIS,
+            oldValue,
+            quoteTimeMillis
+        );
     }
 
     @UsingKey(type=TIMCOR_MS)
@@ -2996,10 +3896,17 @@ public class MarketPrice
         return correctionTimeMillis;
     }
 
+    public static final String CORRECTION_TIME_MILLIS = "correctionTimeMillis";
+
     @RFAType(type=TIMCOR_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setCorrectionTimeMillis(BigInteger correctionTimeMillis) {
+
+        BigInteger oldValue = this.correctionTimeMillis;
+
         this.correctionTimeMillis = correctionTimeMillis;
+
+        firePropertyChange(CORRECTION_TIME_MILLIS, oldValue, correctionTimeMillis);
     }
 
     @UsingKey(type=FIN_STATUS)
@@ -3007,10 +3914,17 @@ public class MarketPrice
         return financialStatusIndicator;
     }
 
+    public static final String FINANCIAL_STATUS_INDICATOR = "financialStatusIndicator";
+
     @RFAType(type=FIN_STATUS)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setFinancialStatusIndicator(String financialStatusIndicator) {
+
+        String oldValue = this.financialStatusIndicator;
+
         this.financialStatusIndicator = financialStatusIndicator;
+
+        firePropertyChange(FINANCIAL_STATUS_INDICATOR, oldValue, financialStatusIndicator);
     }
 
     @UsingKey(type=LS_SUBIND)
@@ -3018,11 +3932,18 @@ public class MarketPrice
         return lastTradeSubMarketIndicator;
     }
 
+    public static final String LAST_TRADE_SUB_MARKET_INDICATOR = "lastTradeSubMarketIndicator";
+
     @RFAType(type=LS_SUBIND)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setLastTradeSubMarketIndicator(
         String lastTradeSubMarketIndicator) {
+
+        String oldValue = this.lastTradeSubMarketIndicator;
+
         this.lastTradeSubMarketIndicator = lastTradeSubMarketIndicator;
+
+        firePropertyChange(LAST_TRADE_SUB_MARKET_INDICATOR, oldValue, lastTradeSubMarketIndicator);
     }
 
     @UsingKey(type=IRG_SUBIND)
@@ -3030,11 +3951,18 @@ public class MarketPrice
         return irgPriceSubmarketIndicator;
     }
 
+    public static final String IRG_PRICE_SUBMARKET_INDICATOR = "irgPriceSubmarketIndicator";
+
     @RFAType(type=IRG_SUBIND)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setIrgPriceSubmarketIndicator(
         String irgPriceSubmarketIndicator) {
+
+        String oldValue = this.irgPriceSubmarketIndicator;
+
         this.irgPriceSubmarketIndicator = irgPriceSubmarketIndicator;
+
+        firePropertyChange(IRG_PRICE_SUBMARKET_INDICATOR, oldValue, irgPriceSubmarketIndicator);
     }
 
     @UsingKey(type=ACVOL_SC)
@@ -3042,10 +3970,17 @@ public class MarketPrice
         return volumeScaling;
     }
 
+    public static final String VOLUME_SCALING = "volumeScaling";
+
     @RFAType(type=ACVOL_SC)
     @Adapt(using=OMMEnumAdapter.class)
     public void setVolumeScaling(String volumeScaling) {
+
+        String oldValue = volumeScaling;
+
         this.volumeScaling = volumeScaling;
+
+        firePropertyChange(VOLUME_SCALING, oldValue, volumeScaling);
     }
 
     @UsingKey(type=EXCHCODE)
@@ -3053,10 +3988,17 @@ public class MarketPrice
         return exchangeCode;
     }
 
-    @RFAType(type=EXCHCODE)
+    public static final String EXCHANGE_CODE = "exchangeCode";
+
+    @RFAType(type=MarketPriceConstants.EXCHCODE)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setExchangeCode(String exchangeCode) {
+
+        String oldValue = this.exchangeCode;
+
         this.exchangeCode = exchangeCode;
+
+        firePropertyChange(MarketPrice.EXCHANGE_CODE, oldValue, exchangeCode);
     }
 
     @UsingKey(type=ODD_ASK)
@@ -3064,10 +4006,17 @@ public class MarketPrice
         return oddBestAsk;
     }
 
+    public static final String ODD_BEST_ASK = "oddBestAsk";
+
     @RFAType(type=ODD_ASK)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOddBestAsk(BigDecimal oddBestAsk) {
+
+        BigDecimal oldValue = this.oddBestAsk;
+
         this.oddBestAsk = oddBestAsk;
+
+        firePropertyChange(ODD_BEST_ASK, oldValue, oddBestAsk);
     }
 
     @UsingKey(type=ODD_ASKSIZ)
@@ -3075,10 +4024,17 @@ public class MarketPrice
         return oddBestAskSize;
     }
 
+    public static final String ODD_BEST_ASK_SIZE = "oddBestAskSize";
+
     @RFAType(type=ODD_ASKSIZ)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOddBestAskSize(BigInteger oddBestAskSize) {
+
+        BigInteger oldValue = this.oddBestAskSize;
+
         this.oddBestAskSize = oddBestAskSize;
+
+        firePropertyChange(ODD_BEST_ASK_SIZE, oldValue, oddBestAskSize);
     }
 
     @UsingKey(type=ODD_BID)
@@ -3086,10 +4042,17 @@ public class MarketPrice
         return oddBestBid;
     }
 
+    public static final String ODD_BEST_BID = "oddBestBid";
+
     @RFAType(type=ODD_BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOddBestBid(BigDecimal oddBestBid) {
+
+        BigDecimal oldValue = this.oddBestBid;
+
         this.oddBestBid = oddBestBid;
+
+        firePropertyChange(ODD_BEST_BID, oldValue, oddBestBid);
     }
 
     @UsingKey(type=ODD_BIDSIZ)
@@ -3097,10 +4060,17 @@ public class MarketPrice
         return oddBestBidSize;
     }
 
+    public static final String ODD_BEST_BID_SIZE = "oddBestBidSize";
+
     @RFAType(type=ODD_BIDSIZ)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOddBestBidSize(BigInteger oddBestBidSize) {
+
+        BigInteger oldValue = this.oddBestBidSize;
+
         this.oddBestBidSize = oddBestBidSize;
+
+        firePropertyChange(ODD_BEST_BID_SIZE, oldValue, oddBestBidSize);
     }
 
     @UsingKey(type=ROUND_VOL)
@@ -3108,10 +4078,17 @@ public class MarketPrice
         return roundVolume;
     }
 
+    public static final String ROUND_VOLUME = "roundVolume";
+
     @RFAType(type=ROUND_VOL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setRoundVolume(BigInteger roundVolume) {
+
+        BigInteger oldValue = this.roundVolume;
+
         this.roundVolume = roundVolume;
+
+        firePropertyChange(ROUND_VOLUME, oldValue, roundVolume);
     }
 
     @UsingKey(type=ORGID)
@@ -3119,10 +4096,17 @@ public class MarketPrice
         return organizationId;
     }
 
+    public static final String ORGANIZATION_ID = "organizationId";
+
     @RFAType(type=ORGID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOrganizationId(BigInteger organizationId) {
+
+        BigInteger oldValue = this.organizationId;
+
         this.organizationId = organizationId;
+
+        firePropertyChange(ORGANIZATION_ID, oldValue, organizationId);
     }
 
     @UsingKey(type=PR_FREQ)
@@ -3130,10 +4114,17 @@ public class MarketPrice
         return priceUpdateFrequency;
     }
 
+    public static final String PRICE_UPDATE_FREQUENCY = "priceUpdateFrequency";
+
     @RFAType(type=PR_FREQ)
     @Adapt(using=OMMEnumAdapter.class)
     public void setPriceUpdateFrequency(String priceUpdateFrequency) {
+
+        String oldValue = this.priceUpdateFrequency;
+
         this.priceUpdateFrequency = priceUpdateFrequency;
+
+        firePropertyChange(PRICE_UPDATE_FREQUENCY, oldValue, priceUpdateFrequency);
     }
 
     @UsingKey(type=RCS_AS_CLA)
@@ -3141,10 +4132,17 @@ public class MarketPrice
         return rcsAssetClassification;
     }
 
+    public static final String RCS_ASSET_CLASSIFICATION = "rcsAssetClassification";
+
     @RFAType(type=RCS_AS_CLA)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRcsAssetClassification(String rcsAssetClassification) {
+
+        String oldValue = this.rcsAssetClassification;
+
         this.rcsAssetClassification = rcsAssetClassification;
+
+        firePropertyChange(RCS_ASSET_CLASSIFICATION, oldValue, rcsAssetClassification);
     }
 
     @UsingKey(type=UNDR_INDEX)
@@ -3152,10 +4150,17 @@ public class MarketPrice
         return underlyingIndex;
     }
 
+    public static final String UNDERLYING_INDEX = "underlyingIndex";
+
     @RFAType(type=UNDR_INDEX)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setUnderlyingIndex(String underlyingIndex) {
+
+        String oldValue = this.underlyingIndex;
+
         this.underlyingIndex = underlyingIndex;
+
+        firePropertyChange(UNDERLYING_INDEX, oldValue, underlyingIndex);
     }
 
     @UsingKey(type=FUTURES)
@@ -3163,10 +4168,17 @@ public class MarketPrice
         return futuresChainRic;
     }
 
+    public static final String FUTURES_CHAIN_RIC = "futuresChainRic";
+
     @RFAType(type=FUTURES)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setFuturesChainRic(String futuresChainRic) {
+
+        String oldValue = this.futuresChainRic;
+
         this.futuresChainRic = futuresChainRic;
+
+        firePropertyChange(FUTURES_CHAIN_RIC, oldValue, futuresChainRic);
     }
 
     @UsingKey(type=OPTIONS)
@@ -3174,10 +4186,17 @@ public class MarketPrice
         return optionsChainRic;
     }
 
+    public static final String OPTIONS_CHAIN_RIC = "optionsChainRic";
+
     @RFAType(type=OPTIONS)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setOptionsChainRic(String optionsChainRic) {
+
+        String oldValue = this.optionsChainRic;
+
         this.optionsChainRic = optionsChainRic;
+
+        firePropertyChange(OPTIONS_CHAIN_RIC, oldValue, optionsChainRic);
     }
 
     @UsingKey(type=STRIKES)
@@ -3185,10 +4204,17 @@ public class MarketPrice
         return strikesCoverage;
     }
 
+    public static final String STRIKES_COVERAGE = "strikesCoverage";
+
     @RFAType(type=STRIKES)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setStrikesCoverage(String strikesCoverage) {
+
+        String oldValue = this.strikesCoverage;
+
         this.strikesCoverage = strikesCoverage;
+
+        firePropertyChange(STRIKES_COVERAGE, oldValue, strikesCoverage);
     }
 
     @UsingKey(type=NEWSTM_MS)
@@ -3196,10 +4222,17 @@ public class MarketPrice
         return newsTimeMillis;
     }
 
+    public static final String NEWS_TIME_MILLIS = "newsTimeMillis";
+
     @RFAType(type=NEWSTM_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setNewsTimeMillis(BigInteger newsTimeMillis) {
+
+        BigInteger oldValue = this.newsTimeMillis;
+
         this.newsTimeMillis = newsTimeMillis;
+
+        firePropertyChange(NEWS_TIME_MILLIS, oldValue, newsTimeMillis);
     }
 
     @UsingKey(type=TRD_THRU_X)
@@ -3207,10 +4240,17 @@ public class MarketPrice
         return tradeThroughExemptFlags;
     }
 
+    public static final String TRADE_THROUGH_EXEMPT_FLAGS = "tradeThroughExemptFlags";
+
     @RFAType(type=TRD_THRU_X)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setTradeThroughExemptFlags(String tradeThroughExemptFlags) {
+
+        String oldValue = this.tradeThroughExemptFlags;
+
         this.tradeThroughExemptFlags = tradeThroughExemptFlags;
+
+        firePropertyChange(TRADE_THROUGH_EXEMPT_FLAGS, oldValue, tradeThroughExemptFlags);
     }
 
     @UsingKey(type=FIN_ST_IND)
@@ -3218,10 +4258,17 @@ public class MarketPrice
         return companyComplianceStatus;
     }
 
+    public static final String COMPANY_COMPLIANCE_STATUS = "companyComplianceStatus";
+
     @RFAType(type=FIN_ST_IND)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setCompanyComplianceStatus(String companyComplianceStatus) {
+
+        String oldValue = this.companyComplianceStatus;
+
         this.companyComplianceStatus = companyComplianceStatus;
+
+        firePropertyChange(COMPANY_COMPLIANCE_STATUS, oldValue, companyComplianceStatus);
     }
 
     @UsingKey(type=IRG_SMKTID)
@@ -3229,10 +4276,17 @@ public class MarketPrice
         return irgSubMarketCenterId;
     }
 
+    public static final String IRG_SUB_MARKET_CENTER_ID = "irgSubMarketCenterId";
+
     @RFAType(type=IRG_SMKTID)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setIrgSubMarketCenterId(String irgSubMarketCenterId) {
+
+        String oldValue = this.irgSubMarketCenterId;
+
         this.irgSubMarketCenterId = irgSubMarketCenterId;
+
+        firePropertyChange(IRG_SUB_MARKET_CENTER_ID, oldValue, irgSubMarketCenterId);
     }
 
     @UsingKey(type=SUB_MKT_ID)
@@ -3240,10 +4294,17 @@ public class MarketPrice
         return subMarketCenterId;
     }
 
+    public static final String SUB_MARKET_CENTER_ID = "subMarketCenterId";
+
     @RFAType(type=SUB_MKT_ID)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setSubMarketCenterId(String subMarketCenterId) {
+
+        String oldValue = this.subMarketCenterId;
+
         this.subMarketCenterId = subMarketCenterId;
+
+        firePropertyChange(SUB_MARKET_CENTER_ID, oldValue, subMarketCenterId);
     }
 
     @UsingKey(type=ACT_DOM_EX)
@@ -3251,10 +4312,17 @@ public class MarketPrice
         return activeDomesticExchangeIds;
     }
 
+    public static final String ACTIVE_DOMESTIC_EXCHANGE_IDS = "activeDomesticExchangeIds";
+
     @RFAType(type=ACT_DOM_EX)
     @Adapt(using=OMMEnumAdapter.class)
     public void setActiveDomesticExchangeIds(String activeDomesticExchangeIds) {
+
+        String oldValue = this.activeDomesticExchangeIds;
+
         this.activeDomesticExchangeIds = activeDomesticExchangeIds;
+
+        firePropertyChange(ACTIVE_DOMESTIC_EXCHANGE_IDS, oldValue, activeDomesticExchangeIds);
     }
 
     @UsingKey(type=ACT_OTH_EX)
@@ -3262,10 +4330,17 @@ public class MarketPrice
         return activeOtherExchangeIds;
     }
 
+    public static final String ACTIVE_OTHER_EXCHANGE_IDS = "activeOtherExchangeIds";
+
     @RFAType(type=ACT_OTH_EX)
     @Adapt(using=OMMEnumAdapter.class)
     public void setActiveOtherExchangeIds(String activeOtherExchangeIds) {
+
+        String oldValue = this.activeOtherExchangeIds;
+
         this.activeOtherExchangeIds = activeOtherExchangeIds;
+
+        firePropertyChange(ACTIVE_OTHER_EXCHANGE_IDS, oldValue, activeOtherExchangeIds);
     }
 
     @UsingKey(type=TRD_QUAL_2)
@@ -3273,10 +4348,17 @@ public class MarketPrice
         return tradePriceQualifier2;
     }
 
+    public static final String TRADE_PRICE_QUALIFIER2 = "tradePriceQualifier2";
+
     @RFAType(type=TRD_QUAL_2)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradePriceQualifier2(String tradePriceQualifier2) {
+
+        String oldValue = this.tradePriceQualifier2;
+
         this.tradePriceQualifier2 = tradePriceQualifier2;
+
+        firePropertyChange(TRADE_PRICE_QUALIFIER2, oldValue, tradePriceQualifier2);
     }
 
     @UsingKey(type=CP_EFF_DAT)
@@ -3284,12 +4366,19 @@ public class MarketPrice
         return latestCapitalChangeEffectiveDate;
     }
 
+    public static final String LATEST_CAPITAL_CHANGE_EFFECTIVE_DATE = "latestCapitalChangeEffectiveDate";
+
     @RFAType(type=CP_EFF_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setLatestCapitalChangeEffectiveDate(
         Long latestCapitalChangeEffectiveDate) {
+
+        Long oldValue = this.latestCapitalChangeEffectiveDate;
+
         this.latestCapitalChangeEffectiveDate =
             latestCapitalChangeEffectiveDate;
+
+        firePropertyChange(LATEST_CAPITAL_CHANGE_EFFECTIVE_DATE, oldValue, latestCapitalChangeEffectiveDate);
     }
 
     @UsingKey(type=ROW64_1)
@@ -3300,7 +4389,12 @@ public class MarketPrice
     @RFAType(type=ROW64_1)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_1(String row64_1) {
+
+        String oldValue = this.row64_1;
+
         this.row64_1 = row64_1;
+
+        firePropertyChange(ROW64_1, oldValue, row64_1);
     }
 
     @UsingKey(type=ROW64_2)
@@ -3311,7 +4405,12 @@ public class MarketPrice
     @RFAType(type=ROW64_2)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_2(String row64_2) {
+
+        String oldValue = this.row64_2;
+
         this.row64_2 = row64_2;
+
+        firePropertyChange(ROW64_2, oldValue, row64_2);
     }
 
     @UsingKey(type=ROW64_3)
@@ -3322,7 +4421,12 @@ public class MarketPrice
     @RFAType(type=ROW64_3)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_3(String row64_3) {
+
+        String oldValue = this.row64_3;
+
         this.row64_3 = row64_3;
+
+        firePropertyChange(ROW64_3, oldValue, row64_3);
     }
 
     @UsingKey(type=ROW64_4)
@@ -3333,7 +4437,12 @@ public class MarketPrice
     @RFAType(type=ROW64_4)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_4(String row64_4) {
+
+        String oldValue = this.row64_4;
+
         this.row64_4 = row64_4;
+
+        firePropertyChange(ROW64_4, oldValue, row64_4);
     }
 
     @UsingKey(type=ROW64_5)
@@ -3344,7 +4453,12 @@ public class MarketPrice
     @RFAType(type=ROW64_5)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_5(String row64_5) {
+
+        String oldValue = this.row64_5;
+
         this.row64_5 = row64_5;
+
+        firePropertyChange(ROW64_5, oldValue, row64_5);
     }
 
     @UsingKey(type=ROW64_6)
@@ -3355,7 +4469,12 @@ public class MarketPrice
     @RFAType(type=ROW64_6)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_6(String row64_6) {
+
+        String oldValue = this.row64_6;
+
         this.row64_6 = row64_6;
+
+        firePropertyChange(ROW64_6, oldValue, row64_6);
     }
 
     @UsingKey(type=ROW64_7)
@@ -3363,10 +4482,17 @@ public class MarketPrice
         return row64_7;
     }
 
-    @RFAType(type=ROW64_7)
+    public static final String ROW_64_7 = MarketPriceConstants.ROW64_7;
+
+    @RFAType(type=MarketPriceConstants.ROW64_7)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_7(String row64_7) {
+
+        String oldValue = this.row64_7;
+
         this.row64_7 = row64_7;
+
+        firePropertyChange(MarketPrice.ROW64_7, oldValue, row64_7);
     }
 
     @UsingKey(type=ROW64_8)
@@ -3374,10 +4500,17 @@ public class MarketPrice
         return row64_8;
     }
 
-    @RFAType(type=ROW64_8)
+    public static final String ROW64_8 = MarketPriceConstants.ROW64_8;
+
+    @RFAType(type=MarketPriceConstants.ROW64_8)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_8(String row64_8) {
+
+        String oldValue = this.row64_8;
+
         this.row64_8 = row64_8;
+
+        firePropertyChange(MarketPrice.ROW64_8, oldValue, row64_8);
     }
 
     @UsingKey(type=ROW64_9)
@@ -3385,10 +4518,17 @@ public class MarketPrice
         return row64_9;
     }
 
-    @RFAType(type=ROW64_9)
+    public static final String ROW64_9 = MarketPriceConstants.ROW64_9;
+
+    @RFAType(type=MarketPriceConstants.ROW64_9)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_9(String row64_9) {
+
+        String oldValue = this.row64_9;
+
         this.row64_9 = row64_9;
+
+        firePropertyChange(MarketPrice.ROW64_9, oldValue, row64_9);
     }
 
     @UsingKey(type=ROW64_10)
@@ -3396,10 +4536,17 @@ public class MarketPrice
         return row64_10;
     }
 
-    @RFAType(type=ROW64_10)
+    public static final String ROW64_10 = MarketPriceConstants.ROW64_10;
+
+    @RFAType(type=MarketPriceConstants.ROW64_10)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_10(String row64_10) {
+
+        String oldValue = this.row64_10;
+
         this.row64_10 = row64_10;
+
+        firePropertyChange(MarketPrice.ROW64_10, oldValue, row64_10);
     }
 
     @UsingKey(type=ROW64_11)
@@ -3407,10 +4554,17 @@ public class MarketPrice
         return row64_11;
     }
 
-    @RFAType(type=ROW64_11)
+    public static final String ROW64_11 = MarketPriceConstants.ROW64_11;
+
+    @RFAType(type=MarketPriceConstants.ROW64_11)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_11(String row64_11) {
+
+        String oldValue = this.row64_11;
+
         this.row64_11 = row64_11;
+
+        firePropertyChange(MarketPrice.ROW64_11, oldValue, row64_11);
     }
 
     @UsingKey(type=ROW64_12)
@@ -3418,10 +4572,17 @@ public class MarketPrice
         return row64_12;
     }
 
-    @RFAType(type=ROW64_12)
+    public static final String ROW64_12 = MarketPriceConstants.ROW64_12;
+
+    @RFAType(type=MarketPriceConstants.ROW64_12)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_12(String row64_12) {
+
+        String oldValue = this.row64_12;
+
         this.row64_12 = row64_12;
+
+        firePropertyChange(MarketPrice.ROW64_12, oldValue, row64_12);
     }
 
     @UsingKey(type=ROW64_13)
@@ -3429,10 +4590,17 @@ public class MarketPrice
         return row64_13;
     }
 
+    public static final String ROW64_13 = MarketPriceConstants.ROW64_13;
+
     @RFAType(type=ROW64_13)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_13(String row64_13) {
+
+        String oldValue = this.row64_13;
+
         this.row64_13 = row64_13;
+
+        firePropertyChange(MarketPrice.ROW64_13, oldValue, row64_13);
     }
 
     @UsingKey(type=ROW64_14)
@@ -3440,10 +4608,17 @@ public class MarketPrice
         return row64_14;
     }
 
-    @RFAType(type=ROW64_14)
+    public static final String ROW64_14 = MarketPriceConstants.ROW64_14;
+
+    @RFAType(type=MarketPriceConstants.ROW64_14)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setRow64_14(String row64_14) {
+
+        String oldValue = this.row64_14;
+
         this.row64_14 = row64_14;
+
+        firePropertyChange(MarketPrice.ROW64_14, oldValue, row64_14);
     }
 
     /**
@@ -3457,10 +4632,17 @@ public class MarketPrice
     /**
      * Setter method for the {@link MarketPriceConstants#PUT_CALL}.
      */
-    @RFAType(type=PUT_CALL)
+    public static final String PUT_CALL = "putCall";
+
+    @RFAType(type=MarketPriceConstants.PUT_CALL)
     @Adapt(using=OMMEnumAdapter.class)
     public void setPutCall(String putCall) {
+
+        String oldValue = this.putCall;
+
         this.putCall = putCall;
+
+        firePropertyChange(MarketPrice.PUT_CALL, oldValue, putCall);
     }
 
     /**
@@ -3471,15 +4653,21 @@ public class MarketPrice
         return impliedVolatilitytOfAskPrice;
     }
 
+    public static final String IMPLIED_VOLATILITY_OF_ASK_PRICE = "impliedVolatilitytOfAskPrice";
+
     /**
      * Setter method for the {@link MarketPriceConstants#IMP_VOLTA}.
      */
-    @RFAType(type=IMP_VOLTA)
+    @RFAType(type=MarketPriceConstants.IMP_VOLTA)
     @Adapt(using=OMMNumericAdapter.class)
     public void setImpliedVolatilitytOfAskPrice(
         BigDecimal impliedVolatilitytOfAskPrice
     ) {
+        BigDecimal oldValue = this.impliedVolatilitytOfAskPrice;
+
         this.impliedVolatilitytOfAskPrice = impliedVolatilitytOfAskPrice;
+
+        firePropertyChange(MarketPrice.IMPLIED_VOLATILITY_OF_ASK_PRICE, oldValue, impliedVolatilitytOfAskPrice);
     }
 
     /**
@@ -3490,15 +4678,22 @@ public class MarketPrice
         return impliedVolatilitytOfBidPrice;
     }
 
+    public static final String IMPLIED_VOLATILITY_OF_BID_PRICE = "impliedVolatilitytOfBidPrice";
+
     /**
      * Getter method for the {@link MarketPriceConstants#IMP_VOLTB}.
      */
-    @RFAType(type=IMP_VOLTB)
+    @RFAType(type=MarketPriceConstants.IMP_VOLTB)
     @Adapt(using=OMMNumericAdapter.class)
     public void setImpliedVolatilitytOfBidPrice(
         BigDecimal impliedVolatilitytOfBidPrice
     ) {
+
+        BigDecimal oldValue = this.impliedVolatilitytOfBidPrice;
+
         this.impliedVolatilitytOfBidPrice = impliedVolatilitytOfBidPrice;
+
+        firePropertyChange(MarketPrice.IMPLIED_VOLATILITY_OF_BID_PRICE, oldValue, impliedVolatilitytOfBidPrice);
     }
 
     /**
@@ -3509,13 +4704,20 @@ public class MarketPrice
         return openInterest;
     }
 
+    public static final String OPEN_INTEREST = "openInterest";
+
     /**
      * Setter method for the {@link MarketPriceConstants#OPINT_1}.
      */
-    @RFAType(type=OPINT_1)
+    @RFAType(type=MarketPriceConstants.OPINT_1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenInterest(BigInteger openInterest) {
+
+        BigInteger oldValue = this.openInterest;
+
         this.openInterest = openInterest;
+
+        firePropertyChange(MarketPrice.OPEN_INTEREST, oldValue, openInterest);
     }
 
     /**
@@ -3526,13 +4728,20 @@ public class MarketPrice
         return openInterestNetChange;
     }
 
+    public static final String OPEN_INTEREST_NET_CHANGE = "openInterestNetChange";
+
     /**
      * Setter method for the {@link MarketPriceConstants#OPINTNC}.
      */
     @RFAType(type=OPINTNC)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenInterestNetChange(BigInteger openInterestNetChange) {
+
+        BigInteger oldValue = this.openInterestNetChange;
+
         this.openInterestNetChange = openInterestNetChange;
+
+        firePropertyChange(OPEN_INTEREST_NET_CHANGE, oldValue, openInterestNetChange);
     }
 
     /**
@@ -3546,10 +4755,17 @@ public class MarketPrice
     /**
      * Getter method for the {@link MarketPriceConstants#STRIKE_PRC}.
      */
+    public static final String STRIKE_PRICE = "strikePrice";
+
     @RFAType(type=STRIKE_PRC)
     @Adapt(using=OMMNumericAdapter.class)
     public void setStrikePrice(BigDecimal strikePrice) {
+
+        BigDecimal oldValue = this.strikePrice;
+
         this.strikePrice = strikePrice;
+
+        firePropertyChange(STRIKE_PRICE, oldValue, strikePrice);
     }
 
     @UsingKey(type=CONTR_MNTH)
@@ -3557,10 +4773,17 @@ public class MarketPrice
         return contractMonth;
     }
 
+    public static final String CONTRACT_MONTH = "contractMonth";
+
     @RFAType(type=CONTR_MNTH)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setContractMonth(String contractMonth) {
+
+        String oldValue = this.contractMonth;
+
         this.contractMonth = contractMonth;
+
+        firePropertyChange(CONTRACT_MONTH, oldValue, contractMonth);
     }
 
     @UsingKey(type=LOTSZUNITS)
@@ -3568,10 +4791,17 @@ public class MarketPrice
         return lotSizeUnits;
     }
 
+    public static final String LOT_SIZE_UNITS = "lotSizeUnits";
+
     @RFAType(type=LOTSZUNITS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setLotSizeUnits(String lotSizeUnits) {
+
+        String oldValue = this.lotSizeUnits;
+
         this.lotSizeUnits = lotSizeUnits;
+
+        firePropertyChange(LOT_SIZE_UNITS, oldValue, lotSizeUnits);
     }
 
     @UsingKey(type=OPEN_ASK)
@@ -3579,10 +4809,17 @@ public class MarketPrice
         return openAskPrice;
     }
 
+    public static final String OPEN_ASK_PRICE = "openAskPrice";
+
     @RFAType(type=OPEN_ASK)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenAskPrice(BigDecimal openAskPrice) {
+
+        BigDecimal oldValue = this.openAskPrice;
+
         this.openAskPrice = openAskPrice;
+
+        firePropertyChange(OPEN_ASK_PRICE, oldValue, openAskPrice);
     }
 
     @UsingKey(type=EXPIR_DATE)
@@ -3590,10 +4827,17 @@ public class MarketPrice
         return expiryDate;
     }
 
+    public static final String EXPIRY_DATE = "expiryDate";
+
     @RFAType(type=EXPIR_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setExpiryDate(Long expiryDate) {
+
+        Long oldValue = this.expiryDate;
+
         this.expiryDate = expiryDate;
+
+        firePropertyChange(EXPIRY_DATE, oldValue, expiryDate);
     }
 
     @UsingKey(type=SETTLE)
@@ -3601,10 +4845,17 @@ public class MarketPrice
         return settlementPrice;
     }
 
+    public static final String SETTLEMENT_PRICE = "settlementPrice";
+
     @RFAType(type=SETTLE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setSettlementPrice(BigDecimal settlementPrice) {
+
+        BigDecimal oldValue = this.settlementPrice;
+
         this.settlementPrice = settlementPrice;
+
+        firePropertyChange(SETTLEMENT_PRICE, oldValue, settlementPrice);
     }
 
     @UsingKey(type=SETTLEDATE)
@@ -3612,9 +4863,16 @@ public class MarketPrice
         return settleDate;
     }
 
+    public static final String SETTLE_DATE = "settleDate";
+
     @RFAType(type=SETTLEDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setSettleDate(Long settleDate) {
+
+        Long oldValue = this.settleDate;
+
         this.settleDate = settleDate;
+
+        firePropertyChange(SETTLE_DATE, oldValue, settleDate);
     }
 }
