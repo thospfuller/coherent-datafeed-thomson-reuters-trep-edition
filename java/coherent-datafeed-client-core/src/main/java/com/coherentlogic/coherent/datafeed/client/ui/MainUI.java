@@ -1,8 +1,5 @@
 package com.coherentlogic.coherent.datafeed.client.ui;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
@@ -47,6 +45,9 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
+
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 
 public class MainUI {
 
@@ -100,19 +101,19 @@ public class MainUI {
         mainFrame = new JFrame();
         mainFrame.setTitle("Coherent Datafeed: Thomson Reuters (TREP) Edition");
         mainFrame.setBounds(100, 100, 450, 300);
-        mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         JMenuBar menuBar = new JMenuBar();
         mainFrame.setJMenuBar(menuBar);
         mainFrame.setSize(550, 550);
-        
+
         JMenu mnHelp = new JMenu("Help");
         menuBar.add(mnHelp);
-        
+
         JMenuItem mntmAbout = new JMenuItem("About");
         mnHelp.add(mntmAbout);
         mainFrame.getContentPane().setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.X_AXIS));
-        
+
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setFont(new Font("Arial", Font.PLAIN, 12));
         mainFrame.getContentPane().add(tabbedPane);
@@ -197,11 +198,14 @@ public class MainUI {
                     binding.setVariable("timeSeriesGateway", timeSeriesGatewaySpecification);
 
                     GroovyShell groovyShell = new GroovyShell(binding);
-                    
+
                     groovyShell.evaluate(scriptText);
                 }
             }
         );
+
+        btnEvaluate.setFont(new Font("Arial", Font.PLAIN, 12));
+        timeSeriesPanel.add(btnEvaluate, "1, 4");
 
         // -----
 
@@ -242,9 +246,9 @@ public class MainUI {
             }
         );
 
-        btnEvaluate.setFont(new Font("Arial", Font.PLAIN, 12));
-        timeSeriesPanel.add(btnEvaluate, "1, 4");
-        
+        evaluateMarketPriceScriptBtn.setFont(new Font("Arial", Font.PLAIN, 12));
+        marketPricePanel.add(evaluateMarketPriceScriptBtn, "1, 4");
+
         statusResponsePanel.setLayout(new BorderLayout(0, 0));
         
         JScrollPane scrollPane = new JScrollPane(statusResponseTextArea);
@@ -385,6 +389,15 @@ public class MainUI {
                 }
             );
         }
+    }
+
+    private long marketMakerCtr = 0;
+
+    public void onMarketMakerUpdate (MarketMaker marketMaker) {
+
+        log.info("mainUI.onMarketMakerUpdate; method called with marketMaker[" + marketMakerCtr + "]" + marketMaker);
+
+        marketMakerCtr++;
     }
 
     /**
