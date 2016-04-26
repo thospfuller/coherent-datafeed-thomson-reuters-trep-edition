@@ -46,6 +46,7 @@ public interface Constants {
         STATUS_RESPONSE_SERVICE_GATEWAY = "statusResponseServiceGateway",
         TS1_DEF_SERVICE_GATEWAY = "ts1DefServiceGateway",
         MARKET_PRICE_SERVICE_GATEWAY = "queryMarketPriceUpdates",
+        MARKET_MAKER_SERVICE_GATEWAY = "queryMarketMakerUpdates",
         MARKET_BY_ORDER_SERVICE = "marketByOrderService",
         MARKET_BY_ORDER_SERVICE_GATEWAY = "queryMarketByOrderUpdates",
         MARKET_MAKER_SERVICE = "marketMakerService",
