@@ -7,6 +7,7 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.exceptions.MethodNotSupportedException;
 import com.coherentlogic.coherent.datafeed.services.Session;
@@ -26,6 +27,8 @@ public class SessionFactory implements Factory<Session> {
 
     private final Map<Handle, MarketPrice> marketPriceEntryCache;
 
+    private final Map<Handle, MarketMaker> marketMakerEntryCache;
+
     private final Map<Handle, MarketByOrder> marketByOrderEntryCache;
 
     private final Map<Handle, TS1DefEntry> ts1DefEntryCache;
@@ -36,6 +39,7 @@ public class SessionFactory implements Factory<Session> {
         Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache,
         Map<Handle, DictionaryEntry> dictionaryEntryCache,
         Map<Handle, MarketPrice> marketPriceEntryCache,
+        Map<Handle, MarketMaker> marketMakerEntryCache,
         Map<Handle, MarketByOrder> marketByOrderEntryCache,
         Map<Handle, TS1DefEntry> ts1DefEntryCache,
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache
@@ -44,6 +48,7 @@ public class SessionFactory implements Factory<Session> {
         this.directoryEntryCache = directoryEntryCache;
         this.dictionaryEntryCache = dictionaryEntryCache;
         this.marketPriceEntryCache = marketPriceEntryCache;
+        this.marketMakerEntryCache = marketMakerEntryCache;
         this.marketByOrderEntryCache = marketByOrderEntryCache;
         this.ts1DefEntryCache = ts1DefEntryCache;
         this.timeSeriesEntryCache = timeSeriesEntryCache;
@@ -61,6 +66,7 @@ public class SessionFactory implements Factory<Session> {
             directoryEntryCache,
             dictionaryEntryCache,
             marketPriceEntryCache,
+            marketMakerEntryCache,
             marketByOrderEntryCache,
             ts1DefEntryCache,
             timeSeriesEntryCache
