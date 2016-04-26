@@ -198,8 +198,6 @@
      ref="getNextStatusResponseUpdateAsJSONMessageProcessor"
      method="process"/>
 
-<!-- TPF: Upgrade broken begins. -->
-
     <!--
           NOTE: There's refer to the links below for the reasons why there's a
                 payload when getNextUpdateAsJSON is a getter method:
@@ -272,6 +270,69 @@
      ref="queryMarketPriceUpdatesMessageProcessor"
      method="process"/>
 
+    <!-- /////////////////////////////////////////////////////////////////// -->
+
+    <int:gateway id="queryMarketMakerUpdates"
+        service-interface="com.coherentlogic.coherent.datafeed.services.MarketMakerServiceSpecification">
+        <int:method name="query"
+         request-channel="queryMarketMakerUpdatesChannel"
+         reply-channel="queryMarketMakerUpdatesReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
+        <int:method name="getNextUpdateAsJSON"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextMarketMakerUpdateAsJSONRequestChannel"
+         reply-channel="getNextMarketMakerUpdateAsJSONReplyChannel"/>
+        <int:method name="getNextUpdate"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeoutParameter (#args[0])"
+         request-channel="getNextMarketMakerUpdateRequestChannel"
+         reply-channel="getNextMarketMakerUpdateReplyChannel"/>
+    </int:gateway>
+
+    <int:channel id="queryMarketMakerUpdatesChannel"/>
+    <int:channel id="queryMarketMakerUpdatesReplyChannel"/>
+
+    <bean id="getNextMarketMakerUpdateAsJSONMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketMakerUpdateAsJSONMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketByOrderService"/>
+    </bean>
+
+    <bean id="queryMarketMakerUpdatesMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketMakerMessageProcessor">
+        <constructor-arg name="marketMakerService" ref="marketMakerService"/>
+        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="marketMakerCache" ref="marketMakerCache"/>
+    </bean>
+
+    <int:channel id="getNextMarketMakerUpdateAsJSONRequestChannel"/>
+    <int:channel id="getNextMarketMakerUpdateAsJSONReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextMarketMakerUpdateAsJSONRequestChannel"
+     output-channel="getNextMarketMakerUpdateAsJSONReplyChannel"
+     ref="getNextMarketMakerUpdateAsJSONMessageProcessor"
+     method="process"/>
+
+    <int:channel id="getNextMarketMakerUpdateRequestChannel"/>
+    <int:channel id="getNextMarketMakerUpdateReplyChannel"/>
+
+    <int:service-activator
+     input-channel="getNextMarketMakerUpdateRequestChannel"
+     output-channel="getNextMarketMakerUpdateReplyChannel"
+     ref="getNextMarketMakerUpdateMessageProcessor"
+     method="process"/>
+
+    <bean id="getNextMarketMakerUpdateMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.GetNextMarketMakerUpdateMessageProcessor">
+        <constructor-arg name="asynchronouslyUpdatableSpecification" ref="marketMakerService"/>
+    </bean>
+
+     <int:channel id="marketMakerUpdateAsJSONChannel"/>
+
+    <int:service-activator
+     input-channel="queryMarketMakerUpdatesChannel"
+     output-channel="queryMarketMakerUpdatesReplyChannel"
+     ref="queryMarketMakerUpdatesMessageProcessor"
+     method="process"/>
 
     <!-- /////////////////////////////////////////////////////////////////// -->
 
