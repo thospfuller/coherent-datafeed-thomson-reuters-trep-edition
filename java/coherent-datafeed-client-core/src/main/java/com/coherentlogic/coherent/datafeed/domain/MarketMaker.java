@@ -19,6 +19,10 @@ import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+/**
+ * 
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ */
 @Entity
 @Table(name=MARKET_MAKER)
 @XStreamAlias(MARKET_MAKER)
