@@ -16,11 +16,5 @@ public interface AuthenticationServiceSpecification {
 
     Handle login (String dacsId);
 
-    /**
-     * @deprecated This is here temporarily so as to deal with a problem
-     *  introduced by AspectJ, however this will be removed in due course.
-     */
-    Handle getHandle();
-
     void logout ();
 }
