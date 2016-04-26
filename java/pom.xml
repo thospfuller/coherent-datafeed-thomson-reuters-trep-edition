@@ -114,10 +114,11 @@
         <!-- Connection to TREP required to run tests in core-it. -->
         <!-- module>coherent-datafeed-client-core-it</module -->
         <module>coherent-datafeed-db-int</module>
+        <module>coherent-datafeed-jms-int</module>
         <module>coherent-datafeed-flink-int</module>
         <module>coherent-datafeed-redis-int</module>
         <module>coherent-datafeed-storm-int</module>
-        <module>coherent-datafeed-suanshu-int</module>
+        <!-- module>coherent-datafeed-suanshu-int</module -->
     </modules>
 
     <dependencyManagement>
