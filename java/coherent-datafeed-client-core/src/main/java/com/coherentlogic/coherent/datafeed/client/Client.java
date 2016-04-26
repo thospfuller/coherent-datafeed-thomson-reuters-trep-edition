@@ -47,7 +47,6 @@ public class Client {
     private static final Logger log =
         LoggerFactory.getLogger(Client.class);
 
-//    @Autowired
     private AbstractApplicationContext applicationContext;
 
     private final PauseResumeService pauseResumeService =
