@@ -23,6 +23,7 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
@@ -86,6 +87,8 @@ public class Session extends SerializableBean {
 
     private final Map<Handle, MarketPrice> marketPriceEntryCache;
 
+    private final Map<Handle, MarketMaker> marketMakerEntryCache;
+
     private final Map<Handle, MarketByOrder> marketByOrderEntryCache;
 
     private final Map<Handle, TS1DefEntry> ts1DefEntryCache;
@@ -104,6 +107,7 @@ public class Session extends SerializableBean {
         Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache,
         Map<Handle, DictionaryEntry> dictionaryEntryCache,
         Map<Handle, MarketPrice> marketPriceEntryCache,
+        Map<Handle, MarketMaker> marketMakerEntryCache,
         Map<Handle, MarketByOrder> marketByOrderEntryCache,
         Map<Handle, TS1DefEntry> ts1DefEntryCache,
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache
@@ -111,6 +115,7 @@ public class Session extends SerializableBean {
         this.directoryEntryCache = directoryEntryCache;
         this.dictionaryEntryCache = dictionaryEntryCache;
         this.marketPriceEntryCache = marketPriceEntryCache;
+        this.marketMakerEntryCache = marketMakerEntryCache;
         this.marketByOrderEntryCache = marketByOrderEntryCache;
         this.ts1DefEntryCache = ts1DefEntryCache;
         this.timeSeriesEntryCache = timeSeriesEntryCache;
@@ -540,12 +545,20 @@ public class Session extends SerializableBean {
         marketPriceEntryCache.put(handle, marketPrice);
     }
 
+    public void putMarketMaker (Handle handle, MarketMaker marketMaker) {
+        marketMakerEntryCache.put(handle, marketMaker);
+    }
+
     public void putMarketByOrder (Handle handle, MarketByOrder marketByOrder) {
         marketByOrderEntryCache.put(handle, marketByOrder);
     }
 
     public MarketPrice getMarketPrice (Handle handle) {
         return marketPriceEntryCache.get (handle);
+    }
+
+    public MarketMaker getMarketMaker (Handle handle) {
+        return marketMakerEntryCache.get (handle);
     }
 
     public MarketByOrder getMarketByOrder (Handle handle) {
