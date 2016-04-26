@@ -1,7 +1,5 @@
 package com.coherentlogic.coherent.datafeed.configuration;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -32,14 +30,10 @@ import com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTran
 import com.coherentlogic.coherent.datafeed.misc.TS1DefDbHelper;
 import com.coherentlogic.coherent.datafeed.services.DictionaryLoadCompleteService;
 import com.coherentlogic.coherent.datafeed.services.LoggingService;
-import com.coherentlogic.coherent.datafeed.services.Session;
-import com.coherentlogic.coherent.datafeed.services.TS1DefService;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper;
 import com.coherentlogic.coherent.datafeed.services.WorkflowEndsService;
-import com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefMessageProcessor;
 import com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor;
 import com.reuters.rfa.common.EventQueue;
-import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMEncoder;
 import com.reuters.rfa.omm.OMMPool;
@@ -60,7 +54,8 @@ public class GlobalConfiguration {
         EVENT_QUEUE = "eventQueue",
         OMM_CONSUMER = "defaultOMMConsumer",
         SESSION_CACHE = "sessionCache",
-        TS1_DEF_CACHE = "ts1DefCache";
+        TS1_DEF_CACHE = "ts1DefCache",
+        MARKET_MAKER_MESSAGE_CONSUMER ="marketMakerEventDrivenEndpoint";
 
     public static final String DEFAULT_EVENT_QUEUE_NAME = "myEventQueue";
 
@@ -249,7 +244,12 @@ public class GlobalConfiguration {
     }
 
     @Bean(name=DefaultOrderFactory.BEAN_NAME)
-    public DefaultOrderFactory getDefaultOrderFactory () {
+    public DefaultMarketByOrderFactory.DefaultOrderFactory getMarketByOrderOrderFactory () {
+        return new DefaultMarketByOrderFactory.DefaultOrderFactory ();
+    }
+
+    @Bean(name=DefaultMarketMakerFactory.DefaultOrderFactory.BEAN_NAME)
+    public DefaultOrderFactory getDefaulMarketMakertOrderFactory () {
         return new DefaultOrderFactory ();
     }
 
@@ -302,6 +302,40 @@ public class GlobalConfiguration {
     public TimeSeriesHelper getTimeSeriesHelper () {
         return new TimeSeriesHelper ();
     }
+
+//    <bean id="marketPriceEventDrivenEndpoint"
+//     class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
+//        <property name="requestChannel" ref="onMarketPriceAddSessionToHeadersChannel"/>
+//    </bean>
+//    @Bean(name=MARKET_MAKER_MESSAGE_CONSUMER)
+//    public MessageConsumer getMarketMakerMessageConsumer () {
+//    	return new MessageConsumer ();
+//    }
+
+//    <bean id="marketPriceService" class="com.coherentlogic.coherent.datafeed.services.MarketPriceService"
+//     depends-on="loggingService">
+//        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+//        <constructor-arg name="client" ref="marketPriceEventDrivenEndpoint"/>
+//        <constructor-arg name="messageConsumer" ref="marketPriceConsumer"/>
+//        <constructor-arg name="jsonGenerator" ref="jsonAdapter"/>
+//    </bean>
+//
+//    @Bean(name=MarketMakerService.BEAN_NAME)
+//    public MarketMakerService getMarketMakerService (
+//        @Qualifier(RequestMessageBuilderFactory.BEAN_NAME) RequestMessageBuilderFactory
+//            defaultRequestMessageBuilderFactory,
+//        Client client,
+//        @Qualifier("onMarketMakerAddSessionToHeadersChannel") MessageConsumer messageConsumer,
+//        BasicAdapter<MarketMaker, String> jsonGenerator
+//    ) {
+//        return new MarketMakerService (
+//            defaultRequestMessageBuilderFactory,
+//            client,
+//            messageConsumer,
+//            jsonGenerator
+//        );
+//    }
+
 
     /*
          <bean id="ts1DefMessageProcessor"
