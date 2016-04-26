@@ -215,7 +215,8 @@ public class RFABeanAdapter<T extends RFABean> {
 
             if (fidDef == null) {
                 throw new DictionaryNotLoadedException ("The fidDef is null for the dictionary with " +
-                    "the dictId " + dictId + ".");
+                    "the dictId " + dictId + " (when this exception is thrown a likely cause is that the dictionary " +
+                    "has not been loaded).");
             } else {
 
                 String name = fidDef.getName();
