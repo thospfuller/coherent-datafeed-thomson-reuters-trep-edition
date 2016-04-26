@@ -56,11 +56,4 @@ public abstract class AbstractAdvancedCommonProperties
     public void setOrderRankRule(String orderRankRule) {
         this.orderRankRule = orderRankRule;
     }
-
-    @Override
-    public String toString() {
-        return "AbstractAdvancedCommonProperties [activeDate=" + activeDate
-            + ", priceRankRule=" + priceRankRule + ", orderRankRule="
-            + orderRankRule + "]";
-    }
 }
