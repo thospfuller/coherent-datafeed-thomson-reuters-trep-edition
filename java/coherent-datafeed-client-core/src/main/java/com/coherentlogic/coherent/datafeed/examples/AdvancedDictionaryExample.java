@@ -74,9 +74,7 @@ public class AdvancedDictionaryExample implements CommandLineRunner {
 
         String dacsId = System.getenv(DACS_ID);
 
-        authenticationService.login(dacsId);
-
-        Handle handle = authenticationService.getHandle();
+        Handle handle = authenticationService.login(dacsId);
 
         log.info("Login handle is: " + handle);
 
