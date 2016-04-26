@@ -129,13 +129,4 @@ public abstract class AbstractCommonProperties extends RFABean
     public void setExchangeId(String exchangeId) {
         this.exchangeId = exchangeId;
     }
-
-    @Override
-    public String toString() {
-        return "AbstractCommonProperties [permission=" + permission + ", displayName="
-            + displayName + ", currency=" + currency + ", recordType="
-            + recordType + ", exchangeId2=" + exchangeId2
-            + ", providerSymbol=" + providerSymbol + ", exchangeId="
-            + exchangeId + "]";
-    }
 }
