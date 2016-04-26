@@ -15,6 +15,7 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
+import com.coherentlogic.coherent.datafeed.exceptions.DictionaryNotLoadedException;
 import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
 import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FidDef;
@@ -213,7 +214,7 @@ public class RFABeanAdapter<T extends RFABean> {
             //       should add a unit test to check for this.
 
             if (fidDef == null) {
-                log.warn ("The fidDef is null for the dictionary with " +
+                throw new DictionaryNotLoadedException ("The fidDef is null for the dictionary with " +
                     "the dictId " + dictId + ".");
             } else {
 
