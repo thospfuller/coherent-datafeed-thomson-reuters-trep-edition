@@ -17,7 +17,9 @@ import com.reuters.rfa.rdm.RDMInstrument;
 import com.reuters.rfa.rdm.RDMMsgTypes;
 
 /**
- * Front-end for the Thomson Reuters market price service.
+ * Front-end for the Thomson Reuters market maker service.
+ *
+ * @todo Remove the jsonGenerator from here.
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
@@ -25,6 +27,11 @@ public class MarketMakerService
     extends AsynchronousService<MarketMaker>
     implements MarketMakerServiceSpecification {
 
+	public static final String BEAN_NAME = "marketMakerService";
+
+	/**
+	 * @deprecated The jsonGenerator should be removed from this class.
+	 */
     public MarketMakerService(
         RequestMessageBuilderFactory factory,
         Client client,
