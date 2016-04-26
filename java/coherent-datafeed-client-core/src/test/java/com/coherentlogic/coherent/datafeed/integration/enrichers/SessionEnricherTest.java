@@ -30,7 +30,7 @@ public class SessionEnricherTest {
     public void setUp() throws Exception {
         message = (Message<String>) mock (Message.class);
         sessionEnricher = new SessionEnricher(new Session (
-            null, null, null, null, null, null));
+            null, null, null, null, null, null, null));
     }
 
     @After

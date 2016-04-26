@@ -23,6 +23,7 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
@@ -50,6 +51,7 @@ public class SessionTest {
         directoryEntryCache = null;
     private Map<Handle, DictionaryEntry> dictionaryEntryCache = null;
     private Map<Handle, MarketPrice> marketPriceEntryCache = null;
+    private Map<Handle, MarketMaker> marketMakerEntryCache = null;
     private Map<Handle, MarketByOrder> marketByOrderEntryCache = null;
     private Map<Handle, TS1DefEntry> ts1DefEntryMap = null;
     private Map<Handle, TimeSeriesEntries> timeSeriesEntryMap = null;
@@ -62,6 +64,7 @@ public class SessionTest {
         directoryEntryCache = mock (Map.class);
         dictionaryEntryCache = mock (Map.class);
         marketPriceEntryCache = mock (Map.class);
+        marketMakerEntryCache = mock (Map.class);
         ts1DefEntryMap = mock (Map.class);
         nameToDirectoryMap = new HashMap<String, DirectoryEntry> ();
         timeSeriesEntryMap = mock (Map.class);
@@ -70,6 +73,7 @@ public class SessionTest {
             directoryEntryCache,
             dictionaryEntryCache,
             marketPriceEntryCache,
+            marketMakerEntryCache,
             marketByOrderEntryCache,
             ts1DefEntryMap,
             timeSeriesEntryMap
@@ -357,6 +361,7 @@ public class SessionTest {
             directoryEntryCache,
             dictionaryEntryCache,
             marketPriceEntryCache,
+            marketMakerEntryCache,
             marketByOrderEntryCache,
             ts1DefEntryMap,
             timeSeriesEntryMap
@@ -426,6 +431,7 @@ public class SessionTest {
             directoryEntryCache,
             dictionaryEntryCache,
             marketPriceEntryCache,
+            marketMakerEntryCache,
             marketByOrderEntryCache,
             ts1DefEntryMap,
             timeSeriesEntryMap
