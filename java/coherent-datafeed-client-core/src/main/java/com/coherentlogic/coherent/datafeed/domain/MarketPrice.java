@@ -60,25 +60,25 @@ public class MarketPrice
     /**
      * BID: REAL
      */
-    @XStreamAlias(BID)
+    @XStreamAlias(MarketPriceConstants.BID)
     private BigDecimal bid = null;
 
     /**
      * BID: REAL
      */
-    @XStreamAlias(BID_1)
+    @XStreamAlias(MarketPriceConstants.BID_1)
     private BigDecimal bid1 = null;
 
     /**
      * BID: REAL
      */
-    @XStreamAlias(BID_2)
+    @XStreamAlias(MarketPriceConstants.BID_2)
     private BigDecimal bid2 = null;
 
     /**
      * ASK: REAL
      */
-    @XStreamAlias(ASK)
+    @XStreamAlias(MarketPriceConstants.ASK)
     private BigDecimal ask = null;
 
     /**
@@ -178,19 +178,19 @@ public class MarketPrice
     @XStreamAlias(HST_CLOSE)
     private BigDecimal historicClose = null;
 
-    @XStreamAlias(NEWS)
+    @XStreamAlias(MarketPriceConstants.NEWS)
     private String news = null;
 
-    @XStreamAlias(NEWS_TIME)
+    @XStreamAlias(MarketPriceConstants.NEWS_TIME)
     private Long newsTime = null;
 
     @XStreamAlias(ACVOL_1)
     private BigInteger volumeAccumulated = null;
 
-    @XStreamAlias(EARNINGS)
+    @XStreamAlias(MarketPriceConstants.EARNINGS)
     private BigDecimal earnings = null;
 
-    @XStreamAlias(YIELD)
+    @XStreamAlias(MarketPriceConstants.YIELD)
     private BigDecimal yield = null;
 
     @XStreamAlias(PERATIO)
@@ -484,10 +484,10 @@ public class MarketPrice
     @XStreamAlias(ADJUST_CLS)
     private BigDecimal adjustedClose = null;
 
-    @XStreamAlias(WEIGHTING)
+    @XStreamAlias(MarketPriceConstants.WEIGHTING)
     private BigDecimal weighting = null;
 
-    @XStreamAlias(STOCK_TYPE)
+    @XStreamAlias(MarketPriceConstants.STOCK_TYPE)
     private String stockType = null;
 
     @XStreamAlias(IMP_VOLT)
@@ -626,7 +626,7 @@ public class MarketPrice
     @XStreamAlias(OFF_CLOSE)
     private BigDecimal officialClosingPrice = null;
 
-    @XStreamAlias(QUOTE_DATE)
+    @XStreamAlias(MarketPriceConstants.QUOTE_DATE)
     private Long quoteDate = null;
 
     @XStreamAlias(VWAP)
@@ -641,7 +641,7 @@ public class MarketPrice
     /**
      * International Security Identification Number code (ISIN).
      */
-    @XStreamAlias(ISIN_CODE)
+    @XStreamAlias(MarketPriceConstants.ISIN_CODE)
     private String isinCode = null;
 
 //    @XStreamAlias(MNEMONIC)
@@ -987,7 +987,7 @@ public class MarketPrice
 
     public static final String BID = "bid";
 
-    @RFAType(type=BID)
+    @RFAType(type=MarketPriceConstants.BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBid(BigDecimal bid) {
 
@@ -995,7 +995,7 @@ public class MarketPrice
 
         this.bid = bid;
 
-        firePropertyChange(BID, oldValue, bid);
+        firePropertyChange(MarketPrice.BID, oldValue, bid);
     }
 
     @UsingKey(type=BID_1)
@@ -1519,7 +1519,7 @@ public class MarketPrice
 
     private static final String YIELD = "yield";
 
-    @RFAType(type=YIELD)
+    @RFAType(type=MarketPriceConstants.YIELD)
     @Adapt(using=OMMNumericAdapter.class)
     public void setYield(BigDecimal yield) {
 
@@ -2981,7 +2981,7 @@ public class MarketPrice
         firePropertyChange(MarketPrice.WEIGHTING, oldValue, weighting);
     }
 
-    @UsingKey(type=STOCK_TYPE)
+    @UsingKey(type=MarketPriceConstants.STOCK_TYPE)
     public String getStockType() {
         return stockType;
     }
