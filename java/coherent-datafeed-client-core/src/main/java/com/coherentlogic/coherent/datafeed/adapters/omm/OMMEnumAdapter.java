@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.adapters.omm;
 
 import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
 import com.reuters.rfa.dictionary.FieldDictionary;
+import com.reuters.rfa.omm.OMMData;
 import com.reuters.rfa.omm.OMMEnum;
 import com.reuters.rfa.omm.OMMFieldEntry;
 
@@ -13,7 +14,7 @@ import com.reuters.rfa.omm.OMMFieldEntry;
 public class OMMEnumAdapter
     extends OMMFieldEntryAdapter<OMMEnum> {
 
-    public static final String BEAN_NAME = "ommEnumAdapter";
+    public static final String BEAN_NAME = "ommEnumAdapter", YES = "Y", NO = "N";
 
     public OMMEnumAdapter(
         FieldDictionary fieldDictionary,
@@ -45,9 +46,19 @@ public class OMMEnumAdapter
             result = enumValue;
         else if (String.class.equals(type))
             result = fieldDictionary.expandedValueFor(fieldId, enumValue);
-        else
-            throw new ConversionFailedException("Cannot cast to type " + type +
-                ".");
+        else if (Boolean.class.equals(type)) {
+
+            String expandedValue = fieldDictionary.expandedValueFor(fieldId, enumValue);
+
+            result = null;
+
+            if (YES.equals(expandedValue))
+                result = Boolean.TRUE;
+            else if (NO.equals(expandedValue))
+                result = Boolean.FALSE;
+
+        } else
+            throw new ConversionFailedException("Cannot cast " + fieldEntry + " to type " + type + ".");
 
         return type.cast(result);
     }
