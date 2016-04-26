@@ -63,18 +63,15 @@ public class StatusResponse extends RFABean {
         this.text = text;
     }
 
-//    @UsingKey(type=CODE)
     public String getCode() {
         return code;
     }
 
-//    @RFAType(type=CODE)
-//    @Adapt(using=OMMNumericAdapter.class)
     public void setCode(String code) {
 
         String oldValue = this.code;
 
-        if (oldValue == null || (oldValue != null && !oldValue.equals(code))) {
+        if (differs (oldValue, code)) {
 
             this.code = code;
 
@@ -97,7 +94,7 @@ public class StatusResponse extends RFABean {
 
         String oldValue = this.streamState;
 
-        if (oldValue == null || (oldValue != null && !oldValue.equals(streamState))) {
+        if (differs (oldValue, streamState)) {
 
             this.streamState = streamState;
 
@@ -112,21 +109,15 @@ public class StatusResponse extends RFABean {
         return this;
     }
 
-//    @UsingKey(type=DATA_STATE_OK)
-//    public boolean isDataStateOK() {
-//        return dataState;
-//    }
-
     public String getDataState() {
         return dataState;
     }
 
-    //    @RFAType(type=DATA_STATE_OK)
     public void setDataState(String dataState) {
 
         String oldValue = this.dataState;
 
-        if (oldValue == null || (oldValue != null && !oldValue.equals(dataState))) {
+        if (differs (oldValue, dataState)) {
 
             this.dataState = dataState;
 
@@ -152,7 +143,7 @@ public class StatusResponse extends RFABean {
 
         String oldValue = this.text;
 
-        if (oldValue == null || (oldValue != null && !oldValue.equals(text))) {
+        if (differs (oldValue, text)) {
 
             this.text = text;
 
