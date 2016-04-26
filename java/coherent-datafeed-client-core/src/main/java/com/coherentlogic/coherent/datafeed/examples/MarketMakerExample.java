@@ -2,9 +2,8 @@ package com.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_SERVICE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX_PATH;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DICTIONARY_SERVICE;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_MAKER_SERVICE;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_MAKER_SERVICE_GATEWAY;
 
 import java.util.List;
 
@@ -19,13 +18,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.FieldDictionaryHolder;
-import com.coherentlogic.coherent.datafeed.services.MarketMakerService;
+import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceSpecification;
+import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -63,45 +66,86 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
 //
 //        applicationContext.registerShutdownHook();
 
+        final MainUI mainUI = applicationContext.getBean(MainUI.class);
+
+        new Thread (
+            new Runnable () {
+                @Override
+                public void run() {
+                    mainUI.mainFrame.pack();
+                    mainUI.mainFrame.setVisible(true);
+                }
+            }
+        ).start();
+
         AuthenticationServiceSpecification authenticationService =
             (AuthenticationServiceSpecification) applicationContext.getBean(
                 AUTHENTICATION_SERVICE);
 
-        MarketMakerService marketMakerService = (MarketMakerService)
-            applicationContext.getBean(MARKET_MAKER_SERVICE);
+        final FrameworkEventListenerAdapter frameworkEventListenerAdapter =
+            (FrameworkEventListenerAdapter)
+                applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
+
+        MarketMakerServiceSpecification marketMakerService = (MarketMakerServiceSpecification)
+            applicationContext.getBean(MARKET_MAKER_SERVICE_GATEWAY);
+
+        final PauseResumeService pauseResumeService = new PauseResumeService ();
+
+        frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
+            new FrameworkEventListener() {
+                @Override
+                public void onEventReceived(Session session) {
+                    pauseResumeService.resume(true);
+                }
+            }
+        );
+
+        frameworkEventListenerAdapter.addInitialisationFailedListeners (
+            new FrameworkEventListener () {
+                @Override
+                public void onEventReceived(Session session) {
+                    pauseResumeService.resume(false);
+                }
+        });
 
         // This needs to be set in the operating system environment variables.
         String dacsId = System.getenv(DACS_ID);
 
-        authenticationService.login(dacsId);
+        Handle loginHandle = authenticationService.login(dacsId);
 
-        Handle handle = authenticationService.getHandle();
+        log.info("main thread: " + Thread.currentThread());
+
+        boolean result = pauseResumeService.pause();
+
+        log.info("result: " + result);
+
+        System.err.println("Before!");
 
         List<Handle> itemHandles = marketMakerService.query(
             Constants.dELEKTRON_DD,
-            handle,
+            loginHandle,
             "GOOG.O",
             "MSFT.O",
             "ODFL.OQ",
             "LKQ.OQ"
         );
 
+        System.err.println("After!");
+
         for (Handle nextHandle : itemHandles)
             log.debug("nextHandle: " + nextHandle);
 
-        FieldDictionaryHolder fieldDictionaryHolder =
-            (FieldDictionaryHolder) applicationContext.getBean(DICTIONARY_SERVICE);
-
-        log.info("fieldDictionary: " + fieldDictionaryHolder.getFieldDictionary());
-
         long ctr = 0;
 
-        final long oneHour = 60 * 60 * 1000;
+        final long wait = 5 * 1000;
 
         while (true) {
-            String next = marketMakerService.getNextUpdateAsJSON(oneHour);
 
-            System.out.println ("next[" + ctr + "]: " + next);
+            Object marketMaker = marketMakerService.getNextUpdate(wait);
+
+            if (ctr % 50 == 0) {
+                System.out.println ("next[" + ctr + "]: " + marketMaker);
+            }
 
             ctr++;
         }
