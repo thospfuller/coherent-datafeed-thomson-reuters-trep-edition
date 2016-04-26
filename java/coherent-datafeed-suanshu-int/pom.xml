@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.coherentlogic.coherent.datafeed</groupId>
+        <artifactId>client</artifactId>
+        <version>1.0.3-RELEASE</version>
+    </parent>
+
+    <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+    <artifactId>coherent-datafeed-suanshu-int</artifactId>
+    <version>${project.parent.version}</version>
+    <packaging>jar</packaging>
+    <name>coherent-datafeed-suanshu-int</name>
+    <description>Integration of the Coherent Datafeed with the Suan Shu Mathematics API.</description>
+    <url>www.coherentlogic.com</url>
+
+    <developers>
+        <developer>
+            <name>Support</name>
+            <email>support@coherentlogic.com</email>
+            <id>support</id>
+            <organization>Coherent Logic Limited</organization>
+            <organizationUrl>www.coherentlogic.com</organizationUrl>
+            <url>www.coherentlogic.com</url>
+            <timezone>+1</timezone>
+            <roles>
+                <role>Support</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <repositories>
+        <repository>
+            <id>nm-repo</id>
+            <name>Numerical Method's Maven Repository</name>
+            <url>http://repo.numericalmethod.com/maven/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-client-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.numericalmethod</groupId>
+            <artifactId>suanshu</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.numericalmethod</groupId>
+            <artifactId>algoquant</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
+                <version>2.3.2</version> <configuration> <source>1.7</source> <target>1.7</target> 
+                </configuration> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-source-plugin</artifactId> <executions> <execution> <id>attach-sources</id> 
+                <goals> <goal>jar</goal> </goals> </execution> </executions> </plugin -->
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,3 @@
+https://github.com/granthenke/storm-spring
+
+https://github.com/ptgoetz/storm-jms/blob/master/examples/src/main/java/org/apache/storm/jms/example/ExampleJmsTopology.java
