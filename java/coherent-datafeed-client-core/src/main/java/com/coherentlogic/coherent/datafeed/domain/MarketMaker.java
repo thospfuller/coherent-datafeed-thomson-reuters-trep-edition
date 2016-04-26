@@ -1,12 +1,14 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_MAKER;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_PRICE;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
@@ -18,6 +20,7 @@ import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Entity
+@Table(name=MARKET_MAKER)
 @XStreamAlias(MARKET_MAKER)
 public class MarketMaker extends AbstractAdvancedCommonProperties
     implements MarketPriceConstants {
@@ -78,55 +81,99 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         this.orders = orders;
     }
 
+    @UsingKey(type=MarketPriceConstants.OFFCL_CODE)
     public String getOfficialCode() {
         return officialCode;
     }
 
+    public static final String OFFICIAL_CODE = "officialCode";
 
+    @RFAType(type=MarketPriceConstants.OFFCL_CODE)
+    @Adapt(using=OMMDataBufferAdapter.class)
     public void setOfficialCode(String officialCode) {
+
+        String oldValue = this.officialCode;
+
         this.officialCode = officialCode;
+
+        firePropertyChange(MarketMaker.OFFICIAL_CODE, oldValue, officialCode);
     }
 
-    
+    @UsingKey(type=MarketPriceConstants.NASDSTATUS)
     public String getNasdStatus() {
         return nasdStatus;
     }
 
+    public static final String NASD_STATUS = "nasdStatus";
 
+    @RFAType(type=MarketPriceConstants.NASDSTATUS)
+    @Adapt(using=OMMEnumAdapter.class)
     public void setNasdStatus(String nasdStatus) {
+
+        String oldValue = this.nasdStatus;
+
         this.nasdStatus = nasdStatus;
+
+        firePropertyChange(MarketMaker.NASD_STATUS, oldValue, nasdStatus);
     }
 
-
+    @UsingKey(type=MarketPriceConstants.LOT_SIZE_A)
     public BigDecimal getLotSize() {
         return lotSize;
     }
 
+    public static final String LOT_SIZE = "lotSize";
 
+    /**
+     * todo: According to the TR example this is, in fact LOT_SIZE_A, so check that other methods that we have use
+     *       the name setLotSize and NOT setLotSizeA.
+     */
+    @RFAType(type=MarketPriceConstants.LOT_SIZE_A)
+    @Adapt(using=OMMNumericAdapter.class)
     public void setLotSize(BigDecimal lotSize) {
+
+        BigDecimal oldValue = this.lotSize;
+
         this.lotSize = lotSize;
+
+        firePropertyChange(MarketMaker.LOT_SIZE, oldValue, lotSize);
     }
 
-
+    @UsingKey(type=MarketPriceConstants.OFF_CD_IND)
     public String getOfficialCodeIndicator() {
         return officialCodeIndicator;
     }
 
+    public static final String OFFICIAL_CODE_INDICATOR = "officialCodeIndicator";
 
+    @RFAType(type=MarketPriceConstants.OFF_CD_IND)
+    @Adapt(using=OMMEnumAdapter.class)
     public void setOfficialCodeIndicator(String officialCodeIndicator) {
+
+        String oldValue = this.officialCodeIndicator;
+
         this.officialCodeIndicator = officialCodeIndicator;
+
+        firePropertyChange(MarketMaker.OFFICIAL_CODE_INDICATOR, oldValue, officialCodeIndicator);
     }
 
-
+    @UsingKey(type=MarketPriceConstants.LIST_MKT)
     public String getListingMarket() {
         return listingMarket;
     }
 
+    public static final String LISTING_MARKET = "listingMarket";
 
+    @RFAType(type=MarketPriceConstants.LIST_MKT)
+    @Adapt(using=OMMDataBufferAdapter.class)
     public void setListingMarket(String listingMarket) {
-        this.listingMarket = listingMarket;
-    }
 
+        String oldValue = this.listingMarket;
+
+        this.listingMarket = listingMarket;
+
+        firePropertyChange(MarketMaker.LISTING_MARKET, oldValue, listingMarket);
+    }
 
     public String getInstrumentClass() {
         return instrumentClass;
@@ -169,18 +216,6 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
     public Map<String, Order> getOrders() {
         return orders;
-    }
-
-    @Override
-    public String toString() {
-        return "MarketMaker [officialCode=" + officialCode + ", nasdStatus="
-            + nasdStatus + ", lotSize=" + lotSize
-            + ", officialCodeIndicator=" + officialCodeIndicator
-            + ", listingMarket=" + listingMarket + ", instrumentClass="
-            + instrumentClass + ", periodCode=" + periodCode
-            + ", financialStatusIndicator=" + financialStatusIndicator
-            + ", marketStatusIndicator=" + marketStatusIndicator
-            + ", orders=" + orders + "]";
     }
 
     /**
@@ -389,21 +424,6 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         @Adapt(using=OMMDateTimeAdapter.class)
         public void setPriortyDate(Long priortyDate) {
             this.priortyDate = priortyDate;
-        }
-
-        @Override
-        public String toString() {
-            return "Order [bid=" + bid + ", ask=" + ask + ", bidSize="
-                + bidSize + ", askSize=" + askSize + ", marketMakerName="
-                + marketMakerName + ", marketMakerId=" + marketMakerId
-                + ", askTimeMillis=" + askTimeMillis
-                + ", lastActivityTimeMillis=" + lastActivityTimeMillis
-                + ", bidTimeMillis=" + bidTimeMillis
-                + ", primaryMarketMaker=" + primaryMarketMaker
-                + ", marketMakerMode=" + marketMakerMode
-                + ", marketMakerState=" + marketMakerState
-                + ", priorityTimeMillis=" + priorityTimeMillis
-                + ", priortyDate=" + priortyDate + "]";
         }
     }
 }
