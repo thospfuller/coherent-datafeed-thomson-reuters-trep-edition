@@ -38,9 +38,7 @@ public class AdvancedClient extends Client {
         AuthenticationServiceSpecification authenticationService =
             advancedClient.getAuthenticationService();
 
-        authenticationService.login("CoherentLogic_Fuller");
-
-        Handle handle = authenticationService.getHandle();
+        Handle handle = authenticationService.login("CoherentLogic_Fuller");
 
         MarketPriceServiceSpecification marketPriceService =
             advancedClient.getMarketPriceService();
