@@ -168,6 +168,7 @@
         <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
         <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
         <constructor-arg name="marketPriceEntryCache" ref="marketPriceEntryCache"/>
+        <constructor-arg name="marketMakerEntryCache" ref="marketMakerEntryCache"/>
         <constructor-arg name="marketByOrderEntryCache" ref="marketByOrderEntryCache"/>
         <constructor-arg name="ts1DefEntryCache" ref="ts1DefEntryCache"/>
         <constructor-arg name="timeSeriesEntryCache" ref="timeSeriesEntryCache"/>
@@ -257,11 +258,24 @@
         <property name="requestChannel" ref="onMarketPriceAddSessionToHeadersChannel"/>
     </bean>
 
+    <bean id="marketMakerEventDrivenEndpoint"
+     class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
+        <property name="requestChannel" ref="onMarketMakerAddSessionToHeadersChannel"/>
+    </bean>
+
     <bean id="marketPriceService" class="com.coherentlogic.coherent.datafeed.services.MarketPriceService"
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketPriceEventDrivenEndpoint"/>
         <constructor-arg name="messageConsumer" ref="marketPriceConsumer"/>
+        <constructor-arg name="jsonGenerator" ref="jsonAdapter"/>
+    </bean>
+
+    <bean id="marketMakerService" class="com.coherentlogic.coherent.datafeed.services.MarketMakerService"
+     depends-on="loggingService">
+        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
+        <constructor-arg name="client" ref="marketMakerEventDrivenEndpoint"/>
+        <constructor-arg name="messageConsumer" ref="marketMakerConsumer"/>
         <constructor-arg name="jsonGenerator" ref="jsonAdapter"/>
     </bean>
 
@@ -348,6 +362,16 @@
         <constructor-arg ref="marketPriceAdapter"/>
      </bean>
 
+    <bean id="refreshMarketMakerMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketMakerMessageProcessor">
+        <constructor-arg ref="marketMakerAdapter"/>
+     </bean>
+
+    <bean id="updateMarketMakerMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketMakerMessageProcessor">
+        <constructor-arg ref="marketMakerAdapter"/>
+     </bean>
+
     <bean id="refreshMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
@@ -423,8 +447,9 @@
     <!-- bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
     <bean id="marketByOrderOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory"/>
-    <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/>
-    <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/ -->
+    <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/ -->
+
+    <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
 
     <bean id="statusResponseAdapter"
      class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter">
@@ -444,6 +469,12 @@
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
+    <bean id="marketMakerOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter.OrderAdapter">
+        <constructor-arg name="orderFactory" ref="marketMakerOrderFactory"/>
+        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+    </bean>
+
     <bean id="marketByOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketByOrderAdapter">
         <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
@@ -455,6 +486,7 @@
         <constructor-arg name="marketMakerFactory" ref="marketMakerFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+        <constructor-arg name="orderAdapter" ref="marketMakerOrderAdapter"/>
     </bean>
 
     <!-- bean id="ommStateTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTransformer"/ -->
@@ -533,6 +565,10 @@
 
     <bean id="marketPriceMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.MarketPriceMessageEnricher">
         <constructor-arg name="marketPriceCache" ref="marketPriceCache"/>
+    </bean>
+
+    <bean id="marketMakerMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.MarketMakerMessageEnricher">
+        <constructor-arg name="marketMakerCache" ref="marketMakerCache"/>
     </bean>
 
     <bean id="marketByOrderMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.MarketByOrderMessageEnricher">

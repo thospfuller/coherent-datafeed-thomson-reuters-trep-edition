@@ -45,6 +45,9 @@
         <local-cache name="marketPriceCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
+        <local-cache name="marketMakerCache">
+            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
+        </local-cache>
         <local-cache name="marketByOrderCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>

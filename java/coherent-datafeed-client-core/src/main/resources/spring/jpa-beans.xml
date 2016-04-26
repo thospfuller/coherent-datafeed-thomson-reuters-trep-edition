@@ -41,6 +41,7 @@
         <property name="annotatedClasses">
             <util:list>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.Sample</value>
             </util:list>

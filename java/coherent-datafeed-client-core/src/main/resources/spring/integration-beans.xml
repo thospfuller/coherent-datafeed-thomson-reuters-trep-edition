@@ -25,6 +25,7 @@
     <import resource="statusresponse-workflow-beans.xml"/>
     <import resource="authentication-workflow-beans.xml"/>
     <import resource="marketprice-workflow-beans.xml"/>
+    <import resource="marketmaker-workflow-beans.xml"/>
     <import resource="market-by-order-workflow-beans.xml"/>
     <import resource="dictionary-workflow-beans.xml"/>
     <import resource="directory-workflow-beans.xml"/>
