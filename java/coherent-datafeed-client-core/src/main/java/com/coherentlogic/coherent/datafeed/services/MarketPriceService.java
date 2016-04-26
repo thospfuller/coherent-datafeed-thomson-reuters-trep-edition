@@ -25,6 +25,9 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  *
  * @todo Move the queryCache into the session.
  *
+ * @todo This service should not export data to the JMS queue -- it should put the time series entry into the map and
+ *  return it.
+ *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public class MarketPriceService
