@@ -75,6 +75,9 @@ public class MarketByOrderAdapter
         this.orderAdapter = orderAdapter;
     }
 
+    /**
+     * @deprecated We may be able to remove this method altogether.
+     */
     @Override
     public MarketByOrder adapt (OMMMsg ommMsg) {
 
