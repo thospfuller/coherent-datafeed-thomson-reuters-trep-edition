@@ -259,11 +259,17 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         @XStreamAlias(PRIMARY_MM)
         private Boolean primaryMarketMaker = null;
 
+        /**
+         * TODO: Make this an enum.
+         */
         @XStreamAlias(MM_MODE)
-        private Boolean marketMakerMode = null;
+        private String marketMakerMode = null;
 
+        /**
+         * TODO: Make this an enum.
+         */
         @XStreamAlias(MM_STATE)
-        private Boolean marketMakerState = null;
+        private String marketMakerState = null;
 
         @XStreamAlias(PR_TIM_MS)
         private Long priorityTimeMillis = null;
@@ -276,10 +282,15 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return bid;
         }
 
-        @RFAType(type=BID)
+        @RFAType(type=MarketPriceConstants.BID)
         @Adapt(using=OMMNumericAdapter.class)
         public void setBid(BigDecimal bid) {
+
+        	BigDecimal oldValue = this.bid;
+
             this.bid = bid;
+
+            firePropertyChange(MarketPrice.BID, oldValue, bid);
         }
 
         @UsingKey(type=ASK)
@@ -387,24 +398,24 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         }
 
         @UsingKey(type=MM_MODE)
-        public Boolean getMarketMakerMode() {
+        public String getMarketMakerMode() {
             return marketMakerMode;
         }
 
         @RFAType(type=MM_MODE)
         @Adapt(using=OMMEnumAdapter.class)
-        public void setMarketMakerMode(Boolean marketMakerMode) {
+        public void setMarketMakerMode(String marketMakerMode) {
             this.marketMakerMode = marketMakerMode;
         }
 
         @UsingKey(type=MM_STATE)
-        public Boolean getMarketMakerState() {
+        public String getMarketMakerState() {
             return marketMakerState;
         }
 
         @RFAType(type=MM_STATE)
         @Adapt(using=OMMEnumAdapter.class)
-        public void setMarketMakerState(Boolean marketMakerState) {
+        public void setMarketMakerState(String marketMakerState) {
             this.marketMakerState = marketMakerState;
         }
 

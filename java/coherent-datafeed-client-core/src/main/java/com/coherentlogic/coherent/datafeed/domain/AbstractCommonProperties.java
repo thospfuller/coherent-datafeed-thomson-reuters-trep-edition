@@ -15,39 +15,38 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public abstract class AbstractCommonProperties extends RFABean
-    implements MarketPriceConstants {
+public abstract class AbstractCommonProperties extends RFABean {
 
     /**
      * Product permissions information.
      *
      * PROD_PERM: UINT
      */
-    @XStreamAlias(PROD_PERM)
+    @XStreamAlias(MarketPriceConstants.PROD_PERM)
     private BigInteger permission = null;
 
-    @XStreamAlias(DSPLY_NAME)
+    @XStreamAlias(MarketPriceConstants.DSPLY_NAME)
     private String displayName;
 
-    @XStreamAlias(CURRENCY)
+    @XStreamAlias(MarketPriceConstants.CURRENCY)
     private String currency = null;
 
-    @XStreamAlias(RECORDTYPE)
+    @XStreamAlias(MarketPriceConstants.RECORDTYPE)
     private BigInteger recordType = null;
 
-    @XStreamAlias(RDN_EXCHD2)
+    @XStreamAlias(MarketPriceConstants.RDN_EXCHD2)
     private String exchangeId2 = null;
 
-    @XStreamAlias(PROV_SYMB)
+    @XStreamAlias(MarketPriceConstants.PROV_SYMB)
     private String providerSymbol = null;
 
-    @XStreamAlias(MNEMONIC)
+    @XStreamAlias(MarketPriceConstants.MNEMONIC)
     private String exchangeId = null;
 
     public AbstractCommonProperties () {
     }
 
-    @UsingKey(type=PROD_PERM)
+    @UsingKey(type=MarketPriceConstants.PROD_PERM)
     public BigInteger getPermission() {
         return permission;
     }
@@ -55,13 +54,13 @@ public abstract class AbstractCommonProperties extends RFABean
     /**
      *
      */
-    @RFAType(type=PROD_PERM)
+    @RFAType(type=MarketPriceConstants.PROD_PERM)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPermission(BigInteger permission) {
         this.permission = permission;
     }
 
-    @UsingKey(type=DSPLY_NAME)
+    @UsingKey(type=MarketPriceConstants.DSPLY_NAME)
     public String getDisplayName() {
         return displayName;
     }
@@ -69,62 +68,62 @@ public abstract class AbstractCommonProperties extends RFABean
     /**
      * @todo Test this.
      */
-    @RFAType(type=DSPLY_NAME)
+    @RFAType(type=MarketPriceConstants.DSPLY_NAME)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    @UsingKey(type=CURRENCY)
+    @UsingKey(type=MarketPriceConstants.CURRENCY)
     public String getCurrency() {
         return currency;
     }
 
-    @RFAType(type=CURRENCY)
+    @RFAType(type=MarketPriceConstants.CURRENCY)
     @Adapt(using=OMMEnumAdapter.class)
     public void setCurrency(String currency) {
         this.currency = currency;
     }
 
-    @UsingKey(type=RECORDTYPE)
+    @UsingKey(type=MarketPriceConstants.RECORDTYPE)
     public BigInteger getRecordType() {
         return recordType;
     }
 
-    @RFAType(type=RECORDTYPE)
+    @RFAType(type=MarketPriceConstants.RECORDTYPE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setRecordType(BigInteger recordType) {
         this.recordType = recordType;
     }
 
-    @UsingKey(type=RDN_EXCHD2)
+    @UsingKey(type=MarketPriceConstants.RDN_EXCHD2)
     public String getExchangeId2() {
         return exchangeId2;
     }
 
-    @RFAType(type=RDN_EXCHD2)
+    @RFAType(type=MarketPriceConstants.RDN_EXCHD2)
     @Adapt(using=OMMEnumAdapter.class)
     public void setExchangeId2(String exchangeId2) {
         this.exchangeId2 = exchangeId2;
     }
 
-    @UsingKey(type=PROV_SYMB)
+    @UsingKey(type=MarketPriceConstants.PROV_SYMB)
     public String getProviderSymbol() {
         return providerSymbol;
     }
 
-    @RFAType(type=PROV_SYMB)
+    @RFAType(type=MarketPriceConstants.PROV_SYMB)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setProviderSymbol(String providerSymbol) {
         this.providerSymbol = providerSymbol;
     }
 
-    @UsingKey(type=MNEMONIC)
+    @UsingKey(type=MarketPriceConstants.MNEMONIC)
     public String getExchangeId() {
         return exchangeId;
     }
 
-    @RFAType(type=MNEMONIC)
+    @RFAType(type=MarketPriceConstants.MNEMONIC)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setExchangeId(String exchangeId) {
         this.exchangeId = exchangeId;
