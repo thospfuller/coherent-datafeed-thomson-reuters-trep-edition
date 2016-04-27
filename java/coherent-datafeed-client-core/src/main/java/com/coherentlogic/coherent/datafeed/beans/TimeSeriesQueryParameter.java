@@ -1,12 +1,13 @@
 package com.coherentlogic.coherent.datafeed.beans;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.DAILY;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.MONTHLY;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.WEEKLY;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DAILY;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.WEEKLY;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.MONTHLY;
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Constants;
 

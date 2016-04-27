@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.exceptions;
 
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
+
 /**
  * An exception that is thrown when decoding, for example a time series, has
  * failed.

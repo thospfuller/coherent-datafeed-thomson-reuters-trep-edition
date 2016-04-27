@@ -10,9 +10,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.dictionary.FidDef;

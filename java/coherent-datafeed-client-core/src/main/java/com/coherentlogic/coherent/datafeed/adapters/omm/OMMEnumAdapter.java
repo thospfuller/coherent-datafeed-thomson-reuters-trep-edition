@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.adapters.omm;
 
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMData;
 import com.reuters.rfa.omm.OMMEnum;
@@ -56,9 +56,12 @@ public class OMMEnumAdapter
                 result = Boolean.TRUE;
             else if (NO.equals(expandedValue))
                 result = Boolean.FALSE;
+            else throw new ConversionFailedException("The fieldId " + fieldId + " cannot be converted into the type " +
+                type);
 
         } else
-            throw new ConversionFailedException("Cannot cast " + fieldEntry + " to type " + type + ".");
+            throw new ConversionFailedException("The fieldId " + fieldId + " cannot be converted into the type " +
+                type);
 
         return type.cast(result);
     }

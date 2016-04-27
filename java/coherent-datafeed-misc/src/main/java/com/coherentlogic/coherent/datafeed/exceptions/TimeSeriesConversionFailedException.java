@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.exceptions;
 
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
+
 /**
  * An exception that is thrown when the conversion from TR RFA-specific logic to the CL time series fails.
  *

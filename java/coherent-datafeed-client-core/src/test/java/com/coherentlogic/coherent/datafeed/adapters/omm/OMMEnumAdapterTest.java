@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.factories.AbstractDictionaryFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultFieldDictionaryFactory;
 import com.reuters.rfa.dictionary.FieldDictionary;
@@ -95,5 +96,21 @@ public class OMMEnumAdapterTest {
         Boolean result = enumAdapter.adapt(fieldEntry, Boolean.class);
 
         assertFalse (result);
+    }
+
+    @Test(expected=ConversionFailedException.class)
+    public void testAdaptEnumBooleanInvalidValue() {
+
+        OMMFieldEntry fieldEntry = mock (OMMFieldEntry.class);
+
+        OMMEnum data = mock (OMMEnum.class);
+
+        // 5007 : PRIMARY_MM
+        when(fieldEntry.getFieldId()).thenReturn(Short.valueOf("5007"));
+        when(fieldEntry.getData(any(Short.class))).thenReturn(data);
+
+        when(data.getValue()).thenReturn(99);
+
+        Boolean result = enumAdapter.adapt(fieldEntry, Boolean.class);
     }
 }

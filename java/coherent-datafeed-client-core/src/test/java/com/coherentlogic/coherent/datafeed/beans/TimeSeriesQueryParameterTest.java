@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.ts1.TS1Constants;
 

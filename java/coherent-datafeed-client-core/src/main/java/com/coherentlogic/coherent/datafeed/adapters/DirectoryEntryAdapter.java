@@ -16,8 +16,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
 import com.reuters.rfa.common.QualityOfService;
 import com.reuters.rfa.internal.rwf.RwfArrayEntry;
 import com.reuters.rfa.omm.OMMArray;

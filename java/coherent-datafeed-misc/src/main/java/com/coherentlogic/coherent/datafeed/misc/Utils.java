@@ -7,7 +7,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.ImbalancedCollectionsException;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NonNullReferenceExpectedException;

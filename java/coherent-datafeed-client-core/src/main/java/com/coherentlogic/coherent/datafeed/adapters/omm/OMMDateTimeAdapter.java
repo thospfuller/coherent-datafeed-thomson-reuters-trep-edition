@@ -5,7 +5,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMData;
 import com.reuters.rfa.omm.OMMDateTime;

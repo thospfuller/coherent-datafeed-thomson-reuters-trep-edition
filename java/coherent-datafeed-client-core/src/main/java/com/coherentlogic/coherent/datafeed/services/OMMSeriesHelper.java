@@ -5,7 +5,7 @@ import static com.reuters.rfa.rdm.RDMDictionary.Summary.DictionaryId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.UnexpectedOMMTypeException;
 import com.coherentlogic.coherent.datafeed.integration.transformers.OMMSeriesTransformer;
