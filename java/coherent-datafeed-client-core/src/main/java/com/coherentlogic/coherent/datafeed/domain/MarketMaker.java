@@ -286,7 +286,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         @Adapt(using=OMMNumericAdapter.class)
         public void setBid(BigDecimal bid) {
 
-        	BigDecimal oldValue = this.bid;
+            BigDecimal oldValue = this.bid;
 
             this.bid = bid;
 
