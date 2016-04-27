@@ -119,8 +119,6 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
 
         log.info("result: " + result);
 
-        System.err.println("Before!");
-
         List<Handle> itemHandles = marketMakerService.query(
             Constants.dELEKTRON_DD,
             loginHandle,
@@ -129,8 +127,6 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
             "ODFL.OQ",
             "LKQ.OQ"
         );
-
-        System.err.println("After!");
 
         for (Handle nextHandle : itemHandles)
             log.debug("nextHandle: " + nextHandle);
