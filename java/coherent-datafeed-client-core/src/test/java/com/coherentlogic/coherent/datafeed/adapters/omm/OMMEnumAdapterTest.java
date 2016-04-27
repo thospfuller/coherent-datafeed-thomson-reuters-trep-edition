@@ -98,6 +98,10 @@ public class OMMEnumAdapterTest {
         assertFalse (result);
     }
 
+    /**
+     * TODO: Review this test as right now the OMMEnumAdapter is returning null when the data is not valid and it makes
+     *       sense to throw an exception.
+     */
     @Test(expected=ConversionFailedException.class)
     public void testAdaptEnumBooleanInvalidValue() {
 
@@ -112,5 +116,7 @@ public class OMMEnumAdapterTest {
         when(data.getValue()).thenReturn(99);
 
         Boolean result = enumAdapter.adapt(fieldEntry, Boolean.class);
+
+        assertNull(result);
     }
 }

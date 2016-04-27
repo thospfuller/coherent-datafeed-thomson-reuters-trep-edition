@@ -1,8 +1,10 @@
 package com.coherentlogic.coherent.datafeed.adapters.omm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
 import com.reuters.rfa.dictionary.FieldDictionary;
-import com.reuters.rfa.omm.OMMData;
 import com.reuters.rfa.omm.OMMEnum;
 import com.reuters.rfa.omm.OMMFieldEntry;
 
@@ -11,8 +13,7 @@ import com.reuters.rfa.omm.OMMFieldEntry;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class OMMEnumAdapter
-    extends OMMFieldEntryAdapter<OMMEnum> {
+public class OMMEnumAdapter extends OMMFieldEntryAdapter<OMMEnum> {
 
     public static final String BEAN_NAME = "ommEnumAdapter", YES = "Y", NO = "N";
 
@@ -52,12 +53,15 @@ public class OMMEnumAdapter
 
             result = null;
 
-            if (YES.equals(expandedValue))
+            if (enumValue == 0) { // UNDEFINED
+                result = null;
+            } else if (YES.equals(expandedValue))
                 result = Boolean.TRUE;
             else if (NO.equals(expandedValue))
                 result = Boolean.FALSE;
-            else throw new ConversionFailedException("The fieldId " + fieldId + " cannot be converted into the type " +
-                type);
+            else // INVALID
+                throw new ConversionFailedException ("The fieldId " + fieldId + " cannot be converted into the type " + type + " and hence "
+                    + "null will be returned as this is undefined.");
 
         } else
             throw new ConversionFailedException("The fieldId " + fieldId + " cannot be converted into the type " +
