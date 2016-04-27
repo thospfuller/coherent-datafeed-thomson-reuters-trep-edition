@@ -12,8 +12,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class AttribInfo extends SerializableBean
-    implements MarketPriceConstants, IdentitySpecification<Integer> {
+public class AttribInfo extends SerializableBean implements IdentitySpecification<Integer> {
 
 //    ServiceName: dELEKTRON_DD
 //    ServiceId: 8008
@@ -24,13 +23,13 @@ public class AttribInfo extends SerializableBean
 
     private Integer filter = null;
 
-    @XStreamAlias(SVC_NAME)
+    @XStreamAlias(MarketPriceConstants.SVC_NAME)
     private String serviceName = null;
 
-    @XStreamAlias(NAME)
+    @XStreamAlias(MarketPriceConstants.NAME)
     private String name = null;
 
-    @XStreamAlias(SVC_ID)
+    @XStreamAlias(MarketPriceConstants.SVC_ID)
     private Integer serviceId = null;
 
     /**
@@ -38,10 +37,10 @@ public class AttribInfo extends SerializableBean
      *
      * RDMUser.NameType.toString(nameType)
      */
-    @XStreamAlias(NAME_TYPE)
+    @XStreamAlias(MarketPriceConstants.NAME_TYPE)
     private String nameType = null;
 
-    @XStreamAlias(ELEMENTS)
+    @XStreamAlias(MarketPriceConstants.ELEMENTS)
     private Map<String, String> elements;
 
     public AttribInfo() {
@@ -52,16 +51,16 @@ public class AttribInfo extends SerializableBean
         this.elements = elements;
     }
 
+    public static final String ELEMENTS = "elements";
+
     public void setElements(Map<String, String> elements) {
 
         Map<String, String> oldValue = this.elements;
 
-        if (RFABean.differs (oldValue, elements)) {
+        this.elements = elements;
 
-            this.elements = elements;
+        firePropertyChange(ELEMENTS, oldValue, elements);
 
-            firePropertyChange("elements", oldValue, elements);
-        }
     }
 
     public AttribInfo withElements (Map<String, String> elements) {
@@ -87,16 +86,15 @@ public class AttribInfo extends SerializableBean
         return filter;
     }
 
+    public static final String FILTER = "filter";
+
     public void setFilter(Integer filter) {
 
         Integer oldValue = this.filter;
 
-        if (RFABean.differs(oldValue, filter)) {
+        this.filter = filter;
 
-            this.filter = filter;
-
-            firePropertyChange("filter", oldValue, filter);
-        }
+        firePropertyChange(FILTER, oldValue, filter);
     }
 
     public AttribInfo withFilter(Integer filter) {
@@ -111,17 +109,16 @@ public class AttribInfo extends SerializableBean
         return id;
     }
 
+    public static final String ID = "id";
+
     @Override
     public void setId(Integer id) {
 
         Integer oldValue = id;
 
-        if (RFABean.differs(oldValue, id)) {
+        this.id = id;
 
-            this.id = id;
-
-            firePropertyChange("id", oldValue, id);
-        }
+        firePropertyChange(ID, oldValue, id);
     }
 
     public AttribInfo withId(Integer id) {
@@ -135,16 +132,15 @@ public class AttribInfo extends SerializableBean
         return serviceName;
     }
 
+    public static final String SERVICE_NAME = "serviceName";
+
     public void setServiceName(String serviceName) {
 
         String oldValue = this.serviceName;
 
-        if (RFABean.differs (oldValue, serviceName)) {
+        this.serviceName = serviceName;
 
-            this.serviceName = serviceName;
-
-            firePropertyChange("serviceName", oldValue, serviceName);
-        }
+        firePropertyChange(SERVICE_NAME, oldValue, serviceName);
     }
 
     public AttribInfo withServiceName(String serviceName) {
@@ -158,16 +154,15 @@ public class AttribInfo extends SerializableBean
         return name;
     }
 
+    public static final String NAME = "name";
+
     public void setName(String name) {
 
         String oldValue = this.name;
 
-        if (RFABean.differs (oldValue, name)) {
+        this.name = name;
 
-            this.name = name;
-
-            firePropertyChange("name", oldValue, name);
-        }
+        firePropertyChange(NAME, oldValue, name);
     }
 
     public AttribInfo withName(String name) {
@@ -181,16 +176,15 @@ public class AttribInfo extends SerializableBean
         return serviceId;
     }
 
+    public static final String SERVICE_ID = "serviceId";
+
     public void setServiceId(Integer serviceId) {
 
         Integer oldValue = this.serviceId;
 
-        if (RFABean.differs (oldValue, serviceId)) {
+        this.serviceId = serviceId;
 
-            this.serviceId = serviceId;
-
-            firePropertyChange("serviceId", oldValue, serviceId);
-        }
+        firePropertyChange(SERVICE_ID, oldValue, serviceId);
     }
 
     public AttribInfo withServiceId(Integer serviceId) {
@@ -204,16 +198,15 @@ public class AttribInfo extends SerializableBean
         return nameType;
     }
 
+    public static final String NAME_TYPE = "nameType";
+
     public void setNameType(String nameType) {
 
         String oldValue = this.nameType;
 
-        if (RFABean.differs (oldValue, nameType)) {
+        this.nameType = nameType;
 
-            this.nameType = nameType;
-
-            firePropertyChange("nameType", oldValue, nameType);
-        }
+        firePropertyChange(NAME_TYPE, oldValue, nameType);
     }
 
     public AttribInfo withNameType(String nameType) {
@@ -221,77 +214,5 @@ public class AttribInfo extends SerializableBean
         setNameType(nameType);
 
         return this;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result
-            + ((elements == null) ? 0 : elements.hashCode());
-        result = prime * result + ((filter == null) ? 0 : filter.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result
-            + ((nameType == null) ? 0 : nameType.hashCode());
-        result = prime * result
-            + ((serviceId == null) ? 0 : serviceId.hashCode());
-        result = prime * result
-            + ((serviceName == null) ? 0 : serviceName.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AttribInfo other = (AttribInfo) obj;
-        if (elements == null) {
-            if (other.elements != null)
-                return false;
-        } else if (!elements.equals(other.elements))
-            return false;
-        if (filter == null) {
-            if (other.filter != null)
-                return false;
-        } else if (!filter.equals(other.filter))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (nameType == null) {
-            if (other.nameType != null)
-                return false;
-        } else if (!nameType.equals(other.nameType))
-            return false;
-        if (serviceId == null) {
-            if (other.serviceId != null)
-                return false;
-        } else if (!serviceId.equals(other.serviceId))
-            return false;
-        if (serviceName == null) {
-            if (other.serviceName != null)
-                return false;
-        } else if (!serviceName.equals(other.serviceName))
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "AttribInfo [id=" + id + ", filter=" + filter + ", serviceName="
-            + serviceName + ", name=" + name + ", serviceId=" + serviceId
-            + ", nameType=" + nameType + ", elements=" + elements + "]";
     }
 }

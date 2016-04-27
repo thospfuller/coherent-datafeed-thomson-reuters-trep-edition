@@ -1342,7 +1342,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return tickArrow;
     }
 
-    private static final String TICK_ARROW = "tickArrow";
+    public static final String TICK_ARROW = "tickArrow";
 
     @RFAType(type=MarketPriceConstants.PRCTCK_1)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1389,7 +1389,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return tradeTimeMillis;
     }
 
-    private static final String TRADE_TIME_MILLIS = "tradeTimeMillis";
+    public static final String TRADE_TIME_MILLIS = "tradeTimeMillis";
 
     @RFAType(type=MarketPriceConstants.TRDTIM_1)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1407,7 +1407,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return openPrice;
     }
 
-    private static final String OPEN_PRICE = "openPrice";
+    public static final String OPEN_PRICE = "openPrice";
 
     @RFAType(type=MarketPriceConstants.OPEN_PRC)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1425,7 +1425,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicClose;
     }
 
-    private static final String HISTORIC_CLOSE = "historicClose";
+    public static final String HISTORIC_CLOSE = "historicClose";
 
     @RFAType(type=MarketPriceConstants.HST_CLOSE)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1443,7 +1443,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return news;
     }
 
-    private static final String NEWS = "news";
+    public static final String NEWS = "news";
 
     @RFAType(type=MarketPriceConstants.NEWS)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -1461,7 +1461,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return newsTime;
     }
 
-    private static final String NEWS_TIME = "newsTime";
+    public static final String NEWS_TIME = "newsTime";
 
     @RFAType(type=MarketPriceConstants.NEWS_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1479,7 +1479,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return volumeAccumulated;
     }
 
-    private static final String VOLUME_ACCUMULATED = "volumeAccumulated";
+    public static final String VOLUME_ACCUMULATED = "volumeAccumulated";
 
     @RFAType(type=MarketPriceConstants.ACVOL_1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1497,7 +1497,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return earnings;
     }
 
-    private static final String EARNINGS = "earnings";
+    public static final String EARNINGS = "earnings";
 
     @RFAType(type=MarketPriceConstants.EARNINGS)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1515,7 +1515,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yield;
     }
 
-    private static final String YIELD = "yield";
+    public static final String YIELD = "yield";
 
     @RFAType(type=MarketPriceConstants.YIELD)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1551,7 +1551,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return dividendType;
     }
 
-    private static final String DIVIDEND_TYPE = "dividendType";
+    public static final String DIVIDEND_TYPE = "dividendType";
 
     @RFAType(type=MarketPriceConstants.DIVIDENDTP)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1569,7 +1569,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return dividendPayDate;
     }
 
-    private static final String DIVIDEND_PAY_DATE = "dividendPayDate";
+    public static final String DIVIDEND_PAY_DATE = "dividendPayDate";
 
     @RFAType(type=MarketPriceConstants.DIVPAYDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1587,7 +1587,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return exDividendDate;
     }
 
-    private static final String EX_DIVIDEND_DATE = "exDividendDate";
+    public static final String EX_DIVIDEND_DATE = "exDividendDate";
 
     @RFAType(type=MarketPriceConstants.EXDIVDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1605,7 +1605,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return tradePriceQualifier;
     }
 
-    private static final String TRADE_PRICE_QUALIFIER = "tradePriceQualifier";
+    public static final String TRADE_PRICE_QUALIFIER = "tradePriceQualifier";
 
     @RFAType(type=MarketPriceConstants.CTS_QUAL)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1623,7 +1623,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return blockCount;
     }
 
-    private static final String BLOCK_COUNT = "blockCount";
+    public static final String BLOCK_COUNT = "blockCount";
 
     @RFAType(type=MarketPriceConstants.BLKCOUNT)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1641,7 +1641,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return blockVolume;
     }
 
-    private static final String BLOCK_VOLUME = "blockVolume";
+    public static final String BLOCK_VOLUME = "blockVolume";
 
     @RFAType(type=MarketPriceConstants.BLKVOLUM)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1659,12 +1659,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return tradeExchangeId;
     }
 
-//    private static final String 
+    public static final String TRADE_EXCHANGE_ID = "tradeExchangeId";
 
     @RFAType(type=MarketPriceConstants.TRDXID_1)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradeExchangeId(String tradeExchangeId) {
+
+        String oldValue = this.tradeExchangeId;
+
         this.tradeExchangeId = tradeExchangeId;
+
+        firePropertyChange(MarketPrice.TRADE_EXCHANGE_ID, oldValue, tradeExchangeId);
     }
 
     @UsingKey(type=MarketPriceConstants.TRD_UNITS)
@@ -1672,12 +1677,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return tradingUnits;
     }
 
-//    private static final String 
+    public static final String TRADING_UNITS = "tradingUnits";
 
     @RFAType(type=MarketPriceConstants.TRD_UNITS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradingUnits(String tradingUnits) {
+
+        String oldValue = this.tradingUnits;
+
         this.tradingUnits = tradingUnits;
+
+        firePropertyChange(MarketPrice.TRADING_UNITS, oldValue, tradingUnits);
     }
 
     @UsingKey(type=MarketPriceConstants.LOT_SIZE)
@@ -1685,12 +1695,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return lotSize;
     }
 
-//    private static final String 
+    public static final String LOT_SIZE = "lotSize";
 
     @RFAType(type=MarketPriceConstants.LOT_SIZE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLotSize(BigInteger lotSize) {
+
+        BigInteger oldValue = this.lotSize;
+
         this.lotSize = lotSize;
+
+        firePropertyChange(MarketPrice.LOT_SIZE, oldValue, lotSize);
     }
 
     @UsingKey(type=MarketPriceConstants.PCTCHNG)
@@ -1698,12 +1713,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return percentChange;
     }
 
-//    private static final String 
+    public static final String PERCENTAGE_CHANGE = "percentChange";
 
     @RFAType(type=MarketPriceConstants.PCTCHNG)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPercentChange(BigDecimal setPercentChange) {
-        this.percentChange = setPercentChange;
+    public void setPercentChange(BigDecimal percentChange) {
+
+        BigDecimal oldValue = this.percentChange;
+
+        this.percentChange = percentChange;
+
+        firePropertyChange(MarketPrice.PERCENTAGE_CHANGE, oldValue, percentChange);
     }
 
     @UsingKey(type=MarketPriceConstants.OPEN_BID)
@@ -1711,12 +1731,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return openBid;
     }
 
-//    private static final String 
+    public static final String OPEN_BID = "openBid";
 
     @RFAType(type=MarketPriceConstants.OPEN_BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setOpenBid(BigDecimal openBid) {
+
+        BigDecimal oldValue = this.openBid;
+
         this.openBid = openBid;
+
+        firePropertyChange(MarketPrice.OPEN_BID, oldValue, openBid);
     }
 
     @UsingKey(type=MarketPriceConstants.DJTIME)
@@ -1724,12 +1749,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return latestDowJonesNewsStoryTime;
     }
 
-//    private static final String 
+    public static final String LATEST_DOW_JONES_NEWS_STORY_TIME = "latestDowJonesNewsStoryTime";
 
     @RFAType(type=MarketPriceConstants.DJTIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setLatestDowJonesNewsStoryTime(Long time) {
-        this.latestDowJonesNewsStoryTime = time;
+    public void setLatestDowJonesNewsStoryTime(Long latestDowJonesNewsStoryTime) {
+
+        Long oldValue = this.latestDowJonesNewsStoryTime;
+
+        this.latestDowJonesNewsStoryTime = latestDowJonesNewsStoryTime;
+
+        firePropertyChange(MarketPrice.LATEST_DOW_JONES_NEWS_STORY_TIME, oldValue, latestDowJonesNewsStoryTime);
     }
 
     @UsingKey(type=MarketPriceConstants.CLOSE_BID)
@@ -1737,12 +1767,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return closeBid;
     }
 
-//    private static final String 
+    public static final String CLOSE_BID = "closeBid";
 
     @RFAType(type=MarketPriceConstants.CLOSE_BID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setCloseBid(BigDecimal closeBid) {
+
+        BigDecimal oldValue = this.closeBid;
+
         this.closeBid = closeBid;
+
+        firePropertyChange(MarketPrice.CLOSE_BID, oldValue, closeBid);
     }
 
     @UsingKey(type=MarketPriceConstants.CLOSE_ASK)
@@ -1750,12 +1785,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return closeAsk;
     }
 
-//    private static final String 
+    public static final String CLOSE_ASK = "closeAsk";
 
     @RFAType(type=MarketPriceConstants.CLOSE_ASK)
     @Adapt(using=OMMNumericAdapter.class)
     public void setCloseAsk(BigDecimal closeAsk) {
+
+        BigDecimal oldValue = this.closeAsk;
+
         this.closeAsk = closeAsk;
+
+        firePropertyChange(MarketPrice.CLOSE_ASK, oldValue, closeAsk);
     }
 
     @UsingKey(type=MarketPriceConstants.DIVIDEND)
@@ -1763,12 +1803,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return dividend;
     }
 
-//    private static final String 
+    public static final String DIVIDEND = "dividend";
 
     @RFAType(type=MarketPriceConstants.DIVIDEND)
     @Adapt(using=OMMNumericAdapter.class)
     public void setDividend(BigDecimal dividend) {
+
+        BigDecimal oldValue = this.dividend;
+
         this.dividend = dividend;
+
+        firePropertyChange(MarketPrice.DIVIDEND, oldValue, dividend);
     }
 
     @UsingKey(type=MarketPriceConstants.NUM_MOVES)
@@ -1776,12 +1821,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return totalTradesToday;
     }
 
-//    private static final String 
+    public static final String TOTAL_TRADES_TODAY = "totalTradesToday";
 
     @RFAType(type=MarketPriceConstants.NUM_MOVES)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTotalTradesToday(BigInteger totalTradesToday) {
+
+        BigInteger oldValue = this.totalTradesToday;
+
         this.totalTradesToday = totalTradesToday;
+
+        firePropertyChange(MarketPrice.TOTAL_TRADES_TODAY, oldValue, totalTradesToday);
     }
 
     @UsingKey(type=MarketPriceConstants.OFFCL_CODE)
@@ -1789,12 +1839,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return officialCode;
     }
 
-//    private static final String 
+    public static final String OFFICIAL_CODE = "officialCode";
 
     @RFAType(type=MarketPriceConstants.OFFCL_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setOfficialCode(String officialCode) {
+
+        String oldValue = this.officialCode;
+
         this.officialCode = officialCode;
+
+        firePropertyChange(MarketPrice.OFFICIAL_CODE, oldValue, officialCode);
     }
 
     @UsingKey(type=MarketPriceConstants.HSTCLSDATE)
@@ -1802,7 +1857,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicCloseDate;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.HSTCLSDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -1815,7 +1870,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHigh;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRHIGH)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1828,7 +1883,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLow;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRLOW)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1841,7 +1896,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return turnover;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.TURNOVER)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1854,7 +1909,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return bondType;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BOND_TYPE)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1867,7 +1922,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return backgroundPage;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BCKGRNDPAG)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -1880,7 +1935,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearOrContractHighIndicator;
     }
 
-//    private static final String 
+//    public static final String 
 
     /**
      * Requires visual inspection still as I have not seen this value set to
@@ -1900,7 +1955,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearOrContractLowIndicator;
     }
 
-//    private static final String 
+//    public static final String 
 
     /**
      * Requires visual inspection still as I have not seen this value set to
@@ -1920,7 +1975,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return bidNetChange;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BID_NET_CH)
     @Adapt(using=OMMNumericAdapter.class)
@@ -1933,7 +1988,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return bidTick1;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BID_TICK_1)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1946,7 +2001,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return cumExMarker;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.CUM_EX_MKR)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1959,7 +2014,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceCode;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.PRC_QL_CD)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1972,7 +2027,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return nasdStatus;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.NASDSTATUS)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1985,7 +2040,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceCode2;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.PRC_QL2)
     @Adapt(using=OMMEnumAdapter.class)
@@ -1998,7 +2053,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return tradeVolume;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.TRDVOL_1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2011,7 +2066,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return todaysHighBid;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BID_HIGH_1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2024,7 +2079,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return todaysLowBid;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BID_LOW_1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2037,7 +2092,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHighBid;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRBIDHIGH)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2050,7 +2105,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLowBid;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRBIDLOW)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2063,7 +2118,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicalClosingBid;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.HST_CLSBID)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2076,7 +2131,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicalClosingBidDate;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.HSTCLBDDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -2089,7 +2144,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearBidHigh;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRBDHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2102,7 +2157,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearBidLow;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRBDLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2144,7 +2199,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return marketParticipantBidId;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BID_MMID1)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2157,7 +2212,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return marketParticipantAskId;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.ASK_MMID1)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2170,7 +2225,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return optionExchangeId;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.OPTION_XID)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2183,7 +2238,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHighDate;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRHIGHDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -2196,7 +2251,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLowDate;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.YRLOWDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -2209,7 +2264,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return irgPrice;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.IRGPRC)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2222,7 +2277,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return irgVolume;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.IRGVOL)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2235,7 +2290,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return irgPriceType;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.IRGCOND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2248,7 +2303,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceCorrectionTime;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.TIMCOR)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -2261,7 +2316,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return insertPrice;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.INSPRC)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2274,7 +2329,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return insertVolume;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.INSVOL)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2287,7 +2342,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return insertPriceType;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.INSCOND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2300,7 +2355,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return lastTime;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.SALTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -2313,7 +2368,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return turnoverScale;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.TNOVER_SC)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2326,7 +2381,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return broadcastXRef;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BCAST_REF)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2339,7 +2394,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return crossRateScale;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.CROSS_SC)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2352,7 +2407,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return amountOutstanding;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.AMT_OS)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2365,7 +2420,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return amountOutstandingScale;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.AMT_OS_SC)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2378,7 +2433,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return officialCodeIndicator;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.OFF_CD_IND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2391,7 +2446,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceVolatility;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.PRC_VOLTY)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2404,7 +2459,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return amountOutstandingDate;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.AMT_OS_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
@@ -2417,7 +2472,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return backgroundReference;
     }
 
-//    private static final String 
+//    public static final String 
 
     @RFAType(type=MarketPriceConstants.BKGD_REF)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2813,7 +2868,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHighIndicator;
     }
 
-    private static final String YEAR_HIGH_INDICATOR = "yearHighIndicator";
+    public static final String YEAR_HIGH_INDICATOR = "yearHighIndicator";
 
     @RFAType(type=MarketPriceConstants.YRHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2831,7 +2886,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLowIndicator;
     }
 
-    private static final String YEAR_LOW_INDICATOR = "yearLowIndicator";
+    public static final String YEAR_LOW_INDICATOR = "yearLowIndicator";
 
     @RFAType(type=MarketPriceConstants.YRLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
@@ -2849,7 +2904,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return betaValue;
     }
 
-    private static final String BETA_VALUE = "betaValue";
+    public static final String BETA_VALUE = "betaValue";
 
     @RFAType(type=MarketPriceConstants.BETA_VAL)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2867,7 +2922,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return preferredDisplayTemplateNumber;
     }
 
-    private static final String PREFERRED_DISPLAY_TEMPLATE_NUMBER = "preferredDisplayTemplateNumber";
+    public static final String PREFERRED_DISPLAY_TEMPLATE_NUMBER = "preferredDisplayTemplateNumber";
 
     @RFAType(type=MarketPriceConstants.PREF_DISP)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2886,7 +2941,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return localLanguageInstrumentName;
     }
 
-    private static final String LOCAL_LANGUAGE_INSTRUMENT_NAME = "localLanguageInstrumentName";
+    public static final String LOCAL_LANGUAGE_INSTRUMENT_NAME = "localLanguageInstrumentName";
 
     @RFAType(type=MarketPriceConstants.DSPLY_NMLL)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2905,7 +2960,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return latestTradeOrTradeTurnoverValue;
     }
 
-    private static final String LATEST_TRADE_OR_TRADE_TURNOVER_VALUE = "latestTradeOrTradeTurnoverValue";
+    public static final String LATEST_TRADE_OR_TRADE_TURNOVER_VALUE = "latestTradeOrTradeTurnoverValue";
 
     @RFAType(type=MarketPriceConstants.VOL_X_PRC1)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2924,7 +2979,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return dataSourceOwnerId;
     }
 
-    private static final String DATA_SOURCE_OWNER_ID = "dataSourceOwnerId";
+    public static final String DATA_SOURCE_OWNER_ID = "dataSourceOwnerId";
 
     @RFAType(type=MarketPriceConstants.DSO_ID)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2942,7 +2997,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return averagePrice;
     }
 
-    private static final String AVERAGE_PRICE = "averagePrice";
+    public static final String AVERAGE_PRICE = "averagePrice";
 
     @RFAType(type=MarketPriceConstants.AVERG_PRC)
     @Adapt(using=OMMNumericAdapter.class)
@@ -2960,7 +3015,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return upc71RestrictedFlag;
     }
 
-    private static final String UPC_71_RESTRICTED_FLAG = "upc71RestrictedFlag";
+    public static final String UPC_71_RESTRICTED_FLAG = "upc71RestrictedFlag";
 
     @RFAType(type=MarketPriceConstants.UPC71_REST)
     @Adapt(using=OMMDataBufferAdapter.class)
@@ -2978,7 +3033,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return adjustedClose;
     }
 
-    private static final String ADJUSTED_CLOSE = "adjustedClose";
+    public static final String ADJUSTED_CLOSE = "adjustedClose";
 
     @RFAType(type=MarketPriceConstants.ADJUST_CLS)
     @Adapt(using=OMMNumericAdapter.class)
@@ -3133,7 +3188,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return specialTermsTradingFlag;
     }
 
-    private static final String SPECIAL_TERMS_TRADING_FLAG = "specialTermsTradingFlag";
+    public static final String SPECIAL_TERMS_TRADING_FLAG = "specialTermsTradingFlag";
 
     @RFAType(type=MarketPriceConstants.SPEC_TRADE)
     @Adapt(using=OMMNumericAdapter.class)
