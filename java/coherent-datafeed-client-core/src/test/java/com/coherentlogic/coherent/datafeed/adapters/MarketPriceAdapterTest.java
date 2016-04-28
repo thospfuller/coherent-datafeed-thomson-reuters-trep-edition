@@ -14,9 +14,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.coherentlogic.coherent.datafeed.factories.NullMarketPriceFactory;
 import com.reuters.rfa.omm.OMMDataBuffer;
 import com.reuters.rfa.omm.OMMDateTime;
@@ -34,7 +34,7 @@ import com.reuters.rfa.omm.OMMTypes;
  */
 public class MarketPriceAdapterTest extends AdapterUnitTestHelper {
 
-    private final Factory<MarketPrice> marketPriceFactory =
+    private final TypedFactory<MarketPrice> marketPriceFactory =
         new NullMarketPriceFactory();
 
     private MarketPriceAdapter adapter = null;

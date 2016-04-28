@@ -2,6 +2,8 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +33,18 @@ public class UpdateMarketPriceMessageProcessor
 
     private final MarketPriceAdapter marketPriceAdapter;
 
+    private final Map<Handle, String> ricCache;
+
+    private final Map<String, MarketPrice> marketPriceCache;
+
     public UpdateMarketPriceMessageProcessor (
-        MarketPriceAdapter marketPriceAdapter
+        MarketPriceAdapter marketPriceAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketPrice> marketPriceCache
     ) {
         this.marketPriceAdapter = marketPriceAdapter;
+        this.ricCache = ricCache;
+        this.marketPriceCache = marketPriceCache;
     }
 
     /**
@@ -60,23 +70,23 @@ public class UpdateMarketPriceMessageProcessor
 
         Handle handle = itemEvent.getHandle();
 
-        Session session = getSession(message);
+        String ric = ricCache.get(handle);
 
-        MarketPrice currentMarketPrice = session.getMarketPrice(handle);
+        MarketPrice currentMarketPrice = marketPriceCache.get(ric);
 
         assertNotNull("currentMarketPrice", currentMarketPrice);
 
         log.info ("Updating the following marketPrice: " + currentMarketPrice);
 
-        MarketPrice updatedMarketPrice =
-            (MarketPrice) SerializationUtils.clone(currentMarketPrice);
+//        MarketPrice updatedMarketPrice =
+//            (MarketPrice) SerializationUtils.clone(currentMarketPrice);
 
-        marketPriceAdapter.adapt(ommMsg, updatedMarketPrice);
+        marketPriceAdapter.adapt(ommMsg, currentMarketPrice);
 
-        session.putMarketPrice(handle, updatedMarketPrice);
+//        session.putMarketPrice(handle, updatedMarketPrice);
 
         Message<MarketPrice> result = MessageBuilder
-            .withPayload(updatedMarketPrice)
+            .withPayload(currentMarketPrice)
             .copyHeaders(headers).build();
 
         log.info("updateMarketPriceMessageProcessor.process: method " +

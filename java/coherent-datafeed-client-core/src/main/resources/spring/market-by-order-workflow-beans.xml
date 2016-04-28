@@ -14,9 +14,7 @@
         http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task.xsd
         http://www.springframework.org/schema/integration
-        http://www.springframework.org/schema/integration/spring-integration.xsd
-        http://www.springframework.org/schema/integration/jms
-        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+        http://www.springframework.org/schema/integration/spring-integration.xsd">
 
     <int:channel id="onMarketByOrderAddSessionToHeadersChannel"/>
 
@@ -87,7 +85,7 @@
 
     <int:service-activator
      input-channel="refreshMarketByOrderChannel"
-     output-channel="addMarketByOrderToQueueChannel"
+     output-channel="workflowEndsChannel"
      ref="refreshMarketByOrderMessageProcessor"
      method="process"/>
 
@@ -95,7 +93,7 @@
 
     <int:service-activator
      input-channel="updateMarketByOrderChannel"
-     output-channel="addMarketByOrderToQueueChannel"
+     output-channel="workflowEndsChannel"
      ref="updateMarketByOrderMessageProcessor"
      method="process"/>
 
@@ -107,10 +105,10 @@
       to the appropriate queue.
       -->
 
-    <int:channel id="addMarketByOrderToQueueChannel"/>
+    <!-- int:channel id="addMarketByOrderToQueueChannel"/>
 
     <int-jms:outbound-channel-adapter
      channel="addMarketByOrderToQueueChannel"
         connection-factory="jmsConnectionFactory"
-        destination="marketByOrderUpdatesTopic"/>
+        destination="marketByOrderUpdatesTopic"/ -->
 </beans>

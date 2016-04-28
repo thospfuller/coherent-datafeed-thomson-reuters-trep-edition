@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.factories;
 
 import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
@@ -18,7 +19,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class SessionFactory implements Factory<Session> {
+public class SessionFactory implements TypedFactory<Session> {
 
     private final Map<Handle, Map<String, DirectoryEntry>>
         directoryEntryCache;

@@ -2,12 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
 
-import javax.jms.MessageConsumer;
-
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
-import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -25,22 +20,18 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class MarketByOrderService
-    extends AsynchronousService<MarketByOrder>
+    extends QueryableService
     implements MarketByOrderServiceSpecification {
 
     public MarketByOrderService(
         RequestMessageBuilderFactory factory,
-        Client client,
-        MessageConsumer messageConsumer,
-        BasicAdapter<MarketByOrder, String> jsonGenerator
+        Client client
     ) {
         super(
             Constants.dELEKTRON_DD,
             RDMMsgTypes.MARKET_BY_ORDER,
             factory,
-            client,
-            messageConsumer,
-            jsonGenerator
+            client
         );
     }
 

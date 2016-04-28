@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package com.coherentlogic.coherent.datafeed.jms.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -117,11 +117,11 @@ public class MarketPriceExample implements CommandLineRunner, MarketPriceConstan
 
         log.info("result: " + result);
 
-        queryMarketPriceService (
-            statusResponseService,
-            marketPriceService,
-            loginHandle
-        );
+//        queryMarketPriceService (
+//            statusResponseService,
+//            marketPriceService,
+//            loginHandle
+//        );
 
         log.info("...done!");
 
@@ -134,142 +134,142 @@ public class MarketPriceExample implements CommandLineRunner, MarketPriceConstan
         //       login.
     }
 
-    static void queryMarketPriceService (
-        final StatusResponseServiceSpecification statusResponseService,
-        final MarketPriceServiceSpecification marketPriceService,
-        final Handle loginHandle
-    ) {
-        List<Handle> itemHandles = marketPriceService.query(
-            Constants.dELEKTRON_DD,
-            loginHandle,
-            "LCOc1",
-            "GOOG.O",
-            "MSFT.O",
-            "ODFL.OQ",
-            "LKQ.OQ",
-            "MDVN.OQ",
-            "BFb.N",
-            "KO.N",
-            ".TRXFLDAFPUM11", // Equity
-            "OIBR.K",
-            "SWM.N",
-            "ERICb.F",
-            "ERICb.DE",
-            "ERICb.D",
-            "ERICb.BE",
-            "ERICa.ST",
-            "ERICa.F",
-            "ERICa.DE",
-            "ERICa.BE",
-            "ERIC.W",
-            "ERIC.PH",
-            "ERIC.P",
-            "ERIC.OQ",
-            "ERIC.MW",
-            "ERIC.DF",
-            "ERIC.C",
-            "ERIC.A",
-            "DRICqf.BO",
-            "BRICUSDNAV.DE",
-            "BRICGBPNAV.DE",
-            "BRICDX.MI",
-            "BRIC.S",
-            "BRIC.MI",
-            "BRIC.AS",
-            "ARICqf.BO",
-            "ARIC.F",
-            "ALRIC.PA1",
-            ".VBRICUTR",
-            "ERIC.O",
-            "RIC.A",
-            "ALRIC.PA",
-            "ARIC.BO",
-            "BRIC.L",
-            "DRIC.BO",
-            "AAT.N",
-            "ABV.N",
-            "ABVc.N",
-            "ABX.N",
-            "ACAS.O",
-            "ACC.N",
-            "ADGE.A",
-            "AEL.N",
-            "AEO.N",
-            "AEP.N",
-            "AEP_pa.N",
-            "AFA.N",
-            "AFE.N",
-            "AFF.N",
-            "AFG.N",
-            "AFQ.N",
-            "AFW.N",
-            "AGM.N",
-            "AGMa.N",
-            "AGNC.O",
-            "AGNCP.O",
-            "AIG.N",
-            "ALN.A",
-            "AM.N",
-            "AMID.N",
-            "AMNB.O",
-            "AMOV.O",
-            "AMRB.O",
-            "AMS.A",
-            "AMSC.O",
-            "AMSWA.O",
-            "AMT.N",
-            "AMWD.O",
-            "AMX.N",
-            "ANAT.O",
-            "APEI.O",
-            "APP.A",
-            "AQQ.A",
-            "ARC.N",
-            "ARCT.O",
-            "ARII.O",
-            "ANAT.O",
-            "APEI.O",
-            "APP.A",
-            "AQQ.A",
-            "ARC.N",
-            "ARCT.O",
-            "ARII.O",
-            "ARL.N",
-            "ARSD.N",
-            "ASEI.O",
-            "ASI.N",
-            "ASP.N",
-            "ATAX.O",
-            "AUQ.N",
-            "AVD.N",
-            "AVF.N",
-            ".DAXBRIC",
-            ".DAXBRICGB",
-            ".DAXBRICGBN",
-            ".DAXBRICGBP",
-            ".TRXFLDAFPU", // Equity
-            ".TRXFLDAFPUMAT" // Equity
-        );
-
-        log.info ("The query is complete, now we will wait " +
-            "for replies; itemHandles: " + itemHandles);
+//    static void queryMarketPriceService (
+//        final StatusResponseServiceSpecification statusResponseService,
+//        final MarketPriceServiceSpecification marketPriceService,
+//        final Handle loginHandle
+//    ) {
+//        List<Handle> itemHandles = marketPriceService.query(
+//            Constants.dELEKTRON_DD,
+//            loginHandle,
+//            "LCOc1",
+//            "GOOG.O",
+//            "MSFT.O",
+//            "ODFL.OQ",
+//            "LKQ.OQ",
+//            "MDVN.OQ",
+//            "BFb.N",
+//            "KO.N",
+//            ".TRXFLDAFPUM11", // Equity
+//            "OIBR.K",
+//            "SWM.N",
+//            "ERICb.F",
+//            "ERICb.DE",
+//            "ERICb.D",
+//            "ERICb.BE",
+//            "ERICa.ST",
+//            "ERICa.F",
+//            "ERICa.DE",
+//            "ERICa.BE",
+//            "ERIC.W",
+//            "ERIC.PH",
+//            "ERIC.P",
+//            "ERIC.OQ",
+//            "ERIC.MW",
+//            "ERIC.DF",
+//            "ERIC.C",
+//            "ERIC.A",
+//            "DRICqf.BO",
+//            "BRICUSDNAV.DE",
+//            "BRICGBPNAV.DE",
+//            "BRICDX.MI",
+//            "BRIC.S",
+//            "BRIC.MI",
+//            "BRIC.AS",
+//            "ARICqf.BO",
+//            "ARIC.F",
+//            "ALRIC.PA1",
+//            ".VBRICUTR",
+//            "ERIC.O",
+//            "RIC.A",
+//            "ALRIC.PA",
+//            "ARIC.BO",
+//            "BRIC.L",
+//            "DRIC.BO",
+//            "AAT.N",
+//            "ABV.N",
+//            "ABVc.N",
+//            "ABX.N",
+//            "ACAS.O",
+//            "ACC.N",
+//            "ADGE.A",
+//            "AEL.N",
+//            "AEO.N",
+//            "AEP.N",
+//            "AEP_pa.N",
+//            "AFA.N",
+//            "AFE.N",
+//            "AFF.N",
+//            "AFG.N",
+//            "AFQ.N",
+//            "AFW.N",
+//            "AGM.N",
+//            "AGMa.N",
+//            "AGNC.O",
+//            "AGNCP.O",
+//            "AIG.N",
+//            "ALN.A",
+//            "AM.N",
+//            "AMID.N",
+//            "AMNB.O",
+//            "AMOV.O",
+//            "AMRB.O",
+//            "AMS.A",
+//            "AMSC.O",
+//            "AMSWA.O",
+//            "AMT.N",
+//            "AMWD.O",
+//            "AMX.N",
+//            "ANAT.O",
+//            "APEI.O",
+//            "APP.A",
+//            "AQQ.A",
+//            "ARC.N",
+//            "ARCT.O",
+//            "ARII.O",
+//            "ANAT.O",
+//            "APEI.O",
+//            "APP.A",
+//            "AQQ.A",
+//            "ARC.N",
+//            "ARCT.O",
+//            "ARII.O",
+//            "ARL.N",
+//            "ARSD.N",
+//            "ASEI.O",
+//            "ASI.N",
+//            "ASP.N",
+//            "ATAX.O",
+//            "AUQ.N",
+//            "AVD.N",
+//            "AVF.N",
+//            ".DAXBRIC",
+//            ".DAXBRICGB",
+//            ".DAXBRICGBN",
+//            ".DAXBRICGBP",
+//            ".TRXFLDAFPU", // Equity
+//            ".TRXFLDAFPUMAT" // Equity
+//        );
+//
+//        log.info ("The query is complete, now we will wait " +
+//            "for replies; itemHandles: " + itemHandles);
 
         long ctr = 0;
 
-        while (true) {
-//            String nextStatusResponseUpdate = statusResponseService.getNextUpdateAsJSON("2000");
+//        while (true) {
+////            String nextStatusResponseUpdate = statusResponseService.getNextUpdateAsJSON("2000");
+////
+////            log.info ("nextStatusResponseUpdate[" + ctr + "]: " +
+////                nextStatusResponseUpdate);
 //
-//            log.info ("nextStatusResponseUpdate[" + ctr + "]: " +
-//                nextStatusResponseUpdate);
-
-            String nextMarketPriceUpdate =
-                marketPriceService.getNextUpdateAsJSON(2500L);
-            log.info ("nextMarketPriceUpdate[" + ctr + "]: " +
-                nextMarketPriceUpdate);
-            System.out.println ("nextMarketPriceUpdate[" + ctr + "]: " +
-                nextMarketPriceUpdate);
-
-            ctr++;
-        }
-    }
+//            String nextMarketPriceUpdate =
+//                marketPriceService.getNextUpdateAsJSON(2500L);
+//            log.info ("nextMarketPriceUpdate[" + ctr + "]: " +
+//                nextMarketPriceUpdate);
+//            System.out.println ("nextMarketPriceUpdate[" + ctr + "]: " +
+//                nextMarketPriceUpdate);
+//
+//            ctr++;
+//        }
+//    }
 }

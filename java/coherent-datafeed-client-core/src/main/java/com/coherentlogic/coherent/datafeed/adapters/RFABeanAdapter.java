@@ -11,13 +11,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.DictionaryNotLoadedException;
 import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FidDef;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMAttribInfo;
@@ -41,7 +41,7 @@ public class RFABeanAdapter<T extends RFABean> {
     private static final Logger log =
         LoggerFactory.getLogger(RFABeanAdapter.class);
 
-    private final Factory<T> rfaBeanFactory;
+    private final TypedFactory<T> rfaBeanFactory;
 
     private final FieldDictionary fieldDictionary;
 
@@ -52,7 +52,7 @@ public class RFABeanAdapter<T extends RFABean> {
     private final Map<String, Method> methodMap;
 
     public RFABeanAdapter (
-        Factory<T> rfaBeanFactory,
+    	TypedFactory<T> rfaBeanFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -79,7 +79,7 @@ public class RFABeanAdapter<T extends RFABean> {
      * @throws NoSuchMethodException
      */
     public RFABeanAdapter (
-        Factory<T> rfaBeanFactory,
+    	TypedFactory<T> rfaBeanFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -377,7 +377,7 @@ public class RFABeanAdapter<T extends RFABean> {
         return result;
     }
 
-    public Factory<T> getRFABeanFactory() {
+    public TypedFactory<T> getRFABeanFactory() {
         return rfaBeanFactory;
     }
 }

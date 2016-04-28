@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import javax.jms.MessageConsumer;
-
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +61,7 @@ import com.reuters.ts1.TS1Series;
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public class TimeSeriesService
-    extends AsynchronousService<TimeSeries>
+    extends QueryableService
     implements TimeSeriesServiceSpecification {
 
     private static final Logger log =
@@ -83,7 +81,6 @@ public class TimeSeriesService
     public TimeSeriesService(
         RequestMessageBuilderFactory factory,
         Client client,
-        MessageConsumer messageConsumer,
         BasicAdapter<TimeSeries, String> jsonGenerator,
         CommonRequestExecutor commonRequestExecutor,
         final Cache<Handle, Session> sessionCache,
@@ -94,9 +91,7 @@ public class TimeSeriesService
             Constants.ELEKTRON_DD,
             RDMMsgTypes.MARKET_PRICE,
             factory,
-            client,
-            messageConsumer,
-            jsonGenerator
+            client
         );
 
         this.commonRequestExecutor = commonRequestExecutor;
@@ -278,18 +273,18 @@ public class TimeSeriesService
         }
     }
 
-    @Override
-    public TimeSeries getNextUpdate(Long timeout) {
-        throw new UnsupportedOperationException("The getNextUpdate method is not supported.");
-    }
-
-    @Override
-    public String getNextUpdateAsJSON(String timeout) {
-        throw new UnsupportedOperationException("The getNextUpdateAsJSON method is not supported.");
-    }
-
-    @Override
-    public String getNextUpdateAsJSON(Long timeout) {
-        throw new UnsupportedOperationException("The getNextUpdateAsJSON method is not supported.");
-    }
+//    @Override
+//    public TimeSeries getNextUpdate(Long timeout) {
+//        throw new UnsupportedOperationException("The getNextUpdate method is not supported.");
+//    }
+//
+//    @Override
+//    public String getNextUpdateAsJSON(String timeout) {
+//        throw new UnsupportedOperationException("The getNextUpdateAsJSON method is not supported.");
+//    }
+//
+//    @Override
+//    public String getNextUpdateAsJSON(Long timeout) {
+//        throw new UnsupportedOperationException("The getNextUpdateAsJSON method is not supported.");
+//    }
 }

@@ -3,6 +3,7 @@ package com.coherentlogic.coherent.datafeed.factories;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
@@ -14,7 +15,7 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class AbstractRFABeanFactory<T extends RFABean>
-    implements Factory<T> {
+    implements TypedFactory<T> {
 
     private final AtomicLong idCounter;
 

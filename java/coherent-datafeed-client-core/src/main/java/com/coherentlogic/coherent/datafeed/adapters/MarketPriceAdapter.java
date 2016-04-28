@@ -4,10 +4,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMData;
 
@@ -19,7 +19,7 @@ import com.reuters.rfa.omm.OMMData;
 public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
 
     public MarketPriceAdapter (
-        Factory<MarketPrice> marketPriceFactory,
+        TypedFactory<MarketPrice> marketPriceFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
@@ -34,7 +34,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
     }
 
     public MarketPriceAdapter (
-        Factory<MarketPrice> marketPriceFactory,
+    	TypedFactory<MarketPrice> marketPriceFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -50,7 +50,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
     }
 
     public MarketPriceAdapter (
-        Factory<MarketPrice> marketPriceFactory,
+    	TypedFactory<MarketPrice> marketPriceFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,

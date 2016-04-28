@@ -95,7 +95,7 @@ public class RefreshMarketPriceMessageProcessorTest {
 
         marketPrice = new MarketPrice ();
 
-        processor = new RefreshMarketPriceMessageProcessor (marketPriceAdapter);
+        processor = new RefreshMarketPriceMessageProcessor (marketPriceAdapter, null, null);
     }
 
     @After

@@ -2,7 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
     xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
     xmlns:int="http://www.springframework.org/schema/integration"
-    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
     xmlns:aop="http://www.springframework.org/schema/aop"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
@@ -71,6 +70,28 @@
 
     <bean id="dictionaryEntryCache" class="org.infinispan.Cache"
         factory-bean="dictionaryEntryCacheFactory" factory-method="getInstance" />
+
+    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <bean id="ricCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="ricCache" />
+    </bean>
+
+    <bean id="ricCache" class="org.infinispan.Cache"
+        factory-bean="ricCacheFactory" factory-method="getInstance" />
+
+    <bean id="marketPriceCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="marketPriceCache" />
+    </bean>
+
+    <bean id="marketPriceCache" class="org.infinispan.Cache"
+        factory-bean="marketPriceCacheFactory" factory-method="getInstance" />
+
+    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <bean id="marketPriceEntryCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
@@ -149,14 +170,14 @@
     <bean id="dictionaryCache" class="org.infinispan.Cache"
         factory-bean="dictionaryCacheFactory" factory-method="getInstance" />
 
-    <bean id="marketPriceCacheFactory"
+    <!-- bean id="marketPriceCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
         <constructor-arg name="cacheManager" ref="cacheManager" />
         <constructor-arg name="cacheName" value="marketPriceCache" />
     </bean>
 
     <bean id="marketPriceCache" class="org.infinispan.Cache"
-        factory-bean="marketPriceCacheFactory" factory-method="getInstance" />
+        factory-bean="marketPriceCacheFactory" factory-method="getInstance" / -->
 
     <bean id="marketMakerCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">

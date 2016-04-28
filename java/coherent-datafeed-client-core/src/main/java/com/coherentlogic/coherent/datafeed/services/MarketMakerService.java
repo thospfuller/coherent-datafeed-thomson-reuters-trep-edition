@@ -2,11 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
 
-import javax.jms.MessageConsumer;
-
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
-import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -24,7 +20,7 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public class MarketMakerService
-    extends AsynchronousService<MarketMaker>
+    extends QueryableService
     implements MarketMakerServiceSpecification {
 
 	public static final String BEAN_NAME = "marketMakerService";
@@ -34,17 +30,13 @@ public class MarketMakerService
 	 */
     public MarketMakerService(
         RequestMessageBuilderFactory factory,
-        Client client,
-        MessageConsumer messageConsumer,
-        BasicAdapter<MarketMaker, String> jsonGenerator
+        Client client
     ) {
         super(
             Constants.dELEKTRON_DD,
             RDMMsgTypes.MARKET_MAKER,
             factory,
-            client,
-            messageConsumer,
-            jsonGenerator
+            client
         );
     }
 

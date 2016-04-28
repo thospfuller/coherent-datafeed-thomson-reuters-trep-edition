@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 
 /**
@@ -9,7 +10,7 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class NullMarketPriceFactory implements Factory<MarketPrice> {
+public class NullMarketPriceFactory implements TypedFactory<MarketPrice> {
 
     public NullMarketPriceFactory (){
     }

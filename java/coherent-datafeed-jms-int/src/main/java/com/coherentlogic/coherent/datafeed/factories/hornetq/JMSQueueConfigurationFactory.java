@@ -7,7 +7,7 @@ import org.hornetq.jms.server.config.JMSConfiguration;
 import org.hornetq.jms.server.config.JMSQueueConfiguration;
 import org.hornetq.jms.server.config.impl.JMSConfigurationImpl;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
  * Factory class used to create instances of the {@link JMSConfiguration} using
@@ -15,7 +15,7 @@ import com.coherentlogic.coherent.datafeed.factories.Factory;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class JMSQueueConfigurationFactory implements Factory<JMSConfiguration> {
+public class JMSQueueConfigurationFactory implements TypedFactory<JMSConfiguration> {
 
     /**
      * A list of QueueConfiguration objects which will be passed to the

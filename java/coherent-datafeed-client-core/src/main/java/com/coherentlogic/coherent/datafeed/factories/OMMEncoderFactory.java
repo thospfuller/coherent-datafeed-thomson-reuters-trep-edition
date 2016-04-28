@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.reuters.rfa.omm.OMMEncoder;
 import com.reuters.rfa.omm.OMMPool;
 
@@ -12,7 +13,7 @@ import com.reuters.rfa.omm.OMMPool;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class OMMEncoderFactory implements Factory<OMMEncoder> {
+public class OMMEncoderFactory implements TypedFactory<OMMEncoder> {
 
     public static final String BEAN_NAME = "encoderFactory";
 

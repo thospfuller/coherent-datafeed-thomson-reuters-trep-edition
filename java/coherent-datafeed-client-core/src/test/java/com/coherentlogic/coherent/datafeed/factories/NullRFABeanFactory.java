@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
@@ -10,7 +11,7 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class NullRFABeanFactory implements Factory<RFABean> {
+public class NullRFABeanFactory implements TypedFactory<RFABean> {
 
     public NullRFABeanFactory (){
     }

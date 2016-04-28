@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
@@ -15,7 +16,6 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.DeleteFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.UpdateFailedException;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMAttribInfo;
 import com.reuters.rfa.omm.OMMData;
@@ -38,7 +38,7 @@ public class MarketByOrderAdapter
     private final OrderAdapter orderAdapter;
 
     public MarketByOrderAdapter (
-        Factory<MarketByOrder> marketByOrderFactory,
+        TypedFactory<MarketByOrder> marketByOrderFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -56,7 +56,7 @@ public class MarketByOrderAdapter
     }
 
     public MarketByOrderAdapter (
-        Factory<MarketByOrder> marketByOrderFactory,
+        TypedFactory<MarketByOrder> marketByOrderFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -81,7 +81,7 @@ public class MarketByOrderAdapter
     @Override
     public MarketByOrder adapt (OMMMsg ommMsg) {
 
-        Factory<? extends RFABean> rfaFactory = getRFABeanFactory();
+        TypedFactory<? extends RFABean> rfaFactory = getRFABeanFactory();
 
         MarketByOrder marketByOrder = (MarketByOrder) rfaFactory.getInstance();
 
@@ -213,7 +213,7 @@ public class MarketByOrderAdapter
             LoggerFactory.getLogger(OrderAdapter.class);
 
         public OrderAdapter (
-            Factory<Order> orderFactory,
+            TypedFactory<Order> orderFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
                 OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
@@ -228,7 +228,7 @@ public class MarketByOrderAdapter
         }
 
         public OrderAdapter (
-            Factory<Order> orderFactory,
+            TypedFactory<Order> orderFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,

@@ -18,6 +18,8 @@ import com.reuters.rfa.common.Client;
  *
  * @param R The type of object the jsonGenerator accepts.
  *
+ * @deprecated This class should no longer be used.
+ *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public abstract class AsynchronousService<R>

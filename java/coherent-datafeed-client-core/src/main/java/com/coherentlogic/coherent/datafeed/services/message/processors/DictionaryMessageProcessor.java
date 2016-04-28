@@ -40,7 +40,7 @@ public class DictionaryMessageProcessor
 
     private final Cache<Handle, Session> dictionaryCache;
 
-    private DictionaryMessageProcessor(
+    public DictionaryMessageProcessor(
         DictionaryServiceSpecification dictionaryService,
         Cache<Handle, Session> dictionaryCache
     ) {

@@ -8,14 +8,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
-import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.DeleteFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.UpdateFailedException;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMAttribInfo;
 import com.reuters.rfa.omm.OMMData;
@@ -36,7 +35,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
     private final MarketMakerAdapter.OrderAdapter orderAdapter;
 
     public MarketMakerAdapter (
-        Factory<MarketMaker> marketMakerFactory,
+        TypedFactory<MarketMaker> marketMakerFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -54,7 +53,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
     }
 
     public MarketMakerAdapter (
-        Factory<MarketMaker> marketByOrderFactory,
+        TypedFactory<MarketMaker> marketByOrderFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -79,7 +78,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
     @Override
     public MarketMaker adapt (OMMMsg ommMsg) {
 
-        Factory<? extends RFABean> rfaFactory = getRFABeanFactory();
+        TypedFactory<? extends RFABean> rfaFactory = getRFABeanFactory();
 
         MarketMaker marketMaker = (MarketMaker) rfaFactory.getInstance();
 
@@ -202,7 +201,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
             LoggerFactory.getLogger(OrderAdapter.class);
 
         public OrderAdapter (
-            Factory<MarketMaker.Order> orderFactory,
+            TypedFactory<MarketMaker.Order> orderFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
                 OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
@@ -217,7 +216,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
         }
 
         public OrderAdapter (
-            Factory<MarketMaker.Order> orderFactory,
+            TypedFactory<MarketMaker.Order> orderFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,

@@ -3,6 +3,7 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
 import java.util.List;
+import java.util.Map;
 
 import org.infinispan.Cache;
 import org.slf4j.Logger;
@@ -13,8 +14,10 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
+import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
+import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
@@ -32,7 +35,7 @@ import com.reuters.rfa.common.Handle;
  */
 public class QueryMarketPriceMessageProcessor
     implements MessageProcessorSpecification
-        <QueryParameters, List<Handle>> {
+        <QueryParameters, Map<String, MarketPrice>> {
 
     private static final Logger log =
         LoggerFactory.getLogger(QueryMarketPriceMessageProcessor.class);
@@ -41,16 +44,20 @@ public class QueryMarketPriceMessageProcessor
 
     private final Cache<Handle, Session> sessionCache;
 
-    private final Cache<Handle, Session> marketPriceCache;
+//    private final Map<Handle, String> ricCache;
+//
+//    private final Map<String, MarketPrice> marketPriceCache;
 
-    private QueryMarketPriceMessageProcessor(
+    public QueryMarketPriceMessageProcessor(
         MarketPriceServiceSpecification marketPriceService,
-        Cache<Handle, Session> sessionCache,
-        Cache<Handle, Session> marketPriceCache
+        Cache<Handle, Session> sessionCache
+//        Map<Handle, String> ricCache,
+//        Map<String, MarketPrice> marketPriceCache
     ) {
         this.marketPriceService = marketPriceService;
         this.sessionCache = sessionCache;
-        this.marketPriceCache = marketPriceCache;
+//        this.ricCache = ricCache;
+//        this.marketPriceCache = marketPriceCache;
     }
 
     /**
@@ -58,10 +65,10 @@ public class QueryMarketPriceMessageProcessor
      */
     @Override
     @Transactional
-    public Message<List<Handle>> process(
+    public Message<Map<String, MarketPrice>> process(
         Message<QueryParameters> message) {
 
-        Message<List<Handle>> result = null;
+        Message<Map<String, MarketPrice>> result = null;
 
         QueryParameters parameters = message.getPayload();
 
@@ -81,15 +88,18 @@ public class QueryMarketPriceMessageProcessor
 
             Handle loginHandle = parameters.getLoginHandle();
 
-            Session session = (Session) sessionCache.get(loginHandle);
+//            Session session = (Session) sessionCache.get(loginHandle);
 
             String[] items = parameters.getItem();
 
-            List<Handle> results = marketPriceService.query(
-                serviceName, loginHandle, items);
+            Map<String, MarketPrice> results = marketPriceService.query(
+                ServiceName.valueOf(serviceName),
+                loginHandle,
+                items
+            );
 
-            for (Handle nextHandle : results)
-                marketPriceCache.put(nextHandle, session);
+//            for (Handle nextHandle : results)
+//                marketPriceCache.put(nextHandle, session);
 
             MessageHeaders headers = message.getHeaders();
 
@@ -97,7 +107,7 @@ public class QueryMarketPriceMessageProcessor
                 MessageBuilder
                     .withPayload(results)
                     .copyHeaders(headers)
-                    .setHeader(SESSION, session)
+//                    .setHeader(SESSION, session)
                     .build();
 //        }
         return result;

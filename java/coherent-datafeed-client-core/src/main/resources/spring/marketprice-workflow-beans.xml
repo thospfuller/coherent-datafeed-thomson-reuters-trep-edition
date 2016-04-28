@@ -4,7 +4,6 @@
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:task="http://www.springframework.org/schema/task"
     xmlns:int="http://www.springframework.org/schema/integration"
-    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -14,9 +13,7 @@
         http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task.xsd
         http://www.springframework.org/schema/integration
-        http://www.springframework.org/schema/integration/spring-integration.xsd
-        http://www.springframework.org/schema/integration/jms
-        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+        http://www.springframework.org/schema/integration/spring-integration.xsd">
 
     <int:channel id="onMarketPriceAddSessionToHeadersChannel"/>
 
@@ -81,12 +78,6 @@
          value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_PRICE}"/>
     </int:router>
 
-    <int:channel id="marketPriceChannel"/>
-
-    <!-- This is no longer necessary as it's purpose was originally when we had
-         one workflow processing many message types.
-    <int:router ref="routeByQueryType" input-channel="marketPriceChannel"/ -->
-
     <!-- See the bean with id routeByQueryType in the application-context file.
       -->
     <int:channel id="processMarketPriceChannel"/>
@@ -107,7 +98,7 @@
 
     <int:service-activator
      input-channel="refreshMarketPriceChannel"
-     output-channel="addMarketPriceToQueueChannel"
+     output-channel="workflowEndsChannel"
      ref="refreshMarketPriceMessageProcessor"
      method="process"/>
 
@@ -115,7 +106,7 @@
 
     <int:service-activator
      input-channel="updateMarketPriceChannel"
-     output-channel="addMarketPriceToQueueChannel"
+     output-channel="workflowEndsChannel"
      ref="updateMarketPriceMessageProcessor"
      method="process"/>
 
@@ -127,16 +118,16 @@
       to the appropriate queue.
       -->
 
-    <int:publish-subscribe-channel id="addMarketPriceToQueueChannel"/>
+    <!-- int:publish-subscribe-channel id="addMarketPriceToQueueChannel"/>
 
     <int:service-activator
      input-channel="addMarketPriceToQueueChannel"
      output-channel="nullChannel"
      ref="mainUI"
-     method="onMarketPriceUpdate"/>
+     method="onMarketPriceUpdate"/ -->
 
-    <int-jms:outbound-channel-adapter
+    <!-- int-jms:outbound-channel-adapter
      channel="addMarketPriceToQueueChannel"
         connection-factory="jmsConnectionFactory"
-        destination="marketPriceUpdatesTopic"/>
+        destination="marketPriceUpdatesTopic"/ -->
 </beans>

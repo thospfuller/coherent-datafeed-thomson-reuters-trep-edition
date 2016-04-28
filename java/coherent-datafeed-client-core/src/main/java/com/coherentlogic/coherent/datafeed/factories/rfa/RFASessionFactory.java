@@ -1,15 +1,15 @@
 package com.coherentlogic.coherent.datafeed.factories.rfa;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.exceptions.
     SessionCreationFailedException;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.session.Session;
 
 /**
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class RFASessionFactory implements Factory<Session> {
+public class RFASessionFactory implements TypedFactory<Session> {
 
     private final Session session;
 

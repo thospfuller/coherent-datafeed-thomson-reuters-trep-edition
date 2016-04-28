@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
@@ -18,7 +19,6 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMData;
 
@@ -48,7 +48,7 @@ public class AdapterUnitTestHelper {
      * @throws Exception
      */
     public void setUp(
-        Factory<? extends RFABean> factory,
+        TypedFactory<? extends RFABean> factory,
         Class<? extends RFABeanAdapter<? extends RFABean>> adapterClass
     ) throws Exception {
 
@@ -101,7 +101,7 @@ public class AdapterUnitTestHelper {
 
         Constructor<? extends RFABeanAdapter<? extends RFABean>> constructor =
             adapterClass.getConstructor(
-                Factory.class, FieldDictionary.class, Map.class);
+                TypedFactory.class, FieldDictionary.class, Map.class);
 
         adapter =
             (RFABeanAdapter<? extends RFABean>) constructor.newInstance(

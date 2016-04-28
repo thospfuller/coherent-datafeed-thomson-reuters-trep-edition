@@ -56,7 +56,7 @@ public class EventDrivenEndpoint extends AbstractEndpoint
      * this constructor has package scope as setting this to public *may* cause
      * Proguard to have problems obfuscating this class.
      */
-    EventDrivenEndpoint (GatewayDelegate gatewayDelegate) {
+    public EventDrivenEndpoint (GatewayDelegate gatewayDelegate) {
         this.gatewayDelegate = gatewayDelegate;
     }
 

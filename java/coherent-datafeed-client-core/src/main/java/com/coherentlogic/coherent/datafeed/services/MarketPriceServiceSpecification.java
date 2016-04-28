@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import java.util.List;
+import java.util.Map;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.reuters.rfa.common.Handle;
@@ -11,18 +11,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public interface MarketPriceServiceSpecification
-    extends AsynchronouslyUpdatableSpecification<MarketPrice> {
+public interface MarketPriceServiceSpecification {
 
-    List<Handle> query(
-        String serviceName,
-        Handle loginHandle,
-        String... items
-    );
-
-    List<Handle> query(
-        String serviceName,
-        Handle loginHandle,
-        String item
-    );
+    Map<String, MarketPrice> query (ServiceName serviceName, Handle loginHandle, String... rics);
 }

@@ -1,6 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -9,8 +8,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public interface TimeSeriesServiceSpecification
-    extends AsynchronouslyUpdatableSpecification<TimeSeries> {
+public interface TimeSeriesServiceSpecification {
 
     /**
      * Method queries the time series service passing the loginHandle, Reuters

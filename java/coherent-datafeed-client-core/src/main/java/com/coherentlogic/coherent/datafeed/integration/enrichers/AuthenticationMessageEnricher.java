@@ -25,7 +25,7 @@ public class AuthenticationMessageEnricher extends AbstractMessageEnricher {
     private static final Logger log =
         LoggerFactory.getLogger(AuthenticationMessageEnricher.class);
 
-    private AuthenticationMessageEnricher(
+    public AuthenticationMessageEnricher(
         Cache<Handle, Session> sessionCache
     ) {
         super(sessionCache);

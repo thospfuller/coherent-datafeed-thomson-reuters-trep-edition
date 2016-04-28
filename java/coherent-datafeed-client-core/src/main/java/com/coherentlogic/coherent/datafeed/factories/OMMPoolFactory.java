@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.reuters.rfa.omm.OMMPool;
 
 /**
@@ -11,7 +12,7 @@ import com.reuters.rfa.omm.OMMPool;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class OMMPoolFactory implements Factory<OMMPool> {
+public class OMMPoolFactory implements TypedFactory<OMMPool> {
 
 	public static final String BEAN_NAME = "poolFactory";
 

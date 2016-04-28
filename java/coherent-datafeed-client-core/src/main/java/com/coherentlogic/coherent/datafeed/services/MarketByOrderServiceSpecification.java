@@ -15,8 +15,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public interface MarketByOrderServiceSpecification
-    extends AsynchronouslyUpdatableSpecification<MarketByOrder> {
+public interface MarketByOrderServiceSpecification {
 
     List<Handle> query(
         String serviceName,

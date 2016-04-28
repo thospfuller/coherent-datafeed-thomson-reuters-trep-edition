@@ -6,8 +6,6 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STREAM_STATE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.TEXT;
 
-import java.util.Map;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -37,7 +35,7 @@ public class StatusResponse extends RFABean {
 
     @XStreamAlias(CODE)
     private String code;
-    
+
     @XStreamAlias(STREAM_STATE)
     private String streamState;
 
@@ -71,12 +69,9 @@ public class StatusResponse extends RFABean {
 
         String oldValue = this.code;
 
-        if (differs (oldValue, code)) {
+        this.code = code;
 
-            this.code = code;
-
-            firePropertyChange(CODE, oldValue, code);
-        }
+        firePropertyChange(CODE, oldValue, code);
     }
 
     public StatusResponse withCode(String code) {
@@ -94,12 +89,9 @@ public class StatusResponse extends RFABean {
 
         String oldValue = this.streamState;
 
-        if (differs (oldValue, streamState)) {
+        this.streamState = streamState;
 
-            this.streamState = streamState;
-
-            firePropertyChange("streamState", oldValue, streamState);
-        }
+        firePropertyChange(STREAM_STATE, oldValue, streamState);
     }
 
     public StatusResponse withStreamState(String streamState) {
@@ -117,12 +109,9 @@ public class StatusResponse extends RFABean {
 
         String oldValue = this.dataState;
 
-        if (differs (oldValue, dataState)) {
+        this.dataState = dataState;
 
-            this.dataState = dataState;
-
-            firePropertyChange("dataState", oldValue, dataState);
-        }
+        firePropertyChange(DATA_STATE, oldValue, dataState);
     }
 
     public StatusResponse withDataState(String dataState) {
@@ -143,12 +132,10 @@ public class StatusResponse extends RFABean {
 
         String oldValue = this.text;
 
-        if (differs (oldValue, text)) {
+        this.text = text;
 
-            this.text = text;
+        firePropertyChange(TEXT, oldValue, text);
 
-            firePropertyChange("text", oldValue, text);
-        }
         return this;
     }
 
@@ -157,30 +144,5 @@ public class StatusResponse extends RFABean {
         setText(text);
 
         return this;
-    }
-
-    @Override
-    public String toString() {
-
-        final StringBuilder builder = new StringBuilder ();
-
-        AttribInfo attribInfo = getAttribInfo();
-
-        if (attribInfo != null) {
-
-            builder.append(attribInfo.toString() + "\n");
-
-            Map<String, String> elements = attribInfo.getElements();
-
-            elements.forEach(
-                (String key, String value) -> {
-                    builder.append(key + ": ").append(value).append ("\n");
-                }
-            );
-        }
-
-        return "StatusResponse [code=" + code + ", streamState="
-            + streamState + ", dataState=" + dataState + ", text="
-            + text + "]\n" + builder.toString();
     }
 }

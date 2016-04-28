@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
 
 /**
@@ -16,7 +17,7 @@ import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class PositionFactory implements Factory<String> {
+public class PositionFactory implements TypedFactory<String> {
 
     private static final Logger log =
         LoggerFactory.getLogger(PositionFactory.class);

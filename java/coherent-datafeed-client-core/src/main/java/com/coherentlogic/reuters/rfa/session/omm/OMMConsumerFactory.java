@@ -1,6 +1,6 @@
 package com.coherentlogic.reuters.rfa.session.omm;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.reuters.rfa.session.Session;
 import com.reuters.rfa.session.omm.OMMConsumer;
 
@@ -10,7 +10,7 @@ import com.reuters.rfa.session.omm.OMMConsumer;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class OMMConsumerFactory implements Factory<OMMConsumer> {
+public class OMMConsumerFactory implements TypedFactory<OMMConsumer> {
 
     private final Session session;
 

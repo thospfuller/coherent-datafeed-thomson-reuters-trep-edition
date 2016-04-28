@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.factories;
 
 import java.util.Date;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 
 /**
@@ -11,7 +12,7 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class TimestampedMarketPriceFactory implements Factory<MarketPrice> {
+public class TimestampedMarketPriceFactory implements TypedFactory<MarketPrice> {
 
     public TimestampedMarketPriceFactory (){
     }

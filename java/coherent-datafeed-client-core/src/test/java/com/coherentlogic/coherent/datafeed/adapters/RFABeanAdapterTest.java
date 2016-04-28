@@ -10,9 +10,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
-import com.coherentlogic.coherent.datafeed.factories.Factory;
 import com.coherentlogic.coherent.datafeed.factories.NullRFABeanFactory;
 import com.reuters.rfa.omm.OMMAttribInfo;
 import com.reuters.rfa.omm.OMMFieldList;
@@ -24,7 +24,7 @@ import com.reuters.rfa.omm.OMMFieldList;
  */
 public class RFABeanAdapterTest extends AdapterUnitTestHelper {
 
-    private final Factory<RFABean> rfaBeanFactory =
+    private final TypedFactory<RFABean> rfaBeanFactory =
         new NullRFABeanFactory();
 
     private RFABeanAdapter<MarketPrice> adapter = null;

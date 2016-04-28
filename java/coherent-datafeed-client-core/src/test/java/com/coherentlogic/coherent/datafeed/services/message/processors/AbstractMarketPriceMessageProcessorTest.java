@@ -33,7 +33,7 @@ public class AbstractMarketPriceMessageProcessorTest {
     public void setUp() throws Exception {
         // We need an instance of AbstractMarketPriceMessageProcessor so we'll
         // use a class which extends from this.
-        processor = new RefreshMarketPriceMessageProcessor(null);
+        processor = new RefreshMarketPriceMessageProcessor(null, null, null);
     }
 
     @After

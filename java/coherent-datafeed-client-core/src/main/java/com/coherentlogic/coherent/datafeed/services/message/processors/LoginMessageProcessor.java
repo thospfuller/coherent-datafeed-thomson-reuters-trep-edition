@@ -27,7 +27,7 @@ public class LoginMessageProcessor
     private static final Logger log =
         LoggerFactory.getLogger(LoginMessageProcessor.class);
 
-    private LoginMessageProcessor(
+    public LoginMessageProcessor(
         AuthenticationServiceSpecification authenticationService,
         Cache<Handle, Session> sessionCache
     ) {

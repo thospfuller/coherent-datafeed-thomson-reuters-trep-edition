@@ -5,7 +5,7 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
  * Factory class for creating instances of {@link javax.jms.MessageProducer}
@@ -13,7 +13,7 @@ import com.coherentlogic.coherent.datafeed.factories.Factory;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class ProducerFactory implements Factory<MessageProducer> {
+public class ProducerFactory implements TypedFactory<MessageProducer> {
 
     private final MessageProducer messageProducer;
 

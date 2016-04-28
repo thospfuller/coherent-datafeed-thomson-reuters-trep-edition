@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.Startable;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
 import com.reuters.rfa.dictionary.DictionaryException;
 import com.reuters.rfa.dictionary.FieldDictionary;
@@ -14,7 +15,7 @@ import com.reuters.rfa.dictionary.FieldDictionary;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class AbstractDictionaryFactory
-    implements Factory<FieldDictionary>, Startable {
+    implements TypedFactory<FieldDictionary>, Startable {
 
     private static final Logger log =
         LoggerFactory.getLogger(AbstractDictionaryFactory.class);

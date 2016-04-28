@@ -92,10 +92,10 @@ public class AdvancedDictionaryExample implements CommandLineRunner {
 
         log.info("size: " + size);
 
-        while (true) {
-            String report =
-                statusResponseService.getNextUpdateAsJSON(THREE_MINUTES);
-            log.info("report: " + report);
-        }
+//        while (true) {
+//            String report =
+//                statusResponseService.getNextUpdateAsJSON(THREE_MINUTES);
+//            log.info("report: " + report);
+//        }
     }
 }

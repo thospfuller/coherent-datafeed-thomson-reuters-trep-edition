@@ -4,7 +4,7 @@ import javax.jms.Topic;
 
 import org.hornetq.api.jms.HornetQJMSClient;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
  * A Factory class for creating instances of {@link javax.jms.Topic Topic} via
@@ -12,7 +12,7 @@ import com.coherentlogic.coherent.datafeed.factories.Factory;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class JMSTopicFactory implements Factory<Topic> {
+public class JMSTopicFactory implements TypedFactory<Topic> {
 
     private final Topic topic;
 

@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package com.coherentlogic.coherent.datafeed.jms.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_SERVICE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -135,15 +135,15 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
 
         final long wait = 5 * 1000;
 
-        while (true) {
-
-            Object marketMaker = marketMakerService.getNextUpdate(wait);
-
-            if (ctr % 50 == 0) {
-                System.out.println ("next[" + ctr + "]: " + marketMaker);
-            }
-
-            ctr++;
-        }
+//        while (true) {
+//
+//            Object marketMaker = marketMakerService.getNextUpdate(wait);
+//
+//            if (ctr % 50 == 0) {
+//                System.out.println ("next[" + ctr + "]: " + marketMaker);
+//            }
+//
+//            ctr++;
+//        }
     }
 }

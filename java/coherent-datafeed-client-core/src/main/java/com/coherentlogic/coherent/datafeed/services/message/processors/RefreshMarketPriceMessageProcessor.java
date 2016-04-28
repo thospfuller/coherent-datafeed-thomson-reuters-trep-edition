@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -27,10 +29,18 @@ public class RefreshMarketPriceMessageProcessor
 
     private final MarketPriceAdapter marketPriceAdapter;
 
+    private final Map<Handle, String> ricCache;
+
+    private final Map<String, MarketPrice> marketPriceCache;
+
     public RefreshMarketPriceMessageProcessor (
-        MarketPriceAdapter marketPriceAdapter
+        MarketPriceAdapter marketPriceAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketPrice> marketPriceCache
     ) {
         this.marketPriceAdapter = marketPriceAdapter;
+        this.ricCache = ricCache;
+        this.marketPriceCache = marketPriceCache;
     }
 
     /**
@@ -45,17 +55,21 @@ public class RefreshMarketPriceMessageProcessor
 
         MessageHeaders headers = message.getHeaders();
 
-        Session session = getSession(message);
+//        Session session = getSession(message);
 
         OMMItemEvent itemEvent = message.getPayload();
 
         Handle handle = itemEvent.getHandle();
 
+        String ric = ricCache.get(handle);
+
+        MarketPrice marketPrice = marketPriceCache.get(ric);
+
         log.debug("Refresh begins for the itemEvent with the handle " + handle);
 
         OMMMsg ommMsg = itemEvent.getMsg();
 
-        MarketPrice marketPrice = session.getMarketPrice(handle);
+//        MarketPrice marketPrice = session.getMarketPrice(handle);
 
         /* TODO: This is not really valid -- consider the following 
          *       The user disconnects the Ethernet cable and waits a few moments
@@ -76,7 +90,7 @@ public class RefreshMarketPriceMessageProcessor
                 "was refreshed.");
         }
 
-        session.putMarketPrice(handle, marketPrice);
+//        session.putMarketPrice(handle, marketPrice);
 
         Message<MarketPrice> result = MessageBuilder
             .withPayload(marketPrice)

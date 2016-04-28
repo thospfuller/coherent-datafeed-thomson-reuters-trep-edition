@@ -2,14 +2,14 @@ package com.coherentlogic.coherent.datafeed.factories;
 
 import java.util.prefs.Preferences;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
  * Factory class for the {@link java.util.prefs.Preferences} class.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class PreferencesFactory implements Factory<Preferences> {
+public class PreferencesFactory implements TypedFactory<Preferences> {
 
     private final Preferences preferences;
 

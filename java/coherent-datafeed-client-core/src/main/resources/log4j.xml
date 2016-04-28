@@ -11,7 +11,7 @@
     <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
        <param name="append" value="false" />
        <param name="maxFileSize" value="100mb" />
-       <param name="maxBackupIndex" value="5" />
+       <param name="maxBackupIndex" value="2" />
        <param name="file" value="${user.home}/coherent-datafeed-trep/coherent-datafeed-trep-edition.log" />
        <layout class="org.apache.log4j.PatternLayout">
         <param name="ConversionPattern" 
@@ -19,9 +19,23 @@
        </layout>
     </appender>
 
+    <logger name="org.springframework.aop.interceptor">
+        <level value="trace"/>
+        <appender-ref ref="fileAppender"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="warn"/>
+        <appender-ref ref="fileAppender"/>
+    </logger>
+
+    <logger name="org.infinispan">
+        <level value="warn"/>
+        <appender-ref ref="fileAppender"/>
+    </logger>
+
     <root>
-        <priority value ="debug" />
-        <!-- appender-ref ref="consoleAppender" / -->
-        <appender-ref ref="fileAppender" />
+        <priority value ="trace" />
+        <appender-ref ref="fileAppender"/>
     </root>
 </log4j:configuration>

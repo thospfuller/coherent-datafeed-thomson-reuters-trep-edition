@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.services.TS1DefDbLoadCompleteService;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
 import com.reuters.ts1.TS1DefDb;
@@ -15,7 +16,7 @@ import com.reuters.ts1.TS1DefDb;
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public class TS1DefDbLoadCompleteServiceFactory
-    implements Factory<TS1DefDbLoadCompleteService> {
+    implements TypedFactory<TS1DefDbLoadCompleteService> {
 
     private final TS1DefServiceSpecification ts1DefService;
 

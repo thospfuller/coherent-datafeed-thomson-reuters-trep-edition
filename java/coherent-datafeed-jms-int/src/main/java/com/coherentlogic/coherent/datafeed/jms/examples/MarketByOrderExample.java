@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package com.coherentlogic.coherent.datafeed.jms.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -142,16 +142,16 @@ public class MarketByOrderExample implements CommandLineRunner {
 
         long ctr = 0;
 
-        while (true) {
-
-            String nextMarketPriceUpdate =
-                marketByOrderService.getNextUpdateAsJSON(2500L);
-            log.info ("nextMarketPriceUpdate[" + ctr + "]: " +
-                nextMarketPriceUpdate);
-            System.out.println ("nextMarketPriceUpdate[" + ctr + "]: " +
-                nextMarketPriceUpdate);
-
-            ctr++;
-        }
+//        while (true) {
+//
+//            String nextMarketPriceUpdate =
+//                marketByOrderService.getNextUpdateAsJSON(2500L);
+//            log.info ("nextMarketPriceUpdate[" + ctr + "]: " +
+//                nextMarketPriceUpdate);
+//            System.out.println ("nextMarketPriceUpdate[" + ctr + "]: " +
+//                nextMarketPriceUpdate);
+//
+//            ctr++;
+//        }
     }
 }

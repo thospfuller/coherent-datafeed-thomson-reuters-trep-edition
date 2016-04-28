@@ -17,8 +17,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public interface TimeSeriesGatewaySpecification
-    extends AsynchronouslyUpdatableSpecification<TimeSeries> {
+public interface TimeSeriesGatewaySpecification {
 
     /**
      * Method queries the time series service passing the loginHandle, Reuters

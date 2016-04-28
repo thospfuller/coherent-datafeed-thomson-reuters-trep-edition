@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories.rfa;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.reuters.rfa.common.EventQueue;
 
 /**
@@ -9,7 +9,7 @@ import com.reuters.rfa.common.EventQueue;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class EventQueueFactory implements Factory<EventQueue> {
+public class EventQueueFactory implements TypedFactory<EventQueue> {
 
     public static final String BEAN_NAME = "eventQueueFactory";
 

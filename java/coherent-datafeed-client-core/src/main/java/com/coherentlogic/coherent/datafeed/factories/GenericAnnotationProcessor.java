@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
@@ -19,7 +20,7 @@ import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeExceptio
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class GenericAnnotationProcessor<A extends Annotation, T>
-    implements Factory<Map<T, Method>> {
+    implements TypedFactory<Map<T, Method>> {
 
     private static final Logger log =
         LoggerFactory.getLogger(GenericAnnotationProcessor.class);

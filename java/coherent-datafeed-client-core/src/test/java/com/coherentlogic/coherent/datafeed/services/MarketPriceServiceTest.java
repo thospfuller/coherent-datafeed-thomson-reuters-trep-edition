@@ -7,14 +7,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Map;
 
-import javax.jms.MessageConsumer;
-
+import org.infinispan.Cache;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.coherentlogic.coherent.datafeed.adapters.json.RFABeanToJSONAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
@@ -41,17 +40,17 @@ public class MarketPriceServiceTest {
 
     private static final String RIC = "FOO.BAR";
 
-//    private static final String[] RICS = new String[] { RIC };
-
     private OMMConsumer ommConsumer = null;
 
     private OMMPool pool = null;
 
     private MarketPriceService marketPriceService = null;
 
-    private MessageConsumer messageConsumer = null;
-
     private Handle handle = null;
+
+    private Cache<Handle, String> ricCache;
+
+    private Cache<String, MarketPrice> marketPriceCache;
 
     @Before
     public void setUp() throws Exception {
@@ -70,16 +69,14 @@ public class MarketPriceServiceTest {
 
         Client client = mock (Client.class);
 
-        messageConsumer = mock (MessageConsumer.class);
-
-        RFABeanToJSONAdapter<MarketPrice> jsonAdapter =
-            new RFABeanToJSONAdapter<MarketPrice>(MarketPrice.class);
+        ricCache = mock (Cache.class);
+        marketPriceCache = mock (Cache.class);
 
         marketPriceService = new MarketPriceService (
             requestMessageBuilderFactory,
             client,
-            messageConsumer,
-            jsonAdapter
+            ricCache,
+            marketPriceCache
         );
 
         handle = mock (Handle.class);
@@ -89,7 +86,6 @@ public class MarketPriceServiceTest {
     public void tearDown() throws Exception {
         ommConsumer = null;
         pool = null;
-        messageConsumer = null;
         marketPriceService = null;
         handle = null;
     }

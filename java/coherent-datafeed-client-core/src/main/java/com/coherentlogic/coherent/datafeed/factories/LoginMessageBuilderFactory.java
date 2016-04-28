@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
 import com.reuters.rfa.omm.OMMEncoder;
 import com.reuters.rfa.omm.OMMPool;
@@ -14,7 +15,7 @@ import com.reuters.rfa.omm.OMMPool;
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public class LoginMessageBuilderFactory
-    implements Factory<LoginMessageBuilder> {
+    implements TypedFactory<LoginMessageBuilder> {
 
     public static final String BEAN_NAME = "loginMessageBuilderFactory";
 

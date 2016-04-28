@@ -5,7 +5,7 @@ import org.hornetq.api.jms.HornetQJMSClient;
 import org.hornetq.api.jms.JMSFactoryType;
 import org.hornetq.jms.client.HornetQConnectionFactory;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
  * A factory class for creating instances of {@link javax.jms.ConnectionFactory}
@@ -20,7 +20,7 @@ import com.coherentlogic.coherent.datafeed.factories.Factory;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class ConnectionFactoryFactory implements Factory<HornetQConnectionFactory> {
+public class ConnectionFactoryFactory implements TypedFactory<HornetQConnectionFactory> {
 
     private final HornetQConnectionFactory connectionFactory;
 

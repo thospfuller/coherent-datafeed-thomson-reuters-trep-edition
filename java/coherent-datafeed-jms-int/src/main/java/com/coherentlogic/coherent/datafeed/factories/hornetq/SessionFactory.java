@@ -4,7 +4,7 @@ import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Session;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
  * Factory class for creating instances of {@link javax.jms.Session} from a
@@ -12,7 +12,7 @@ import com.coherentlogic.coherent.datafeed.factories.Factory;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class SessionFactory implements Factory<Session> {
+public class SessionFactory implements TypedFactory<Session> {
 
     private final Session session;
 

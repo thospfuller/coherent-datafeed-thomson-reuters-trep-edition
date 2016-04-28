@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.exceptions.
     ApplicationInitializationFailedException;
 import com.reuters.rfa.session.Session;
@@ -13,7 +14,7 @@ import com.reuters.rfa.session.Session;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class RFASessionFactory implements Factory<Session> {
+public class RFASessionFactory implements TypedFactory<Session> {
 
     private final String sessionName;
 

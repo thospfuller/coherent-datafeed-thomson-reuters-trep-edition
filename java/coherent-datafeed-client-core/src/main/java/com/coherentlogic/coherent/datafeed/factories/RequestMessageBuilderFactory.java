@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.reuters.rfa.common.EventQueue;
 import com.reuters.rfa.omm.OMMEncoder;
@@ -15,8 +16,7 @@ import com.reuters.rfa.session.omm.OMMConsumer;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class RequestMessageBuilderFactory implements
-    Factory<RequestMessageBuilder> {
+public class RequestMessageBuilderFactory implements TypedFactory<RequestMessageBuilder> {
 
     public static final String BEAN_NAME = "defaultRequestMessageBuilderFactory";
 

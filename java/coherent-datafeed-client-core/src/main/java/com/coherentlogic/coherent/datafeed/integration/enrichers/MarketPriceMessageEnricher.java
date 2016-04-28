@@ -58,12 +58,12 @@ public class MarketPriceMessageEnricher extends AbstractMessageEnricher {
          */
 //        synchronized (marketPriceCache) {
 
-            Session session = getSession (message, marketPriceCache);
+//            Session session = getSession (message, marketPriceCache);
 
             enrichedMessage =
                 MessageBuilder
                     .fromMessage(message)
-                    .setHeader(SESSION, session)
+//                    .setHeader(SESSION, session)
                     .build ();
 //        }
         log.info("enrich: method ends; enrichedMessage: " +

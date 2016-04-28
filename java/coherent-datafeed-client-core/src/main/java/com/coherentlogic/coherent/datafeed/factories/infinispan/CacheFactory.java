@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.factories.infinispan;
 import org.infinispan.Cache;
 import org.infinispan.manager.CacheContainer;
 
-import com.coherentlogic.coherent.datafeed.factories.Factory;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.listeners.infinispan.CachedObjectListener;
 
 /**
@@ -11,7 +11,7 @@ import com.coherentlogic.coherent.datafeed.listeners.infinispan.CachedObjectList
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class CacheFactory<K, V> implements Factory<Cache<K, V>> {
+public class CacheFactory<K, V> implements TypedFactory<Cache<K, V>> {
 
     private final Cache<K, V> cache;
 
