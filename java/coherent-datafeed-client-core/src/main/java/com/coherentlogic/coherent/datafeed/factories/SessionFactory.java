@@ -26,12 +26,6 @@ public class SessionFactory implements TypedFactory<Session> {
 
     private final Map<Handle, DictionaryEntry> dictionaryEntryCache;
 
-    private final Map<Handle, MarketPrice> marketPriceEntryCache;
-
-    private final Map<Handle, MarketMaker> marketMakerEntryCache;
-
-    private final Map<Handle, MarketByOrder> marketByOrderEntryCache;
-
     private final Map<Handle, TS1DefEntry> ts1DefEntryCache;
 
     private final Map<Handle, TimeSeriesEntries> timeSeriesEntryCache;
@@ -39,18 +33,12 @@ public class SessionFactory implements TypedFactory<Session> {
     public SessionFactory(
         Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache,
         Map<Handle, DictionaryEntry> dictionaryEntryCache,
-        Map<Handle, MarketPrice> marketPriceEntryCache,
-        Map<Handle, MarketMaker> marketMakerEntryCache,
-        Map<Handle, MarketByOrder> marketByOrderEntryCache,
         Map<Handle, TS1DefEntry> ts1DefEntryCache,
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache
     ) {
         super();
         this.directoryEntryCache = directoryEntryCache;
         this.dictionaryEntryCache = dictionaryEntryCache;
-        this.marketPriceEntryCache = marketPriceEntryCache;
-        this.marketMakerEntryCache = marketMakerEntryCache;
-        this.marketByOrderEntryCache = marketByOrderEntryCache;
         this.ts1DefEntryCache = ts1DefEntryCache;
         this.timeSeriesEntryCache = timeSeriesEntryCache;
     }
@@ -66,9 +54,6 @@ public class SessionFactory implements TypedFactory<Session> {
         Session session = new Session (
             directoryEntryCache,
             dictionaryEntryCache,
-            marketPriceEntryCache,
-            marketMakerEntryCache,
-            marketByOrderEntryCache,
             ts1DefEntryCache,
             timeSeriesEntryCache
         );
