@@ -64,9 +64,6 @@ public class TimeSeriesExample implements CommandLineRunner {
 
         client.start();
 
-        client.getMainUI().mainFrame.pack();
-        client.getMainUI().mainFrame.setVisible(true);
-
         // This needs to be set in the operating system environment variables.
         String dacsId = System.getenv(DACS_ID);
 

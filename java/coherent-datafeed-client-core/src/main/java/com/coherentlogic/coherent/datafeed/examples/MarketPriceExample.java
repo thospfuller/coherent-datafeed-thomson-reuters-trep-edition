@@ -20,7 +20,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
-import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
