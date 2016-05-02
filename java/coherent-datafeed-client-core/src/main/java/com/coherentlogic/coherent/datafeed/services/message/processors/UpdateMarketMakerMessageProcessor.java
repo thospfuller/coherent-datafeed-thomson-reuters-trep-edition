@@ -2,6 +2,8 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +32,18 @@ public class UpdateMarketMakerMessageProcessor
 
     private final MarketMakerAdapter marketMakerAdapter;
 
+    private final Map<Handle, String> ricCache;
+
+    private final Map<String, MarketMaker> marketMakerCache;
+
     public UpdateMarketMakerMessageProcessor (
-        MarketMakerAdapter marketMakerAdapter
+        MarketMakerAdapter marketMakerAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketMaker> marketMakerCache
     ) {
         this.marketMakerAdapter = marketMakerAdapter;
+        this.ricCache = ricCache;
+        this.marketMakerCache = marketMakerCache;
     }
 
     /**
@@ -59,9 +69,9 @@ public class UpdateMarketMakerMessageProcessor
 
         Handle handle = itemEvent.getHandle();
 
-        Session session = getSession(message);
+        String ric = ricCache.get(handle);
 
-        MarketMaker currentMarketMaker = session.getMarketMaker(handle);
+        MarketMaker currentMarketMaker = marketMakerCache.get(ric);
 
         assertNotNull("currentMarketMaker", currentMarketMaker);
 
@@ -74,8 +84,6 @@ public class UpdateMarketMakerMessageProcessor
             (MarketMaker) SerializationUtils.clone(currentMarketMaker);
 
         marketMakerAdapter.adapt(ommMsg, updatedMarketMaker);
-
-        session.putMarketMaker(handle, updatedMarketMaker);
 
         Message<MarketMaker> result = MessageBuilder
             .withPayload(updatedMarketMaker)

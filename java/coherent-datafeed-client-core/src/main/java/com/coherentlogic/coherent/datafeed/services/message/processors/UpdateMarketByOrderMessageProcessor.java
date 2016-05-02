@@ -2,6 +2,8 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +34,18 @@ public class UpdateMarketByOrderMessageProcessor
 
     private final MarketByOrderAdapter marketByOrderAdapter;
 
+    private final Map<Handle, String> ricCache;
+
+    private final Map<String, MarketByOrder> marketByOrderCache;
+
     public UpdateMarketByOrderMessageProcessor (
-        MarketByOrderAdapter marketPriceAdapter
+        MarketByOrderAdapter marketPriceAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketByOrder> marketByOrderCache
     ) {
         this.marketByOrderAdapter = marketPriceAdapter;
+        this.ricCache = ricCache;
+        this.marketByOrderCache = marketByOrderCache;
     }
 
     /**
@@ -61,9 +71,10 @@ public class UpdateMarketByOrderMessageProcessor
 
         Handle handle = itemEvent.getHandle();
 
-        Session session = getSession(message);
+//        Session session = getSession(message);
 
-        MarketByOrder currentMarketByOrder = session.getMarketByOrder(handle);
+        String ric = ricCache.get(handle);
+        MarketByOrder currentMarketByOrder = marketByOrderCache.get(ric);
 
         assertNotNull("currentMarketByOrder", currentMarketByOrder);
 
@@ -74,7 +85,7 @@ public class UpdateMarketByOrderMessageProcessor
 
         marketByOrderAdapter.adapt(ommMsg, updatedMarketByOrder);
 
-        session.putMarketByOrder(handle, updatedMarketByOrder);
+//        session.putMarketByOrder(handle, updatedMarketByOrder);
 
         Message<MarketByOrder> result = MessageBuilder
             .withPayload(updatedMarketByOrder)
