@@ -63,8 +63,6 @@ public class SessionTest {
 
         directoryEntryCache = mock (Map.class);
         dictionaryEntryCache = mock (Map.class);
-        marketPriceEntryCache = mock (Map.class);
-        marketMakerEntryCache = mock (Map.class);
         ts1DefEntryMap = mock (Map.class);
         nameToDirectoryMap = new HashMap<String, DirectoryEntry> ();
         timeSeriesEntryMap = mock (Map.class);
@@ -72,9 +70,6 @@ public class SessionTest {
         session = new Session (
             directoryEntryCache,
             dictionaryEntryCache,
-            marketPriceEntryCache,
-            marketMakerEntryCache,
-            marketByOrderEntryCache,
             ts1DefEntryMap,
             timeSeriesEntryMap
         );
@@ -360,9 +355,6 @@ public class SessionTest {
         session = new Session (
             directoryEntryCache,
             dictionaryEntryCache,
-            marketPriceEntryCache,
-            marketMakerEntryCache,
-            marketByOrderEntryCache,
             ts1DefEntryMap,
             timeSeriesEntryMap
         );
@@ -430,9 +422,6 @@ public class SessionTest {
         Session session = new Session (
             directoryEntryCache,
             dictionaryEntryCache,
-            marketPriceEntryCache,
-            marketMakerEntryCache,
-            marketByOrderEntryCache,
             ts1DefEntryMap,
             timeSeriesEntryMap
         );

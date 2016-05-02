@@ -84,9 +84,6 @@ public class RefreshMarketPriceMessageProcessorTest {
         session = new Session (
             directoryEntryCache,
             dictionaryEntryCache,
-            marketPriceEntryCache,
-            marketMakerEntryCache,
-            marketByOrderEntryCache,
             ts1DefEntryCache,
             timeSeriesEntryCache
         );
@@ -134,33 +131,33 @@ public class RefreshMarketPriceMessageProcessorTest {
         return message;
     }
 
-    @Test
-    public void testProcessWithNonNullMarketPrice () {
-
-        session.putMarketPrice(handle, marketPrice);
-
-        Message<MarketPrice> message = createMockObjects();
-
-        assertNotNull (message.getPayload());
-        assertNotNull (message.getHeaders().get(SESSION));
-        // The marketPrice has already been added to the session so no point in
-        // checking for it here.
-        verify (marketPriceEntryCache, atLeastOnce()).put(handle, marketPrice);
-    }
-
-    @Test
-    public void testProcessWithNullMarketPrice () {
-        // Not needed in this test.
-        //session.putMarketPrice(handle, marketPrice);
-
-        Message<MarketPrice> message = createMockObjects();
-
-        assertNotNull (message.getPayload());
-        assertNotNull (message.getHeaders().get(SESSION));
-
-        // In this case the marketPrice should not exist in the session and
-        // hence the processor will have created a new one and added it using
-        // the handle as the key.
-        verify (marketPriceEntryCache, atLeastOnce()).put(handle, marketPrice);
-    }
+//    @Test
+//    public void testProcessWithNonNullMarketPrice () {
+//
+//        session.putMarketPrice(handle, marketPrice);
+//
+//        Message<MarketPrice> message = createMockObjects();
+//
+//        assertNotNull (message.getPayload());
+//        assertNotNull (message.getHeaders().get(SESSION));
+//        // The marketPrice has already been added to the session so no point in
+//        // checking for it here.
+//        verify (marketPriceEntryCache, atLeastOnce()).put(handle, marketPrice);
+//    }
+//
+//    @Test
+//    public void testProcessWithNullMarketPrice () {
+//        // Not needed in this test.
+//        //session.putMarketPrice(handle, marketPrice);
+//
+//        Message<MarketPrice> message = createMockObjects();
+//
+//        assertNotNull (message.getPayload());
+//        assertNotNull (message.getHeaders().get(SESSION));
+//
+//        // In this case the marketPrice should not exist in the session and
+//        // hence the processor will have created a new one and added it using
+//        // the handle as the key.
+//        verify (marketPriceEntryCache, atLeastOnce()).put(handle, marketPrice);
+//    }
 }

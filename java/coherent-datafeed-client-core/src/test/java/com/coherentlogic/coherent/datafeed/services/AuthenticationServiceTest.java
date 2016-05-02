@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
-import com.coherentlogic.coherent.datafeed.beans.UserBean;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
@@ -34,8 +33,6 @@ public class AuthenticationServiceTest {
 
     private AuthenticationService authenticationService = null;
 
-    private UserBean userBean = new UserBean ();
-
     @Before
     public void setUp() throws Exception {
 
@@ -56,9 +53,6 @@ public class AuthenticationServiceTest {
         SessionFactory sessionFactory = new SessionFactory(
             directoryMap,
             dictionaryMap,
-            marketPriceMap,
-            marketMakerMap,
-            marketByOrderMap,
             ts1DefEntryMap,
             timeSeriesEntriesMap
         );
@@ -70,8 +64,7 @@ public class AuthenticationServiceTest {
             null,
             null,
             sessionCache,
-            sessionFactory,
-            userBean // deprecated -- no longer needed
+            sessionFactory
         );
     }
 

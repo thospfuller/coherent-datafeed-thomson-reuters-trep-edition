@@ -56,9 +56,6 @@ public class SessionUtilsTest {
                 null,
                 null,
                 null,
-                null,
-                null,
-                null,
                 null
             )
         );

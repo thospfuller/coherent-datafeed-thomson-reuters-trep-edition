@@ -127,7 +127,7 @@ public class DirectoryServiceLoaderTest {
         Handle handle = mock (Handle.class);
 
         Session session = new Session (
-            directoryEntryCache, null, null, null, null, null, null);
+            directoryEntryCache, null, null, null);
 
         Iterator<OMMMapEntry> iterator = mock (Iterator.class);
         OMMMapEntry mapEntry = mock (OMMMapEntry.class);

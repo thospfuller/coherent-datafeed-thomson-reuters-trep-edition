@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
+import com.coherentlogic.coherent.datafeed.factories.MarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -76,7 +77,8 @@ public class MarketPriceServiceTest {
             requestMessageBuilderFactory,
             client,
             ricCache,
-            marketPriceCache
+            marketPriceCache,
+            new MarketPriceFactory()
         );
 
         handle = mock (Handle.class);

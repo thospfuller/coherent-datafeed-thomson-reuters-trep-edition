@@ -23,7 +23,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
 public class AbstractMarketPriceMessageProcessorTest {
 
     private final Session session = new Session (
-        null, null, null, null, null, null, null);
+        null, null, null, null);
 
     private final OMMItemEvent itemEvent = mock (OMMItemEvent.class);
 
