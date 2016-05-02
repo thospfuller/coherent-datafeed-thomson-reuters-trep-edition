@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -8,7 +10,6 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.MarketByOrderAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.session.omm.OMMItemEvent;
@@ -27,10 +28,18 @@ public class RefreshMarketByOrderMessageProcessor
 
     private final MarketByOrderAdapter marketByOrderAdapter;
 
+    private final Map<Handle, String> ricCache;
+
+    private final Map<String, MarketByOrder> marketByOrderCache;
+
     public RefreshMarketByOrderMessageProcessor (
-        MarketByOrderAdapter marketByOrderAdapter
+        MarketByOrderAdapter marketByOrderAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketByOrder> marketByOrderCache
     ) {
         this.marketByOrderAdapter = marketByOrderAdapter;
+        this.ricCache = ricCache;
+        this.marketByOrderCache = marketByOrderCache;
     }
 
     /**
@@ -45,7 +54,7 @@ public class RefreshMarketByOrderMessageProcessor
 
         MessageHeaders headers = message.getHeaders();
 
-        Session session = getSession(message);
+//        Session session = getSession(message);
 
         OMMItemEvent itemEvent = message.getPayload();
 
@@ -55,7 +64,10 @@ public class RefreshMarketByOrderMessageProcessor
 
         OMMMsg ommMsg = itemEvent.getMsg();
 
-        MarketByOrder marketByOrder = session.getMarketByOrder(handle);
+//        MarketByOrder marketByOrder = session.getMarketByOrder(handle);
+
+        String ric = ricCache.get(handle);
+        MarketByOrder marketByOrder = marketByOrderCache.get(ric);
 
         /* TODO: This is not really valid -- consider the following 
          *       The user disconnects the Ethernet cable and waits a few moments
@@ -76,7 +88,7 @@ public class RefreshMarketByOrderMessageProcessor
                 "was refreshed: " + marketByOrder);
         }
 
-        session.putMarketByOrder(handle, marketByOrder);
+//        session.putMarketByOrder(handle, marketByOrder);
 
         Message<MarketByOrder> result = MessageBuilder
             .withPayload(marketByOrder)
