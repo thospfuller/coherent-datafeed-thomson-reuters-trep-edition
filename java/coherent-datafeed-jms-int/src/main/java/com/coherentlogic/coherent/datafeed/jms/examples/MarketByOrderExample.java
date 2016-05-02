@@ -6,7 +6,7 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER_SERVICE_GATEWAY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
-import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,12 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
 import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
-import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.reuters.rfa.common.Handle;
@@ -134,11 +135,11 @@ public class MarketByOrderExample implements CommandLineRunner {
         final MarketByOrderServiceSpecification marketByOrderService,
         final Handle loginHandle
     ) {
-        List<Handle> itemHandles = marketByOrderService.query(
-            Constants.dELEKTRON_DD, loginHandle, "ANZ.AX");
+        Map<String, MarketByOrder> results = marketByOrderService.query(
+            ServiceName.dELEKTRON_DD, loginHandle, "ANZ.AX");
 
-        log.info ("The query is complete, now we will wait " +
-            "for replies; itemHandles: " + itemHandles);
+//        log.info ("The query is complete, now we will wait " +
+//            "for replies; itemHandles: " + itemHandles);
 
         long ctr = 0;
 

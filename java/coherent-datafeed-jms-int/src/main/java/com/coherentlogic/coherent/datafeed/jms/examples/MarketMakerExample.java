@@ -5,7 +5,7 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_MAKER_SERVICE_GATEWAY;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.jms.JMSException;
 
@@ -24,10 +24,10 @@ import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
-import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
@@ -65,18 +65,18 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
 //                DEFAULT_APP_CTX_PATH);
 //
 //        applicationContext.registerShutdownHook();
-
-        final MainUI mainUI = applicationContext.getBean(MainUI.class);
-
-        new Thread (
-            new Runnable () {
-                @Override
-                public void run() {
-                    mainUI.mainFrame.pack();
-                    mainUI.mainFrame.setVisible(true);
-                }
-            }
-        ).start();
+//
+//        final MainUI mainUI = applicationContext.getBean(MainUI.class);
+//
+//        new Thread (
+//            new Runnable () {
+//                @Override
+//                public void run() {
+//                    mainUI.mainFrame.pack();
+//                    mainUI.mainFrame.setVisible(true);
+//                }
+//            }
+//        ).start();
 
         AuthenticationServiceSpecification authenticationService =
             (AuthenticationServiceSpecification) applicationContext.getBean(
@@ -119,8 +119,8 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
 
         log.info("result: " + result);
 
-        List<Handle> itemHandles = marketMakerService.query(
-            Constants.dELEKTRON_DD,
+        Map<String, MarketMaker> results = marketMakerService.query(
+            ServiceName.dELEKTRON_DD,
             loginHandle,
             "GOOG.O",
             "MSFT.O",
@@ -128,8 +128,8 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
             "LKQ.OQ"
         );
 
-        for (Handle nextHandle : itemHandles)
-            log.debug("nextHandle: " + nextHandle);
+//        for (Handle nextHandle : itemHandles)
+//            log.debug("nextHandle: " + nextHandle);
 
         long ctr = 0;
 
