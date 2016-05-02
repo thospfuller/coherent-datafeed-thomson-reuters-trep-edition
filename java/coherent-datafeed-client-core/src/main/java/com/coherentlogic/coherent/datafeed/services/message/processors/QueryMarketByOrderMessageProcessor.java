@@ -1,8 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-
 import java.util.List;
+import java.util.Map;
 
 import org.infinispan.Cache;
 import org.slf4j.Logger;
@@ -13,8 +12,10 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
+import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
@@ -32,7 +33,7 @@ import com.reuters.rfa.common.Handle;
  */
 public class QueryMarketByOrderMessageProcessor
     implements MessageProcessorSpecification
-        <QueryParameters, List<Handle>> {
+        <QueryParameters, Map<String, MarketByOrder>> {
 
     private static final Logger log =
         LoggerFactory.getLogger(QueryMarketByOrderMessageProcessor.class);
@@ -43,7 +44,7 @@ public class QueryMarketByOrderMessageProcessor
 
     private final Cache<Handle, Session> marketByOrderCache;
 
-    private QueryMarketByOrderMessageProcessor(
+    public QueryMarketByOrderMessageProcessor(
         MarketByOrderServiceSpecification marketByOrderService,
         Cache<Handle, Session> sessionCache,
         Cache<Handle, Session> marketByOrderCache
@@ -58,10 +59,10 @@ public class QueryMarketByOrderMessageProcessor
      */
     @Override
     @Transactional
-    public Message<List<Handle>> process(
+    public Message<Map<String, MarketByOrder>> process(
         Message<QueryParameters> message) {
 
-        Message<List<Handle>> result = null;
+        Message<Map<String, MarketByOrder>> result = null;
 
         QueryParameters parameters = message.getPayload();
 
@@ -81,15 +82,15 @@ public class QueryMarketByOrderMessageProcessor
 
             Handle loginHandle = parameters.getLoginHandle();
 
-            Session session = (Session) sessionCache.get(loginHandle);
+//            Session session = (Session) sessionCache.get(loginHandle);
 
             String[] items = parameters.getItem();
 
-            List<Handle> results = marketByOrderService.query(
-                serviceName, loginHandle, items);
+            Map<String, MarketByOrder> results = marketByOrderService.query(
+                ServiceName.valueOf(serviceName), loginHandle, items);
 
-            for (Handle nextHandle : results)
-                marketByOrderCache.put(nextHandle, session);
+//            for (Handle nextHandle : results)
+//                marketByOrderCache.put(nextHandle, session);
 
             MessageHeaders headers = message.getHeaders();
 
@@ -97,7 +98,7 @@ public class QueryMarketByOrderMessageProcessor
                 MessageBuilder
                     .withPayload(results)
                     .copyHeaders(headers)
-                    .setHeader(SESSION, session)
+//                    .setHeader(SESSION, session)
                     .build();
 //        }
         return result;
