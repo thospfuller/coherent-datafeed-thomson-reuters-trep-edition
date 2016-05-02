@@ -1,4 +1,6 @@
-package com.coherentlogic.coherent.datafeed.services.message.processors;
+	package com.coherentlogic.coherent.datafeed.services.message.processors;
+
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +10,6 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
@@ -28,10 +29,18 @@ public class RefreshMarketMakerMessageProcessor
 
     private final MarketMakerAdapter marketMakerAdapter;
 
+    private final Map<Handle, String> ricCache;
+
+    private final Map<String, MarketMaker> marketMakerCache;
+
     public RefreshMarketMakerMessageProcessor (
-        MarketMakerAdapter marketMakerAdapter
+        MarketMakerAdapter marketMakerAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketMaker> marketMakerCache
     ) {
         this.marketMakerAdapter = marketMakerAdapter;
+        this.ricCache = ricCache;
+        this.marketMakerCache = marketMakerCache;
     }
 
     /**
@@ -46,8 +55,6 @@ public class RefreshMarketMakerMessageProcessor
 
         MessageHeaders headers = message.getHeaders();
 
-        Session session = getSession(message);
-
         OMMItemEvent itemEvent = message.getPayload();
 
         Handle handle = itemEvent.getHandle();
@@ -56,7 +63,9 @@ public class RefreshMarketMakerMessageProcessor
 
         OMMMsg ommMsg = itemEvent.getMsg();
 
-        MarketMaker marketMaker = session.getMarketMaker(handle);
+        String ric = ricCache.get(handle);
+
+        MarketMaker marketMaker = marketMakerCache.get(ric); //session.getMarketMaker(handle);
 
         /* TODO: This is not really valid -- consider the following 
          *       The user disconnects the Ethernet cable and waits a few moments
@@ -69,15 +78,13 @@ public class RefreshMarketMakerMessageProcessor
 
         if (marketMaker == null) {
             marketMaker = marketMakerAdapter.adapt(ommMsg);
-            log.info("The marketPrice was null so a new instance was " +
+            log.info("The marketMaker was null so a new instance was " +
                 "created for this refresh.");
         } else {
         	marketMakerAdapter.adapt(ommMsg, marketMaker);
-            log.info("The marketPrice was not null so an existing instance " +
+            log.info("The marketMaker was not null so an existing instance " +
                 "was refreshed.");
         }
-
-        session.putMarketMaker(handle, marketMaker);
 
         Message<MarketMaker> result = MessageBuilder
             .withPayload(marketMaker)
