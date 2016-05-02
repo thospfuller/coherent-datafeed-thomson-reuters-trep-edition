@@ -1,8 +1,11 @@
 package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
+import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -20,18 +23,24 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class MarketByOrderService
-    extends QueryableService
+    extends CacheableQueryableService<MarketByOrder>
     implements MarketByOrderServiceSpecification {
 
     public MarketByOrderService(
         RequestMessageBuilderFactory factory,
-        Client client
+        Client client,
+        Map<Handle, String> ricCache,
+        Map<String, MarketByOrder> marketByOrderCache,
+        TypedFactory<MarketByOrder> marketByOrderFactory
     ) {
         super(
             Constants.dELEKTRON_DD,
             RDMMsgTypes.MARKET_BY_ORDER,
             factory,
-            client
+            client,
+            ricCache,
+            marketByOrderCache,
+            marketByOrderFactory
         );
     }
 
