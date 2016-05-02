@@ -11,7 +11,6 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
-import com.coherentlogic.coherent.datafeed.beans.UserBean;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory;
@@ -20,6 +19,9 @@ import com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory;
 import com.coherentlogic.coherent.datafeed.factories.LoginMessageBuilderFactory;
+import com.coherentlogic.coherent.datafeed.factories.MarketByOrderFactory;
+import com.coherentlogic.coherent.datafeed.factories.MarketMakerFactory;
+import com.coherentlogic.coherent.datafeed.factories.MarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.OMMEncoderFactory;
 import com.coherentlogic.coherent.datafeed.factories.OMMPoolFactory;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
@@ -62,11 +64,6 @@ public class GlobalConfiguration {
     @Bean(name=SPRING_CACHE_MANAGER)
     public ConcurrentMapCacheManager getConcurrentMapCacheManager () {
         return new ConcurrentMapCacheManager ();
-    }
-
-    @Bean(name=UserBean.BEAN_NAME)
-    public UserBean getUserBean () {
-        return new UserBean ();
     }
 
     @Bean(name=LoggingService.BEAN_NAME)
@@ -301,6 +298,21 @@ public class GlobalConfiguration {
     @Bean(name=TimeSeriesHelper.BEAN_NAME)
     public TimeSeriesHelper getTimeSeriesHelper () {
         return new TimeSeriesHelper ();
+    }
+
+    @Bean(name=MarketPriceFactory.BEAN_NAME)
+    public MarketPriceFactory getMarketPriceFactory () {
+        return new MarketPriceFactory ();
+    }
+
+    @Bean(name=MarketMakerFactory.BEAN_NAME)
+    public MarketMakerFactory getMarketMakerFactory () {
+        return new MarketMakerFactory ();
+    }
+
+    @Bean(name=MarketByOrderFactory.BEAN_NAME)
+    public MarketByOrderFactory getMarketByOrderFactory () {
+        return new MarketByOrderFactory ();
     }
 
 //    <bean id="marketPriceEventDrivenEndpoint"
