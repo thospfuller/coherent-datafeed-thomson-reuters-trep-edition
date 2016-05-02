@@ -1,6 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import com.coherentlogic.coherent.datafeed.beans.UserBean;
 import com.coherentlogic.coherent.datafeed.exceptions.SessionCreationFailedException;
 
 /**
@@ -15,13 +14,10 @@ public class CompletionEventHandlingService {
 
     private final AuthenticationService authenticationService;
 
-    private final UserBean userBean;
-
     public CompletionEventHandlingService(
-        AuthenticationService authenticationService, UserBean userBean) {
+        AuthenticationService authenticationService) {
         super();
         this.authenticationService = authenticationService;
-        this.userBean = userBean;
     }
 
     /**
@@ -29,11 +25,14 @@ public class CompletionEventHandlingService {
      * workflow.
      */
     public void process () {
-        String dacsId = userBean.getDacsId ();
 
-        if (dacsId == null)
-            throw new SessionCreationFailedException("The DACS id is null!");
+        throw new SessionCreationFailedException("The process method has had its implementation gutted!");
 
-        authenticationService.login(dacsId);
+//        String dacsId = userBean.getDacsId ();
+//
+//        if (dacsId == null)
+//            throw new SessionCreationFailedException("The DACS id is null!");
+//
+//        authenticationService.login(dacsId);
     }
 }
