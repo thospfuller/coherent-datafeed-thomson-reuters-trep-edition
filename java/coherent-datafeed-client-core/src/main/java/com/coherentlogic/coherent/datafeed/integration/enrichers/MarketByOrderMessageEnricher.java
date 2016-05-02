@@ -58,12 +58,12 @@ public class MarketByOrderMessageEnricher extends AbstractMessageEnricher {
          */
 //        synchronized (marketByOrderCache) {
 
-            Session session = getSession (message, marketByOrderCache);
+//            Session session = getSession (message, marketByOrderCache);
 
             enrichedMessage =
                 MessageBuilder
                     .fromMessage(message)
-                    .setHeader(SESSION, session)
+//                    .setHeader(SESSION, session)
                     .build ();
 //        }
         log.info("enrich: method ends; enrichedMessage: " +
