@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import java.util.List;
+import java.util.Map;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.reuters.rfa.common.Handle;
@@ -17,15 +17,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketByOrderServiceSpecification {
 
-    List<Handle> query(
-        String serviceName,
-        Handle loginHandle,
-        String... items
-    );
-
-    List<Handle> query(
-        String serviceName,
-        Handle loginHandle,
-        String item
-    );
+    Map<String, MarketByOrder> query (ServiceName serviceName, Handle loginHandle, String... rics);
 }
