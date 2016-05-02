@@ -81,7 +81,6 @@ public class TimeSeriesService
     public TimeSeriesService(
         RequestMessageBuilderFactory factory,
         Client client,
-        BasicAdapter<TimeSeries, String> jsonGenerator,
         CommonRequestExecutor commonRequestExecutor,
         final Cache<Handle, Session> sessionCache,
         final Map<Handle, CompletableFuture<TimeSeries>> handleToCompletableFutureCache,
