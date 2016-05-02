@@ -22,9 +22,6 @@ import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
-import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
-import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
 import com.reuters.rfa.common.Handle;
@@ -85,12 +82,6 @@ public class Session extends SerializableBean {
      */
     private final Map<Handle, DictionaryEntry> dictionaryEntryCache;
 
-    private final Map<Handle, MarketPrice> marketPriceEntryCache;
-
-    private final Map<Handle, MarketMaker> marketMakerEntryCache;
-
-    private final Map<Handle, MarketByOrder> marketByOrderEntryCache;
-
     private final Map<Handle, TS1DefEntry> ts1DefEntryCache;
 
     private final Map<Handle, TimeSeriesEntries> timeSeriesEntryCache;
@@ -106,17 +97,11 @@ public class Session extends SerializableBean {
     public Session(
         Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache,
         Map<Handle, DictionaryEntry> dictionaryEntryCache,
-        Map<Handle, MarketPrice> marketPriceEntryCache,
-        Map<Handle, MarketMaker> marketMakerEntryCache,
-        Map<Handle, MarketByOrder> marketByOrderEntryCache,
         Map<Handle, TS1DefEntry> ts1DefEntryCache,
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache
     ) {
         this.directoryEntryCache = directoryEntryCache;
         this.dictionaryEntryCache = dictionaryEntryCache;
-        this.marketPriceEntryCache = marketPriceEntryCache;
-        this.marketMakerEntryCache = marketMakerEntryCache;
-        this.marketByOrderEntryCache = marketByOrderEntryCache;
         this.ts1DefEntryCache = ts1DefEntryCache;
         this.timeSeriesEntryCache = timeSeriesEntryCache;
     }
@@ -537,37 +522,33 @@ public class Session extends SerializableBean {
         return dictionaryEntryCache;
     }
 
-    public Map<Handle, MarketPrice> getMarketPriceCache () {
-        return marketPriceEntryCache;
-    }
-
-    public void putMarketPrice (Handle handle, MarketPrice marketPrice) {
-        marketPriceEntryCache.put(handle, marketPrice);
-    }
-
-    public void putMarketMaker (Handle handle, MarketMaker marketMaker) {
-        marketMakerEntryCache.put(handle, marketMaker);
-    }
-
-    public void putMarketByOrder (Handle handle, MarketByOrder marketByOrder) {
-        marketByOrderEntryCache.put(handle, marketByOrder);
-    }
-
-    public MarketPrice getMarketPrice (Handle handle) {
-        return marketPriceEntryCache.get (handle);
-    }
-
-    public MarketMaker getMarketMaker (Handle handle) {
-        return marketMakerEntryCache.get (handle);
-    }
-
-    public MarketByOrder getMarketByOrder (Handle handle) {
-        return marketByOrderEntryCache.get (handle);
-    }
-
-    public MarketPrice removeMarketPrice (Handle handle) {
-        return marketPriceEntryCache.remove(handle);
-    }
+//    public void putMarketPrice (Handle handle, MarketPrice marketPrice) {
+//        marketPriceEntryCache.put(handle, marketPrice);
+//    }
+//
+//    public void putMarketMaker (Handle handle, MarketMaker marketMaker) {
+//        marketMakerEntryCache.put(handle, marketMaker);
+//    }
+//
+//    public void putMarketByOrder (Handle handle, MarketByOrder marketByOrder) {
+//        marketByOrderEntryCache.put(handle, marketByOrder);
+//    }
+//
+//    public MarketPrice getMarketPrice (Handle handle) {
+//        return marketPriceEntryCache.get (handle);
+//    }
+//
+//    public MarketMaker getMarketMaker (Handle handle) {
+//        return marketMakerEntryCache.get (handle);
+//    }
+//
+//    public MarketByOrder getMarketByOrder (Handle handle) {
+//        return marketByOrderEntryCache.get (handle);
+//    }
+//
+//    public MarketPrice removeMarketPrice (Handle handle) {
+//        return marketPriceEntryCache.remove(handle);
+//    }
 
     public TimeSeriesEntries getTimeSeriesEntries (Handle handle) {
         return timeSeriesEntryCache.get(handle);
