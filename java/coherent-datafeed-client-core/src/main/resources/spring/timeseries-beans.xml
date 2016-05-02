@@ -34,8 +34,8 @@
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="timeSeriesEventDrivenEndpoint"/>
-        <constructor-arg name="messageConsumer" ref="timeSeriesConsumer"/>
-        <constructor-arg name="jsonGenerator" ref="timeSeriesJSONGenerator"/>
+        <!-- constructor-arg name="messageConsumer" ref="timeSeriesConsumer"/>
+        <constructor-arg name="jsonGenerator" ref="timeSeriesJSONGenerator"/ -->
         <constructor-arg name="commonRequestExecutor" ref="timeSeriesRequestExecutor"/>
         <constructor-arg name="sessionCache" ref="sessionCache"/>
         <constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/>

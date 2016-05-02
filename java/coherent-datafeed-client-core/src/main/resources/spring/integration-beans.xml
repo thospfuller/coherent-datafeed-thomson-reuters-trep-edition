@@ -27,7 +27,8 @@
     <import resource="dictionary-workflow-beans.xml"/>
     <import resource="directory-workflow-beans.xml"/>
     <import resource="ts1def-workflow-beans.xml"/>
-    <!-- import resource="timeseries-workflow-beans.xml"/ -->
+    <import resource="timeseries-beans.xml"/>
+    <import resource="timeseries-workflow-beans.xml"/>
 
     <int:channel id="workflowEndsChannel"/>
 

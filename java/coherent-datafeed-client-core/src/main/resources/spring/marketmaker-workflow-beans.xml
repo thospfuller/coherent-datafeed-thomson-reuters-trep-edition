@@ -66,12 +66,12 @@
      method="onCompletionEventReceived"/>
 
     <int:channel id="ommItemEventChannel"/>
-    <int:channel id="marketDataItemEventChannel"/>
+    <!-- int:channel id="marketDataItemEventChannel"/ -->
 
     <!-- See rfa.example.framework.OMMSubAppContext.java
       -->
     <int:router input-channel="ommItemEventChannel"
-     default-output-channel="workflowEndsChannel"
+     default-output-channel="errorChannel"
      expression="payload.msg.msgModelType">
         <!-- Was marketMakerChannel -->
         <int:mapping channel="processMarketMakerChannel"

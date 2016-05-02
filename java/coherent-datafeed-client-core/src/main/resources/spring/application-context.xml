@@ -177,9 +177,6 @@
     <bean id="sessionFactory" class="com.coherentlogic.coherent.datafeed.factories.SessionFactory">
         <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
         <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
-        <constructor-arg name="marketPriceEntryCache" ref="marketPriceEntryCache"/>
-        <constructor-arg name="marketMakerEntryCache" ref="marketMakerEntryCache"/>
-        <constructor-arg name="marketByOrderEntryCache" ref="marketByOrderEntryCache"/>
         <constructor-arg name="ts1DefEntryCache" ref="ts1DefEntryCache"/>
         <constructor-arg name="timeSeriesEntryCache" ref="timeSeriesEntryCache"/>
     </bean>
@@ -202,7 +199,6 @@
         <constructor-arg name="client" ref="authenticationEventDrivenEndpoint"/>
         <constructor-arg name="sessionCache" ref="sessionCache"/>
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
-        <constructor-arg name="userBean" ref="userBean"/>
     </bean>
 
     <bean id="jsonAdapter" class="com.coherentlogic.coherent.datafeed.adapters.json.RFABeanToJSONAdapter">
@@ -252,12 +248,16 @@
         <constructor-arg name="client" ref="marketPriceEventDrivenEndpoint"/>
         <constructor-arg name="ricCache" ref="ricCache"/>
         <constructor-arg name="marketPriceCache" ref="marketPriceCache"/>
+        <constructor-arg name="marketPriceFactory" ref="marketPriceFactory"/>
     </bean>
 
     <bean id="marketMakerService" class="com.coherentlogic.coherent.datafeed.services.MarketMakerService"
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketMakerEventDrivenEndpoint"/>
+        <constructor-arg name="ricCache" ref="ricCache"/>
+        <constructor-arg name="marketMakerCache" ref="marketMakerCache"/>
+        <constructor-arg name="marketMakerFactory" ref="marketMakerFactory"/>
     </bean>
 
     <bean id="marketByOrderEventDrivenEndpoint"
@@ -269,6 +269,9 @@
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketByOrderEventDrivenEndpoint"/>
+        <constructor-arg name="ricCache" ref="ricCache"/>
+        <constructor-arg name="marketByOrderCache" ref="marketByOrderCache"/>
+        <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
     </bean>
 
     <bean id="statusResponseService" class="com.coherentlogic.coherent.datafeed.services.StatusResponseService"
@@ -346,21 +349,29 @@
     <bean id="refreshMarketMakerMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketMakerMessageProcessor">
         <constructor-arg ref="marketMakerAdapter"/>
+        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketMakerCache"/>
      </bean>
 
     <bean id="updateMarketMakerMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketMakerMessageProcessor">
         <constructor-arg ref="marketMakerAdapter"/>
+        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketMakerCache"/>
      </bean>
 
     <bean id="refreshMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
+        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketByOrderCache"/>
      </bean>
 
     <bean id="updateMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
+        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketByOrderCache"/>
      </bean>
 
     <bean id="statusResponseMessageProcessor"

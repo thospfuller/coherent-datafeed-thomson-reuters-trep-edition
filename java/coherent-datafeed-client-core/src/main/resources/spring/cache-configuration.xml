@@ -27,12 +27,6 @@
         <local-cache name="dictionaryEntryCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
-        <local-cache name="marketPriceEntryCache">
-            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
-        </local-cache>
-        <local-cache name="marketByOrderEntryCache">
-            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
-        </local-cache>
         <local-cache name="ts1DefEntryCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
