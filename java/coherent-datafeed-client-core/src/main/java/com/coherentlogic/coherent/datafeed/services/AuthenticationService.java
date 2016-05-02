@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coherentlogic.coherent.datafeed.beans.UserBean;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDacsIdException;
@@ -58,8 +57,6 @@ public class AuthenticationService
 
     private final SessionFactory sessionFactory;
 
-    private final UserBean userBean;
-
     private Handle handle = null;
 
     private OMMItemIntSpec ommItemIntSpec = null;
@@ -75,8 +72,7 @@ public class AuthenticationService
         PositionFactory positionFactory,
         EventDrivenEndpoint client,
         Cache<Handle, Session> sessionCache,
-        SessionFactory sessionFactory,
-        UserBean userBean
+        SessionFactory sessionFactory
     ) {
         super();
         this.loginMessageBuilder = loginMessageBuilder;
@@ -86,7 +82,6 @@ public class AuthenticationService
         this.eventDrivenEndpoint = client;
         this.sessionCache = sessionCache;
         this.sessionFactory = sessionFactory;
-        this.userBean = userBean;
     }
 
     public Handle login (String dacsId) {
@@ -116,7 +111,6 @@ public class AuthenticationService
         log.info("dacsId: " + dacsId + ", applicationId: " + applicationId);
 
         try {
-            userBean.setDacsId(dacsId);
 
             String position = positionFactory.getInstance();
 
