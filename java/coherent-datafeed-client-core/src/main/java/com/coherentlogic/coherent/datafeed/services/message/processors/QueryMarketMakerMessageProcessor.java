@@ -3,6 +3,7 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
 import java.util.List;
+import java.util.Map;
 
 import org.infinispan.Cache;
 import org.slf4j.Logger;
@@ -13,9 +14,10 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
+import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
@@ -33,7 +35,7 @@ import com.reuters.rfa.common.Handle;
  */
 public class QueryMarketMakerMessageProcessor
     implements MessageProcessorSpecification
-        <QueryParameters, List<Handle>> {
+        <QueryParameters, Map<String, MarketMaker>> {
 
     private static final Logger log =
         LoggerFactory.getLogger(QueryMarketMakerMessageProcessor.class);
@@ -44,7 +46,7 @@ public class QueryMarketMakerMessageProcessor
 
     private final Cache<Handle, Session> marketMakerCache;
 
-    private QueryMarketMakerMessageProcessor(
+    public QueryMarketMakerMessageProcessor(
         MarketMakerServiceSpecification marketMakerService,
         Cache<Handle, Session> sessionCache,
         Cache<Handle, Session> marketMakerCache
@@ -59,10 +61,10 @@ public class QueryMarketMakerMessageProcessor
      */
     @Override
     @Transactional
-    public Message<List<Handle>> process(
+    public Message<Map<String, MarketMaker>> process(
         Message<QueryParameters> message) {
 
-        Message<List<Handle>> result = null;
+        Message<Map<String, MarketMaker>> result = null;
 
         QueryParameters parameters = message.getPayload();
 
@@ -83,17 +85,17 @@ public class QueryMarketMakerMessageProcessor
 
             Handle loginHandle = parameters.getLoginHandle();
 
-            Session session = (Session) sessionCache.get(loginHandle);
+//            Session session = (Session) sessionCache.get(loginHandle);
 
             String[] items = parameters.getItem();
 
-            List<Handle> results = marketMakerService.query(
-                serviceName, loginHandle, items);
+            Map<String, MarketMaker> results = marketMakerService.query(
+                ServiceName.valueOf(serviceName), loginHandle, items);
 
-            for (Handle nextHandle : results) {
-                marketMakerCache.put(nextHandle, session);
-                log.warn("marketMakerCache.put of nextHandle: " + nextHandle + ", session: " + session);
-            }
+//            for (Handle nextHandle : results) {
+//                marketMakerCache.put(nextHandle, session);
+//                log.warn("marketMakerCache.put of nextHandle: " + nextHandle + ", session: " + session);
+//            }
 
             MessageHeaders headers = message.getHeaders();
 
@@ -101,7 +103,6 @@ public class QueryMarketMakerMessageProcessor
                 MessageBuilder
                     .withPayload(results)
                     .copyHeaders(headers)
-                    .setHeader(SESSION, session)
                     .build();
 //        }
         return result;
