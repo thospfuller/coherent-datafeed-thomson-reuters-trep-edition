@@ -1857,12 +1857,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicCloseDate;
     }
 
-//    public static final String 
+    public static final String HISTORIC_CLOSE_DATE = "historicCloseDate";
 
     @RFAType(type=MarketPriceConstants.HSTCLSDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setHistoricCloseDate(Long historicCloseDate) {
+
+        Long oldValue = this.historicCloseDate;
+
         this.historicCloseDate = historicCloseDate;
+
+        firePropertyChange(MarketPrice.HISTORIC_CLOSE_DATE, oldValue, historicCloseDate);
     }
 
     @UsingKey(type=MarketPriceConstants.YRHIGH)
@@ -1870,12 +1875,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHigh;
     }
 
-//    public static final String 
+    public static final String YEAR_HIGH = "yearHigh";
 
     @RFAType(type=MarketPriceConstants.YRHIGH)
     @Adapt(using=OMMNumericAdapter.class)
     public void setYearHigh(BigDecimal yearHigh) {
+
+        BigDecimal oldValue = this.yearHigh;
+
         this.yearHigh = yearHigh;
+
+        firePropertyChange(MarketPrice.YEAR_HIGH, oldValue, yearHigh);
     }
 
     @UsingKey(type=MarketPriceConstants.YRLOW)
@@ -1883,12 +1893,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLow;
     }
 
-//    public static final String 
+    public static final String YEAR_LOW = "yearLow";
 
     @RFAType(type=MarketPriceConstants.YRLOW)
     @Adapt(using=OMMNumericAdapter.class)
     public void setYearLow(BigDecimal yearLow) {
+
+        BigDecimal oldValue = this.yearLow;
+
         this.yearLow = yearLow;
+
+        firePropertyChange(MarketPrice.YEAR_LOW, oldValue, yearLow);
     }
 
     @UsingKey(type=MarketPriceConstants.TURNOVER)
@@ -1896,12 +1911,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return turnover;
     }
 
-//    public static final String 
+    public static final String TURNOVER = "turnover";
 
     @RFAType(type=MarketPriceConstants.TURNOVER)
     @Adapt(using=OMMNumericAdapter.class)
     public void setTurnover(BigDecimal turnover) {
+
+        BigDecimal oldValue = this.turnover;
+
         this.turnover = turnover;
+
+        firePropertyChange(MarketPrice.TURNOVER, oldValue, turnover);
     }
 
     @UsingKey(type=MarketPriceConstants.BOND_TYPE)
@@ -1909,12 +1929,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return bondType;
     }
 
-//    public static final String 
+    public static final String BOND_TYPE = "bondType";
 
     @RFAType(type=MarketPriceConstants.BOND_TYPE)
     @Adapt(using=OMMEnumAdapter.class)
     public void setBondType(String bondType) {
+
+        String oldValue = this.bondType;
+
         this.bondType = bondType;
+
+        firePropertyChange(MarketPrice.BOND_TYPE, oldValue, bondType);
     }
 
     @UsingKey(type=MarketPriceConstants.BCKGRNDPAG)
@@ -1922,12 +1947,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return backgroundPage;
     }
 
-//    public static final String 
+    public static final String BACKGROUND_PAGE = "backgroundPage";
 
     @RFAType(type=MarketPriceConstants.BCKGRNDPAG)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setBackgroundPage(String backgroundPage) {
+
+        String oldValue = this.backgroundPage;
+
         this.backgroundPage = backgroundPage;
+
+        firePropertyChange(MarketPrice.BACKGROUND_PAGE, oldValue, backgroundPage);
     }
 
     @UsingKey(type=MarketPriceConstants.YCHIGH_IND)
@@ -1935,7 +1965,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearOrContractHighIndicator;
     }
 
-//    public static final String 
+    public static final String YEAR_OR_CONTRACT_HIGH_INDICATOR = "yearOrContractHighIndicator";
 
     /**
      * Requires visual inspection still as I have not seen this value set to
@@ -1947,7 +1977,12 @@ public class MarketPrice extends AbstractCommonProperties {
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearOrContractHighIndicator(
         String yearOrContractHighIndicator) {
+
+        String oldValue = this.yearOrContractHighIndicator;
+
         this.yearOrContractHighIndicator = yearOrContractHighIndicator;
+
+        firePropertyChange(MarketPrice.YEAR_OR_CONTRACT_HIGH_INDICATOR, oldValue, yearOrContractHighIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.YCLOW_IND)
@@ -1955,7 +1990,7 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearOrContractLowIndicator;
     }
 
-//    public static final String 
+    public static final String YEAR_OR_CONTRACT_LOW_INDICATOR = "yearOrContractLowIndicator";
 
     /**
      * Requires visual inspection still as I have not seen this value set to
@@ -1967,7 +2002,12 @@ public class MarketPrice extends AbstractCommonProperties {
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearOrContractLowIndicator(
         String yearOrContractLowIndicator) {
+
+        String oldValue = this.yearOrContractLowIndicator;
+
         this.yearOrContractLowIndicator = yearOrContractLowIndicator;
+
+        firePropertyChange(MarketPrice.YEAR_OR_CONTRACT_LOW_INDICATOR, oldValue, yearOrContractLowIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.BID_NET_CH)
@@ -1975,12 +2015,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return bidNetChange;
     }
 
-//    public static final String 
+    public static final String BID_NET_CHANGE = "bidNetChange";
 
     @RFAType(type=MarketPriceConstants.BID_NET_CH)
     @Adapt(using=OMMNumericAdapter.class)
     public void setBidNetChange(BigDecimal bidNetChange) {
+
+        BigDecimal oldValue = this.bidNetChange;
+
         this.bidNetChange = bidNetChange;
+
+        firePropertyChange(MarketPrice.BID_NET_CHANGE, oldValue, bidNetChange);
     }
 
     @UsingKey(type=MarketPriceConstants.BID_TICK_1)
@@ -1988,12 +2033,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return bidTick1;
     }
 
-//    public static final String 
+    public static final String BID_TICK_1 = "bidTick1";
 
     @RFAType(type=MarketPriceConstants.BID_TICK_1)
     @Adapt(using=OMMEnumAdapter.class)
     public void setBidTick1(String bidTick1) {
+
+        String oldValue = this.bidTick1;
+
         this.bidTick1 = bidTick1;
+
+        firePropertyChange(MarketPrice.BID_TICK_1, oldValue, bidTick1);
     }
 
     @UsingKey(type=MarketPriceConstants.CUM_EX_MKR)
