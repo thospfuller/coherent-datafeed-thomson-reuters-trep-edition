@@ -49,6 +49,66 @@
             advice-ref="performanceMonitorInterceptor" />
     </aop:config>
 
+    <bean id="marketPriceSetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketPrice"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="marketPriceSetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketPrice.set*(..))"/>
+        <aop:advisor pointcut-ref="marketPriceSetterPointcut"
+            advice-ref="marketPriceSetterInterceptor" />
+    </aop:config>
+
+    <bean id="marketByOrderSetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketByOrder"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="marketByOrderSetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketByOrder.set*(..))"/>
+        <aop:advisor pointcut-ref="marketByOrderSetterPointcut"
+            advice-ref="marketByOrderSetterInterceptor" />
+    </aop:config>
+
+    <bean id="marketMakerSetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketMaker"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="marketMakerSetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketMaker.set*(..))"/>
+        <aop:advisor pointcut-ref="marketMakerSetterPointcut"
+            advice-ref="marketMakerSetterInterceptor" />
+    </aop:config>
+
+    <bean id="marketMakerOrderSetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="marketMakerOrderSetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order.set*(..))"/>
+        <aop:advisor pointcut-ref="marketMakerOrderSetterPointcut"
+            advice-ref="marketMakerOrderSetterInterceptor" />
+    </aop:config>
+
+    <bean id="directoryEntrySetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.DirectoryEntry"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="directoryEntrySetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.DirectoryEntry.set*(..))"/>
+        <aop:advisor pointcut-ref="directoryEntrySetterPointcut"
+            advice-ref="directoryEntrySetterInterceptor" />
+    </aop:config>
+
     <!--bean id="springCacheManager"
      class="org.springframework.cache.concurrent.ConcurrentMapCacheManager"/ -->
 
@@ -423,6 +483,8 @@
         <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter" value-ref="ommNumericAdapter"/>
         <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter" value-ref="ommDateTimeAdapter"/>
     </util:map>
+
+    <bean id="marketPrice" class="com.coherentlogic.coherent.datafeed.domain.MarketPrice" scope="prototype"/>
 
     <!-- bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
