@@ -8,11 +8,14 @@ import java.math.BigInteger;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
+import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -907,7 +910,6 @@ public class MarketPrice extends AbstractCommonProperties {
     @XStreamAlias(MarketPriceConstants.STRIKE_PRC)
     private BigDecimal strikePrice = null;
 
-    //
     /**
      * Contract month
      *
@@ -987,13 +989,8 @@ public class MarketPrice extends AbstractCommonProperties {
 
     @RFAType(type=MarketPriceConstants.BID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBid(BigDecimal bid) {
-
-        BigDecimal oldValue = this.bid;
-
+    public void setBid(@Changeable(BID) BigDecimal bid) {
         this.bid = bid;
-
-        firePropertyChange(MarketPrice.BID, oldValue, bid);
     }
 
     @UsingKey(type=MarketPriceConstants.BID_1)
@@ -1046,7 +1043,7 @@ public class MarketPrice extends AbstractCommonProperties {
      */
     @RFAType(type=MarketPriceConstants.ASK)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAsk(BigDecimal ask) {
+    public void setAsk(@Changeable("ask") BigDecimal ask) {
 
         BigDecimal oldValue = this.ask;
 
@@ -1158,7 +1155,7 @@ public class MarketPrice extends AbstractCommonProperties {
      */
     @RFAType(type=MarketPriceConstants.TRDPRC_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLast(BigDecimal last) {
+    public void setLast(@Changeable("last") BigDecimal last) {
 
         BigDecimal oldValue = this.last;
 
@@ -2051,11 +2048,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return cumExMarker;
     }
 
-//    public static final String 
+    public static final String CUM_EX_MARKER = "cumExMarker";
 
     @RFAType(type=MarketPriceConstants.CUM_EX_MKR)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setCumExMarker(String cumExMarker) {
+    public void setCumExMarker(@Changeable(CUM_EX_MARKER) String cumExMarker) {
         this.cumExMarker = cumExMarker;
     }
 
@@ -2064,11 +2061,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceCode;
     }
 
-//    public static final String 
+    public static final String PRICE_CODE = "priceCode";
 
     @RFAType(type=MarketPriceConstants.PRC_QL_CD)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setPriceCode(String priceCode) {
+    public void setPriceCode(@Changeable(PRICE_CODE) String priceCode) {
         this.priceCode = priceCode;
     }
 
@@ -2077,11 +2074,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return nasdStatus;
     }
 
-//    public static final String 
+    public static final String NASD_STATUS = "nasdStatus";
 
     @RFAType(type=MarketPriceConstants.NASDSTATUS)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setNasdStatus(String nasdStatus) {
+    public void setNasdStatus(@Changeable(NASD_STATUS) String nasdStatus) {
         this.nasdStatus = nasdStatus;
     }
 
@@ -2090,11 +2087,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceCode2;
     }
 
-//    public static final String 
+    public static final String PRICE_CODE_2 = "priceCode2";
 
     @RFAType(type=MarketPriceConstants.PRC_QL2)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setPriceCode2(String priceCode2) {
+    public void setPriceCode2(@Changeable(PRICE_CODE_2) String priceCode2) {
         this.priceCode2 = priceCode2;
     }
 
@@ -2103,11 +2100,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return tradeVolume;
     }
 
-//    public static final String 
+    public static final String TRADE_VOLUME = "tradeVolume";
 
     @RFAType(type=MarketPriceConstants.TRDVOL_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTradeVolume(BigInteger tradeVolume) {
+    public void setTradeVolume(@Changeable(TRADE_VOLUME) BigInteger tradeVolume) {
         this.tradeVolume = tradeVolume;
     }
 
@@ -2116,11 +2113,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return todaysHighBid;
     }
 
-//    public static final String 
+    public static final String TODAYS_HIGH_BID = "todaysHighBid";
 
     @RFAType(type=MarketPriceConstants.BID_HIGH_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTodaysHighBid(BigDecimal todaysHighBid) {
+    public void setTodaysHighBid(@Changeable(TODAYS_HIGH_BID) BigDecimal todaysHighBid) {
         this.todaysHighBid = todaysHighBid;
     }
 
@@ -2129,11 +2126,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return todaysLowBid;
     }
 
-//    public static final String 
+    public static final String TODAYS_LOW_BID = "todaysLowBid";
 
     @RFAType(type=MarketPriceConstants.BID_LOW_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTodaysLowBid(BigDecimal todaysLowBid) {
+    public void setTodaysLowBid(@Changeable(TODAYS_LOW_BID) BigDecimal todaysLowBid) {
         this.todaysLowBid = todaysLowBid;
     }
 
@@ -2142,11 +2139,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHighBid;
     }
 
-//    public static final String 
+    public static final String YEAR_HIGH_BID = "yearHighBid";
 
     @RFAType(type=MarketPriceConstants.YRBIDHIGH)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setYearHighBid(BigDecimal yearHighBid) {
+    public void setYearHighBid(@Changeable(YEAR_HIGH_BID) BigDecimal yearHighBid) {
         this.yearHighBid = yearHighBid;
     }
 
@@ -2155,11 +2152,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLowBid;
     }
 
-//    public static final String 
+    public static final String YEAR_LOW_BID = "yearLowBid";
 
     @RFAType(type=MarketPriceConstants.YRBIDLOW)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setYearLowBid(BigDecimal yearLowBid) {
+    public void setYearLowBid(@Changeable(YEAR_LOW_BID) BigDecimal yearLowBid) {
         this.yearLowBid = yearLowBid;
     }
 
@@ -2168,11 +2165,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicalClosingBid;
     }
 
-//    public static final String 
+    public static final String HISTORICAL_CLOSING_BID = "historicalClosingBid";
 
     @RFAType(type=MarketPriceConstants.HST_CLSBID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setHistoricalClosingBid(BigDecimal historicalClosingBid) {
+    public void setHistoricalClosingBid(@Changeable(HISTORICAL_CLOSING_BID) BigDecimal historicalClosingBid) {
         this.historicalClosingBid = historicalClosingBid;
     }
 
@@ -2181,12 +2178,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return historicalClosingBidDate;
     }
 
-//    public static final String 
+    public static final String HISTORIC_CLOSING_BID_DATE = "historicalClosingBidDate";
 
     @RFAType(type=MarketPriceConstants.HSTCLBDDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setHistoricalClosingBidDate(Long historicalClosingBidDate) {
+
+    	Long oldValue = this.historicalClosingBidDate;
+
         this.historicalClosingBidDate = historicalClosingBidDate;
+
+        firePropertyChange(MarketPrice.HISTORIC_CLOSING_BID_DATE, oldValue, historicalClosingBidDate);
     }
 
     @UsingKey(type=MarketPriceConstants.YRBDHI_IND)
@@ -2194,12 +2196,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearBidHigh;
     }
 
-//    public static final String 
+    public static final String YEAR_BID_HIGH = "yearBidHigh";
 
     @RFAType(type=MarketPriceConstants.YRBDHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearBidHigh(String yearBidHigh) {
+
+    	String oldValue = this.yearBidHigh;
+
         this.yearBidHigh = yearBidHigh;
+
+        firePropertyChange(MarketPrice.YEAR_BID_HIGH, oldValue, yearBidHigh);
     }
 
     @UsingKey(type=MarketPriceConstants.YRBDLO_IND)
@@ -2207,12 +2214,17 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearBidLow;
     }
 
-//    public static final String 
+    public static final String YEAR_BID_LOW = "yearBidLow";
 
     @RFAType(type=MarketPriceConstants.YRBDLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearBidLow(String yearBidLow) {
+
+    	String oldValue = this.yearBidLow;
+
         this.yearBidLow = yearBidLow;
+
+        firePropertyChange(MarketPrice.YEAR_BID_LOW, oldValue, yearBidLow);
     }
 
     @UsingKey(type=MarketPriceConstants.NUM_BIDS)
@@ -2230,7 +2242,7 @@ public class MarketPrice extends AbstractCommonProperties {
 
         this.numberOfBids = numberOfBids;
 
-        firePropertyChange(NUMBER_OF_BIDS, oldValue, numberOfBids);
+        firePropertyChange(MarketPrice.NUMBER_OF_BIDS, oldValue, numberOfBids);
     }
 
 //    @UsingKey(type=RECORDTYPE)
@@ -2249,11 +2261,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return marketParticipantBidId;
     }
 
-//    public static final String 
+    public static final String MARKET_PARTICIPANT_BID_ID = "marketParticipantBidId";
 
     @RFAType(type=MarketPriceConstants.BID_MMID1)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setMarketParticipantBidId(String marketParticipantBidId) {
+    public void setMarketParticipantBidId(@Changeable(MARKET_PARTICIPANT_BID_ID) String marketParticipantBidId) {
         this.marketParticipantBidId = marketParticipantBidId;
     }
 
@@ -2262,11 +2274,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return marketParticipantAskId;
     }
 
-//    public static final String 
+    public static final String MARKET_PARTICIPANT_ASK_ID = "marketParticipantAskId";
 
     @RFAType(type=MarketPriceConstants.ASK_MMID1)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setMarketParticipantAskId(String marketParticipantAskId) {
+    public void setMarketParticipantAskId(@Changeable(MARKET_PARTICIPANT_ASK_ID) String marketParticipantAskId) {
         this.marketParticipantAskId = marketParticipantAskId;
     }
 
@@ -2275,11 +2287,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return optionExchangeId;
     }
 
-//    public static final String 
+    public static final String OPTION_EXCHANGE_ID = "optionExchangeId";
 
     @RFAType(type=MarketPriceConstants.OPTION_XID)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setOptionExchangeId(String optionExchangeId) {
+    public void setOptionExchangeId(@Changeable(OPTION_EXCHANGE_ID) String optionExchangeId) {
         this.optionExchangeId = optionExchangeId;
     }
 
@@ -2288,11 +2300,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearHighDate;
     }
 
-//    public static final String 
+    public static final String YEAR_HIGH_DATE = "yearHighDate";
 
     @RFAType(type=MarketPriceConstants.YRHIGHDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setYearHighDate(Long yearHighDate) {
+    public void setYearHighDate(@Changeable(YEAR_HIGH_DATE) Long yearHighDate) {
         this.yearHighDate = yearHighDate;
     }
 
@@ -2301,11 +2313,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return yearLowDate;
     }
 
-//    public static final String 
+    public static final String YEAR_LOW_DATE = "yearLowDate";
 
     @RFAType(type=MarketPriceConstants.YRLOWDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setYearLowDate(Long yearLowDate) {
+    public void setYearLowDate(@Changeable(YEAR_LOW_DATE) Long yearLowDate) {
         this.yearLowDate = yearLowDate;
     }
 
@@ -2314,11 +2326,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return irgPrice;
     }
 
-//    public static final String 
+    public static final String IRG_PRICE = "irgPrice";
 
     @RFAType(type=MarketPriceConstants.IRGPRC)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setIrgPrice(BigDecimal irgPrice) {
+    public void setIrgPrice(@Changeable(IRG_PRICE) BigDecimal irgPrice) {
         this.irgPrice = irgPrice;
     }
 
@@ -2327,11 +2339,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return irgVolume;
     }
 
-//    public static final String 
+    public static final String IRG_VOLUME = "irgVolume";
 
     @RFAType(type=MarketPriceConstants.IRGVOL)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setIrgVolume(BigInteger irgVolume) {
+    public void setIrgVolume(@Changeable(IRG_VOLUME) BigInteger irgVolume) {
         this.irgVolume = irgVolume;
     }
 
@@ -2340,11 +2352,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return irgPriceType;
     }
 
-//    public static final String 
+    public static final String IRG_PRICE_TYPE = "irgPriceType";
 
     @RFAType(type=MarketPriceConstants.IRGCOND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setIrgPriceType(String irgPriceType) {
+    public void setIrgPriceType(@Changeable(IRG_PRICE_TYPE) String irgPriceType) {
         this.irgPriceType = irgPriceType;
     }
 
@@ -2353,11 +2365,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceCorrectionTime;
     }
 
-//    public static final String 
+    public static final String PRICE_CORRECTION_TIME = "priceCorrectionTime";
 
     @RFAType(type=MarketPriceConstants.TIMCOR)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setPriceCorrectionTime(Long priceCorrectionTime) {
+    public void setPriceCorrectionTime(@Changeable(PRICE_CORRECTION_TIME) Long priceCorrectionTime) {
         this.priceCorrectionTime = priceCorrectionTime;
     }
 
@@ -2366,11 +2378,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return insertPrice;
     }
 
-//    public static final String 
+    public static final String INSERT_PRICE = "insertPrice";
 
     @RFAType(type=MarketPriceConstants.INSPRC)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setInsertPrice(BigDecimal insertPrice) {
+    public void setInsertPrice(@Changeable(INSERT_PRICE) BigDecimal insertPrice) {
         this.insertPrice = insertPrice;
     }
 
@@ -2379,11 +2391,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return insertVolume;
     }
 
-//    public static final String 
+    public static final String INSERT_VOLUME = "insertVolume";
 
     @RFAType(type=MarketPriceConstants.INSVOL)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setInsertVolume(BigInteger insertVolume) {
+    public void setInsertVolume(@Changeable(INSERT_VOLUME) BigInteger insertVolume) {
         this.insertVolume = insertVolume;
     }
 
@@ -2392,11 +2404,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return insertPriceType;
     }
 
-//    public static final String 
+    public static final String INSERT_PRICE_TYPE = "insertPriceType";
 
     @RFAType(type=MarketPriceConstants.INSCOND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setInsertPriceType(String insertPriceType) {
+    public void setInsertPriceType(@Changeable(INSERT_PRICE_TYPE) String insertPriceType) {
         this.insertPriceType = insertPriceType;
     }
 
@@ -2405,11 +2417,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return lastTime;
     }
 
-//    public static final String 
+    public static final String LAST_TIME = "lastTime";
 
     @RFAType(type=MarketPriceConstants.SALTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setLastTime(Long lastTime) {
+    public void setLastTime(@Changeable(LAST_TIME) Long lastTime) {
         this.lastTime = lastTime;
     }
 
@@ -2418,11 +2430,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return turnoverScale;
     }
 
-//    public static final String 
+    public static final String TURNOVER_SCALE = "turnoverScale";
 
     @RFAType(type=MarketPriceConstants.TNOVER_SC)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTurnoverScale(String turnoverScale) {
+    public void setTurnoverScale(@Changeable(TURNOVER_SCALE) String turnoverScale) {
         this.turnoverScale = turnoverScale;
     }
 
@@ -2431,11 +2443,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return broadcastXRef;
     }
 
-//    public static final String 
+    public static final String BROADCAST_X_REF = "broadcastXRef";
 
     @RFAType(type=MarketPriceConstants.BCAST_REF)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setBroadcastXRef(String broadcastXRef) {
+    public void setBroadcastXRef(@Changeable(BROADCAST_X_REF) String broadcastXRef) {
         this.broadcastXRef = broadcastXRef;
     }
 
@@ -2444,11 +2456,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return crossRateScale;
     }
 
-//    public static final String 
+    public static final String CROSS_RATE_SCALE = "crossRateScale";
 
     @RFAType(type=MarketPriceConstants.CROSS_SC)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setCrossRateScale(String crossRateScale) {
+    public void setCrossRateScale(@Changeable(CROSS_RATE_SCALE) String crossRateScale) {
         this.crossRateScale = crossRateScale;
     }
 
@@ -2457,11 +2469,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return amountOutstanding;
     }
 
-//    public static final String 
+    public static final String AMOUNT_OUTSTANDING = "amountOutstanding";
 
     @RFAType(type=MarketPriceConstants.AMT_OS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAmountOutstanding(BigDecimal amountOutstanding) {
+    public void setAmountOutstanding(@Changeable(AMOUNT_OUTSTANDING) BigDecimal amountOutstanding) {
         this.amountOutstanding = amountOutstanding;
     }
 
@@ -2470,11 +2482,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return amountOutstandingScale;
     }
 
-//    public static final String 
+    public static final String AMOUNT_OUTSTANDING_SCALE = "amountOutstandingScale";
 
     @RFAType(type=MarketPriceConstants.AMT_OS_SC)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setAmountOutstandingScale(String amountOutstandingScale) {
+    public void setAmountOutstandingScale(@Changeable(AMOUNT_OUTSTANDING_SCALE) String amountOutstandingScale) {
         this.amountOutstandingScale = amountOutstandingScale;
     }
 
@@ -2483,11 +2495,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return officialCodeIndicator;
     }
 
-//    public static final String 
+    public static final String OFFICIAL_CODE_INDICATOR = "officialCodeIndicator";
 
     @RFAType(type=MarketPriceConstants.OFF_CD_IND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setOfficialCodeIndicator(String officialCodeIndicator) {
+    public void setOfficialCodeIndicator(@Changeable(OFFICIAL_CODE_INDICATOR) String officialCodeIndicator) {
         this.officialCodeIndicator = officialCodeIndicator;
     }
 
@@ -2496,11 +2508,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return priceVolatility;
     }
 
-//    public static final String 
+    public static final String PRICE_VOLATILITY = "priceVolatility";
 
     @RFAType(type=MarketPriceConstants.PRC_VOLTY)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPriceVolatility(BigDecimal priceVolatility) {
+    public void setPriceVolatility(@Changeable(PRICE_VOLATILITY) BigDecimal priceVolatility) {
         this.priceVolatility = priceVolatility;
     }
 
@@ -2509,11 +2521,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return amountOutstandingDate;
     }
 
-//    public static final String 
+    public static final String AMOUNT_OUTSTANDING_DATE = "amountOutstandingDate";
 
     @RFAType(type=MarketPriceConstants.AMT_OS_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setAmountOutstandingDate(Long amountOutstandingDate) {
+    public void setAmountOutstandingDate(@Changeable(AMOUNT_OUTSTANDING_DATE) Long amountOutstandingDate) {
         this.amountOutstandingDate = amountOutstandingDate;
     }
 
@@ -2522,11 +2534,11 @@ public class MarketPrice extends AbstractCommonProperties {
         return backgroundReference;
     }
 
-//    public static final String 
+    public static final String BACKGROUND_REFERENCE = "backgroundReference";
 
     @RFAType(type=MarketPriceConstants.BKGD_REF)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setBackgroundReference(String backgroundReference) {
+    public void setBackgroundReference(@Changeable(BACKGROUND_REFERENCE) String backgroundReference) {
         this.backgroundReference = backgroundReference;
     }
 

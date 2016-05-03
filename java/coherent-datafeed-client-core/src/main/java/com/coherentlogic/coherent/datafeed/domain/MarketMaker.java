@@ -1,7 +1,6 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_MAKER;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_PRICE;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -15,6 +14,7 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
+import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -94,13 +94,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
     @RFAType(type=MarketPriceConstants.OFFCL_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setOfficialCode(String officialCode) {
-
-        String oldValue = this.officialCode;
-
+    public void setOfficialCode(@Changeable(OFFICIAL_CODE) String officialCode) {
         this.officialCode = officialCode;
-
-        firePropertyChange(MarketMaker.OFFICIAL_CODE, oldValue, officialCode);
     }
 
     @UsingKey(type=MarketPriceConstants.NASDSTATUS)
@@ -112,13 +107,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
     @RFAType(type=MarketPriceConstants.NASDSTATUS)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setNasdStatus(String nasdStatus) {
-
-        String oldValue = this.nasdStatus;
-
+    public void setNasdStatus(@Changeable(NASD_STATUS) String nasdStatus) {
         this.nasdStatus = nasdStatus;
-
-        firePropertyChange(MarketMaker.NASD_STATUS, oldValue, nasdStatus);
     }
 
     @UsingKey(type=MarketPriceConstants.LOT_SIZE_A)
@@ -134,13 +124,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
      */
     @RFAType(type=MarketPriceConstants.LOT_SIZE_A)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLotSize(BigDecimal lotSize) {
-
-        BigDecimal oldValue = this.lotSize;
-
+    public void setLotSize(@Changeable(LOT_SIZE) BigDecimal lotSize) {
         this.lotSize = lotSize;
-
-        firePropertyChange(MarketMaker.LOT_SIZE, oldValue, lotSize);
     }
 
     @UsingKey(type=MarketPriceConstants.OFF_CD_IND)
@@ -152,13 +137,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
     @RFAType(type=MarketPriceConstants.OFF_CD_IND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setOfficialCodeIndicator(String officialCodeIndicator) {
-
-        String oldValue = this.officialCodeIndicator;
-
+    public void setOfficialCodeIndicator(@Changeable(OFFICIAL_CODE_INDICATOR) String officialCodeIndicator) {
         this.officialCodeIndicator = officialCodeIndicator;
-
-        firePropertyChange(MarketMaker.OFFICIAL_CODE_INDICATOR, oldValue, officialCodeIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.LIST_MKT)
@@ -170,41 +150,37 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
     @RFAType(type=MarketPriceConstants.LIST_MKT)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setListingMarket(String listingMarket) {
-
-        String oldValue = this.listingMarket;
-
+    public void setListingMarket(@Changeable(LISTING_MARKET) String listingMarket) {
         this.listingMarket = listingMarket;
-
-        firePropertyChange(MarketMaker.LISTING_MARKET, oldValue, listingMarket);
     }
 
     public String getInstrumentClass() {
         return instrumentClass;
     }
 
+    public static final String INSTRUMENT_CLASS = "instrumentClass";
 
-    public void setInstrumentClass(String instrumentClass) {
+    public void setInstrumentClass(@Changeable(INSTRUMENT_CLASS) String instrumentClass) {
         this.instrumentClass = instrumentClass;
     }
-
 
     public String getPeriodCode() {
         return periodCode;
     }
 
+    public static final String PERIOD_CODE = "periodCode";
 
-    public void setPeriodCode(String periodCode) {
+    public void setPeriodCode(@Changeable(PERIOD_CODE) String periodCode) {
         this.periodCode = periodCode;
     }
-
 
     public String getFinancialStatusIndicator() {
         return financialStatusIndicator;
     }
 
+    public static final String FINANCIAL_STATUS_INDICATOR = "financialStatusIndicator";
 
-    public void setFinancialStatusIndicator(String financialStatusIndicator) {
+    public void setFinancialStatusIndicator(@Changeable(FINANCIAL_STATUS_INDICATOR) String financialStatusIndicator) {
         this.financialStatusIndicator = financialStatusIndicator;
     }
 
@@ -213,8 +189,9 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         return marketStatusIndicator;
     }
 
+    public static final String MARKET_STATUS_INDICATOR = "marketStatusIndicator";
 
-    public void setMarketStatusIndicator(String marketStatusIndicator) {
+    public void setMarketStatusIndicator(@Changeable(MARKET_STATUS_INDICATOR) String marketStatusIndicator) {
         this.marketStatusIndicator = marketStatusIndicator;
     }
 
@@ -298,9 +275,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return ask;
         }
 
+        public static final String ASK = "ask";
+
         @RFAType(type=ASK)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setAsk(BigDecimal ask) {
+        public void setAsk(@Changeable(ASK) BigDecimal ask) {
             this.ask = ask;
         }
 
@@ -309,9 +288,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return bidSize;
         }
 
+        public static final String BID_SIZE = "bidSize";
+
         @RFAType(type=BIDSIZE)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setBidSize(BigDecimal bidSize) {
+        public void setBidSize(@Changeable(BID_SIZE) BigDecimal bidSize) {
             this.bidSize = bidSize;
         }
 
@@ -320,6 +301,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return askSize;
         }
 
+        public static final String ASK_SIZE = "askSize";
+
         /**
          * @TODO: SHOULD THIS BE AN INTEGER OR LONG?
          *
@@ -327,7 +310,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
          */
         @RFAType(type=ASKSIZE)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setAskSize(BigDecimal askSize) {
+        public void setAskSize(@Changeable(ASK_SIZE) BigDecimal askSize) {
             this.askSize = askSize;
         }
 
@@ -336,9 +319,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return marketMakerName;
         }
 
+        public static final String MARKET_MAKER_NAME = "marketMakerName";
+
         @RFAType(type=MKT_MKR_NM)
         @Adapt(using=OMMDataBufferAdapter.class)
-        public void setMarketMakerName(String marketMakerName) {
+        public void setMarketMakerName(@Changeable(MARKET_MAKER_NAME) String marketMakerName) {
             this.marketMakerName = marketMakerName;
         }
 
@@ -347,9 +332,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return marketMakerId;
         }
 
+        public static final String MARKET_MAKER_ID = "marketMakerId";
+
         @RFAType(type=MMID)
         @Adapt(using=OMMDataBufferAdapter.class)
-        public void setMarketMakerId(String marketMakerId) {
+        public void setMarketMakerId(@Changeable(MARKET_MAKER_ID) String marketMakerId) {
             this.marketMakerId = marketMakerId;
         }
 
@@ -358,9 +345,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return askTimeMillis;
         }
 
+        public static final String ASK_TIME_MILLIS = "askTimeMillis";
+
         @RFAType(type=ASK_TIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setAskTimeMillis(Long askTimeMillis) {
+        public void setAskTimeMillis(@Changeable(ASK_TIME_MILLIS) Long askTimeMillis) {
             this.askTimeMillis = askTimeMillis;
         }
 
@@ -369,9 +358,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return lastActivityTimeMillis;
         }
 
+        public static final String LAST_ACTIVITY_TIME_MILLIS = "lastActivityTimeMillis";
+
         @RFAType(type=TIMACT_MS)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setLastActivityTimeMillis(Long lastActivityTimeMillis) {
+        public void setLastActivityTimeMillis(@Changeable(LAST_ACTIVITY_TIME_MILLIS) Long lastActivityTimeMillis) {
             this.lastActivityTimeMillis = lastActivityTimeMillis;
         }
 
@@ -380,9 +371,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return bidTimeMillis;
         }
 
+        public static final String BID_TIME_MILLIS = "bidTimeMillis";
+
         @RFAType(type=BID_TIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setBidTimeMillis(Long bidTimeMillis) {
+        public void setBidTimeMillis(@Changeable(BID_TIME_MILLIS) Long bidTimeMillis) {
             this.bidTimeMillis = bidTimeMillis;
         }
 
@@ -391,9 +384,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return primaryMarketMaker;
         }
 
+        public static final String PRIMARY_MARKET_MAKER = "primaryMarketMaker";
+
         @RFAType(type=PRIMARY_MM)
         @Adapt(using=OMMEnumAdapter.class)
-        public void setPrimaryMarketMaker(Boolean primaryMarketMaker) {
+        public void setPrimaryMarketMaker(@Changeable(PRIMARY_MARKET_MAKER) Boolean primaryMarketMaker) {
             this.primaryMarketMaker = primaryMarketMaker;
         }
 
@@ -402,9 +397,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return marketMakerMode;
         }
 
+        public static final String MARKET_MAKER_MODE = "marketMakerMode";
+
         @RFAType(type=MM_MODE)
         @Adapt(using=OMMEnumAdapter.class)
-        public void setMarketMakerMode(String marketMakerMode) {
+        public void setMarketMakerMode(@Changeable(MARKET_MAKER_MODE) String marketMakerMode) {
             this.marketMakerMode = marketMakerMode;
         }
 
@@ -413,9 +410,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return marketMakerState;
         }
 
+        public static final String MARKET_SHARE_STATE = "marketMakerState";
+
         @RFAType(type=MM_STATE)
         @Adapt(using=OMMEnumAdapter.class)
-        public void setMarketMakerState(String marketMakerState) {
+        public void setMarketMakerState(@Changeable(MARKET_SHARE_STATE) String marketMakerState) {
             this.marketMakerState = marketMakerState;
         }
 
@@ -424,9 +423,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return priorityTimeMillis;
         }
 
+        public static final String PRIORITY_TIME_MILLIS = "priorityTimeMillis";
+
         @RFAType(type=PR_TIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setPriorityTimeMillis(Long priorityTimeMillis) {
+        public void setPriorityTimeMillis(@Changeable(PRIORITY_TIME_MILLIS) Long priorityTimeMillis) {
             this.priorityTimeMillis = priorityTimeMillis;
         }
 
@@ -435,9 +436,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return priortyDate;
         }
 
+        public static final String PRIORITY_DATE = "priortyDate";
+
         @RFAType(type=PR_DATE)
         @Adapt(using=OMMDateTimeAdapter.class)
-        public void setPriortyDate(Long priortyDate) {
+        public void setPriortyDate(@Changeable(PRIORITY_DATE) Long priortyDate) {
             this.priortyDate = priortyDate;
         }
     }

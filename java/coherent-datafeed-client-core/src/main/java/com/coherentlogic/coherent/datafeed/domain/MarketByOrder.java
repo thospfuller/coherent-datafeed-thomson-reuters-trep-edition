@@ -14,6 +14,7 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
+import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -184,12 +185,14 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return permission;
     }
 
+    public static final String PERMISSION = "permission";
+
     /**
      *
      */
     @RFAType(type=PROD_PERM)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPermission(BigInteger permission) {
+    public void setPermission(@Changeable(PERMISSION) BigInteger permission) {
         this.permission = permission;
     }
 
@@ -241,9 +244,11 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return providerSymbol;
     }
 
+    public static final String PROVIDER_SYMBOL = "providerSymbol";
+
     @RFAType(type=PROV_SYMB)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setProviderSymbol(String providerSymbol) {
+    public void setProviderSymbol(@Changeable(PROVIDER_SYMBOL) String providerSymbol) {
         this.providerSymbol = providerSymbol;
     }
 
@@ -274,9 +279,11 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return exchangeId;
     }
 
+    public static final String EXCHANGE_ID = "exchangeId";
+
     @RFAType(type=MNEMONIC)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setExchangeId(String exchangeId) {
+    public void setExchangeId(@Changeable(EXCHANGE_ID) String exchangeId) {
         this.exchangeId = exchangeId;
     }
 
@@ -285,9 +292,11 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return lastActivityTimeMillis;
     }
 
+    public static final String LAST_ACTIVITY_TIME_MILLIS = "lastActivityTimeMillis";
+
     @RFAType(type=TIMACT_MS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLastActivityTimeMillis(Long lastActivityTimeMillis) {
+    public void setLastActivityTimeMillis(@Changeable(LAST_ACTIVITY_TIME_MILLIS) Long lastActivityTimeMillis) {
         this.lastActivityTimeMillis = lastActivityTimeMillis;
     }
 
@@ -469,9 +478,11 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
             return orderSize;
         }
 
+        public static final String ORDER_SIZE = "orderSize";
+
         @RFAType(type=ORDER_SIZE)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setOrderSize(Long orderSize) {
+        public void setOrderSize(@Changeable(ORDER_SIZE) Long orderSize) {
             this.orderSize = orderSize;
         }
 
