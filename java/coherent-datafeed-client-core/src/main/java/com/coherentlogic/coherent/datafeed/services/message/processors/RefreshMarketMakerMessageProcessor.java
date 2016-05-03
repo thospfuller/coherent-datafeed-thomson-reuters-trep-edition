@@ -1,4 +1,4 @@
-	package com.coherentlogic.coherent.datafeed.services.message.processors;
+    package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import java.util.Map;
 
@@ -65,7 +65,7 @@ public class RefreshMarketMakerMessageProcessor
 
         String ric = ricCache.get(handle);
 
-        MarketMaker marketMaker = marketMakerCache.get(ric); //session.getMarketMaker(handle);
+        MarketMaker marketMaker = marketMakerCache.get(ric);
 
         /* TODO: This is not really valid -- consider the following 
          *       The user disconnects the Ethernet cable and waits a few moments
@@ -81,7 +81,7 @@ public class RefreshMarketMakerMessageProcessor
             log.info("The marketMaker was null so a new instance was " +
                 "created for this refresh.");
         } else {
-        	marketMakerAdapter.adapt(ommMsg, marketMaker);
+            marketMakerAdapter.adapt(ommMsg, marketMaker);
             log.info("The marketMaker was not null so an existing instance " +
                 "was refreshed.");
         }
