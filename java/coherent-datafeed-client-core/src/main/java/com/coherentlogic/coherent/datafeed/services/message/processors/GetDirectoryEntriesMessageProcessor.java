@@ -8,9 +8,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntries;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
+import com.coherentlogic.coherent.datafeed.exceptions.MethodNotSupportedException;
 import com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification;
 import com.reuters.rfa.common.Handle;
 
@@ -26,16 +26,12 @@ public class GetDirectoryEntriesMessageProcessor
     private static final Logger log =
         LoggerFactory.getLogger(GetDirectoryEntriesMessageProcessor.class);
 
-    private final BasicAdapter<DirectoryEntries, String> jsonAdapter;
-
     private final Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache;
 
     public GetDirectoryEntriesMessageProcessor(
-        BasicAdapter<DirectoryEntries, String> jsonAdapter,
         Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache
     ) {
         super();
-        this.jsonAdapter = jsonAdapter;
         this.directoryEntryCache = directoryEntryCache;
     }
 
@@ -47,12 +43,12 @@ public class GetDirectoryEntriesMessageProcessor
     @Override
     public DirectoryEntries getDirectoryEntries() {
 
+        log.info("getDirectoryEntries: method begins.");
+
         Set<DirectoryEntry> directoryEntrySet = new HashSet<DirectoryEntry> ();
 
         DirectoryEntries directoryEntries =
             new DirectoryEntries (directoryEntrySet);
-
-        log.info("getDirectoryEntries: method begins.");
 
         Set<Entry<Handle, Map<Handle, DirectoryEntry>>> directoryEntryCacheSet =
             directoryEntryCache.entrySet();
@@ -76,7 +72,14 @@ public class GetDirectoryEntriesMessageProcessor
         return directoryEntries;
     }
 
-    void addAll (
+    
+
+    @Override
+	public String getDirectoryEntriesAsJSON() {
+		throw new MethodNotSupportedException();
+	}
+
+	void addAll (
         Set<Entry<Handle, DirectoryEntry>> source,
         Set<DirectoryEntry> target
     ) {
@@ -88,17 +91,5 @@ public class GetDirectoryEntriesMessageProcessor
 
             target.add(result);
         }
-    }
-
-    @Override
-    public String getDirectoryEntriesAsJSON() {
-        DirectoryEntries directoryEntries = getDirectoryEntries ();
-
-        String result = jsonAdapter.adapt(directoryEntries);
-
-        log.info("getDictionaryEntriesAsJSON: method returns; result: " +
-            result);
-
-        return result;
     }
 }

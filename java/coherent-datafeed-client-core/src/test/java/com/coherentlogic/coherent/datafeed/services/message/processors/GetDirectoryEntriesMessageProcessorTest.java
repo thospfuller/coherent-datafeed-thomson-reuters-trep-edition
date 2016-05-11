@@ -1,6 +1,9 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,17 +11,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntries;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.reuters.rfa.common.Handle;
@@ -33,7 +29,6 @@ public class GetDirectoryEntriesMessageProcessorTest {
 
     private GetDirectoryEntriesMessageProcessor processor = null;
 
-    private BasicAdapter<DirectoryEntries, String> jsonAdapter;
     private Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache;
 
     private Handle handleA = null, handleB = null, handleC = null;
@@ -55,10 +50,7 @@ public class GetDirectoryEntriesMessageProcessorTest {
         directoryEntryCache =
             new HashMap<Handle, Map<Handle, DirectoryEntry>> ();
 
-        processor = new GetDirectoryEntriesMessageProcessor (
-            jsonAdapter,
-            directoryEntryCache
-        );
+        processor = new GetDirectoryEntriesMessageProcessor (directoryEntryCache);
     }
 
     @After
