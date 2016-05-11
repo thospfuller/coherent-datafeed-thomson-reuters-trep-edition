@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +48,6 @@ public class DirectoryServiceLoader {
      */
     public Message<OMMItemEvent> load(Message<OMMItemEvent> message) {
 
-        log.warn("load: method begins; message: " + message);
-
         Session session = getSession(message);
 
         OMMItemEvent ommItemEvent = message.getPayload();
@@ -60,11 +59,9 @@ public class DirectoryServiceLoader {
 
         executeActionOn (msg, serviceMap, handle, session);
 
-        log.warn("load: method ends.");
-
         return message;
     }
-    
+
     int getSize (Map<Handle, Map<String, DirectoryEntry>> directoryCache) {
 
         int result = 0;
@@ -88,8 +85,8 @@ public class DirectoryServiceLoader {
 
         if (dataType != OMMTypes.MAP)
             throw new InvalidDataTypeException("Expected an OMMTypes.MAP, "
-                    + "however received the following dataType: "
-                    + OMMTypes.toString(dataType));
+                + "however received the following dataType: "
+                + OMMTypes.toString(dataType));
 
         OMMMap serviceMap = (OMMMap) msg.getPayload();
 
@@ -104,10 +101,10 @@ public class DirectoryServiceLoader {
 
         if (mapEntryDataType != OMMTypes.FILTER_LIST)
             throw new InvalidDataTypeException(
-                    "Expected an "
-                            + "OMMTypes.FILTER_LIST, however received "
-                            + "the following dataType: "
-                            + OMMTypes.toString(mapEntryDataType));
+                "Expected an "
+                    + "OMMTypes.FILTER_LIST, however received "
+                    + "the following dataType: "
+                    + OMMTypes.toString(mapEntryDataType));
 
         List<DirectoryEntry> directoryEntries =
             transform(msg);
@@ -156,7 +153,7 @@ public class DirectoryServiceLoader {
     void executeActionOn(List<DirectoryEntry> directoryEntries,
         Map<String, DirectoryEntry> directoryServiceEntryCache) {
 
-        log.warn("directoryServiceEntries.size: "
+        log.debug("directoryServiceEntries.size: "
                 + directoryEntries.size());
 
         for (DirectoryEntry entry : directoryEntries) {
@@ -178,23 +175,3 @@ public class DirectoryServiceLoader {
         }
     }
 }
-//
-//OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
-//
-//short mapEntryDataType = mapEntry.getDataType();
-//
-//if (mapEntryDataType != OMMTypes.FILTER_LIST)
-//  throw new InvalidDataTypeException(
-//          "Expected an "
-//                  + "OMMTypes.FILTER_LIST, however received "
-//                  + "the following dataType: "
-//                  + OMMTypes.toString(mapEntryDataType));
-//
-//List<DirectoryEntry> directoryEntries =
-//  transform(msg);
-//
-//Map<String, DirectoryEntry> directoryServiceEntryMap =
-//  session.getDirectoryServiceEntryCache(handle);
-//
-//executeActionOn(directoryEntries, directoryServiceEntryMap);
-//}
