@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
-import com.coherentlogic.coherent.datafeed.exceptions.MethodNotSupportedException;
 import com.coherentlogic.coherent.datafeed.services.DictionaryGatewaySpecification;
 import com.reuters.rfa.common.Handle;
 
@@ -55,12 +54,5 @@ public class GetDictionaryEntriesMessageProcessor
         log.info("getDictionaryEntries: method ends.");
 
         return new DictionaryEntries (results);
-    }
-
-    @Override
-    public String getDictionaryEntriesAsJSON() {
-        // This method should be unnecessary and IIRC this was working without it whereas the directory equiv had some
-        // problem and once the method was added the issue went away.
-        throw new MethodNotSupportedException();
     }
 }
