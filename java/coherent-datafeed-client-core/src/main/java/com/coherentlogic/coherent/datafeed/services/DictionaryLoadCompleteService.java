@@ -43,10 +43,6 @@ public class DictionaryLoadCompleteService
 
         boolean result = session.allDictionariesAreLoaded();
 
-//        for (Entry<Handle, DictionaryEntry> next : session.getDictionaryMap().entrySet()) {
-//            log.info("===== next: " + ToStringBuilder.reflectionToString(next));
-//        }
-
         log.info("allDictionariesAreLoaded: method ends; result: " + result);
 
         return result;
