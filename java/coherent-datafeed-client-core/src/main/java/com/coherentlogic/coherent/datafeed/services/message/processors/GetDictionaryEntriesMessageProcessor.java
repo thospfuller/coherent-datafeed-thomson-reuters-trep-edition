@@ -8,9 +8,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
+import com.coherentlogic.coherent.datafeed.exceptions.MethodNotSupportedException;
 import com.coherentlogic.coherent.datafeed.services.DictionaryGatewaySpecification;
 import com.reuters.rfa.common.Handle;
 
@@ -26,16 +26,12 @@ public class GetDictionaryEntriesMessageProcessor
     private static final Logger log =
         LoggerFactory.getLogger(GetDictionaryEntriesMessageProcessor.class);
 
-    private final BasicAdapter<DictionaryEntries, String> jsonAdapter;
-
     private final Map<Handle, DictionaryEntry> dictionaryEntryCache;
 
-    private GetDictionaryEntriesMessageProcessor(
-        BasicAdapter<DictionaryEntries, String> jsonAdapter,
+    public GetDictionaryEntriesMessageProcessor(
         Map<Handle, DictionaryEntry> dictionaryEntryCache
     ) {
         super();
-        this.jsonAdapter = jsonAdapter;
         this.dictionaryEntryCache = dictionaryEntryCache;
     }
 
@@ -63,13 +59,8 @@ public class GetDictionaryEntriesMessageProcessor
 
     @Override
     public String getDictionaryEntriesAsJSON() {
-        DictionaryEntries dictionaryEntries = getDictionaryEntries ();
-
-        String result = jsonAdapter.adapt(dictionaryEntries);
-
-        log.info("getDictionaryEntriesAsJSON: method returns; result: " +
-            result);
-
-        return result;
+        // This method should be unnecessary and IIRC this was working without it whereas the directory equiv had some
+        // problem and once the method was added the issue went away.
+        throw new MethodNotSupportedException();
     }
 }
