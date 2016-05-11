@@ -74,13 +74,6 @@ public class StatusResponse extends RFABean {
         firePropertyChange(CODE, oldValue, code);
     }
 
-    public StatusResponse withCode(String code) {
-
-        setCode (code);
-
-        return this;
-    }
-
     public String getStreamState() {
         return streamState;
     }
@@ -94,13 +87,6 @@ public class StatusResponse extends RFABean {
         firePropertyChange(STREAM_STATE, oldValue, streamState);
     }
 
-    public StatusResponse withStreamState(String streamState) {
-
-        setStreamState(streamState);
-
-        return this;
-    }
-
     public String getDataState() {
         return dataState;
     }
@@ -112,13 +98,6 @@ public class StatusResponse extends RFABean {
         this.dataState = dataState;
 
         firePropertyChange(DATA_STATE, oldValue, dataState);
-    }
-
-    public StatusResponse withDataState(String dataState) {
-
-        setDataState(dataState);
-
-        return this;
     }
 
     @UsingKey(type=TEXT)
@@ -135,13 +114,6 @@ public class StatusResponse extends RFABean {
         this.text = text;
 
         firePropertyChange(TEXT, oldValue, text);
-
-        return this;
-    }
-
-    public StatusResponse withText(String text) {
-
-        setText(text);
 
         return this;
     }

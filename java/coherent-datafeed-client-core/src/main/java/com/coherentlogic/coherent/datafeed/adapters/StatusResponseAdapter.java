@@ -69,11 +69,10 @@ public class StatusResponseAdapter
 
             String text = state.getText();
 
-            statusResponse
-                .withCode(code)
-                .withDataState(dataState)
-                .withStreamState(streamState)
-                .withText(text);
+            statusResponse.setCode(code);
+            statusResponse.setDataState(dataState);
+            statusResponse.setStreamState(streamState);
+            statusResponse.setText(text);
         }
 
         log.info("adapt: method ends; statusResponse: " + statusResponse);
