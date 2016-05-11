@@ -121,7 +121,7 @@ public class DirectoryEntryAdapter
 
                 adapt (filterList, directoryEntry);
             } else {
-                log.warn("adapt invoked with an unknown type: " + type);
+                log.warn("adapt invoked with an unknown type: " + OMMTypes.toString(type));
             }
         }
     }
