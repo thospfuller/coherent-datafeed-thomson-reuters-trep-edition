@@ -8,6 +8,8 @@ import com.coherentlogic.coherent.datafeed.exceptions.SessionCreationFailedExcep
  * below may do the trick, however note that the handle is maintained in the
  * AuthenticationService and is not thread-safe.
  *
+ * @deprecated We may be able to get rid of this class.
+ *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
 public class CompletionEventHandlingService {
