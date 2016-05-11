@@ -396,6 +396,18 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return orders;
     }
 
+    @Override
+    public String toString() {
+        return "MarketByOrder [permission=" + permission + ", displayName=" + displayName + ", tradingUnits="
+            + tradingUnits + ", recordType=" + recordType + ", currency=" + currency + ", exchangeId2="
+            + exchangeId2 + ", providerSymbol=" + providerSymbol + ", exchangeId=" + exchangeId
+            + ", lastActivityTimeMillis=" + lastActivityTimeMillis + ", contextId=" + contextId
+            + ", elektronDataSourceOwnerId=" + elektronDataSourceOwnerId + ", spsSubProviderLevelRic="
+            + spsSubProviderLevelRic + ", orderBookState=" + orderBookState + ", haltReason=" + haltReason
+            + ", tradingStatus=" + tradingStatus + ", haltReasonCode=" + haltReasonCode + ", orders=" + orders
+            + "]";
+    }
+
     /**
      * @TODO: Consider renaming this class to something like MarketByOrderOrder or
      * moving it to another package because we also have a MarketMakerOrder, which

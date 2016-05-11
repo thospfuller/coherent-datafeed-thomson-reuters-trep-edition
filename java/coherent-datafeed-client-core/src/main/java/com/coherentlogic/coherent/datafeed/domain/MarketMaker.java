@@ -199,6 +199,15 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         return orders;
     }
 
+    @Override
+    public String toString() {
+        return "MarketMaker [officialCode=" + officialCode + ", nasdStatus=" + nasdStatus + ", lotSize=" + lotSize
+            + ", officialCodeIndicator=" + officialCodeIndicator + ", listingMarket=" + listingMarket
+            + ", instrumentClass=" + instrumentClass + ", periodCode=" + periodCode + ", financialStatusIndicator="
+            + financialStatusIndicator + ", marketStatusIndicator=" + marketStatusIndicator + ", orders=" + orders
+            + "]";
+    }
+
     /**
      * 
      *
@@ -442,6 +451,16 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         @Adapt(using=OMMDateTimeAdapter.class)
         public void setPriortyDate(@Changeable(PRIORITY_DATE) Long priortyDate) {
             this.priortyDate = priortyDate;
+        }
+
+        @Override
+        public String toString() {
+            return "Order [bid=" + bid + ", ask=" + ask + ", bidSize=" + bidSize + ", askSize=" + askSize
+                + ", marketMakerName=" + marketMakerName + ", marketMakerId=" + marketMakerId + ", askTimeMillis="
+                + askTimeMillis + ", lastActivityTimeMillis=" + lastActivityTimeMillis + ", bidTimeMillis="
+                + bidTimeMillis + ", primaryMarketMaker=" + primaryMarketMaker + ", marketMakerMode="
+                + marketMakerMode + ", marketMakerState=" + marketMakerState + ", priorityTimeMillis="
+                + priorityTimeMillis + ", priortyDate=" + priortyDate + "]";
         }
     }
 }
