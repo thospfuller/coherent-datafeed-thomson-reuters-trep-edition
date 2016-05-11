@@ -32,7 +32,10 @@ public class WorkflowEndsService {
 
         Object payload = message.getPayload();
 
-        log.warn("The workflow has ended; note: "+ note + ", payload: " +
-            payload + ", payload.class: " + payload.getClass() + ".");
+        if (log.isWarnEnabled()) {
+            log.warn("The workflow has ended; note: "+ note);
+        } else if (log.isDebugEnabled() && payload != null) {
+            log.debug("The workflow has ended; note: "+ note + ", payload: " + payload);
+        }
     }
 }
