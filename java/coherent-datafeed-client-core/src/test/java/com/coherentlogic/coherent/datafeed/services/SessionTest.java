@@ -87,56 +87,56 @@ public class SessionTest {
         handle = null;
     }
 
-    @Test(expected=NullPointerRuntimeException.class)
-    public void putDirectoryWithNullHandle () {
-
-        DirectoryEntry directoryEntry =
-            new DirectoryEntry();
-
-        session.putDirectory(null, directoryEntry);
-    }
-
-    @Test(expected=NullPointerRuntimeException.class)
-    public void putDirectoryWithNullDirectoryServiceEntry () {
-
-        Handle handle = mock (Handle.class);
-
-        session.putDirectory(handle, null);
-    }
-
-    @Test(expected=InvalidApplicationSessionException.class)
-    public void putDirectoryWhereHandleReturnsANullMap () {
-
-        Handle handle = mock (Handle.class);
-
-        DirectoryEntry directoryEntry =
-            new DirectoryEntry();
-
-        directoryEntry.setName(NAME);
-
-        session.putDirectory(handle, directoryEntry);
-    }
-
-    @Test
-    public void putDirectory () {
-
-        Handle handle = mock (Handle.class);
-
-        DirectoryEntry directoryEntry =
-            new DirectoryEntry();
-
-        when (
-            directoryEntryCache.get(handle)
-        ).thenReturn(
-            nameToDirectoryMap
-        );
-
-        directoryEntry.setName(NAME);
-
-        session.putDirectory(handle, directoryEntry);
-
-        assertEquals(1, nameToDirectoryMap.size());
-    }
+//    @Test(expected=NullPointerRuntimeException.class)
+//    public void putDirectoryWithNullHandle () {
+//
+//        DirectoryEntry directoryEntry =
+//            new DirectoryEntry();
+//
+//        session.putDirectory(null, directoryEntry);
+//    }
+//
+//    @Test(expected=NullPointerRuntimeException.class)
+//    public void putDirectoryWithNullDirectoryServiceEntry () {
+//
+//        Handle handle = mock (Handle.class);
+//
+//        session.putDirectory(handle, null);
+//    }
+//
+//    @Test(expected=InvalidApplicationSessionException.class)
+//    public void putDirectoryWhereHandleReturnsANullMap () {
+//
+//        Handle handle = mock (Handle.class);
+//
+//        DirectoryEntry directoryEntry =
+//            new DirectoryEntry();
+//
+//        directoryEntry.setName(NAME);
+//
+//        session.putDirectory(handle, directoryEntry);
+//    }
+//
+//    @Test
+//    public void putDirectory () {
+//
+//        Handle handle = mock (Handle.class);
+//
+//        DirectoryEntry directoryEntry =
+//            new DirectoryEntry();
+//
+//        when (
+//            directoryEntryCache.get(handle)
+//        ).thenReturn(
+//            nameToDirectoryMap
+//        );
+//
+//        directoryEntry.setName(NAME);
+//
+//        session.putDirectory(handle, directoryEntry);
+//
+//        assertEquals(1, nameToDirectoryMap.size());
+//    }
 
     @Test(expected=NullPointerRuntimeException.class)
     public void putDictionaryWithNullHanlde () {
@@ -196,73 +196,6 @@ public class SessionTest {
             session.findDictionaryServiceEntry(handle);
 
         assertNotNull(result);
-    }
-
-    /**
-     * Map<String, DirectoryEntry> directoryEntryMap
-     */
-    @Test
-    public void allDirectoriesAreLoadedWithNoDirectories () {
-
-        Set<Handle> directorySet = new HashSet<Handle> ();
-
-        when (directoryEntryCache.keySet()).thenReturn(directorySet);
-
-        boolean result = session.allDirectoriesAreLoaded ();
-
-        assertTrue (result);
-    }
-
-    @Test
-    public void allDirectoriesAreLoadedWithAllDirectoriesTrue () {
-
-         DirectoryEntry dse1 = new DirectoryEntry ();
-         DirectoryEntry dse2 = new DirectoryEntry ();
-
-         dse1.setLoaded(true);
-         dse2.setLoaded(true);
-
-        boolean result = allDirectoriesAreLoaded (
-            dse1,
-            dse2
-        );
-
-        assertTrue (result);
-    }
-
-    @Test
-    public void allDirectoriesAreLoadedWithSomeDirectoriesFalse () {
-
-         DirectoryEntry dse1 = new DirectoryEntry ();
-         DirectoryEntry dse2 = new DirectoryEntry ();
-
-         dse1.setLoaded(false);
-         dse2.setLoaded(true);
-
-        boolean result = allDirectoriesAreLoaded (
-            dse1,
-            dse2
-        );
-
-        assertFalse (result);
-    }
-
-    boolean allDirectoriesAreLoaded (
-        DirectoryEntry dse1,
-        DirectoryEntry dse2
-    ) {
-
-        Map<String, DirectoryEntry> directoryEntryMap =
-            new HashMap<String, DirectoryEntry> ();
-
-        directoryEntryMap.put(DSE1, dse1);
-        directoryEntryMap.put(DSE2, dse2);
-
-        boolean result = session.allDirectoryServiceEntriesAreLoaded (
-            directoryEntryMap
-        ); 
-
-        return result;
     }
 
     /**

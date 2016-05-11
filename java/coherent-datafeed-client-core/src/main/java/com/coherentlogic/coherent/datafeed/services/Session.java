@@ -136,34 +136,34 @@ public class Session extends SerializableBean {
         return directoryEntryCache;
     }
 
-    /**
-     * @todo Rename this method to put or addDirectoryEntry.
-     */
-    public void putDirectory (
-        Handle handle,
-        DirectoryEntry directoryEntry
-    ) {
-        assertNotNull(HANDLE, handle);
-        assertNotNull("directoryServiceEntry", directoryEntry);
-
-        Map<String, DirectoryEntry> nameToDirectoryMap =
-            directoryEntryCache.get(handle);
-
-        // This is an indicator that there may be a concurrency issue as this
-        // should never happen.
-        // @todo This should never happen but the question is should we bother
-        //       checking for this?
-        if (nameToDirectoryMap == null)
-            throw new InvalidApplicationSessionException(
-                "The handle " + handle + " pointed to a null " +
-                "nameToDirectoryMap entry.");
-
-        String name = directoryEntry.getName();
-
-        assertNotNull ("directoryServiceEntry.name", name);
-
-        nameToDirectoryMap.put(name, directoryEntry);
-    }
+//    /**
+//     * @todo Rename this method to put or addDirectoryEntry.
+//     */
+//    public void putDirectory (
+//        Handle handle,
+//        DirectoryEntry directoryEntry
+//    ) {
+//        assertNotNull(HANDLE, handle);
+//        assertNotNull("directoryServiceEntry", directoryEntry);
+//
+//        Map<String, DirectoryEntry> nameToDirectoryMap =
+//            directoryEntryCache.get(handle);
+//
+//        // This is an indicator that there may be a concurrency issue as this
+//        // should never happen.
+//        // @todo This should never happen but the question is should we bother
+//        //       checking for this?
+//        if (nameToDirectoryMap == null)
+//            throw new InvalidApplicationSessionException(
+//                "The handle " + handle + " pointed to a null " +
+//                "nameToDirectoryMap entry.");
+//
+//        String name = directoryEntry.getName();
+//
+//        assertNotNull ("directoryServiceEntry.name", name);
+//
+//        nameToDirectoryMap.put(name, directoryEntry);
+//    }
 
     /**
      * @todo Rename this method to put or addDictionaryEntry.
@@ -240,66 +240,9 @@ public class Session extends SerializableBean {
         return ts1DefEntryCache;
     }
 
-    public Map<String, DirectoryEntry> removeDirectory (Handle handle) {
-        return directoryEntryCache.remove(handle);
-    }
-
-    /**
-     * @return True when the loaded flag for ever directory (associated with
-     * every handle) has been set to true otherwise this method returns false. 
-     */
-    public boolean allDirectoriesAreLoaded () {
-
-        boolean result = true;
-
-        Set<Handle> handles = directoryEntryCache.keySet();
-
-        for (Handle nextHandle : handles) {
-
-            Map<String, DirectoryEntry> directoryEntryMap =
-                directoryEntryCache.get(nextHandle);
-
-            boolean loaded =
-                allDirectoryServiceEntriesAreLoaded (directoryEntryMap);
-
-            if (!loaded) {
-                result = false;
-                break;
-             }
-        }
-        return result;
-    }
-
-    boolean allDirectoryServiceEntriesAreLoaded (
-        Map<String, DirectoryEntry> directoryEntryMap
-    ) {
-        boolean result = true;
-
-        Set<String> directoryEntryKeys =
-            directoryEntryMap.keySet();
-
-        for (String nextKey : directoryEntryKeys) {
-
-            DirectoryEntry nextDirectoryServiceEntry =
-                directoryEntryMap.get(nextKey);
-
-            boolean loaded = nextDirectoryServiceEntry.isLoaded();
-
-            log.info("loaded" + loaded + ", nextDirectoryServiceEntry: " +
-                ToStringBuilder.reflectionToString(
-                    nextDirectoryServiceEntry));
-
-            if (!loaded) {
-                result = false;
-                break;
-            }
-        }
-        return result;
-    }
-
     /**
      * @return True when the loaded flag for ever dictionary has been set to
-     *  true otherwise this method returns false. 
+     *  true otherwise this method returns false.
      */
     public boolean allDictionariesAreLoaded () {
 
@@ -413,6 +356,8 @@ public class Session extends SerializableBean {
      */
     public Set<String> getAllDictionariesUsed (String directoryName) {
 
+        log.info ("getAllDictionariesUsed: method invoked with directoryName: " + directoryName);
+
         Set<String> results = new HashSet<String> ();
 
         Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
@@ -521,34 +466,6 @@ public class Session extends SerializableBean {
     public Map<Handle, DictionaryEntry> getDictionaryCache() {
         return dictionaryEntryCache;
     }
-
-//    public void putMarketPrice (Handle handle, MarketPrice marketPrice) {
-//        marketPriceEntryCache.put(handle, marketPrice);
-//    }
-//
-//    public void putMarketMaker (Handle handle, MarketMaker marketMaker) {
-//        marketMakerEntryCache.put(handle, marketMaker);
-//    }
-//
-//    public void putMarketByOrder (Handle handle, MarketByOrder marketByOrder) {
-//        marketByOrderEntryCache.put(handle, marketByOrder);
-//    }
-//
-//    public MarketPrice getMarketPrice (Handle handle) {
-//        return marketPriceEntryCache.get (handle);
-//    }
-//
-//    public MarketMaker getMarketMaker (Handle handle) {
-//        return marketMakerEntryCache.get (handle);
-//    }
-//
-//    public MarketByOrder getMarketByOrder (Handle handle) {
-//        return marketByOrderEntryCache.get (handle);
-//    }
-//
-//    public MarketPrice removeMarketPrice (Handle handle) {
-//        return marketPriceEntryCache.remove(handle);
-//    }
 
     public TimeSeriesEntries getTimeSeriesEntries (Handle handle) {
         return timeSeriesEntryCache.get(handle);
