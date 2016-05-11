@@ -34,7 +34,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
     }
 
     public MarketPriceAdapter (
-    	TypedFactory<MarketPrice> marketPriceFactory,
+        TypedFactory<MarketPrice> marketPriceFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -50,7 +50,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
     }
 
     public MarketPriceAdapter (
-    	TypedFactory<MarketPrice> marketPriceFactory,
+        TypedFactory<MarketPrice> marketPriceFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
