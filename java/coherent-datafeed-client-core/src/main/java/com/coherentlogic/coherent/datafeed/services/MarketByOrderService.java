@@ -57,6 +57,7 @@ public class MarketByOrderService
     ) {
         RequestMessageBuilderFactory factory =
             getRequestMessageBuilderFactory();
+
         Client client = getClient();
 
         RequestMessageBuilder builder = factory.getInstance();
