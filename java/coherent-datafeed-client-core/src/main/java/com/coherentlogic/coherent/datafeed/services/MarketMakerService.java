@@ -3,9 +3,11 @@ package com.coherentlogic.coherent.datafeed.services;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
-import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
@@ -29,9 +31,7 @@ public class MarketMakerService
 
     public static final String BEAN_NAME = "marketMakerService";
 
-//    private final Map<Handle, String> ricCache;
-//
-//    private final Map<String, MarketMaker> marketMakerCache;
+    private static final Logger log = LoggerFactory.getLogger(MarketMakerService.class);
 
     /**
      * @deprecated The jsonGenerator should be removed from this class.
@@ -52,9 +52,6 @@ public class MarketMakerService
             marketMakerCache,
             marketMakerFactory
         );
-
-//        this.ricCache = ricCache;
-//        this.marketMakerCache = marketMakerCache;
     }
 
     /**
@@ -86,9 +83,4 @@ public class MarketMakerService
 
         return handles;
     }
-
-//    @Override
-//    public Map<String, MarketMaker> query(ServiceName serviceName, Handle loginHandle, String... rics) {
-//
-//    }
 }
