@@ -42,12 +42,10 @@ public class DirectoryMessageProcessor
     }
 
     /**
-     * @todo Move this method into its own DirectoryMessageProcessor.
+     *
      */
     @Override
     public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
-
-        log.info ("process: method begins; message: " + message);
 
         MessageHeaders headers = message.getHeaders();
 
@@ -61,6 +59,8 @@ public class DirectoryMessageProcessor
 
         int size = directoryHandles.size();
 
+        log.info("directoryHandles.size: " + directoryHandles.size ());
+
         assertEquals("directoryHandles", 1, size);
 
         // We also need to be able to associate a directory handle with a
@@ -69,9 +69,9 @@ public class DirectoryMessageProcessor
         for (Handle directoryHandle : directoryHandles)
             directoryCache.put(directoryHandle, session);
 
-        assertEquals("directoryCache.size", 1, directoryCache.size());
-
-        log.info ("process: method ends.");
+        // Not sure why we expect the directoryCache.size to only ever be one -- may want to explore this further, or it
+        // could be a copy/paste error.
+//        assertEquals("directoryCache.size", 1, directoryCache.size());
 
         return message;
     }
