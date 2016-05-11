@@ -1,9 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import java.util.List;
 import java.util.Map;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -16,7 +14,6 @@ import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -32,26 +29,14 @@ import com.reuters.rfa.common.Handle;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class QueryMarketByOrderMessageProcessor
-    implements MessageProcessorSpecification
-        <QueryParameters, Map<String, MarketByOrder>> {
+    implements MessageProcessorSpecification <QueryParameters, Map<String, MarketByOrder>> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(QueryMarketByOrderMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(QueryMarketByOrderMessageProcessor.class);
 
     private final MarketByOrderServiceSpecification marketByOrderService;
 
-    private final Cache<Handle, Session> sessionCache;
-
-    private final Cache<Handle, Session> marketByOrderCache;
-
-    public QueryMarketByOrderMessageProcessor(
-        MarketByOrderServiceSpecification marketByOrderService,
-        Cache<Handle, Session> sessionCache,
-        Cache<Handle, Session> marketByOrderCache
-    ) {
+    public QueryMarketByOrderMessageProcessor(MarketByOrderServiceSpecification marketByOrderService) {
         this.marketByOrderService = marketByOrderService;
-        this.sessionCache = sessionCache;
-        this.marketByOrderCache = marketByOrderCache;
     }
 
     /**
@@ -66,41 +51,25 @@ public class QueryMarketByOrderMessageProcessor
 
         QueryParameters parameters = message.getPayload();
 
-        /* Note that it is possible that this method is paused prior and then
-         * the MarketPriceMessageEnricher.enrich method is executed, which
-         * can result in an NPE progresses. The solution is to sync here and in
-         * the MarketPriceMessageEnricher.enrich method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         */
-//        synchronized (marketByOrderCache) {
+        log.info("parameters: " + parameters);
 
-            log.info("parameters: " + parameters);
+        String serviceName = parameters.getServiceName();
 
-            String serviceName = parameters.getServiceName();
+        Handle loginHandle = parameters.getLoginHandle();
 
-            Handle loginHandle = parameters.getLoginHandle();
+        String[] items = parameters.getItem();
 
-//            Session session = (Session) sessionCache.get(loginHandle);
+        Map<String, MarketByOrder> results = marketByOrderService.query(
+            ServiceName.valueOf(serviceName), loginHandle, items);
 
-            String[] items = parameters.getItem();
+        MessageHeaders headers = message.getHeaders();
 
-            Map<String, MarketByOrder> results = marketByOrderService.query(
-                ServiceName.valueOf(serviceName), loginHandle, items);
+        result =
+            MessageBuilder
+                .withPayload(results)
+                .copyHeaders(headers)
+                .build();
 
-//            for (Handle nextHandle : results)
-//                marketByOrderCache.put(nextHandle, session);
-
-            MessageHeaders headers = message.getHeaders();
-
-            result =
-                MessageBuilder
-                    .withPayload(results)
-                    .copyHeaders(headers)
-//                    .setHeader(SESSION, session)
-                    .build();
-//        }
         return result;
     }
 }

@@ -1,11 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-
-import java.util.List;
 import java.util.Map;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -18,7 +14,6 @@ import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -34,26 +29,14 @@ import com.reuters.rfa.common.Handle;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class QueryMarketMakerMessageProcessor
-    implements MessageProcessorSpecification
-        <QueryParameters, Map<String, MarketMaker>> {
+    implements MessageProcessorSpecification <QueryParameters, Map<String, MarketMaker>> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(QueryMarketMakerMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(QueryMarketMakerMessageProcessor.class);
 
     private final MarketMakerServiceSpecification marketMakerService;
 
-    private final Cache<Handle, Session> sessionCache;
-
-    private final Cache<Handle, Session> marketMakerCache;
-
-    public QueryMarketMakerMessageProcessor(
-        MarketMakerServiceSpecification marketMakerService,
-        Cache<Handle, Session> sessionCache,
-        Cache<Handle, Session> marketMakerCache
-    ) {
+    public QueryMarketMakerMessageProcessor(MarketMakerServiceSpecification marketMakerService) {
         this.marketMakerService = marketMakerService;
-        this.sessionCache = sessionCache;
-        this.marketMakerCache = marketMakerCache;
     }
 
     /**
@@ -68,43 +51,25 @@ public class QueryMarketMakerMessageProcessor
 
         QueryParameters parameters = message.getPayload();
 
-        /* Note that it is possible that this method is paused prior and then
-         * the MarketPriceMessageEnricher.enrich method is executed, which
-         * can result in an NPE progresses. The solution is to sync here and in
-         * the MarketMakerMessageEnricher.enrich method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         */
+        log.info("parameters: " + parameters);
 
-//        synchronized (sessionCache) {
+        String serviceName = parameters.getServiceName();
 
-            log.info("parameters: " + parameters);
+        Handle loginHandle = parameters.getLoginHandle();
 
-            String serviceName = parameters.getServiceName();
+        String[] items = parameters.getItem();
 
-            Handle loginHandle = parameters.getLoginHandle();
+        Map<String, MarketMaker> results = marketMakerService.query(
+            ServiceName.valueOf(serviceName), loginHandle, items);
 
-//            Session session = (Session) sessionCache.get(loginHandle);
+        MessageHeaders headers = message.getHeaders();
 
-            String[] items = parameters.getItem();
+        result =
+            MessageBuilder
+                .withPayload(results)
+                .copyHeaders(headers)
+                .build();
 
-            Map<String, MarketMaker> results = marketMakerService.query(
-                ServiceName.valueOf(serviceName), loginHandle, items);
-
-//            for (Handle nextHandle : results) {
-//                marketMakerCache.put(nextHandle, session);
-//                log.warn("marketMakerCache.put of nextHandle: " + nextHandle + ", session: " + session);
-//            }
-
-            MessageHeaders headers = message.getHeaders();
-
-            result =
-                MessageBuilder
-                    .withPayload(results)
-                    .copyHeaders(headers)
-                    .build();
-//        }
         return result;
     }
 }

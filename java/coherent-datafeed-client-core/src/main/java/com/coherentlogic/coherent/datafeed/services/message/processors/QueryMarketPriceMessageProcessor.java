@@ -1,11 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-
-import java.util.List;
 import java.util.Map;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -15,10 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
+import com.coherentlogic.coherent.datafeed.services.MarketPriceService;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -34,30 +29,16 @@ import com.reuters.rfa.common.Handle;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class QueryMarketPriceMessageProcessor
-    implements MessageProcessorSpecification
-        <QueryParameters, Map<String, MarketPrice>> {
+    implements MessageProcessorSpecification <QueryParameters, Map<String, MarketPrice>> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(QueryMarketPriceMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(QueryMarketPriceMessageProcessor.class);
 
-    private final MarketPriceServiceSpecification marketPriceService;
-
-    private final Cache<Handle, Session> sessionCache;
-
-//    private final Map<Handle, String> ricCache;
-//
-//    private final Map<String, MarketPrice> marketPriceCache;
+    private final MarketPriceService marketPriceService;
 
     public QueryMarketPriceMessageProcessor(
-        MarketPriceServiceSpecification marketPriceService,
-        Cache<Handle, Session> sessionCache
-//        Map<Handle, String> ricCache,
-//        Map<String, MarketPrice> marketPriceCache
+        MarketPriceService marketPriceService
     ) {
         this.marketPriceService = marketPriceService;
-        this.sessionCache = sessionCache;
-//        this.ricCache = ricCache;
-//        this.marketPriceCache = marketPriceCache;
     }
 
     /**
@@ -65,51 +46,34 @@ public class QueryMarketPriceMessageProcessor
      */
     @Override
     @Transactional
-    public Message<Map<String, MarketPrice>> process(
-        Message<QueryParameters> message) {
+    public Message<Map<String, MarketPrice>> process(Message<QueryParameters> message) {
 
         Message<Map<String, MarketPrice>> result = null;
 
         QueryParameters parameters = message.getPayload();
 
-        /* Note that it is possible that this method is paused prior and then
-         * the MarketPriceMessageEnricher.enrich method is executed, which
-         * can result in an NPE progresses. The solution is to sync here and in
-         * the MarketPriceMessageEnricher.enrich method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         */
-//        synchronized (marketPriceCache) {
+        log.info("parameters: " + parameters);
 
-            log.info("parameters: " + parameters);
+        String serviceName = parameters.getServiceName();
 
-            String serviceName = parameters.getServiceName();
+        Handle loginHandle = parameters.getLoginHandle();
 
-            Handle loginHandle = parameters.getLoginHandle();
+        String[] items = parameters.getItem();
 
-//            Session session = (Session) sessionCache.get(loginHandle);
+        Map<String, MarketPrice> results = marketPriceService.query(
+            ServiceName.valueOf(serviceName),
+            loginHandle,
+            items
+        );
 
-            String[] items = parameters.getItem();
+        MessageHeaders headers = message.getHeaders();
 
-            Map<String, MarketPrice> results = marketPriceService.query(
-                ServiceName.valueOf(serviceName),
-                loginHandle,
-                items
-            );
+        result =
+            MessageBuilder
+                .withPayload(results)
+                .copyHeaders(headers)
+                .build();
 
-//            for (Handle nextHandle : results)
-//                marketPriceCache.put(nextHandle, session);
-
-            MessageHeaders headers = message.getHeaders();
-
-            result =
-                MessageBuilder
-                    .withPayload(results)
-                    .copyHeaders(headers)
-//                    .setHeader(SESSION, session)
-                    .build();
-//        }
         return result;
     }
 }
