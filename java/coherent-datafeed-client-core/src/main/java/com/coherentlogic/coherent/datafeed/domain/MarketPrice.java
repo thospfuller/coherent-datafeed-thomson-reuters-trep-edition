@@ -2184,7 +2184,7 @@ public class MarketPrice extends AbstractCommonProperties {
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setHistoricalClosingBidDate(Long historicalClosingBidDate) {
 
-    	Long oldValue = this.historicalClosingBidDate;
+        Long oldValue = this.historicalClosingBidDate;
 
         this.historicalClosingBidDate = historicalClosingBidDate;
 
@@ -2202,7 +2202,7 @@ public class MarketPrice extends AbstractCommonProperties {
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearBidHigh(String yearBidHigh) {
 
-    	String oldValue = this.yearBidHigh;
+        String oldValue = this.yearBidHigh;
 
         this.yearBidHigh = yearBidHigh;
 
@@ -2220,7 +2220,7 @@ public class MarketPrice extends AbstractCommonProperties {
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearBidLow(String yearBidLow) {
 
-    	String oldValue = this.yearBidLow;
+        String oldValue = this.yearBidLow;
 
         this.yearBidLow = yearBidLow;
 
@@ -5131,5 +5131,109 @@ public class MarketPrice extends AbstractCommonProperties {
         this.settleDate = settleDate;
 
         firePropertyChange(SETTLE_DATE, oldValue, settleDate);
+    }
+
+    @Override
+    public String toString() {
+        return "MarketPrice [displayTemplate=" + displayTemplate + ", idnExchangeId=" + idnExchangeId + ", displayName="
+            + displayName + ", bid=" + bid + ", bid1=" + bid1 + ", bid2=" + bid2 + ", ask=" + ask + ", ask1=" + ask1
+            + ", ask2=" + ask2 + ", bidSize=" + bidSize + ", askSize=" + askSize + ", last=" + last + ", last1="
+            + last1 + ", last2=" + last2 + ", last3=" + last3 + ", last4=" + last4 + ", netChange=" + netChange
+            + ", todaysHigh=" + todaysHigh + ", todaysLow=" + todaysLow + ", tickArrow=" + tickArrow
+            + ", tradeDateMillis=" + tradeDateMillis + ", tradeTimeMillis=" + tradeTimeMillis + ", openPrice="
+            + openPrice + ", historicClose=" + historicClose + ", news=" + news + ", newsTime=" + newsTime
+            + ", volumeAccumulated=" + volumeAccumulated + ", earnings=" + earnings + ", yield=" + yield
+            + ", priceToEarningsRatio=" + priceToEarningsRatio + ", dividendType=" + dividendType
+            + ", dividendPayDate=" + dividendPayDate + ", exDividendDate=" + exDividendDate
+            + ", tradePriceQualifier=" + tradePriceQualifier + ", blockCount=" + blockCount + ", blockVolume="
+            + blockVolume + ", tradeExchangeId=" + tradeExchangeId + ", tradingUnits=" + tradingUnits + ", lotSize="
+            + lotSize + ", percentChange=" + percentChange + ", openBid=" + openBid
+            + ", latestDowJonesNewsStoryTime=" + latestDowJonesNewsStoryTime + ", closeBid=" + closeBid
+            + ", closeAsk=" + closeAsk + ", dividend=" + dividend + ", totalTradesToday=" + totalTradesToday
+            + ", officialCode=" + officialCode + ", historicCloseDate=" + historicCloseDate + ", yearHigh="
+            + yearHigh + ", yearLow=" + yearLow + ", turnover=" + turnover + ", bondType=" + bondType
+            + ", backgroundPage=" + backgroundPage + ", yearOrContractHighIndicator=" + yearOrContractHighIndicator
+            + ", yearOrContractLowIndicator=" + yearOrContractLowIndicator + ", bidNetChange=" + bidNetChange
+            + ", bidTick1=" + bidTick1 + ", cumExMarker=" + cumExMarker + ", priceCode=" + priceCode
+            + ", nasdStatus=" + nasdStatus + ", priceCode2=" + priceCode2 + ", tradeVolume=" + tradeVolume
+            + ", todaysHighBid=" + todaysHighBid + ", todaysLowBid=" + todaysLowBid + ", yearHighBid=" + yearHighBid
+            + ", yearLowBid=" + yearLowBid + ", historicalClosingBid=" + historicalClosingBid
+            + ", historicalClosingBidDate=" + historicalClosingBidDate + ", yearBidHigh=" + yearBidHigh
+            + ", yearBidLow=" + yearBidLow + ", numberOfBids=" + numberOfBids + ", optionExchangeId="
+            + optionExchangeId + ", yearHighDate=" + yearHighDate + ", yearLowDate=" + yearLowDate + ", irgPrice="
+            + irgPrice + ", irgVolume=" + irgVolume + ", irgPriceType=" + irgPriceType + ", priceCorrectionTime="
+            + priceCorrectionTime + ", insertPrice=" + insertPrice + ", insertVolume=" + insertVolume
+            + ", insertPriceType=" + insertPriceType + ", lastTime=" + lastTime + ", turnoverScale=" + turnoverScale
+            + ", broadcastXRef=" + broadcastXRef + ", crossRateScale=" + crossRateScale + ", amountOutstanding="
+            + amountOutstanding + ", amountOutstandingScale=" + amountOutstandingScale + ", officialCodeIndicator="
+            + officialCodeIndicator + ", priceVolatility=" + priceVolatility + ", amountOutstandingDate="
+            + amountOutstandingDate + ", backgroundReference=" + backgroundReference + ", generalPurposeValue1="
+            + generalPurposeValue1 + ", generalPurposeValue1Description=" + generalPurposeValue1Description
+            + ", generalPurposeValue2=" + generalPurposeValue2 + ", generalPurposeValue2Description="
+            + generalPurposeValue2Description + ", generalPurposeValue3=" + generalPurposeValue3
+            + ", generalPurposeValue3Description=" + generalPurposeValue3Description + ", generalPurposeValue4="
+            + generalPurposeValue4 + ", generalPurposeValue4Description=" + generalPurposeValue4Description
+            + ", sequenceNumber=" + sequenceNumber + ", printType=" + printType
+            + ", alteredTradeEventSequenceNumber=" + alteredTradeEventSequenceNumber + ", quoteTimeSeconds="
+            + quoteTimeSeconds + ", genericFlag1=" + genericFlag1 + ", genericFlag2=" + genericFlag2
+            + ", genericFlag3=" + genericFlag3 + ", genericFlag4=" + genericFlag4 + ", uniqueInstrumentId2Source="
+            + uniqueInstrumentId2Source + ", uniqueInstrumentId2=" + uniqueInstrumentId2 + ", timeInSeconds1="
+            + timeInSeconds1 + ", timeInSeconds2=" + timeInSeconds2 + ", exchangeTime=" + exchangeTime
+            + ", yearHighIndicator=" + yearHighIndicator + ", yearLowIndicator=" + yearLowIndicator + ", betaValue="
+            + betaValue + ", preferredDisplayTemplateNumber=" + preferredDisplayTemplateNumber
+            + ", localLanguageInstrumentName=" + localLanguageInstrumentName + ", latestTradeOrTradeTurnoverValue="
+            + latestTradeOrTradeTurnoverValue + ", dataSourceOwnerId=" + dataSourceOwnerId + ", averagePrice="
+            + averagePrice + ", upc71RestrictedFlag=" + upc71RestrictedFlag + ", adjustedClose=" + adjustedClose
+            + ", weighting=" + weighting + ", stockType=" + stockType + ", impliedVolatility=" + impliedVolatility
+            + ", capitalAdjustmentFactor=" + capitalAdjustmentFactor + ", capitalAdjustmentDate="
+            + capitalAdjustmentDate + ", sharesIssuedTotal=" + sharesIssuedTotal + ", marketValue=" + marketValue
+            + ", specialTermsTradingFlag=" + specialTermsTradingFlag + ", forecastedEarnings=" + forecastedEarnings
+            + ", earningsRankRatio=" + earningsRankRatio + ", forecastDate=" + forecastDate + ", forecastYear="
+            + forecastYear + ", irgPriceTypeModifier=" + irgPriceTypeModifier + ", insertPriceTypeModifier="
+            + insertPriceTypeModifier + ", askPlayersLevel1=" + askPlayersLevel1 + ", bidPlayersLevel1="
+            + bidPlayersLevel1 + ", genericTime3=" + genericTime3 + ", genericTime4=" + genericTime4
+            + ", marketCapitalisation=" + marketCapitalisation + ", irgCorrectionValueFid=" + irgCorrectionValueFid
+            + ", irgCorrectionValue=" + irgCorrectionValue + ", abnormalVolumeIncreasePercentage="
+            + abnormalVolumeIncreasePercentage + ", blockTransactionsBetween10KAnd50KShares="
+            + blockTransactionsBetween10KAnd50KShares + ", blockTransactionsBetween50KAnd100KShares="
+            + blockTransactionsBetween50KAnd100KShares + ", blockTransactionsAbove100KShares="
+            + blockTransactionsAbove100KShares + ", priceMovingAverages50D=" + priceMovingAverages50D
+            + ", priceMovingAverages150D=" + priceMovingAverages150D + ", priceMovingAverages200D="
+            + priceMovingAverages200D + ", volumeMovingAverages10D=" + volumeMovingAverages10D
+            + ", volumeMovingAverages25D=" + volumeMovingAverages25D + ", volumeMovingAverages50D="
+            + volumeMovingAverages50D + ", openPriceNetChange=" + openPriceNetChange
+            + ", latestReportedCashDividend=" + latestReportedCashDividend + ", marketValueScalingFactor="
+            + marketValueScalingFactor + ", exDividendTradeDate=" + exDividendTradeDate
+            + ", previousDisplayTemplate=" + previousDisplayTemplate + ", extendedPriceQualifierFid="
+            + extendedPriceQualifierFid + ", minimumPriceMovement=" + minimumPriceMovement
+            + ", officialClosingPrice=" + officialClosingPrice + ", quoteDate=" + quoteDate
+            + ", volumeWeightedAveragePrice=" + volumeWeightedAveragePrice + ", bidAskDate=" + bidAskDate
+            + ", isinCode=" + isinCode + ", rtrsOpeningPrice=" + rtrsOpeningPrice + ", sedolCode=" + sedolCode
+            + ", marketSegment=" + marketSegment + ", regularTradesTimeMillis=" + regularTradesTimeMillis
+            + ", allTradesTimeMillis=" + allTradesTimeMillis + ", quoteTimeMillis=" + quoteTimeMillis
+            + ", correctionTimeMillis=" + correctionTimeMillis + ", financialStatusIndicator="
+            + financialStatusIndicator + ", lastTradeSubMarketIndicator=" + lastTradeSubMarketIndicator
+            + ", irgPriceSubmarketIndicator=" + irgPriceSubmarketIndicator + ", volumeScaling=" + volumeScaling
+            + ", exchangeCode=" + exchangeCode + ", oddBestAsk=" + oddBestAsk + ", oddBestAskSize=" + oddBestAskSize
+            + ", oddBestBid=" + oddBestBid + ", oddBestBidSize=" + oddBestBidSize + ", roundVolume=" + roundVolume
+            + ", organizationId=" + organizationId + ", priceUpdateFrequency=" + priceUpdateFrequency
+            + ", rcsAssetClassification=" + rcsAssetClassification + ", underlyingIndex=" + underlyingIndex
+            + ", futuresChainRic=" + futuresChainRic + ", optionsChainRic=" + optionsChainRic + ", strikesCoverage="
+            + strikesCoverage + ", newsTimeMillis=" + newsTimeMillis + ", tradeThroughExemptFlags="
+            + tradeThroughExemptFlags + ", companyComplianceStatus=" + companyComplianceStatus
+            + ", irgSubMarketCenterId=" + irgSubMarketCenterId + ", subMarketCenterId=" + subMarketCenterId
+            + ", activeDomesticExchangeIds=" + activeDomesticExchangeIds + ", activeOtherExchangeIds="
+            + activeOtherExchangeIds + ", tradePriceQualifier2=" + tradePriceQualifier2
+            + ", latestCapitalChangeEffectiveDate=" + latestCapitalChangeEffectiveDate + ", marketParticipantBidId="
+            + marketParticipantBidId + ", row64_1=" + row64_1 + ", row64_2=" + row64_2 + ", row64_3=" + row64_3
+            + ", row64_4=" + row64_4 + ", row64_5=" + row64_5 + ", row64_6=" + row64_6 + ", row64_7=" + row64_7
+            + ", row64_8=" + row64_8 + ", row64_9=" + row64_9 + ", row64_10=" + row64_10 + ", row64_11=" + row64_11
+            + ", row64_12=" + row64_12 + ", row64_13=" + row64_13 + ", row64_14=" + row64_14
+            + ", marketParticipantAskId=" + marketParticipantAskId + ", putCall=" + putCall
+            + ", impliedVolatilitytOfAskPrice=" + impliedVolatilitytOfAskPrice + ", impliedVolatilitytOfBidPrice="
+            + impliedVolatilitytOfBidPrice + ", openInterest=" + openInterest + ", openInterestNetChange="
+            + openInterestNetChange + ", strikePrice=" + strikePrice + ", contractMonth=" + contractMonth
+            + ", lotSizeUnits=" + lotSizeUnits + ", openAskPrice=" + openAskPrice + ", expiryDate=" + expiryDate
+            + ", settlementPrice=" + settlementPrice + ", settleDate=" + settleDate + "]";
     }
 }
