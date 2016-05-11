@@ -18,7 +18,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class AbstractMarketMakerMessageProcessor implements
-        MessageProcessorSpecification<OMMItemEvent, MarketMaker> {
+    MessageProcessorSpecification<OMMItemEvent, MarketMaker> {
 
     /**
      * Method returns the {@link Session} which is taken from the message
