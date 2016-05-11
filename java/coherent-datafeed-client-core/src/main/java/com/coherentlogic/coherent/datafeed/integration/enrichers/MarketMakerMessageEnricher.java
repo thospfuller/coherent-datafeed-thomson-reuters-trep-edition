@@ -29,6 +29,9 @@ public class MarketMakerMessageEnricher extends AbstractMessageEnricher {
     private static final Logger log =
         LoggerFactory.getLogger(MarketMakerMessageEnricher.class);
 
+    /**
+     * @deprecated The marketMakerCache is no longer needed.
+     */
     public MarketMakerMessageEnricher(
         Cache<Handle, Session> marketMakerCache
     ) {
@@ -42,8 +45,6 @@ public class MarketMakerMessageEnricher extends AbstractMessageEnricher {
     public Message<Event> enrich (Message<Event> message) {
 
         log.info("enrich: method begins; message: " + message);
-
-        Cache<Handle, Session> marketMakerCache = getSessionCache();
 
         Message<Event> enrichedMessage = null;
 

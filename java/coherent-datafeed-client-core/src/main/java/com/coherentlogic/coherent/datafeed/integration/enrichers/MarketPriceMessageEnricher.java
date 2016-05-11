@@ -29,6 +29,9 @@ public class MarketPriceMessageEnricher extends AbstractMessageEnricher {
     private static final Logger log =
         LoggerFactory.getLogger(MarketPriceMessageEnricher.class);
 
+    /**
+     * @deprecated The marketPriceCache is no longer needed.
+     */
     public MarketPriceMessageEnricher(
         Cache<Handle, Session> marketPriceCache
     ) {
@@ -43,8 +46,6 @@ public class MarketPriceMessageEnricher extends AbstractMessageEnricher {
 
         log.info("enrich: method begins; message: " + message);
 
-        Cache<Handle, Session> marketPriceCache = getSessionCache();
-
         Message<Event> enrichedMessage = null;
 
         /* Note that it is possible that this method is invoked before the
@@ -58,12 +59,9 @@ public class MarketPriceMessageEnricher extends AbstractMessageEnricher {
          */
 //        synchronized (marketPriceCache) {
 
-//            Session session = getSession (message, marketPriceCache);
-
             enrichedMessage =
                 MessageBuilder
                     .fromMessage(message)
-//                    .setHeader(SESSION, session)
                     .build ();
 //        }
         log.info("enrich: method ends; enrichedMessage: " +

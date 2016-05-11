@@ -29,6 +29,9 @@ public class MarketByOrderMessageEnricher extends AbstractMessageEnricher {
     private static final Logger log =
         LoggerFactory.getLogger(MarketByOrderMessageEnricher.class);
 
+    /**
+     * @deprecated The marketByOrderCache is no longer needed.
+     */
     public MarketByOrderMessageEnricher(
         Cache<Handle, Session> marketByOrderCache
     ) {
@@ -43,8 +46,6 @@ public class MarketByOrderMessageEnricher extends AbstractMessageEnricher {
 
         log.info("enrich: method begins; message: " + message);
 
-        Cache<Handle, Session> marketByOrderCache = getSessionCache();
-
         Message<Event> enrichedMessage = null;
 
         /* Note that it is possible that this method is invoked before the
@@ -58,12 +59,9 @@ public class MarketByOrderMessageEnricher extends AbstractMessageEnricher {
          */
 //        synchronized (marketByOrderCache) {
 
-//            Session session = getSession (message, marketByOrderCache);
-
             enrichedMessage =
                 MessageBuilder
                     .fromMessage(message)
-//                    .setHeader(SESSION, session)
                     .build ();
 //        }
         log.info("enrich: method ends; enrichedMessage: " +
