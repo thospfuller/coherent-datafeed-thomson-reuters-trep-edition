@@ -235,10 +235,10 @@ public class GlobalConfiguration {
         return new DefaultStatusResponseFactory ();
     }
 
-    @Bean(name=DefaultMarketPriceFactory.BEAN_NAME)
-    public DefaultMarketPriceFactory getDefaultMarketPriceFactory () {
-        return new DefaultMarketPriceFactory ();
-    }
+//    @Bean(name=DefaultMarketPriceFactory.BEAN_NAME)
+//    public DefaultMarketPriceFactory getDefaultMarketPriceFactory () {
+//        return new DefaultMarketPriceFactory ();
+//    }
 
     @Bean(name=DefaultOrderFactory.BEAN_NAME)
     public DefaultMarketByOrderFactory.DefaultOrderFactory getMarketByOrderOrderFactory () {
