@@ -46,8 +46,8 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
+//import groovy.lang.Binding;
+//import groovy.lang.GroovyShell;
 
 public class MainUI {
 
@@ -189,17 +189,17 @@ public class MainUI {
             new ActionListener () {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    String scriptText = timeSeriesGroovyScriptTextArea.getText();
-
-                    Binding binding = new Binding ();
-
-                    binding.setVariable("log", log);
-                    binding.setVariable("loginHandle", loginHandle);
-                    binding.setVariable("timeSeriesGateway", timeSeriesGatewaySpecification);
-
-                    GroovyShell groovyShell = new GroovyShell(binding);
-
-                    groovyShell.evaluate(scriptText);
+//                    String scriptText = timeSeriesGroovyScriptTextArea.getText();
+//
+//                    Binding binding = new Binding ();
+//
+//                    binding.setVariable("log", log);
+//                    binding.setVariable("loginHandle", loginHandle);
+//                    binding.setVariable("timeSeriesGateway", timeSeriesGatewaySpecification);
+//
+//                    GroovyShell groovyShell = new GroovyShell(binding);
+//
+//                    groovyShell.evaluate(scriptText);
                 }
             }
         );
@@ -231,17 +231,17 @@ public class MainUI {
             new ActionListener () {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    String scriptText = marketPriceGroovyScriptTextArea.getText();
-
-                    Binding binding = new Binding ();
-
-                    binding.setVariable("log", log);
-                    binding.setVariable("loginHandle", loginHandle);
-                    binding.setVariable("marketPriceGateway", marketPriceGatewaySpecification);
-
-                    GroovyShell groovyShell = new GroovyShell(binding);
-                    
-                    groovyShell.evaluate(scriptText);
+//                    String scriptText = marketPriceGroovyScriptTextArea.getText();
+//
+//                    Binding binding = new Binding ();
+//
+//                    binding.setVariable("log", log);
+//                    binding.setVariable("loginHandle", loginHandle);
+//                    binding.setVariable("marketPriceGateway", marketPriceGatewaySpecification);
+//
+//                    GroovyShell groovyShell = new GroovyShell(binding);
+//                    
+//                    groovyShell.evaluate(scriptText);
                 }
             }
         );
