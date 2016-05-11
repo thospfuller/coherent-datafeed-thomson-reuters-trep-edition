@@ -147,7 +147,7 @@ public class MarketByOrderAdapter
 
         if (order != null) {
             throw new AddFailedException("An order already exists under the " +
-                "key" + key + " (order: " + order + ").");
+                "key: " + key + " (order: " + order + ").");
         }
 
         order = new Order ();
