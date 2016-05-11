@@ -77,16 +77,10 @@ public class UpdateMarketMakerMessageProcessor
 
         log.info ("Updating the following marketMaker: " + currentMarketMaker);
 
-        /*
-         * @todo: We do not need to clone this object anymore so get rid of this step. 
-         */
-        MarketMaker updatedMarketMaker =
-            (MarketMaker) SerializationUtils.clone(currentMarketMaker);
-
-        marketMakerAdapter.adapt(ommMsg, updatedMarketMaker);
+        marketMakerAdapter.adapt(ommMsg, currentMarketMaker);
 
         Message<MarketMaker> result = MessageBuilder
-            .withPayload(updatedMarketMaker)
+            .withPayload(currentMarketMaker)
             .copyHeaders(headers).build();
 
         log.info("updateMarketMakerMessageProcessor.process: method " +
