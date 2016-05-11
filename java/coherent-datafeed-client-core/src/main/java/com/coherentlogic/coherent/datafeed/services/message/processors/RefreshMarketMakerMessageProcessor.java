@@ -10,7 +10,6 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.session.omm.OMMItemEvent;
@@ -77,11 +76,16 @@ public class RefreshMarketMakerMessageProcessor
 //            marketMakerAdapter.adapt(ommMsg) + ") ", marketMaker);
 
         if (marketMaker == null) {
+
             marketMaker = marketMakerAdapter.adapt(ommMsg);
+
             log.info("The marketMaker was null so a new instance was " +
                 "created for this refresh.");
+
         } else {
+
             marketMakerAdapter.adapt(ommMsg, marketMaker);
+
             log.info("The marketMaker was not null so an existing instance " +
                 "was refreshed.");
         }
