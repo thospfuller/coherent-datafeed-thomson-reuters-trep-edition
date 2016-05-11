@@ -15,5 +15,5 @@ public interface DictionaryGatewaySpecification {
 
     DictionaryEntries getDictionaryEntries ();
 
-    String getDictionaryEntriesAsJSON ();
+//    String getDictionaryEntriesAsJSON ();
 }
