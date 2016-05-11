@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
@@ -36,9 +36,9 @@ import com.reuters.ts1.TS1Constants;
  * @see http://docs.spring.io/spring-boot/docs/1.2.7.RELEASE/reference/htmlsingle/#getting-started-installing-the-cli
  * @see https://spring.io/guides/gs/consuming-rest/
  */
-@SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@SpringBootApplication
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 public class TimeSeriesExample implements CommandLineRunner {
 
     private static final Logger log =

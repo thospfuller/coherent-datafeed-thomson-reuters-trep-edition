@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -37,9 +37,9 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@SpringBootApplication
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 public class MarketPriceExample implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log =
@@ -253,10 +253,11 @@ public class MarketPriceExample implements CommandLineRunner, MarketPriceConstan
 
                         String text = "[ric: "+ key +"]; nextMarketPriceUpdate[" + currentCtr + "]: " + event;
 
-                        if (currentCtr % 1000 == 0) {
+                        //if (currentCtr % 100 == 0) {
+
+                        //if ("ask".equals(event.getPropertyName()) || "bid".equals(event.getPropertyName()))
                             System.out.println (text);
-                            // log.info (text);
-                        }
+                        //}
                     }
                 );
             }

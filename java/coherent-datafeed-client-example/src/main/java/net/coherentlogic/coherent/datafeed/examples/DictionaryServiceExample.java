@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
@@ -22,9 +22,9 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@SpringBootApplication
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 public class DictionaryServiceExample implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log =

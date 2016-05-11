@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -37,9 +37,9 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@SpringBootApplication
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 public class MarketMakerExample implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log =
@@ -248,18 +248,44 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
             (String key, MarketMaker value) -> {
 
                 System.out.println("Adding an instance of PropertyChangeListener for the ric " + key +
-                    " and marketMaker " + value);
+                    " and marketMaker " + value.getPrimaryKey());
 
-                value.addPropertyChangeListener(
-                    event -> {
-
-                        long currentCtr = ctr.incrementAndGet();
-
-                        String text = "[ric: "+ key +"]; nextMarketMakerUpdate[" + currentCtr + "]: " + event;
-
-//                        if (currentCtr % 100 == 0) {
-                            System.out.println (text);
+//                value.addPropertyChangeListener(
+//                    event -> {
+//
+//                        long currentCtr = ctr.incrementAndGet();
+//
+//                        String text = "[ric: "+ key +"]; nextMarketMakerUpdate[" + currentCtr + "]: " + event;
+//
+//                        if (currentCtr % 1000 == 0) {
+//                        if (MarketMaker.NASD_STATUS.equals(event.getPropertyName())
+//                            ||
+//                            MarketMaker.OFFICIAL_CODE.equals(event.getPropertyName())) {
+//                            System.out.println (text);
 //                        }
+//                    }
+//                );
+
+                value.getOrders().forEach(
+                    (String orderKey, MarketMaker.Order order) -> {
+
+                        System.out.println("Adding an instance of PropertyChangeListener for the orderKey " + orderKey +
+                            " and marketMaker.order " + order.getUniqueId());
+
+                        AtomicLong orderCtr = new AtomicLong (0);
+
+                        order.addPropertyChangeListener(
+                            event -> {
+
+                                long orderCtrValue = orderCtr.getAndIncrement();
+
+//                                if (orderCtrValue % 100 == 0) {
+                                    String text = "[orderKey: "+ orderKey +"]; nextMarketMakerOrderUpdate[" +
+                                        orderCtrValue + "]: " + event;
+                                    System.out.println(text);
+//                                }
+                            }
+                        );
                     }
                 );
             }

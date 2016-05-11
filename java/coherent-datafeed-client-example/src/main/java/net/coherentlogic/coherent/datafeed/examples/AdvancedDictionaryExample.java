@@ -1,4 +1,4 @@
-package com.coherentlogic.coherent.datafeed.examples;
+package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_SERVICE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -33,9 +33,9 @@ import com.reuters.rfa.dictionary.FieldDictionary;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@SpringBootApplication
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 public class AdvancedDictionaryExample implements CommandLineRunner {
 
     private static final Logger log =
