@@ -96,7 +96,33 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         OMMMap marketMakerMap = (OMMMap) marketMakerData;
 
-        toRFABean(marketMakerMap, marketMaker);
+        if (marketMakerMap != null) {
+
+            toRFABean(marketMakerMap, marketMaker);
+
+            Iterator iterator = marketMakerMap.iterator();
+
+            while (iterator.hasNext()) {
+
+                OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
+
+                OMMData ommKey = (OMMData) mapEntry.getKey();
+
+                String key = ommKey.toString();
+
+                byte action = mapEntry.getAction();
+
+                if (action == OMMMapEntry.Action.ADD) {
+                    addOrder (marketMaker, key, mapEntry);
+                } else if (action == OMMMapEntry.Action.DELETE) {
+                    deleteOrder (marketMaker, key, mapEntry);
+                } else if (action == OMMMapEntry.Action.UPDATE) {
+                    updateOrder (marketMaker, key, mapEntry);
+                }
+            }
+
+        } else
+            log.debug("The marketMakerMap was null -- this has not been the case until recently.");
 
         if (ommMsg.has(OMMMsg.HAS_ATTRIB_INFO)) {
 
@@ -105,26 +131,6 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
             toRFABean (attribInfo, marketMaker);
         }
 
-        Iterator iterator = marketMakerMap.iterator();
-
-        while (iterator.hasNext()) {
-
-            OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
-
-            OMMData ommKey = (OMMData) mapEntry.getKey();
-
-            String key = ommKey.toString();
-
-            byte action = mapEntry.getAction();
-
-            if (action == OMMMapEntry.Action.ADD) {
-                addOrder (marketMaker, key, mapEntry);
-            } else if (action == OMMMapEntry.Action.DELETE) {
-                deleteOrder (marketMaker, key, mapEntry);
-            } else if (action == OMMMapEntry.Action.UPDATE) {
-                updateOrder (marketMaker, key, mapEntry);
-            }
-        }
         log.info ("adapt: method ends.");
     }
 
@@ -139,7 +145,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         if (order != null) {
             throw new AddFailedException("An order already exists under the " +
-                "key" + key + " (order: " + order + ").");
+                "key: " + key + " (order: " + order + ").");
         }
 
         order = new MarketMaker.Order ();
