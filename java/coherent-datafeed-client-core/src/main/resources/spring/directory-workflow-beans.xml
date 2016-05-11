@@ -29,7 +29,7 @@
     <int:router input-channel="routeByDirectoryEventTypeChannel"
      default-output-channel="errorChannel"
      expression="payload.type">
-        <int:mapping channel="workflowEndsChannel"
+        <int:mapping channel="directoryWorkflowEndsChannel"
          value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
         <int:mapping channel="routeByDirectoryOMMTypeChannel"
          value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
@@ -41,11 +41,9 @@
      default-output-channel="errorChannel"
      resolution-required="true"
      expression="payload.msg.dataType">
-        <int:mapping channel="workflowEndsChannel"
+        <int:mapping channel="directoryWorkflowEndsChannel"
          value="#{T(com.reuters.rfa.omm.OMMTypes).NO_DATA}"/>
         <int:mapping channel="loadAllDirectoryServicesChannel"
-         value="#{T(com.reuters.rfa.omm.OMMTypes).MAP}"/>
-                <int:mapping channel="loadAllDirectoryServicesChannel"
          value="#{T(com.reuters.rfa.omm.OMMTypes).MAP}"/>
     </int:router>
 
@@ -71,7 +69,18 @@
      expression="payload.msg.isSet (T(com.reuters.rfa.omm.OMMMsg$Indication).REFRESH_COMPLETE)">
         <int:mapping channel="loadDictionariesChannel"
          value="#{T(java.lang.Boolean).TRUE}"/>
-        <int:mapping channel="workflowEndsChannel"
+        <int:mapping channel="directoryWorkflowEndsChannel"
          value="#{T(java.lang.Boolean).FALSE}"/>
     </int:router>
+
+    <int:channel id="directoryWorkflowEndsChannel"/>
+
+    <bean id="directoryWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The directory workflow ends."/>
+    </bean>
+
+    <int:service-activator
+     input-channel="directoryWorkflowEndsChannel"
+     ref="directoryWorkflowEndsService"
+     method="end"/>
 </beans>

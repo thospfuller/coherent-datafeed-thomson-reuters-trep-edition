@@ -5,7 +5,10 @@
     xmlns="urn:infinispan:config:8.0">
 
     <!-- TODO: Consider changing these caches to FULL_XA but we'll need to add @Transactional annotations where appropriate. -->
-    <cache-container default-cache="defaultCache">
+    <cache-container default-cache="defaultCache" statistics="true">
+
+        <!-- jmx domain="com.coherentlogic.coherent.datafeed.trep" duplicate-domains="true"/ -->
+
         <local-cache name="sessionCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>

@@ -4,7 +4,6 @@
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:task="http://www.springframework.org/schema/task"
     xmlns:int="http://www.springframework.org/schema/integration"
-    xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -29,16 +28,19 @@
     <int:router input-channel="routeByMarketByOrderEventTypeChannel"
      default-output-channel="errorChannel"
      expression="payload.type">
-        <int:mapping channel="completionEventChannel"
+        <int:mapping channel="marketByOrderCompletionEventChannel"
          value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
-        <int:mapping channel="ommItemEventChannel"
+        <int:mapping channel="ommItemEventToMarketByOrderChannel"
          value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
     </int:router>
 
-    <int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
-     output-channel="ommItemEventChannel"/>
+    <!-- @deprecated This is not being used and hence should be removed. -->
+    <!-- int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
+     output-channel="ommItemEventToMarketByOrderChannel"/ -->
 
-    <int:channel id="completionEventChannel"/>
+    <int:channel id="marketByOrderCompletionEventChannel"/>
+    <int:channel id="marketByOrderItemEventChannel"/>
+    <int:channel id="ommItemEventToMarketByOrderChannel"/>
 
     <!-- @TODO Remove this and add a workflow that eventually adds a message to
                a queue. This will be called if the dacsId is incorrect, for
@@ -46,18 +48,15 @@
                their dacs id.
       -->
     <int:service-activator
-     input-channel="completionEventChannel"
-     output-channel="workflowEndsChannel"
+     input-channel="marketByOrderCompletionEventChannel"
+     output-channel="marketByOrderWorkflowEndsChannel"
      ref="completionEventHandler"
      method="onCompletionEventReceived"/>
 
-    <int:channel id="ommItemEventChannel"/>
-    <int:channel id="marketByOrderItemEventChannel"/>
-
     <!-- See rfa.example.framework.OMMSubAppContext.java
       -->
-    <int:router input-channel="ommItemEventChannel"
-     default-output-channel="workflowEndsChannel"
+    <int:router input-channel="ommItemEventToMarketByOrderChannel"
+     default-output-channel="marketByOrderWorkflowEndsChannel"
      expression="payload.msg.msgModelType">
         <int:mapping channel="processMarketByOrderChannel"
          value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_BY_ORDER}"/>
@@ -85,7 +84,7 @@
 
     <int:service-activator
      input-channel="refreshMarketByOrderChannel"
-     output-channel="workflowEndsChannel"
+     output-channel="marketByOrderWorkflowEndsChannel"
      ref="refreshMarketByOrderMessageProcessor"
      method="process"/>
 
@@ -93,9 +92,20 @@
 
     <int:service-activator
      input-channel="updateMarketByOrderChannel"
-     output-channel="workflowEndsChannel"
+     output-channel="marketByOrderWorkflowEndsChannel"
      ref="updateMarketByOrderMessageProcessor"
      method="process"/>
+
+    <int:channel id="marketByOrderWorkflowEndsChannel"/>
+
+    <bean id="marketByOrderWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The marketByOrder workflow ends."/>
+    </bean>
+
+    <int:service-activator
+     input-channel="marketByOrderWorkflowEndsChannel"
+     ref="marketByOrderWorkflowEndsService"
+     method="end"/>
 
     <!--
       A status response message needs to be extracted from an instance of

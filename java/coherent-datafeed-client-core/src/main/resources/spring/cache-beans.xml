@@ -2,7 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
     xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
     xmlns:int="http://www.springframework.org/schema/integration"
-    xmlns:aop="http://www.springframework.org/schema/aop"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -73,14 +72,32 @@
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-    <bean id="ricCacheFactory"
+    <bean id="marketPriceRICCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
         <constructor-arg name="cacheManager" ref="cacheManager" />
-        <constructor-arg name="cacheName" value="ricCache" />
+        <constructor-arg name="cacheName" value="marketPriceRICCache" />
     </bean>
 
-    <bean id="ricCache" class="org.infinispan.Cache"
-        factory-bean="ricCacheFactory" factory-method="getInstance" />
+    <bean id="marketMakerRICCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="marketMakerRICCache" />
+    </bean>
+
+    <bean id="marketByOrderRICCacheFactory"
+        class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">
+        <constructor-arg name="cacheManager" ref="cacheManager" />
+        <constructor-arg name="cacheName" value="marketByOrderRICCacheFactory" />
+    </bean>
+
+    <bean id="marketPriceRICCache" class="org.infinispan.Cache"
+        factory-bean="marketPriceRICCacheFactory" factory-method="getInstance" />
+
+    <bean id="marketMakerRICCache" class="org.infinispan.Cache"
+        factory-bean="marketMakerRICCacheFactory" factory-method="getInstance" />
+
+    <bean id="marketByOrderRICCache" class="org.infinispan.Cache"
+        factory-bean="marketByOrderRICCacheFactory" factory-method="getInstance" />
 
     <bean id="marketPriceCacheFactory"
         class="com.coherentlogic.coherent.datafeed.factories.infinispan.CacheFactory">

@@ -28,31 +28,19 @@
     <int:router input-channel="routeByMarketPriceEventTypeChannel"
      default-output-channel="errorChannel"
      expression="payload.type">
-        <int:mapping channel="completionEventChannel"
+        <int:mapping channel="marketPriceCompletionEventChannel"
          value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
-        <int:mapping channel="ommItemEventChannel"
+        <int:mapping channel="ommItemEventToMarketPriceChannel"
          value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
         <!-- int:mapping channel="marketDataItemEventChannel"
          value="#{T(com.reuters.rfa.common.Event).MARKET_DATA_ITEM_EVENT}"/ -->
     </int:router>
 
-    <!-- This transformer casts the Event into an instance of OMMItemEvent.
+    <!-- @deprecated This is not being used and hence should be removed. -->
+    <!-- int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
+     output-channel="ommItemEventToMarketPriceChannel"/ -->
 
-         TODO: See OMMClient.java
-               OMMMsg msg = ((OMMItemEvent)event).getMsg();
-               if (msg.isSet(OMMMsg.Indication.CLEAR_CACHE)) {
-                   clearDataAndTables();
-               }
-               OMMMsg.Indication.CLEAR_CACHE then we need to go to a channel
-               which will ultimately clear the MarketPriceUpdate map, or other
-               map if this is for something else.
-
-               See also for ripple.
-      -->
-    <int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
-     output-channel="ommItemEventChannel"/>
-
-    <int:channel id="completionEventChannel"/>
+    <int:channel id="marketPriceCompletionEventChannel"/>
 
     <!-- @TODO Remove this and add a workflow that eventually adds a message to
                a queue. This will be called if the dacsId is incorrect, for
@@ -60,18 +48,18 @@
                their dacs id.
       -->
     <int:service-activator
-     input-channel="completionEventChannel"
-     output-channel="workflowEndsChannel"
+     input-channel="marketPriceCompletionEventChannel"
+     output-channel="marketPriceWorkflowEndsChannel"
      ref="completionEventHandler"
      method="onCompletionEventReceived"/>
 
-    <int:channel id="ommItemEventChannel"/>
-    <int:channel id="marketDataItemEventChannel"/>
+    <int:channel id="ommItemEventToMarketPriceChannel"/>
+    <!-- int:channel id="marketDataItemEventChannel"/ -->
 
     <!-- See rfa.example.framework.OMMSubAppContext.java
       -->
-    <int:router input-channel="ommItemEventChannel"
-     default-output-channel="workflowEndsChannel"
+    <int:router input-channel="ommItemEventToMarketPriceChannel"
+     default-output-channel="marketPriceWorkflowEndsChannel"
      expression="payload.msg.msgModelType">
         <!-- Was marketPriceChannel -->
         <int:mapping channel="processMarketPriceChannel"
@@ -98,7 +86,7 @@
 
     <int:service-activator
      input-channel="refreshMarketPriceChannel"
-     output-channel="workflowEndsChannel"
+     output-channel="marketPriceWorkflowEndsChannel"
      ref="refreshMarketPriceMessageProcessor"
      method="process"/>
 
@@ -106,9 +94,20 @@
 
     <int:service-activator
      input-channel="updateMarketPriceChannel"
-     output-channel="workflowEndsChannel"
+     output-channel="marketPriceWorkflowEndsChannel"
      ref="updateMarketPriceMessageProcessor"
      method="process"/>
+
+    <int:channel id="marketPriceWorkflowEndsChannel"/>
+
+    <bean id="marketPriceWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The marketPrice workflow ends."/>
+    </bean>
+
+    <int:service-activator
+     input-channel="marketPriceWorkflowEndsChannel"
+     ref="marketPriceWorkflowEndsService"
+     method="end"/>
 
     <!--
       A status response message needs to be extracted from an instance of

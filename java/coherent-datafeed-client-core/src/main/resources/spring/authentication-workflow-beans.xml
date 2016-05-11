@@ -25,6 +25,11 @@
                @see AggregateMessageDeliveryException
       -->
 
+    <!-- NOTE: This was working prior to switching to Spring Boot and we did not have this channel here so I'm
+               not sure why adding this was necessary, or how this wasn't throwing an exception in the absence thereof.
+      -->
+    <int:channel id="onAuthAddSessionToHeadersChannel"/>
+
     <int:service-activator
      input-channel="onAuthAddSessionToHeadersChannel"
      output-channel="routeByAuthEventTypeChannel"

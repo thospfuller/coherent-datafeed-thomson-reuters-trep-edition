@@ -4,7 +4,6 @@
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:task="http://www.springframework.org/schema/task"
     xmlns:int="http://www.springframework.org/schema/integration"
-    xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:cache="http://www.springframework.org/schema/cache"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -16,12 +15,10 @@
         http://www.springframework.org/schema/task/spring-task.xsd
         http://www.springframework.org/schema/integration
         http://www.springframework.org/schema/integration/spring-integration.xsd
-        http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/cache
         http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-        <bean id="timeSeriesRequestExecutor"
+    <bean id="timeSeriesRequestExecutor"
      class="com.coherentlogic.coherent.datafeed.services.CommonRequestExecutor">
         <constructor-arg name="client" ref="timeSeriesEventDrivenEndpoint"/>
         <constructor-arg name="requestMessageBuilderFactory"

@@ -6,6 +6,7 @@
     xmlns:int="http://www.springframework.org/schema/integration"
     xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -19,95 +20,23 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/cache
-        http://www.springframework.org/schema/cache/spring-cache.xsd">
-
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.coherentlogic"/>
+    <context:component-scan base-package="com.coherentlogic.coherent.datafeed"/>
+
+    <cache:annotation-driven cache-manager="springCacheManager"/>
 
     <!-- import resource="hornetq-beans.xml"/ -->
+    <import resource="aop-configuration.xml"/>
     <import resource="integration-beans.xml"/>
     <!-- import resource="cache-beans.xml"/ -->
     <!-- The dictionary-beans are ONLY used when loading the dictionaries from
          the local file system.
       -->
     <!-- import resource="dictionary-beans.xml"/ -->
-
-    <cache:annotation-driven cache-manager="springCacheManager"/>
-
-    <bean id="performanceMonitorInterceptor"
-     class="org.springframework.aop.interceptor.JamonPerformanceMonitorInterceptor">
-        <property name="useDynamicLogger" value="true"/>
-        <property name="trackAllInvocations" value="true"/>
-    </bean>
-
-    <aop:config>
-        <aop:pointcut id="performanceMonitoringPointcut"
-         expression="execution(public void com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint.processEvent(..))"/>
-        <aop:advisor pointcut-ref="performanceMonitoringPointcut"
-            advice-ref="performanceMonitorInterceptor" />
-    </aop:config>
-
-    <bean id="marketPriceSetterInterceptor"
-     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
-        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketPrice"/>
-    </bean>
-
-    <aop:config>
-        <aop:pointcut id="marketPriceSetterPointcut"
-         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketPrice.set*(..))"/>
-        <aop:advisor pointcut-ref="marketPriceSetterPointcut"
-            advice-ref="marketPriceSetterInterceptor" />
-    </aop:config>
-
-    <bean id="marketByOrderSetterInterceptor"
-     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
-        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketByOrder"/>
-    </bean>
-
-    <aop:config>
-        <aop:pointcut id="marketByOrderSetterPointcut"
-         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketByOrder.set*(..))"/>
-        <aop:advisor pointcut-ref="marketByOrderSetterPointcut"
-            advice-ref="marketByOrderSetterInterceptor" />
-    </aop:config>
-
-    <bean id="marketMakerSetterInterceptor"
-     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
-        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketMaker"/>
-    </bean>
-
-    <aop:config>
-        <aop:pointcut id="marketMakerSetterPointcut"
-         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketMaker.set*(..))"/>
-        <aop:advisor pointcut-ref="marketMakerSetterPointcut"
-            advice-ref="marketMakerSetterInterceptor" />
-    </aop:config>
-
-    <bean id="marketMakerOrderSetterInterceptor"
-     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
-        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order"/>
-    </bean>
-
-    <aop:config>
-        <aop:pointcut id="marketMakerOrderSetterPointcut"
-         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order.set*(..))"/>
-        <aop:advisor pointcut-ref="marketMakerOrderSetterPointcut"
-            advice-ref="marketMakerOrderSetterInterceptor" />
-    </aop:config>
-
-    <bean id="directoryEntrySetterInterceptor"
-     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
-        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.DirectoryEntry"/>
-    </bean>
-
-    <aop:config>
-        <aop:pointcut id="directoryEntrySetterPointcut"
-         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.DirectoryEntry.set*(..))"/>
-        <aop:advisor pointcut-ref="directoryEntrySetterPointcut"
-            advice-ref="directoryEntrySetterInterceptor" />
-    </aop:config>
 
     <!--bean id="springCacheManager"
      class="org.springframework.cache.concurrent.ConcurrentMapCacheManager"/ -->
@@ -212,6 +141,8 @@
         <constructor-arg name="dispatchableNotificationClient" ref="dispatcher"/>
     </bean>
 
+    <!-- bean id="defaultGatewayDelegate" class="com.coherentlogic.coherent.datafeed.integration.endpoints.GatewayDelegate"/ -->
+
     <bean id="authenticationEventDrivenEndpoint"
      class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
         <property name="requestChannel" ref="onAuthAddSessionToHeadersChannel"/>
@@ -295,6 +226,7 @@
     <bean id="marketPriceEventDrivenEndpoint"
      class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
         <property name="requestChannel" ref="onMarketPriceAddSessionToHeadersChannel"/>
+        <!-- shouldTrack -->
     </bean>
 
     <bean id="marketMakerEventDrivenEndpoint"
@@ -306,7 +238,7 @@
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketPriceEventDrivenEndpoint"/>
-        <constructor-arg name="ricCache" ref="ricCache"/>
+        <constructor-arg name="ricCache" ref="marketPriceRICCache"/>
         <constructor-arg name="marketPriceCache" ref="marketPriceCache"/>
         <constructor-arg name="marketPriceFactory" ref="marketPriceFactory"/>
     </bean>
@@ -315,7 +247,7 @@
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketMakerEventDrivenEndpoint"/>
-        <constructor-arg name="ricCache" ref="ricCache"/>
+        <constructor-arg name="ricCache" ref="marketMakerRICCache"/>
         <constructor-arg name="marketMakerCache" ref="marketMakerCache"/>
         <constructor-arg name="marketMakerFactory" ref="marketMakerFactory"/>
     </bean>
@@ -329,7 +261,7 @@
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="marketByOrderEventDrivenEndpoint"/>
-        <constructor-arg name="ricCache" ref="ricCache"/>
+        <constructor-arg name="ricCache" ref="marketByOrderRICCache"/>
         <constructor-arg name="marketByOrderCache" ref="marketByOrderCache"/>
         <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
     </bean>
@@ -382,55 +314,53 @@
 
     <bean id="getDictionaryEntriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.GetDictionaryEntriesMessageProcessor">
-        <constructor-arg name="jsonAdapter" ref="jsonAdapter"/>
         <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
     </bean>
 
     <bean id="getDirectoryEntriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.GetDirectoryEntriesMessageProcessor">
-        <constructor-arg name="jsonAdapter" ref="jsonAdapter"/>
         <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
     </bean>
 
     <bean id="refreshMarketPriceMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketPriceMessageProcessor">
         <constructor-arg ref="marketPriceAdapter"/>
-        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketPriceRICCache"/>
         <constructor-arg ref="marketPriceCache"/>
      </bean>
 
     <bean id="updateMarketPriceMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketPriceMessageProcessor">
         <constructor-arg ref="marketPriceAdapter"/>
-        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketPriceRICCache"/>
         <constructor-arg ref="marketPriceCache"/>
      </bean>
 
     <bean id="refreshMarketMakerMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketMakerMessageProcessor">
         <constructor-arg ref="marketMakerAdapter"/>
-        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketMakerRICCache"/>
         <constructor-arg ref="marketMakerCache"/>
      </bean>
 
     <bean id="updateMarketMakerMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketMakerMessageProcessor">
         <constructor-arg ref="marketMakerAdapter"/>
-        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketMakerRICCache"/>
         <constructor-arg ref="marketMakerCache"/>
      </bean>
 
     <bean id="refreshMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
-        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketByOrderRICCache"/>
         <constructor-arg ref="marketByOrderCache"/>
      </bean>
 
     <bean id="updateMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
-        <constructor-arg ref="ricCache"/>
+        <constructor-arg ref="marketByOrderRICCache"/>
         <constructor-arg ref="marketByOrderCache"/>
      </bean>
 
@@ -485,6 +415,8 @@
     </util:map>
 
     <bean id="marketPrice" class="com.coherentlogic.coherent.datafeed.domain.MarketPrice" scope="prototype"/>
+    <bean id="marketByOrder" class="com.coherentlogic.coherent.datafeed.domain.MarketByOrder" scope="prototype"/>
+    <bean id="marketMaker" class="com.coherentlogic.coherent.datafeed.domain.MarketMaker" scope="prototype"/>
 
     <!-- bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
     <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>

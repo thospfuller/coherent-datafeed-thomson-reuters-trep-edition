@@ -30,6 +30,8 @@
     <import resource="timeseries-beans.xml"/>
     <import resource="timeseries-workflow-beans.xml"/>
 
+    <int:message-history/>
+
     <int:channel id="workflowEndsChannel"/>
 
     <int:service-activator

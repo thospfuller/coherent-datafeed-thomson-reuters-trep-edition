@@ -19,15 +19,26 @@
 
     <int:service-activator
      input-channel="processStatusResponseChannel"
-     output-channel="workflowEndsChannel"
+     output-channel="statusResponseWorkflowEndsChannel"
      ref="statusResponseMessageProcessor"
      method="process"/>
+
+    <int:channel id="statusResponseWorkflowEndsChannel"/>
+
+    <bean id="statusResponseWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The statusResponse workflow ends."/>
+    </bean>
+
+    <int:service-activator
+     input-channel="statusResponseWorkflowEndsChannel"
+     ref="statusResponseWorkflowEndsService"
+     method="end"/>
 
     <!-- int:publish-subscribe-channel id="addStatusResponseToQueueChannel"/>
 
     <int:service-activator
      input-channel="addStatusResponseToQueueChannel"
-     output-channel="workflowEndsChannel"
+     output-channel="statusResponseWorkflowEndsChannel"
      ref="mainUI"
      method="onStatusResponseUpdate"/ -->
 </beans>
