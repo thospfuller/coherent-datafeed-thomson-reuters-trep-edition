@@ -4,20 +4,13 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.UNUSED;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNullOrEmpty;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidQueryException;
-import com.coherentlogic.coherent.datafeed.exceptions.InvalidStateException;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
-import com.coherentlogic.coherent.datafeed.misc.Utils;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Handle;
 
@@ -39,27 +32,15 @@ public abstract class QueryableService extends RequestService {
 
     private final short msgModelType;
 
-//    private final Map<Handle, String> ricCache;
-//
-//    private final Map<String, T> objectCache;
-//
-//    private final TypedFactory<T> objectFactory;
-
     public QueryableService(
         String serviceName,
         short msgModelType,
         RequestMessageBuilderFactory factory,
         Client client
-//        Map<Handle, String> ricCache,
-//        Map<String, T> objectCache,
-//        TypedFactory<T> objectFactory
     ) {
         super(factory, client);
         this.serviceName = serviceName;
         this.msgModelType = msgModelType;
-//        this.ricCache = ricCache;
-//        this.objectCache = objectCache;
-//        this.objectFactory = objectFactory;
     }
 
     public List<Handle> query (Handle loginHandle) {
@@ -108,8 +89,7 @@ public abstract class QueryableService extends RequestService {
         assertNotNullOrEmpty ("items", items);
 
         log.info("serviceName: " + serviceName + ", loginHandle: " +
-            loginHandle + ", items: " +
-            ToStringBuilder.reflectionToString(items));
+            loginHandle + ", items: " + items);
 
         List<Handle> results = null;
 
