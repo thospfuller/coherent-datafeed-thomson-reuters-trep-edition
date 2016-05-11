@@ -28,7 +28,7 @@ public class TS1DefDbLoaderMessageProcessor
 
     private final TS1DefDbLoader ts1DefDbLoader;
 
-    private TS1DefDbLoaderMessageProcessor(TS1DefDbLoader ts1DefDbLoader) {
+    public TS1DefDbLoaderMessageProcessor(TS1DefDbLoader ts1DefDbLoader) {
         this.ts1DefDbLoader = ts1DefDbLoader;
     }
 

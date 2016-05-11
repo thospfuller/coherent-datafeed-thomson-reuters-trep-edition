@@ -40,7 +40,7 @@ public class TS1DefGatewayDelegateMessageProcessor implements
      * 
      * @param ts1DefService
      */
-    private TS1DefGatewayDelegateMessageProcessor(
+    public TS1DefGatewayDelegateMessageProcessor(
         Map<Handle, Session> sessionCache,
         Map<Handle, Session> ts1DefCache,
         TS1DefServiceSpecification ts1DefService
