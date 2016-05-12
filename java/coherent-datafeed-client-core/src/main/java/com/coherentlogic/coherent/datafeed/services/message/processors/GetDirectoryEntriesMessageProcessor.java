@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntries;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
-import com.coherentlogic.coherent.datafeed.exceptions.MethodNotSupportedException;
 import com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification;
 import com.reuters.rfa.common.Handle;
 
@@ -20,17 +19,14 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class GetDirectoryEntriesMessageProcessor
-    implements DirectoryGatewaySpecification {
+public class GetDirectoryEntriesMessageProcessor implements DirectoryGatewaySpecification {
 
     private static final Logger log =
         LoggerFactory.getLogger(GetDirectoryEntriesMessageProcessor.class);
 
     private final Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache;
 
-    public GetDirectoryEntriesMessageProcessor(
-        Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache
-    ) {
+    public GetDirectoryEntriesMessageProcessor(Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache) {
         super();
         this.directoryEntryCache = directoryEntryCache;
     }
@@ -43,7 +39,7 @@ public class GetDirectoryEntriesMessageProcessor
     @Override
     public DirectoryEntries getDirectoryEntries() {
 
-        log.info("getDirectoryEntries: method begins.");
+        log.debug("getDirectoryEntries: method begins.");
 
         Set<DirectoryEntry> directoryEntrySet = new HashSet<DirectoryEntry> ();
 
@@ -53,8 +49,7 @@ public class GetDirectoryEntriesMessageProcessor
         Set<Entry<Handle, Map<Handle, DirectoryEntry>>> directoryEntryCacheSet =
             directoryEntryCache.entrySet();
 
-        for (Entry<Handle, Map<Handle, DirectoryEntry>> nextEntry :
-            directoryEntryCacheSet) {
+        for (Entry<Handle, Map<Handle, DirectoryEntry>> nextEntry : directoryEntryCacheSet) {
 
             Map<Handle, DirectoryEntry> directoryEntryMap =
                 nextEntry.getValue();
@@ -64,28 +59,22 @@ public class GetDirectoryEntriesMessageProcessor
 
             addAll (subDirectoryEntrySet, directoryEntrySet);
 
-            log.info ("Adding a directoryEntrySet of size " + directoryEntrySet.size() + " to the subDirectoryEntrySet, which now has a size of " + subDirectoryEntrySet.size());
+            log.debug ("Adding a directoryEntrySet of size " + directoryEntrySet.size() + " to the "
+                + "subDirectoryEntrySet, which now has a size of " + subDirectoryEntrySet.size());
         }
 
-        log.info("getDirectoryEntries: method ends.");
+        log.debug ("getDirectoryEntries: method ends; directoryEntries: " + directoryEntries);
 
         return directoryEntries;
     }
 
-    
-
-    @Override
-	public String getDirectoryEntriesAsJSON() {
-		throw new MethodNotSupportedException();
-	}
-
-	void addAll (
+    void addAll (
         Set<Entry<Handle, DirectoryEntry>> source,
         Set<DirectoryEntry> target
     ) {
         for (Entry<Handle, DirectoryEntry> sourceEntry : source) {
 
-            log.warn("addAll: handle: " + sourceEntry.getKey() + ", value: " + sourceEntry.getValue());
+            log.debug("addAll: handle: " + sourceEntry.getKey() + ", value: " + sourceEntry.getValue());
 
             DirectoryEntry result = sourceEntry.getValue();
 
