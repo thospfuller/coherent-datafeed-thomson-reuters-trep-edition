@@ -21,10 +21,10 @@ import com.reuters.rfa.common.Handle;
  */
 public class SessionFactory<S> {
 
-	public SessionFactory(Handle loginHandle) {
-	}
+    public SessionFactory(Handle loginHandle) {
+    }
 
-	public S getInstance () {
-		return null;
-	}
+    public S getInstance () {
+        return null;
+    }
 }

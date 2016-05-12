@@ -321,7 +321,7 @@ public class GlobalConfiguration {
 //    </bean>
 //    @Bean(name=MARKET_MAKER_MESSAGE_CONSUMER)
 //    public MessageConsumer getMarketMakerMessageConsumer () {
-//    	return new MessageConsumer ();
+//        return new MessageConsumer ();
 //    }
 
 //    <bean id="marketPriceService" class="com.coherentlogic.coherent.datafeed.services.MarketPriceService"

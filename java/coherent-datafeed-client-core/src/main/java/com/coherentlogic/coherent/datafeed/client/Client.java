@@ -204,7 +204,7 @@ public class Client {
     }
 
     public StatusResponseServiceSpecification getStatusResponseService () {
-    	return (StatusResponseServiceSpecification)
+        return (StatusResponseServiceSpecification)
             applicationContext.getBean(STATUS_RESPONSE_SERVICE_GATEWAY);
     }
 

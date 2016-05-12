@@ -52,7 +52,7 @@ public class RFABeanAdapter<T extends RFABean> {
     private final Map<String, Method> methodMap;
 
     public RFABeanAdapter (
-    	TypedFactory<T> rfaBeanFactory,
+        TypedFactory<T> rfaBeanFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -79,7 +79,7 @@ public class RFABeanAdapter<T extends RFABean> {
      * @throws NoSuchMethodException
      */
     public RFABeanAdapter (
-    	TypedFactory<T> rfaBeanFactory,
+        TypedFactory<T> rfaBeanFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,

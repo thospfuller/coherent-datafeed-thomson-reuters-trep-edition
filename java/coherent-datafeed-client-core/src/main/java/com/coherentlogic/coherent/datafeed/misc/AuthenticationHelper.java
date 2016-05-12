@@ -47,7 +47,7 @@ public class AuthenticationHelper {
     private static final Logger log =
         LoggerFactory.getLogger(AuthenticationHelper.class);
 
-	public boolean loginSucceeded (OMMItemEvent itemEvent) {
+    public boolean loginSucceeded (OMMItemEvent itemEvent) {
 
         OMMMsg msg = itemEvent.getMsg();
 

@@ -19,7 +19,7 @@ public class DictionaryEntries implements Serializable {
 
     private static final long serialVersionUID = -7009670010791348760L;
 
-	@XStreamAlias(DICTIONARY_ENTRIES)
+    @XStreamAlias(DICTIONARY_ENTRIES)
     @XStreamImplicit
     private final Set<DictionaryEntry> dictionaryEntryList;
 

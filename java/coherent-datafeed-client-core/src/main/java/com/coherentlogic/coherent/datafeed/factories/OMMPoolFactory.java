@@ -14,7 +14,7 @@ import com.reuters.rfa.omm.OMMPool;
  */
 public class OMMPoolFactory implements TypedFactory<OMMPool> {
 
-	public static final String BEAN_NAME = "poolFactory";
+    public static final String BEAN_NAME = "poolFactory";
 
     @Override
     public OMMPool getInstance() {

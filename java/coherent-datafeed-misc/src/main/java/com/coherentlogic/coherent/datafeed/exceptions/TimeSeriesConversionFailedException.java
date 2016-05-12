@@ -13,7 +13,7 @@ public class TimeSeriesConversionFailedException extends ConversionFailedExcepti
 
     private static final long serialVersionUID = 6452486823180887239L;
 
-	public TimeSeriesConversionFailedException(String msg) {
+    public TimeSeriesConversionFailedException(String msg) {
         super(msg);
     }
 

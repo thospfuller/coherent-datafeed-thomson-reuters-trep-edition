@@ -17,7 +17,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  */
 public class TimeSeriesHelper {
 
-	public static final String BEAN_NAME = "timeSeriesHelper";
+    public static final String BEAN_NAME = "timeSeriesHelper";
 
     public boolean isRicListEmpty (
         OMMItemEvent itemEvent,
