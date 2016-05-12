@@ -14,6 +14,4 @@ import com.coherentlogic.coherent.datafeed.domain.DirectoryEntries;
 public interface DirectoryGatewaySpecification {
 
     DirectoryEntries getDirectoryEntries ();
-
-    String getDirectoryEntriesAsJSON ();
 }
