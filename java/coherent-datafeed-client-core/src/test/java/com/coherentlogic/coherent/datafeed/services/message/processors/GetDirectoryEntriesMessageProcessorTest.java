@@ -44,8 +44,16 @@ public class GetDirectoryEntriesMessageProcessorTest {
         handleC = mock (Handle.class);
 
         directoryEntryA  = new DirectoryEntry ();
+
+        directoryEntryA.setPrimaryKey(1000L);
+
         directoryEntryB = new DirectoryEntry ();
+
+        directoryEntryB.setPrimaryKey(2000L);
+
         directoryEntryC = new DirectoryEntry ();
+
+        directoryEntryC.setPrimaryKey(3000L);
 
         directoryEntryCache =
             new HashMap<Handle, Map<Handle, DirectoryEntry>> ();
