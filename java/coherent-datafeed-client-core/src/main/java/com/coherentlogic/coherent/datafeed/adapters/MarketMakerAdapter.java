@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
@@ -36,6 +37,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
     public MarketMakerAdapter (
         TypedFactory<MarketMaker> marketMakerFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -43,6 +45,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
         throws SecurityException, NoSuchMethodException {
         this (
             marketMakerFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),
@@ -54,6 +57,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
     public MarketMakerAdapter (
         TypedFactory<MarketMaker> marketByOrderFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -64,6 +68,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         super (
             marketByOrderFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             rfaBeanClass
@@ -208,12 +213,14 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         public OrderAdapter (
             TypedFactory<MarketMaker.Order> orderFactory,
+            TypedFactory<AttribInfo> attribInfoFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
                 OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
             throws SecurityException, NoSuchMethodException {
             this (
                 orderFactory,
+                attribInfoFactory,
                 fieldDictionary,
                 fieldEntryAdapters,
                 new HashMap<String, Method> (),
@@ -223,6 +230,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         public OrderAdapter (
             TypedFactory<MarketMaker.Order> orderFactory,
+            TypedFactory<AttribInfo> attribInfoFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -232,6 +240,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
             super (
                 orderFactory,
+                attribInfoFactory,
                 fieldDictionary,
                 fieldEntryAdapters,
                 rfaBeanClass

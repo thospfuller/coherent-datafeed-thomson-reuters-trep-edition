@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.reuters.rfa.dictionary.FieldDictionary;
@@ -20,12 +21,14 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
 
     public MarketPriceAdapter (
         TypedFactory<MarketPrice> marketPriceFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
         throws SecurityException, NoSuchMethodException {
         this (
             marketPriceFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),
@@ -35,6 +38,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
 
     public MarketPriceAdapter (
         TypedFactory<MarketPrice> marketPriceFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -42,6 +46,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
         throws SecurityException, NoSuchMethodException {
         this (
             marketPriceFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),
@@ -51,6 +56,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
 
     public MarketPriceAdapter (
         TypedFactory<MarketPrice> marketPriceFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -60,6 +66,7 @@ public class MarketPriceAdapter extends RFABeanAdapter<MarketPrice> {
 
         super (
             marketPriceFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             MarketPrice.class

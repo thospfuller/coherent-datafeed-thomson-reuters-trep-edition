@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
@@ -37,8 +38,12 @@ public class MarketByOrderAdapter
 
     private final OrderAdapter orderAdapter;
 
+    private final TypedFactory<MarketByOrder.Order> orderFactory; //TypedFactory<MarketByOrder.Order>
+
     public MarketByOrderAdapter (
         TypedFactory<MarketByOrder> marketByOrderFactory,
+        TypedFactory<MarketByOrder.Order> orderFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -46,6 +51,8 @@ public class MarketByOrderAdapter
         throws SecurityException, NoSuchMethodException {
         this (
             marketByOrderFactory,
+            orderFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),
@@ -57,6 +64,8 @@ public class MarketByOrderAdapter
 
     public MarketByOrderAdapter (
         TypedFactory<MarketByOrder> marketByOrderFactory,
+        TypedFactory<MarketByOrder.Order> orderFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -67,11 +76,13 @@ public class MarketByOrderAdapter
 
         super (
             marketByOrderFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             rfaBeanClass
         );
 
+        this.orderFactory = orderFactory;
         this.orderAdapter = orderAdapter;
     }
 
@@ -150,7 +161,7 @@ public class MarketByOrderAdapter
                 "key: " + key + " (order: " + order + ").");
         }
 
-        order = new Order ();
+        order = orderFactory.getInstance();
 
         OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
 
@@ -214,12 +225,14 @@ public class MarketByOrderAdapter
 
         public OrderAdapter (
             TypedFactory<Order> orderFactory,
+            TypedFactory<AttribInfo> attribInfoFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
                 OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters)
             throws SecurityException, NoSuchMethodException {
             this (
                 orderFactory,
+                attribInfoFactory,
                 fieldDictionary,
                 fieldEntryAdapters,
                 new HashMap<String, Method> (),
@@ -229,6 +242,7 @@ public class MarketByOrderAdapter
 
         public OrderAdapter (
             TypedFactory<Order> orderFactory,
+            TypedFactory<AttribInfo> attribInfoFactory,
             FieldDictionary fieldDictionary,
             Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -238,6 +252,7 @@ public class MarketByOrderAdapter
 
             super (
                 orderFactory,
+                attribInfoFactory,
                 fieldDictionary,
                 fieldEntryAdapters,
                 rfaBeanClass

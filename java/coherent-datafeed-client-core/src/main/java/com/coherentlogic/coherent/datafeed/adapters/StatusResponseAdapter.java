@@ -7,7 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMData;
@@ -29,12 +31,14 @@ public class StatusResponseAdapter
         LoggerFactory.getLogger(StatusResponseAdapter.class);
 
     public StatusResponseAdapter(
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters
     ) throws SecurityException, NoSuchMethodException {
         super(
             null,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),

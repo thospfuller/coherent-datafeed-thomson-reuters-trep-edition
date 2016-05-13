@@ -43,6 +43,8 @@ public class RFABeanAdapter<T extends RFABean> {
 
     private final TypedFactory<T> rfaBeanFactory;
 
+    private final TypedFactory<AttribInfo> attribInfoFactory;
+
     private final FieldDictionary fieldDictionary;
 
     private final Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
@@ -53,6 +55,7 @@ public class RFABeanAdapter<T extends RFABean> {
 
     public RFABeanAdapter (
         TypedFactory<T> rfaBeanFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -60,6 +63,7 @@ public class RFABeanAdapter<T extends RFABean> {
         throws SecurityException, NoSuchMethodException {
         this (
             rfaBeanFactory,
+            attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
             new HashMap<String, Method> (),
@@ -80,6 +84,7 @@ public class RFABeanAdapter<T extends RFABean> {
      */
     public RFABeanAdapter (
         TypedFactory<T> rfaBeanFactory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
@@ -87,6 +92,7 @@ public class RFABeanAdapter<T extends RFABean> {
         Class<? extends RFABean> rfaBeanClass)
         throws SecurityException, NoSuchMethodException {
         this.rfaBeanFactory = rfaBeanFactory;
+        this.attribInfoFactory = attribInfoFactory;
         this.fieldDictionary = fieldDictionary;
         this.fieldEntryAdapters = fieldEntryAdapters;
         this.methodMap = methodMap;
@@ -137,20 +143,19 @@ public class RFABeanAdapter<T extends RFABean> {
 
         String nameType = RDMUser.NameType.toString(nameTypeShort);
 
-        AttribInfo attribInfo = new AttribInfo ();
+        AttribInfo attribInfo = attribInfoFactory.getInstance();
 
         OMMElementList elementList = (OMMElementList) ommAttribInfo.getAttrib();
 
         Map<String, String> elements = getElements (elementList);
 
-        attribInfo
-            .withId(id)
-            .withFilter(filter)
-            .withName(name)
-            .withServiceName(serviceName)
-            .withServiceId(serviceId)
-            .withNameType(nameType)
-            .withElements(elements);
+        attribInfo.setId(id);
+        attribInfo.setFilter(filter);
+        attribInfo.setName(name);
+        attribInfo.setServiceName(serviceName);
+        attribInfo.setServiceId(serviceId);
+        attribInfo.setNameType(nameType);
+        attribInfo.setElements(elements);
 
         rfaBean.withAttribInfo(attribInfo);
     }
