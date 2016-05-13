@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.coherentlogic.coherent.data.model.core.domain.IdentitySpecification;
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
+import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -53,21 +54,8 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     public static final String ELEMENTS = "elements";
 
-    public void setElements(Map<String, String> elements) {
-
-        Map<String, String> oldValue = this.elements;
-
+    public void setElements(@Changeable(ELEMENTS) Map<String, String> elements) {
         this.elements = elements;
-
-        firePropertyChange(ELEMENTS, oldValue, elements);
-
-    }
-
-    public AttribInfo withElements (Map<String, String> elements) {
-
-        setElements (elements);
-
-        return this;
     }
 
     public Map<String, String> getElements() {
@@ -88,20 +76,8 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     public static final String FILTER = "filter";
 
-    public void setFilter(Integer filter) {
-
-        Integer oldValue = this.filter;
-
+    public void setFilter(@Changeable(FILTER) Integer filter) {
         this.filter = filter;
-
-        firePropertyChange(FILTER, oldValue, filter);
-    }
-
-    public AttribInfo withFilter(Integer filter) {
-
-        setFilter (filter);
-
-        return this;
     }
 
     @Override
@@ -112,20 +88,8 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
     public static final String ID = "id";
 
     @Override
-    public void setId(Integer id) {
-
-        Integer oldValue = id;
-
+    public void setId(@Changeable(ID) Integer id) {
         this.id = id;
-
-        firePropertyChange(ID, oldValue, id);
-    }
-
-    public AttribInfo withId(Integer id) {
-
-        setId (id);
-
-        return this;
     }
 
     public String getServiceName() {
@@ -134,20 +98,8 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     public static final String SERVICE_NAME = "serviceName";
 
-    public void setServiceName(String serviceName) {
-
-        String oldValue = this.serviceName;
-
+    public void setServiceName(@Changeable(SERVICE_NAME) String serviceName) {
         this.serviceName = serviceName;
-
-        firePropertyChange(SERVICE_NAME, oldValue, serviceName);
-    }
-
-    public AttribInfo withServiceName(String serviceName) {
-
-        setServiceName(serviceName);
-
-        return this;
     }
 
     public String getName() {
@@ -156,20 +108,8 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     public static final String NAME = "name";
 
-    public void setName(String name) {
-
-        String oldValue = this.name;
-
+    public void setName(@Changeable(NAME) String name) {
         this.name = name;
-
-        firePropertyChange(NAME, oldValue, name);
-    }
-
-    public AttribInfo withName(String name) {
-
-        setName (name);
-
-        return this;
     }
 
     public Integer getServiceId() {
@@ -178,20 +118,8 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     public static final String SERVICE_ID = "serviceId";
 
-    public void setServiceId(Integer serviceId) {
-
-        Integer oldValue = this.serviceId;
-
+    public void setServiceId(@Changeable(SERVICE_ID) Integer serviceId) {
         this.serviceId = serviceId;
-
-        firePropertyChange(SERVICE_ID, oldValue, serviceId);
-    }
-
-    public AttribInfo withServiceId(Integer serviceId) {
-
-        setServiceId (serviceId);
-
-        return this;
     }
 
     public String getNameType() {
@@ -200,19 +128,13 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     public static final String NAME_TYPE = "nameType";
 
-    public void setNameType(String nameType) {
-
-        String oldValue = this.nameType;
-
+    public void setNameType(@Changeable(NAME_TYPE) String nameType) {
         this.nameType = nameType;
-
-        firePropertyChange(NAME_TYPE, oldValue, nameType);
     }
 
-    public AttribInfo withNameType(String nameType) {
-
-        setNameType(nameType);
-
-        return this;
+    @Override
+    public String toString() {
+        return "AttribInfo [id=" + id + ", filter=" + filter + ", serviceName=" + serviceName + ", name=" + name
+                + ", serviceId=" + serviceId + ", nameType=" + nameType + ", elements=" + elements + "]";
     }
 }
