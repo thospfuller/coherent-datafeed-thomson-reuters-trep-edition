@@ -31,6 +31,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias(DIRECTORY_ENTRY)
 public class DirectoryEntry extends SerializableBean {
 
+    private static final long serialVersionUID = -7839342136372860963L;
+
     private static final Map<Byte, ActionType> actionTypeMap =
         new HashMap<Byte, ActionType> ();
 
