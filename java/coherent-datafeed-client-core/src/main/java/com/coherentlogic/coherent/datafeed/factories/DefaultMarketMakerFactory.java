@@ -1,6 +1,8 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
-import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 
@@ -16,9 +18,15 @@ public class DefaultMarketMakerFactory
 
     public static final String BEAN_NAME = "marketMakerFactory";
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Override
     public MarketMaker getInstance() {
-        return configure(new MarketMaker ());
+
+        MarketMaker marketMaker = applicationContext.getBean(MarketMaker.class);
+
+        return configure(marketMaker);
     }
 
     /**
@@ -29,10 +37,13 @@ public class DefaultMarketMakerFactory
 
         public static final String BEAN_NAME = "marketMakerOrderFactory";
 
+        @Autowired
+        private ApplicationContext applicationContext;
+
         @Override
         public MarketMaker.Order getInstance() {
 
-            MarketMaker.Order order = new MarketMaker.Order ();
+            MarketMaker.Order order = applicationContext.getBean(MarketMaker.Order.class);
 
             return configure(order);
         }
