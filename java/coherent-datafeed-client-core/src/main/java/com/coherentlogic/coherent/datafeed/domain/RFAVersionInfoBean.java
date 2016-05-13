@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
+import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -9,16 +10,18 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 public class RFAVersionInfoBean {
 
-    public static final String PRODUCT_VERSION = "PRODUCT_VERSION";
+    public static final String PRODUCT_VERSION_ID = "PRODUCT_VERSION_ID";
 
-    @XStreamAlias(PRODUCT_VERSION)
+    @XStreamAlias(PRODUCT_VERSION_ID)
     private String productVersion = null;
 
     public String getProductVersion() {
         return productVersion;
     }
 
-    public void setProductVersion(String productVersion) {
+    public static final String PRODUCT_VERSION = "productVersion";
+
+    public void setProductVersion(@Changeable(PRODUCT_VERSION) String productVersion) {
         this.productVersion = productVersion;
     }
 }
