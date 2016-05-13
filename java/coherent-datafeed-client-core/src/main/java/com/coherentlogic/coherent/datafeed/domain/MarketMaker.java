@@ -270,13 +270,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
         @RFAType(type=MarketPriceConstants.BID)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setBid(BigDecimal bid) {
-
-            BigDecimal oldValue = this.bid;
-
+        public void setBid(@Changeable(MarketPrice.BID) BigDecimal bid) {
             this.bid = bid;
-
-            firePropertyChange(MarketPrice.BID, oldValue, bid);
         }
 
         @UsingKey(type=ASK)
