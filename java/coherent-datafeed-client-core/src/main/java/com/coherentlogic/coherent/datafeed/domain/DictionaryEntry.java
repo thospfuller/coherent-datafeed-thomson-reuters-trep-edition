@@ -4,16 +4,11 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DICTIONARY_ENTR
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
- * Class represents an entry in the session that is associated with a handle to
- * a dictionary.
- *
- * @todo Should this be named simply DictionaryEntry?
+ * Class represents an entry in the session that is associated with a handle to a dictionary.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
@@ -54,6 +49,6 @@ public class DictionaryEntry implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "DictionaryEntry [name=" + name + ", directoryName=" + directoryName + ", loaded=" + loaded + "]";
     }
 }
