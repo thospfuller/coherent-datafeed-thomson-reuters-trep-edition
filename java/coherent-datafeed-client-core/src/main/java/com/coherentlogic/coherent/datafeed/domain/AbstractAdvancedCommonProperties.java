@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public abstract class AbstractAdvancedCommonProperties
     extends AbstractCommonProperties implements MarketPriceConstants {
 
-    @XStreamAlias(ACTIV_DATE)
+    @XStreamAlias(ACTIV_DATE_KEY)
     private Date activeDate;
 
     @XStreamAlias(PR_RNK_RUL)
@@ -24,12 +24,12 @@ public abstract class AbstractAdvancedCommonProperties
     public AbstractAdvancedCommonProperties() {
     }
 
-    @UsingKey(type=ACTIV_DATE)
+    @UsingKey(type=ACTIV_DATE_KEY)
     public Date getActiveDate() {
         return activeDate;
     }
 
-    @RFAType(type=ACTIV_DATE)
+    @RFAType(type=ACTIV_DATE_KEY)
     @Adapt(using=OMMDateTimeAdapter.class)
     public void setActiveDate(Date activeDate) {
         this.activeDate = activeDate;
