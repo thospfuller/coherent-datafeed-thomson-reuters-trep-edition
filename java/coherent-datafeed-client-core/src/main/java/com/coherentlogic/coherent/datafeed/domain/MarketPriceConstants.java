@@ -387,8 +387,8 @@ public interface MarketPriceConstants {
     static final String ELEMENTS = "elements";
 
     static final String
-        ACTIV_DATE = "ACTIV_DATE",
-        CONTEXT_ID = "CONTEXT_ID",
+        ACTIV_DATE_KEY = "ACTIV_DATE_KEY",
+        CONTEXT_ID_KEY = "CONTEXT_ID_KEY",
         DDS_DSO_ID = "DDS_DSO_ID",
         SPS_SP_RIC = "SPS_SP_RIC",
         BOOK_STATE = "BOOK_STATE",
