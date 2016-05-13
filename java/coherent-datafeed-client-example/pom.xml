@@ -13,9 +13,8 @@
     <artifactId>coherent-datafeed-client-example</artifactId>
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
-    <name>Coherent Logic Coherent Datafeed Client</name>
-    <description>An example application which is the middle-tier between Java
-    and the R Project</description>
+    <name>Coherent Logic Coherent Datafeed Client Examples</name>
+    <description>A module which contains example Java applications.</description>
     <url>www.coherentlogic.com</url>
 
     <developers>
