@@ -292,14 +292,18 @@
     <bean id="ommMsgTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMMsgTransformer"/>
     <bean id="ommMapTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMMapTransformer"/>
 
-    <bean id="serviceEntryAdapter" class="com.coherentlogic.coherent.datafeed.adapters.DirectoryEntryAdapter"/>
+    <bean id="directoryEntryFactory" class="com.coherentlogic.coherent.datafeed.factories.DirectoryEntryFactory"/>
+
+    <bean id="directoryEntryAdapter" class="com.coherentlogic.coherent.datafeed.adapters.DirectoryEntryAdapter">
+        <constructor-arg name="directoryEntryFactory" ref="directoryEntryFactory"/>
+    </bean>
 
     <bean id="authenitcationPauseResumeService" class="com.coherentlogic.coherent.datafeed.services.PauseResumeService"/>
 
     <bean id="frameworkEventListenerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter"/>
 
     <bean id="directoryServiceLoader" class="com.coherentlogic.coherent.datafeed.services.DirectoryServiceLoader">
-        <constructor-arg name="serviceEntryAdapter" ref="serviceEntryAdapter"/>
+        <constructor-arg name="directoryEntryAdapter" ref="directoryEntryAdapter"/>
     </bean>
 
     <bean id="authenticationHelper" class="com.coherentlogic.coherent.datafeed.misc.AuthenticationHelper">
@@ -348,31 +352,31 @@
         <constructor-arg ref="marketMakerAdapter"/>
         <constructor-arg ref="marketMakerRICCache"/>
         <constructor-arg ref="marketMakerCache"/>
-     </bean>
+    </bean>
 
     <bean id="refreshMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
         <constructor-arg ref="marketByOrderRICCache"/>
         <constructor-arg ref="marketByOrderCache"/>
-     </bean>
+    </bean>
 
     <bean id="updateMarketByOrderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketByOrderMessageProcessor">
         <constructor-arg ref="marketByOrderAdapter"/>
         <constructor-arg ref="marketByOrderRICCache"/>
         <constructor-arg ref="marketByOrderCache"/>
-     </bean>
+    </bean>
 
     <bean id="statusResponseMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
         <constructor-arg ref="statusResponseAdapter"/>
-     </bean>
+    </bean>
 
     <bean id="ts1DefDbLoaderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefDbLoaderMessageProcessor">
         <constructor-arg ref="ts1DefDbLoader"/>
-     </bean>
+    </bean>
 
     <!-- bean id="transformTimeSeriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor">
@@ -414,50 +418,60 @@
         <entry key="com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter" value-ref="ommDateTimeAdapter"/>
     </util:map>
 
+    <!--
+      If the domain class utilizes the Changeable annotation then it must be declared as a prototype bean and it must be
+      obtained via the Spring application context otherwise none of the fire methods will be called.
+      -->
+    <bean id="directoryEntry" class="com.coherentlogic.coherent.datafeed.domain.DirectoryEntry" scope="prototype"/>
+    <bean id="attribInfo" class="com.coherentlogic.coherent.datafeed.domain.AttribInfo" scope="prototype"/>
     <bean id="marketPrice" class="com.coherentlogic.coherent.datafeed.domain.MarketPrice" scope="prototype"/>
     <bean id="marketByOrder" class="com.coherentlogic.coherent.datafeed.domain.MarketByOrder" scope="prototype"/>
+    <bean id="marketByOrderOrder" class="com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order" scope="prototype"/>
     <bean id="marketMaker" class="com.coherentlogic.coherent.datafeed.domain.MarketMaker" scope="prototype"/>
-
-    <!-- bean id="statusResponseFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory"/>
-    <bean id="marketPriceFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory"/>
-    <bean id="marketByOrderOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory"/>
-    <bean id="marketByOrderFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory"/ -->
+    <bean id="marketMakerOrder" class="com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order" scope="prototype"/>
 
     <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
 
     <bean id="statusResponseAdapter"
      class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter">
+        <constructor-arg name="attribInfoFactory" ref="attribInfoFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
     <bean id="marketPriceAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketPriceAdapter">
         <constructor-arg name="marketPriceFactory" ref="marketPriceFactory"/>
+        <constructor-arg name="attribInfoFactory" ref="attribInfoFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
     <bean id="marketByOrderOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketByOrderAdapter.OrderAdapter">
         <constructor-arg name="orderFactory" ref="marketByOrderOrderFactory"/>
+        <constructor-arg name="attribInfoFactory" ref="attribInfoFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
     <bean id="marketMakerOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter.OrderAdapter">
         <constructor-arg name="orderFactory" ref="marketMakerOrderFactory"/>
+        <constructor-arg name="attribInfoFactory" ref="attribInfoFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
     </bean>
 
     <bean id="marketByOrderAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketByOrderAdapter">
-        <constructor-arg name="marketByOrderFactory" ref="marketByOrderFactory"/>
-        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
-        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
-        <constructor-arg name="orderAdapter" ref="marketByOrderOrderAdapter"/>
+        <constructor-arg index="0" name="marketByOrderFactory" ref="marketByOrderFactory"/>
+        <constructor-arg index="1" name="orderFactory" ref="marketByOrderOrderFactory"/>
+        <constructor-arg index="2" name="attribInfoFactory" ref="attribInfoFactory"/>
+        <constructor-arg index="3" name="fieldDictionary" ref="fieldDictionary"/>
+        <constructor-arg index="4" name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+        <constructor-arg index="5" name="orderAdapter" ref="marketByOrderOrderAdapter"/>
     </bean>
 
     <bean id="marketMakerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter">
         <constructor-arg name="marketMakerFactory" ref="marketMakerFactory"/>
+        <constructor-arg name="attribInfoFactory" ref="attribInfoFactory"/>
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
         <constructor-arg name="orderAdapter" ref="marketMakerOrderAdapter"/>
