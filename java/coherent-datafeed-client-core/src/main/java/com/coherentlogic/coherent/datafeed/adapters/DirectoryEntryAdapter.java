@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.reuters.rfa.common.QualityOfService;
 import com.reuters.rfa.internal.rwf.RwfArrayEntry;
@@ -62,6 +63,12 @@ public class DirectoryEntryAdapter
     private static final Logger log =
         LoggerFactory.getLogger(DirectoryEntryAdapter.class);
 
+    private final TypedFactory<DirectoryEntry> directoryEntryFactory;
+
+    public DirectoryEntryAdapter (TypedFactory<DirectoryEntry> directoryEntryFactory) {
+        this.directoryEntryFactory = directoryEntryFactory;
+    }
+
     /**
      * Method converts the {@link OMMMsg} into a list of
      * {@link DirectoryEntry} objects.
@@ -93,8 +100,7 @@ public class DirectoryEntryAdapter
 
         while (iterator.hasNext()) {
 
-            DirectoryEntry directoryEntry =
-                new DirectoryEntry ();
+            DirectoryEntry directoryEntry = directoryEntryFactory.getInstance();
 
             directoryEntries.add(directoryEntry);
 
