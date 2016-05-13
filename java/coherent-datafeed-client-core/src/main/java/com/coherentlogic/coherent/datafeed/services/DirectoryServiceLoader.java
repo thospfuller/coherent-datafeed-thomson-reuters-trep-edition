@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +31,12 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  */
 public class DirectoryServiceLoader {
 
-    private static final Logger log = LoggerFactory
-        .getLogger(DirectoryServiceLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(DirectoryServiceLoader.class);
 
-    private final DirectoryEntryAdapter serviceEntryAdapter;
+    private final DirectoryEntryAdapter directoryEntryAdapter;
 
-    public DirectoryServiceLoader(
-        DirectoryEntryAdapter serviceEntryAdapter
-    ) {
-        this.serviceEntryAdapter = serviceEntryAdapter;
+    public DirectoryServiceLoader(DirectoryEntryAdapter directoryEntryAdapter) {
+        this.directoryEntryAdapter = directoryEntryAdapter;
     }
 
     /**
@@ -119,7 +115,7 @@ public class DirectoryServiceLoader {
     List<DirectoryEntry> transform(OMMMsg msg) {
 
         List<DirectoryEntry> directoryEntries =
-            serviceEntryAdapter.adapt(msg);
+            directoryEntryAdapter.adapt(msg);
 
         return directoryEntries;
     }
