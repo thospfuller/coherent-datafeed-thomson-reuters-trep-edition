@@ -2,9 +2,9 @@ package com.coherentlogic.coherent.datafeed.domain;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DIRECTORY_ENTRIES;
 
-import java.io.Serializable;
 import java.util.Set;
 
+import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @XStreamAlias(DIRECTORY_ENTRIES)
-public class DirectoryEntries implements Serializable {
+public class DirectoryEntries extends SerializableBean {
 
     private static final long serialVersionUID = 2271484647334046161L;
 
@@ -23,9 +23,7 @@ public class DirectoryEntries implements Serializable {
     @XStreamImplicit
     private final Set<DirectoryEntry> directoryEntryList;
 
-    public DirectoryEntries(
-        Set<DirectoryEntry> directoryEntryList) {
-        super();
+    public DirectoryEntries(Set<DirectoryEntry> directoryEntryList) {
         this.directoryEntryList = directoryEntryList;
     }
 
