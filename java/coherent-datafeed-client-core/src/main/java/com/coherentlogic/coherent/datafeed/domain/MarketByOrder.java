@@ -67,13 +67,13 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=MARKET_BY_ORDER)
 @XStreamAlias(MARKET_BY_ORDER)
-public class MarketByOrder extends RFABean implements MarketPriceConstants {
+public class MarketByOrder extends RFABean {
 
     private static final long serialVersionUID = 1L;
 
 //    static final String
 //        DSPLY_NAME = "DSPLY_NAME",
-//        ACTIV_DATE = "ACTIV_DATE",
+//        ACTIV_DATE_KEY = "ACTIV_DATE_KEY",
 //        TRD_UNITS = "TRD_UNITS",
 //        RECORDTYPE = "RECORDTYPE",
 //        RDN_EXCHD2 = "RDN_EXCHD2",
@@ -82,7 +82,7 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
 //        OR_RNK_RUL = "OR_RNK_RUL",
 //        MNEMONIC = "MNEMONIC",
 //        TIMACT_MS = "TIMACT_MS",
-//        CONTEXT_ID = "CONTEXT_ID",
+//        CONTEXT_ID_KEY = "CONTEXT_ID_KEY",
 //        DDS_DSO_ID = "DDS_DSO_ID",
 //        SPS_SP_RIC = "SPS_SP_RIC",
 //        BOOK_STATE = "BOOK_STATE",
@@ -101,19 +101,19 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
      *
      * @deprecated See comments.
      */
-    @XStreamAlias(PROD_PERM)
+    @XStreamAlias(MarketPriceConstants.PROD_PERM)
     private BigInteger permission = null;
 
-    @XStreamAlias(DSPLY_NAME)
+    @XStreamAlias(MarketPriceConstants.DSPLY_NAME)
     private String displayName;
 
-//    @XStreamAlias(ACTIV_DATE)
+//    @XStreamAlias(ACTIV_DATE_KEY)
 //    private Date activeDate;
 
-    @XStreamAlias(TRD_UNITS)
+    @XStreamAlias(MarketPriceConstants.TRD_UNITS)
     private Integer tradingUnits; // enum
 
-    @XStreamAlias(RECORDTYPE)
+    @XStreamAlias(MarketPriceConstants.RECORDTYPE)
     private Integer recordType; // uint32
 
     @XStreamAlias(CURRENCY)
@@ -122,13 +122,13 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
     /**
      * @see Appears in MarketPrice as well.
      */
-    @XStreamAlias(RDN_EXCHD2)
+    @XStreamAlias(MarketPriceConstants.RDN_EXCHD2)
     private String exchangeId2 = null;
 
     /**
      * @TODO: Appears in MarketPrice as well and MarketMaker.
      */
-    @XStreamAlias(PROV_SYMB)
+    @XStreamAlias(MarketPriceConstants.PROV_SYMB)
     private String providerSymbol = null;
 
 //    @XStreamAlias(PR_RNK_RUL)
@@ -140,36 +140,36 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
     /**
      * @see Appears in MarketPrice as well.
      */
-    @XStreamAlias(MNEMONIC)
+    @XStreamAlias(MarketPriceConstants.MNEMONIC)
     private String exchangeId = null;
 
-    @XStreamAlias(TIMACT_MS)
+    @XStreamAlias(MarketPriceConstants.TIMACT_MS)
     private Long lastActivityTimeMillis;
 
-    @XStreamAlias(CONTEXT_ID)
+    @XStreamAlias(MarketPriceConstants.CONTEXT_ID_KEY)
     private Integer contextId;
 
-    @XStreamAlias(DDS_DSO_ID)
+    @XStreamAlias(MarketPriceConstants.DDS_DSO_ID)
     private Integer elektronDataSourceOwnerId = null;
 
-    @XStreamAlias(SPS_SP_RIC)
+    @XStreamAlias(MarketPriceConstants.SPS_SP_RIC)
     private String spsSubProviderLevelRic;
 
-    @XStreamAlias(BOOK_STATE)
+    @XStreamAlias(MarketPriceConstants.BOOK_STATE)
     private String orderBookState;
 
-    @XStreamAlias(HALT_REASN)
+    @XStreamAlias(MarketPriceConstants.HALT_REASN)
     private String haltReason;
 
-    @XStreamAlias(TRD_STATUS)
+    @XStreamAlias(MarketPriceConstants.TRD_STATUS)
     private String tradingStatus;
 
-    @XStreamAlias(HALT_RSN)
+    @XStreamAlias(MarketPriceConstants.HALT_RSN)
     private String haltReasonCode;
 
-    @XStreamAlias(ORDERS)
+    @XStreamAlias(MarketPriceConstants.ORDERS)
     private final Map<String, Order> orders;
-    
+
     // Probably RMTES_STRING -- same as orderId so probably not needed.
     // private String key;
 
@@ -190,7 +190,7 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
     /**
      *
      */
-    @RFAType(type=PROD_PERM)
+    @RFAType(type=MarketPriceConstants.PROD_PERM)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPermission(@Changeable(PERMISSION) BigInteger permission) {
         this.permission = permission;
@@ -200,31 +200,37 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return displayName;
     }
 
-    @RFAType(type=DSPLY_NAME)
+    public static final String DISPLAY_NAME = "displayName";
+
+    @RFAType(type=MarketPriceConstants.DSPLY_NAME)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(@Changeable(DISPLAY_NAME) String displayName) {
         this.displayName = displayName;
     }
 
-    @UsingKey(type=TRD_UNITS)
+    @UsingKey(type=MarketPriceConstants.TRD_UNITS)
     public Integer getTradingUnits() {
         return tradingUnits;
     }
 
-    @RFAType(type=TRD_UNITS)
+    public static final String TRADING_UNITS = "tradingUnits";
+
+    @RFAType(type=MarketPriceConstants.TRD_UNITS)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTradingUnits(Integer tradingUnits) {
+    public void setTradingUnits(@Changeable(TRADING_UNITS) Integer tradingUnits) {
         this.tradingUnits = tradingUnits;
     }
 
-    @UsingKey(type=RECORDTYPE)
+    @UsingKey(type=MarketPriceConstants.RECORDTYPE)
     public Integer getRecordType() {
         return recordType;
     }
 
-    @RFAType(type=RECORDTYPE)
+    public static final String RECORD_TYPE = "recordType";
+
+    @RFAType(type=MarketPriceConstants.RECORDTYPE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setRecordType(Integer recordType) {
+    public void setRecordType(@Changeable(RECORD_TYPE) Integer recordType) {
         this.recordType = recordType;
     }
 
@@ -233,20 +239,22 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
         return currency;
     }
 
+    public static final String CURRENCY = "currency";
+
     @RFAType(type=CURRENCY)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setCurrency(String currency) {
+    public void setCurrency(@Changeable(CURRENCY) String currency) {
         this.currency = currency;
     }
 
-    @UsingKey(type=PROV_SYMB)
+    @UsingKey(type=MarketPriceConstants.PROV_SYMB)
     public String getProviderSymbol() {
         return providerSymbol;
     }
 
     public static final String PROVIDER_SYMBOL = "providerSymbol";
 
-    @RFAType(type=PROV_SYMB)
+    @RFAType(type=MarketPriceConstants.PROV_SYMB)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setProviderSymbol(@Changeable(PROVIDER_SYMBOL) String providerSymbol) {
         this.providerSymbol = providerSymbol;
@@ -274,121 +282,137 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
 //        this.orderRankRule = orderRankRule;
 //    }
     
-    @UsingKey(type=MNEMONIC)
+    @UsingKey(type=MarketPriceConstants.MNEMONIC)
     public String getExchangeId() {
         return exchangeId;
     }
 
     public static final String EXCHANGE_ID = "exchangeId";
 
-    @RFAType(type=MNEMONIC)
+    @RFAType(type=MarketPriceConstants.MNEMONIC)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setExchangeId(@Changeable(EXCHANGE_ID) String exchangeId) {
         this.exchangeId = exchangeId;
     }
 
-    @UsingKey(type=TIMACT_MS)
+    @UsingKey(type=MarketPriceConstants.TIMACT_MS)
     public Long getLastActivityTimeMillis() {
         return lastActivityTimeMillis;
     }
 
     public static final String LAST_ACTIVITY_TIME_MILLIS = "lastActivityTimeMillis";
 
-    @RFAType(type=TIMACT_MS)
+    @RFAType(type=MarketPriceConstants.TIMACT_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLastActivityTimeMillis(@Changeable(LAST_ACTIVITY_TIME_MILLIS) Long lastActivityTimeMillis) {
         this.lastActivityTimeMillis = lastActivityTimeMillis;
     }
 
-    @UsingKey(type=CONTEXT_ID)
+    @UsingKey(type=MarketPriceConstants.CONTEXT_ID_KEY)
     public Integer getContextId() {
         return contextId;
     }
 
-    @RFAType(type=CONTEXT_ID)
+    public static final String CONTEXT_ID = "contextId";
+
+    @RFAType(type=MarketPriceConstants.CONTEXT_ID_KEY)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setContextId(Integer contextId) {
+    public void setContextId(@Changeable(CONTEXT_ID) Integer contextId) {
         this.contextId = contextId;
     }
 
     /**
      * @TODO: Consider renaming this method.
      */
-    @UsingKey(type=DDS_DSO_ID)
+    @UsingKey(type=MarketPriceConstants.DDS_DSO_ID)
     public Integer getElektronDataSourceOwnerId() {
         return elektronDataSourceOwnerId;
     }
 
-    @RFAType(type=DDS_DSO_ID)
+    public static final String DATA_SOURCE_OWNER_ID = "dataSourceOwnerId";
+
+    @RFAType(type=MarketPriceConstants.DDS_DSO_ID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setElektronDataSourceOwnerId(Integer dataSourceOwnerId) {
+    public void setElektronDataSourceOwnerId(@Changeable(DATA_SOURCE_OWNER_ID) Integer dataSourceOwnerId) {
         this.elektronDataSourceOwnerId = dataSourceOwnerId;
     }
 
-    @UsingKey(type=RDN_EXCHD2)
+    @UsingKey(type=MarketPriceConstants.RDN_EXCHD2)
     public String getExchangeId2() {
         return exchangeId2;
     }
 
-    @RFAType(type=RDN_EXCHD2)
+    public static final String EXCHANGE_ID_2 = "exchangeId2";
+
+    @RFAType(type=MarketPriceConstants.RDN_EXCHD2)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setExchangeId2(String exchangeId2) {
+    public void setExchangeId2(@Changeable(EXCHANGE_ID_2) String exchangeId2) {
         this.exchangeId2 = exchangeId2;
     }
 
-    @UsingKey(type=SPS_SP_RIC)
+    @UsingKey(type=MarketPriceConstants.SPS_SP_RIC)
     public String getSpsSubProviderLevelRic() {
         return spsSubProviderLevelRic;
     }
 
-    @RFAType(type=SPS_SP_RIC)
+    public static final String SPS_SUB_PROVIDER_LEVEL_RIC = "spsSubProviderLevelRic";
+
+    @RFAType(type=MarketPriceConstants.SPS_SP_RIC)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setSpsSubProviderLevelRic(String spsSubProviderLevelRic) {
+    public void setSpsSubProviderLevelRic(@Changeable(SPS_SUB_PROVIDER_LEVEL_RIC) String spsSubProviderLevelRic) {
         this.spsSubProviderLevelRic = spsSubProviderLevelRic;
     }
 
-    @UsingKey(type=BOOK_STATE)
+    @UsingKey(type=MarketPriceConstants.BOOK_STATE)
     public String getOrderBookState() {
         return orderBookState;
     }
 
-    @RFAType(type=BOOK_STATE)
+    public static final String ORDER_BOOK_STATE = "orderBookState";
+
+    @RFAType(type=MarketPriceConstants.BOOK_STATE)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setOrderBookState(String orderBookState) {
+    public void setOrderBookState(@Changeable(ORDER_BOOK_STATE) String orderBookState) {
         this.orderBookState = orderBookState;
     }
 
     
-    @UsingKey(type=HALT_REASN)
+    @UsingKey(type=MarketPriceConstants.HALT_REASN)
     public String getHaltReason() {
         return haltReason;
     }
 
-    @RFAType(type=HALT_REASN)
+    public static final String HALT_REASON = "haltReason";
+
+    @RFAType(type=MarketPriceConstants.HALT_REASN)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setHaltReason(String haltReason) {
+    public void setHaltReason(@Changeable(HALT_REASON) String haltReason) {
         this.haltReason = haltReason;
     }
 
-    @UsingKey(type=TRD_STATUS)
+    @UsingKey(type=MarketPriceConstants.TRD_STATUS)
     public String getTradingStatus() {
         return tradingStatus;
     }
 
-    @RFAType(type=TRD_STATUS)
+    public static final String TRADING_STATUS = "tradingStatus";
+
+    @RFAType(type=MarketPriceConstants.TRD_STATUS)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTradingStatus(String tradingStatus) {
+    public void setTradingStatus(@Changeable(TRADING_STATUS) String tradingStatus) {
         this.tradingStatus = tradingStatus;
     }
 
-    @UsingKey(type=HALT_RSN)
+    @UsingKey(type=MarketPriceConstants.HALT_RSN)
     public String getHaltReasonCode() {
         return haltReasonCode;
     }
 
-    @RFAType(type=HALT_RSN)
+    public static final String HALT_REASON_CODE = "haltReasonCode";
+
+    @RFAType(type=MarketPriceConstants.HALT_RSN)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setHaltReasonCode(String haltReasonCode) {
+    public void setHaltReasonCode(@Changeable(HALT_REASON_CODE) String haltReasonCode) {
         this.haltReasonCode = haltReasonCode;
     }
 
@@ -419,115 +443,127 @@ public class MarketByOrder extends RFABean implements MarketPriceConstants {
      *
      */
     @XStreamAlias(MarketPriceConstants.ORDER)
-    public static class Order extends RFABean implements MarketPriceConstants {
+    public static class Order extends RFABean {
 
         // RMTES_STRING
-        @XStreamAlias(ORDER_ID)
+        @XStreamAlias(MarketPriceConstants.ORDER_ID)
         private String orderId;
 
         // REAL64
-        @XStreamAlias(ORDER_PRC)
+        @XStreamAlias(MarketPriceConstants.ORDER_PRC)
         private BigDecimal orderPrice;
 
         // ENUM
-        @XStreamAlias(ORDER_SIDE)
+        @XStreamAlias(MarketPriceConstants.ORDER_SIDE)
         private String orderSide;
 
         // REAL64
-        @XStreamAlias(ORDER_SIZE)
+        @XStreamAlias(MarketPriceConstants.ORDER_SIZE)
         private Long orderSize;
 
         // UINT64
         // QUOTIM_MS
-        @XStreamAlias(QUOTIM_MS)
+        @XStreamAlias(MarketPriceConstants.QUOTIM_MS)
         private Long quoteTimeMillis;
 
         // RMTES_STRING
-        @XStreamAlias(ORDER_TONE)
+        @XStreamAlias(MarketPriceConstants.ORDER_TONE)
         private String orderTone;
 
-        @XStreamAlias(PR_TIM_MS)
+        @XStreamAlias(MarketPriceConstants.PR_TIM_MS)
         private Long priorityTimeMillis;
 
         public Order() {
         }
 
-        @UsingKey(type=ORDER_ID)
+        @UsingKey(type=MarketPriceConstants.ORDER_ID)
         public String getOrderId() {
             return orderId;
         }
 
-        @RFAType(type=ORDER_ID)
+        public static final String ORDER_ID = "orderId";
+
+        @RFAType(type=MarketPriceConstants.ORDER_ID)
         @Adapt(using=OMMDataBufferAdapter.class)
-        public void setOrderId(String orderId) {
+        public void setOrderId(@Changeable(ORDER_ID) String orderId) {
             this.orderId = orderId;
         }
 
-        @UsingKey(type=ORDER_PRC)
+        @UsingKey(type=MarketPriceConstants.ORDER_PRC)
         public BigDecimal getOrderPrice() {
             return orderPrice;
         }
 
-        @RFAType(type=ORDER_PRC)
+        public static final String ORDER_PRICE = "orderPrice";
+
+        @RFAType(type=MarketPriceConstants.ORDER_PRC)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setOrderPrice(BigDecimal orderPrice) {
+        public void setOrderPrice(@Changeable(ORDER_PRICE) BigDecimal orderPrice) {
             this.orderPrice = orderPrice;
         }
 
-        @UsingKey(type=ORDER_SIDE)
+        @UsingKey(type=MarketPriceConstants.ORDER_SIDE)
         public String getOrderSide() {
             return orderSide;
         }
 
-        @RFAType(type=ORDER_SIDE)
+        public static final String ORDER_SIDE = "orderSide";
+
+        @RFAType(type=MarketPriceConstants.ORDER_SIDE)
         @Adapt(using=OMMEnumAdapter.class)
-        public void setOrderSide(String orderSide) {
+        public void setOrderSide(@Changeable(ORDER_SIDE) String orderSide) {
             this.orderSide = orderSide;
         }
 
-        @UsingKey(type=ORDER_SIZE)
+        @UsingKey(type=MarketPriceConstants.ORDER_SIZE)
         public Long getOrderSize() {
             return orderSize;
         }
 
         public static final String ORDER_SIZE = "orderSize";
 
-        @RFAType(type=ORDER_SIZE)
+        @RFAType(type=MarketPriceConstants.ORDER_SIZE)
         @Adapt(using=OMMNumericAdapter.class)
         public void setOrderSize(@Changeable(ORDER_SIZE) Long orderSize) {
             this.orderSize = orderSize;
         }
 
-        @UsingKey(type=QUOTIM_MS)
+        @UsingKey(type=MarketPriceConstants.QUOTIM_MS)
         public Long getQuoteTimeMillis() {
             return quoteTimeMillis;
         }
 
-        @RFAType(type=QUOTIM_MS)
+        public static final String QUOTE_TIME_MILLIS = "quoteTimeMillis";
+
+        @RFAType(type=MarketPriceConstants.QUOTIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setQuoteTimeMillis(Long quoteTimeMillis) {
+        public void setQuoteTimeMillis(@Changeable(QUOTE_TIME_MILLIS) Long quoteTimeMillis) {
             this.quoteTimeMillis = quoteTimeMillis;
         }
 
-        @UsingKey(type=ORDER_TONE)
+        @UsingKey(type=MarketPriceConstants.ORDER_TONE)
         public String getOrderTone() {
             return orderTone;
         }
 
-        @RFAType(type=ORDER_TONE)
+        public static final String ORDER_TONE = "orderTone";
+
+        @RFAType(type=MarketPriceConstants.ORDER_TONE)
         @Adapt(using=OMMDataBufferAdapter.class)
-        public void setOrderTone(String orderTone) {
+        public void setOrderTone(@Changeable(ORDER_TONE) String orderTone) {
             this.orderTone = orderTone;
         }
 
-        @UsingKey(type=PR_TIM_MS)
+        @UsingKey(type=MarketPriceConstants.PR_TIM_MS)
         public Long getPriorityTimeMillis() {
             return priorityTimeMillis;
         }
 
-        @RFAType(type=PR_TIM_MS)
+        public static final String PRIORITY_TIME_MILLIS = "priorityTimeMillis";
+
+        @RFAType(type=MarketPriceConstants.PR_TIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
-        public void setPriorityTimeMillis(Long priorityTimeMillis) {
+        public void setPriorityTimeMillis(@Changeable(PRIORITY_TIME_MILLIS) Long priorityTimeMillis) {
             this.priorityTimeMillis = priorityTimeMillis;
         }
 
