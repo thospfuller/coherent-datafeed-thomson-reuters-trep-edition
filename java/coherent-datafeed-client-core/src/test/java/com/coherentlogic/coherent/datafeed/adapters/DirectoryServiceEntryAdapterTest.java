@@ -1,12 +1,14 @@
 package com.coherentlogic.coherent.datafeed.adapters;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.util.Iterator;
 
 import org.junit.After;
 import org.junit.Before;
 
+import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.reuters.rfa.omm.OMMMap;
 import com.reuters.rfa.omm.OMMMapEntry;
@@ -29,8 +31,16 @@ public class DirectoryServiceEntryAdapterTest {
 
     @Before
     public void setUp() throws Exception {
+
         entry = new DirectoryEntry ();
-        adapter = new DirectoryEntryAdapter ();
+
+        TypedFactory<DirectoryEntry> directoryEntryFactory = mock(TypedFactory.class);
+
+        // Test passes without this but it may be necessary in the future.
+        // when(directoryEntryFactory.getInstance()).thenReturn(new DirectoryEntry ());
+
+        adapter = new DirectoryEntryAdapter (directoryEntryFactory);
+
         map = mock (OMMMap.class);
         mapEntry = mock (OMMMapEntry.class);
     }

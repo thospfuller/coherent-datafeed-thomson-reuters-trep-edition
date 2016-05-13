@@ -11,6 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.factories.NullRFABeanFactory;
@@ -29,15 +30,24 @@ public class RFABeanAdapterTest extends AdapterUnitTestHelper {
 
     private RFABeanAdapter<MarketPrice> adapter = null;
 
+    private TypedFactory<AttribInfo> attribInfoFactory = null;
+
     @Before
     public void setUp() throws Exception {
-        setUp(rfaBeanFactory, MarketPriceAdapter.class);
+
+        attribInfoFactory = mock (TypedFactory.class);
+
+        when (attribInfoFactory.getInstance()).thenReturn(new AttribInfo ());
+
+        setUp(rfaBeanFactory, attribInfoFactory, MarketPriceAdapter.class);
+
         adapter = (RFABeanAdapter<MarketPrice>) getAdapter();
+
     }
 
     @After
     public void tearDown () throws Exception {
-        super.tearDown();
+        attribInfoFactory = null;
     }
 
     private OMMAttribInfo configureToReturnNonNullValues () {

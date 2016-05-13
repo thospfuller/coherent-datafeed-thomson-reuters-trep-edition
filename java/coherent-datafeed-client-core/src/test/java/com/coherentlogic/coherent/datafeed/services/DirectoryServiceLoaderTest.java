@@ -27,6 +27,9 @@ import com.reuters.rfa.omm.OMMMapEntry;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMTypes;
 
+/**
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ */
 public class DirectoryServiceLoaderTest {
 
     private static final String

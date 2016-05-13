@@ -18,6 +18,7 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.reuters.rfa.dictionary.FieldDictionary;
 import com.reuters.rfa.omm.OMMData;
@@ -49,6 +50,7 @@ public class AdapterUnitTestHelper {
      */
     public void setUp(
         TypedFactory<? extends RFABean> factory,
+        TypedFactory<AttribInfo> attribInfoFactory,
         Class<? extends RFABeanAdapter<? extends RFABean>> adapterClass
     ) throws Exception {
 
@@ -101,11 +103,11 @@ public class AdapterUnitTestHelper {
 
         Constructor<? extends RFABeanAdapter<? extends RFABean>> constructor =
             adapterClass.getConstructor(
-                TypedFactory.class, FieldDictionary.class, Map.class);
+                TypedFactory.class, TypedFactory.class, FieldDictionary.class, Map.class);
 
         adapter =
             (RFABeanAdapter<? extends RFABean>) constructor.newInstance(
-                factory, fieldDictionary, fieldEntryAdapters);
+                factory, attribInfoFactory, fieldDictionary, fieldEntryAdapters);
     }
 
     public void tearDown() throws Exception {

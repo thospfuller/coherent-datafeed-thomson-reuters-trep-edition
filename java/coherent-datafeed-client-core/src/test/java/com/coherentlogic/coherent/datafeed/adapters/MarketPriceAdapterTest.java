@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.factories.NullMarketPriceFactory;
@@ -37,17 +38,25 @@ public class MarketPriceAdapterTest extends AdapterUnitTestHelper {
     private final TypedFactory<MarketPrice> marketPriceFactory =
         new NullMarketPriceFactory();
 
+    private TypedFactory<AttribInfo> attribInfoFactory = null;
+
     private MarketPriceAdapter adapter = null;
 
     @Before
     public void setUp() throws Exception {
-        setUp(marketPriceFactory, MarketPriceAdapter.class);
+
+        attribInfoFactory = mock (TypedFactory.class);
+
+        when (attribInfoFactory.getInstance()).thenReturn(new AttribInfo ());
+
+        setUp(marketPriceFactory, attribInfoFactory, MarketPriceAdapter.class);
+
         adapter = (MarketPriceAdapter) getAdapter();
     }
 
     @After
     public void tearDown() throws Exception{
-        super.tearDown();
+        attribInfoFactory = null;
     }
 
     @Test
