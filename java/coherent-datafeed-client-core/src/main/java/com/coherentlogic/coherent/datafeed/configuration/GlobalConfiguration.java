@@ -16,10 +16,8 @@ import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory;
-import com.coherentlogic.coherent.datafeed.factories.DefaultMarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory;
 import com.coherentlogic.coherent.datafeed.factories.LoginMessageBuilderFactory;
-import com.coherentlogic.coherent.datafeed.factories.MarketByOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.MarketMakerFactory;
 import com.coherentlogic.coherent.datafeed.factories.MarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.OMMEncoderFactory;
@@ -308,11 +306,6 @@ public class GlobalConfiguration {
     @Bean(name=MarketMakerFactory.BEAN_NAME)
     public MarketMakerFactory getMarketMakerFactory () {
         return new MarketMakerFactory ();
-    }
-
-    @Bean(name=MarketByOrderFactory.BEAN_NAME)
-    public MarketByOrderFactory getMarketByOrderFactory () {
-        return new MarketByOrderFactory ();
     }
 
 //    <bean id="marketPriceEventDrivenEndpoint"
