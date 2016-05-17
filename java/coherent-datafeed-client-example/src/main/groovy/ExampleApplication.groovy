@@ -1,17 +1,12 @@
-//System.setProperty('javax.xml.parsers.DocumentBuilderFactory', 'org.apache.xerces.jaxp.SAXParserFactoryImpl ')
+/*
+ *
+ * grape -V resolve org.codehaus.jettison jettison 1.3.4
+ */
 
-// import javax.xml.parsers.DocumentBuilderFactory
-// com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl@11932058
-// def mmm = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+//System.setProperty('java.util.logging.config.file', 'C:/development/projects/cdatafeed-16.May.2016-RELEASE/release-17.May.2016/java/coherent-datafeed-client-example/src/main/resources/logging.properties')
 
 @GrabResolver(name='JBoss Release Repository', root='https://repository.jboss.org/nexus/content/repositories/releases/')
 @GrabResolver(name='JBoss.org Maven repository', root='https://repository.jboss.org/nexus/content/groups/public')
-
-//System.setProperty("java.util.logging.config.file", "C:/Temp")
-
-/*
- * grape -V resolve org.codehaus.jettison jettison 1.3.4
- */
 
 @Grab(group='org.codehaus.jettison', module='jettison', version='1.3.4')
 import org.codehaus.jettison.mapped.Configuration
@@ -35,8 +30,6 @@ import org.codehaus.jettison.mapped.Configuration
 @GrabExclude('xml-apis:xml-apis')
 @Grab(group='stax', module='stax', version='1.2.0')
 
-//@Grab(group='xml-apis', module='xml-apis', version='1.0.b2')
-
 @GrabConfig(systemClassLoader=true)
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
@@ -51,7 +44,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
@@ -68,6 +61,13 @@ import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecifi
 import com.reuters.rfa.common.Handle;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
+
+@Grab(group='log4j', module='log4j', version='1.2.17')
+import org.apache.log4j.xml.DOMConfigurator
+
+java.util.logging.LogManager.getLogManager ().readConfiguration (new URL ("https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition/raw/334d6f5ee33e30b53f34f2028a67347960903bfe/java/coherent-datafeed-client-example/src/main/resources/logging.properties").openStream ())
+
+DOMConfigurator.configure(new URL ("https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition/raw/334d6f5ee33e30b53f34f2028a67347960903bfe/java/coherent-datafeed-client-example/src/main/resources/log4j.xml"))
 
 ExampleGroovyApplication.main ([] as String[])
 
@@ -121,9 +121,11 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
             (AuthenticationServiceSpecification) applicationContext.getBean(
                 AUTHENTICATION_ENTRY_POINT);
 
-        def frameworkEventListenerAdapter =
-            (FrameworkEventListenerAdapter)
-                applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
+        FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter =
+            applicationContext.getBean(
+                FRAMEWORK_EVENT_LISTENER_ADAPTER,
+                FrameworkEventListenerAdapterSpecification.class
+            );
 
         final MarketByOrderServiceGatewaySpecification marketByOrderService =
             applicationContext.getBean(MarketByOrderServiceGatewaySpecification.class);
@@ -134,22 +136,21 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
         final MarketMakerServiceGatewaySpecification marketMakerService =
             applicationContext.getBean(MarketMakerServiceGatewaySpecification.class);
 
-        frameworkEventListenerAdapter.addInitialisationSuccessfulListeners ([
+        frameworkEventListenerAdapter.initialisationSuccessfulListenerList <<
             new FrameworkEventListener() {
                 @Override
                 public void onEventReceived(Session session) {
                     pauseResumeService.resume(true);
                 }
             }
-        ]);
 
-        frameworkEventListenerAdapter.addInitialisationFailedListeners (
+        frameworkEventListenerAdapter.initialisationFailedListenerList <<
             new FrameworkEventListener () {
                 @Override
                 public void onEventReceived(Session session) {
                     pauseResumeService.resume(false);
                 }
-        });
+            }
 
         String dacsId = System.getenv(DACS_ID);
 
@@ -157,7 +158,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
         boolean result = pauseResumeService.pause();
 
-        System.out.println("result: " + result);
+//        System.out.println("result: " + result);
 
         queryMarketMakerService (
             statusResponseService,
@@ -177,7 +178,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
             loginHandle
         );
 
-//        log.info("...done!");
+        log.info("...done!");
 
         // NOTE: If we end too soon this may be part of the reason why we're
         //       seeing an ommMsg with the final flag set -- one way of proving
@@ -201,7 +202,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
         marketByOrderMap.each {
             String key, MarketByOrder value ->
 
-            System.out.println("Adding an instance of PropertyChangeListener for the ric " + key +
+            log.info("Adding an instance of PropertyChangeListener for the ric " + key +
                 " and marketByOrder " + value);
 
             value.addPropertyChangeListener {
@@ -211,14 +212,11 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
                 String text = "[ric: "+ key +"]; nextMarketByOrderUpdate[" + currentCtr + "]: " + event;
 
-                System.out.println (text);
+                log.info (text);
             }
 
             value.getOrders().each {
                 String orderKey, MarketByOrder.Order order ->
-
-//                        System.out.println("Adding an instance of PropertyChangeListener for the orderKey " + orderKey +
-//                            " and marketByOrder.order " + order.getUniqueId());
 
                 AtomicLong orderCtr = new AtomicLong (0);
 
@@ -230,7 +228,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
                     if (orderCtrValue % 100 == 0) {
                         String text = "[orderKey: "+ orderKey +"]; nextMarketByOrderOrderUpdate[" +
                             orderCtrValue + "]: " + event;
-                        System.out.println(text);
+                        log.info(text);
                     }
                 }
             }
@@ -260,13 +258,13 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
                 String text = "[ric: "+ key +"]; nextMarketMakerUpdate[" + currentCtr + "]: " + event;
 
-                System.out.println (text);
+                log.info (text);
             }
 
             value.getOrders().each {
                 String orderKey, MarketMaker.Order order ->
 
-                System.out.println("Adding an instance of PropertyChangeListener for the orderKey " + orderKey +
+                log.info("Adding an instance of PropertyChangeListener for the orderKey " + orderKey +
                     " and marketMaker.order " + order);
 
                 AtomicLong orderCtr = new AtomicLong (0);
@@ -280,7 +278,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
                         orderCtrValue + "]: " + event;
 
                     if (orderCtrValue % 100 == 0)
-                        System.out.println(text);
+                        log.info(text);
                 }
             }
         }
@@ -310,7 +308,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
                 String text = "[ric: "+ key +"]; nextMarketPriceUpdate[" + currentCtr + "]: " + event;
 
                 if (currentCtr % 1000 == 0)
-                    System.out.println (text);
+                    log.info (text);
             }
         }
     }
@@ -4326,7 +4324,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
         "OD7T.MU",
         "OD7T.SG",
         "ZWAA.VI"
-    ]
+    ] as String[]
 }
 
 /*@GrabExclude('org.eclipse.equinox:app')
