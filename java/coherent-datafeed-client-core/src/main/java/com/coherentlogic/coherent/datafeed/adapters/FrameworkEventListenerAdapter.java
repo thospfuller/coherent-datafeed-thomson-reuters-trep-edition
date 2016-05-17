@@ -40,7 +40,7 @@ import com.reuters.rfa.common.Event;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class FrameworkEventListenerAdapter {
+public class FrameworkEventListenerAdapter implements FrameworkEventListenerAdapterSpecification {
 
     private static final Logger log =
         LoggerFactory.getLogger(FrameworkEventListenerAdapter.class);
@@ -77,39 +77,55 @@ public class FrameworkEventListenerAdapter {
             nextListener.onEventReceived(session);
     }
 
-    public void addInitialisationSuccessfulListeners (
-        FrameworkEventListener... frameworkEventListeners) {
+//    public void addInitialisationSuccessfulListeners (
+//        FrameworkEventListener... frameworkEventListeners) {
+//
+//        for (FrameworkEventListener next : frameworkEventListeners)
+//            initialisationSuccessfulListenerList.add(next);
+//    }
 
-        for (FrameworkEventListener next : frameworkEventListeners)
-            initialisationSuccessfulListenerList.add(next);
+    /* (non-Javadoc)
+	 * @see com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification#addInitialisationSuccessfulListeners(java.util.List)
+	 */
+    @Override
+	public void addInitialisationSuccessfulListeners (List<FrameworkEventListener> frameworkEventListeners) {
+        initialisationSuccessfulListenerList.addAll(frameworkEventListeners);
     }
 
-    public void removeInitialisationSuccessfulListeners (
-        FrameworkEventListener... frameworkEventListeners) {
+//    public void removeInitialisationSuccessfulListeners (
+//        FrameworkEventListener... frameworkEventListeners) {
+//
+//        for (FrameworkEventListener next : frameworkEventListeners)
+//            initialisationSuccessfulListenerList.remove(next);
+//    }
 
-        for (FrameworkEventListener next : frameworkEventListeners)
-            initialisationSuccessfulListenerList.remove(next);
+//    public void addInitialisationFailedListeners (
+//        FrameworkEventListener... frameworkEventListeners) {
+//
+//        for (FrameworkEventListener next : frameworkEventListeners)
+//            initialisationFailedListenerList.add(next);
+//    }
+
+    /* (non-Javadoc)
+	 * @see com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification#addInitialisationFailedListeners(java.util.List)
+	 */
+    @Override
+	public void addInitialisationFailedListeners (List<FrameworkEventListener> frameworkEventListeners) {
+        initialisationFailedListenerList.addAll(frameworkEventListeners);
     }
 
-    public void addInitialisationFailedListeners (
-        FrameworkEventListener... frameworkEventListeners) {
+//    public void removeInitialisationFailedListeners (
+//        FrameworkEventListener... frameworkEventListeners) {
+//
+//        for (FrameworkEventListener next : frameworkEventListeners)
+//            initialisationFailedListenerList.remove(next);
+//    }
 
-        for (FrameworkEventListener next : frameworkEventListeners)
-            initialisationFailedListenerList.add(next);
-    }
-
-    public void removeInitialisationFailedListeners (
-        FrameworkEventListener... frameworkEventListeners) {
-
-        for (FrameworkEventListener next : frameworkEventListeners)
-            initialisationFailedListenerList.remove(next);
-    }
-
-    /**
-     * Method is called by the integration work flow and will set the completed
-     * flag to true and then notify all waiting threads.
-     */
-    public Message<?> initialisationSuccessful (Message<Event> message) {
+    /* (non-Javadoc)
+	 * @see com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification#initialisationSuccessful(org.springframework.messaging.Message)
+	 */
+    @Override
+	public Message<?> initialisationSuccessful (Message<Event> message) {
 
         Event payload = message.getPayload();
 
@@ -131,11 +147,11 @@ public class FrameworkEventListenerAdapter {
         return message;
     }
 
-    /**
-     * Method is called by the integration work flow and will set the completed
-     * flag to false and then notify all waiting threads.
-     */
-    public Message<?> initialisationFailed (Message<?> message) {
+    /* (non-Javadoc)
+	 * @see com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification#initialisationFailed(org.springframework.messaging.Message)
+	 */
+    @Override
+	public Message<?> initialisationFailed (Message<?> message) {
 
         /* This should probably be a message passed in as a param since if this
          * method is called an exception will probably have been thrown.
@@ -148,11 +164,27 @@ public class FrameworkEventListenerAdapter {
         Session session = (Session) headers.get(SESSION);
 
         assertNotNull ("session", session);
-        
+
         notifyListeners (initialisationFailedListenerList, session);
 
         log.info("initialisationFailed: method returns.");
 
         return message;
+    }
+
+    /* (non-Javadoc)
+	 * @see com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification#getInitialisationSuccessfulListenerList()
+	 */
+    @Override
+	public List<FrameworkEventListener> getInitialisationSuccessfulListenerList () {
+        return initialisationSuccessfulListenerList;
+    }
+
+    /* (non-Javadoc)
+	 * @see com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification#getInitialisationFailedListenerList()
+	 */
+    @Override
+	public List<FrameworkEventListener> getInitialisationFailedListenerList () {
+        return initialisationFailedListenerList;
     }
 }
