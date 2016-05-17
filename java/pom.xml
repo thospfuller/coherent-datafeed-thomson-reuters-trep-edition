@@ -467,33 +467,29 @@
                     <debug>true</debug>
                 </configuration>
             </plugin>
-                        <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>2.9</version>
                 <configuration>
-                    <aggregate>true</aggregate>
                     <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-                    <docletPath>C:/development/software/UMLGraph-5.6.6/lib/UmlGraph.jar</docletPath>
-                    <!-- 
-                     If you see this error "Cannot run program 'dot'" then
-                     Graphviz has probably not been installed; see here:
+                    <docletPath>C:/development/software/UMLGraph-5.6/lib/UmlGraph.jar</docletPath>
+                    <!--
+                        If you see this error "Cannot run program 'dot'" then Graphviz has probably
+                        not been installed; see here:
 
-                     http://www.graphviz.org/Download.php
+                        http://www.graphviz.org/Download.php
 
-                     The UML Graph doclet needs to be installed manually as follows: 
-                     mvn install:install-file -Dfile=C:/development/software/UMLGraph-5.6.6/lib/UmlGraph.jar 
-                     -DgroupId=org.umlgraph -DartifactId=doclet -Dversion=5.6.6 -Dpackaging=jar -->
+                        The UML Graph doclet needs to be installed manually as follows: 
+                        mvn install:install-file -Dfile=C:/development/software/UMLGraph-5.6.6/lib/UmlGraph.jar 
+                        -DgroupId=org.umlgraph -DartifactId=doclet -Dversion=5.6.6 -Dpackaging=jar -->
                     <docletArtifact>
                         <groupId>org.umlgraph</groupId>
                         <artifactId>doclet</artifactId>
-                        <version>5.6.6</version>
+                        <version>5.6</version>
                     </docletArtifact>
-                    <additionalparam>-views</additionalparam>
+                    <additionalparam>"-views" "-Xdoclint:none"</additionalparam>
                     <useStandardDocletOptions>true</useStandardDocletOptions>
-                    <!-- Upgrade to JDK 8 resulted in errors so the doclint param below 
-                         fixes this. -->
-                    <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
                 <!-- Below is the yDoc configuration. <doclet>ydoc.doclets.YStandard</doclet> 
                     <docletPath>C:/development/software/yworks-uml-doclet/lib/ydoc.jar: C:/development/software/yworks-uml-doclet/lib/styleed.jar: 
