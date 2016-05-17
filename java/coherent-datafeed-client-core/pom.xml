@@ -15,7 +15,7 @@
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
 
-    <name>coherent-datafeed-client-core</name>
+    <name>coherent-datafeed-trep-core</name>
 
     <url>www.coherentlogic.com</url>
 
@@ -233,7 +233,7 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
@@ -252,7 +252,7 @@
         </dependency>
     </dependencies>
 
-    <build>
+    <!-- build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -264,12 +264,11 @@
                         </goals>
                     </execution>
                 </executions>
-                <!-- TODO: This is Spring Boot-specific so move the examples to their own module. -->
                 <configuration>
                     <mainClass>${start-class}</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build -->
 </project>
