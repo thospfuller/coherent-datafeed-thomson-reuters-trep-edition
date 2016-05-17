@@ -111,7 +111,7 @@
         <module>coherent-datafeed-config</module>
         <module>coherent-datafeed-misc</module>
         <module>coherent-datafeed-client-core</module>
-        <module>coherent-datafeed-client-example</module>
+        <!-- module>coherent-datafeed-client-example</module -->
         <!-- Connection to TREP required to run tests in core-it. -->
         <!-- module>coherent-datafeed-client-core-it</module -->
         <!-- module>coherent-datafeed-db-int</module>
@@ -507,4 +507,28 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- https://issues.sonatype.org/browse/OSSRH-3376 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
