@@ -1,35 +1,43 @@
-//@GrabResolver(name='JBoss Release Repository', root='https://repository.jboss.org/nexus/content/repositories/releases/')
-//@GrabResolver(name='JBoss.org Maven repository', root='https://repository.jboss.org/nexus/content/groups/public')
+//System.setProperty('javax.xml.parsers.DocumentBuilderFactory', 'org.apache.xerces.jaxp.SAXParserFactoryImpl ')
 
-System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
+// import javax.xml.parsers.DocumentBuilderFactory
+// com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl@11932058
+// def mmm = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
-@GrabConfig(systemClassLoader=true)
+@GrabResolver(name='JBoss Release Repository', root='https://repository.jboss.org/nexus/content/repositories/releases/')
+@GrabResolver(name='JBoss.org Maven repository', root='https://repository.jboss.org/nexus/content/groups/public')
 
-@GrabExclude('org.eclipse.equinox:app')
+//System.setProperty("java.util.logging.config.file", "C:/Temp")
+
+/*
+ * grape -V resolve org.codehaus.jettison jettison 1.3.4
+ */
+
+@Grab(group='org.codehaus.jettison', module='jettison', version='1.3.4')
+import org.codehaus.jettison.mapped.Configuration
 
 @Grab(group='org.hibernate', module='hibernate-search-orm', version='5.1.0.Final')
 @Grab(group='org.hibernate', module='hibernate-search-engine', version='5.1.0.Final')
 @Grab(group='org.hibernate.common', module='hibernate-commons-annotations', version='5.0.1.Final')
 @Grab(group='org.hibernate', module='hibernate-core', version='5.1.0.Final')
 @Grab(group='org.hibernate', module='hibernate-entitymanager', version='5.1.0.Final')
-@GrabExclude('xml-apis:xml-apis')
-@Grab(group='xml-apis', module='xml-apis', version='1.0.b2')
-@Grab(group='org.hibernate', module='hibernate-tools', version='4.3.2.Final')
 
 @Grab(group='org.infinispan', module='infinispan-spring', version='8.0.1.Final')
 @Grab(group='org.infinispan', module='infinispan-core', version='8.0.1.Final')
 @Grab(group='org.infinispan', module='infinispan-commons', version='8.0.1.Final')
 @Grab(group='org.infinispan', module='infinispan-query', version='8.0.1.Final')
 
-@Grab(group='org.springframework.boot', module='spring-boot', version='1.3.3.RELEASE')
-@Grab(group='org.springframework.boot', module='spring-boot-starter', version='1.3.3.RELEASE')
-@Grab(group='org.springframework.boot', module='spring-boot-actuator', version='1.3.3.RELEASE')
-@Grab(group='org.springframework.boot', module='spring-boot-starter-remote-shell', version='1.3.3.RELEASE')
-@GrabExclude('org.springframework.boot:spring-boot-starter-logging')
+@Grab(group='org.javassist', module='javassist', version='3.18.1-GA')
+
+@Grab(group='org.slf4j', module='slf4j-api', version='1.7.5')
 
 @Grab(group='com.coherentlogic.coherent.datafeed.client', module='coherent-datafeed-client-core', version='1.0.3-RELEASE')
+@GrabExclude('xml-apis:xml-apis')
+@Grab(group='stax', module='stax', version='1.2.0')
 
-//@Grab(group='org.codehaus.jettison', module='jettison', version='1.3.4')
+//@Grab(group='xml-apis', module='xml-apis', version='1.0.b2')
+
+@GrabConfig(systemClassLoader=true)
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
@@ -39,17 +47,9 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.boot.CommandLineRunner;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
@@ -67,6 +67,10 @@ import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.reuters.rfa.common.Handle;
 
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
+
+ExampleGroovyApplication.main ([] as String[])
+
 /**
  * An example application that authenticates, executes a query, and gets the
  * data.
@@ -83,43 +87,31 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-//@SpringBootApplication
-//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
-public class ExampleGroovyApplication implements MarketPriceConstants, CommandLineRunner {
-
-//    private static final Logger log =
-//        LoggerFactory.getLogger(ExampleApplication.class);
+public class ExampleGroovyApplication implements MarketPriceConstants {
 
     private final PauseResumeService pauseResumeService = new PauseResumeService ();
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    private def applicationContext;
 
-    public ExampleApplication () {
+    public ExampleGroovyApplication () {
     }
 
     public static void main (String[] unused) throws InterruptedException {
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:spring/application-context.xml", "classpath*:spring/cache-beans.xml");
+        def applicationContext = new org.springframework.context.support.GenericGroovyApplicationContext(["classpath*:spring/application-context.xml", "classpath*:spring/cache-beans.xml"] as String[])
 
-        new ExampleApplication (context).run(unused);
+        def exampleApplication = new ExampleGroovyApplication ()
 
-/*        SpringApplicationBuilder builder = new SpringApplicationBuilder (ExampleApplication.class);
+        exampleApplication.applicationContext = applicationContext
 
-        builder
-            .web(false)
-            .headless(false)
-            .registerShutdownHook(true)
-            .run(unused);
-*/
+        exampleApplication.run ()
 
         Thread.sleep(Long.MAX_VALUE);
 
         System.exit(-9999);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void run() throws Exception {
 
         final StatusResponseServiceSpecification statusResponseService =
             (StatusResponseServiceSpecification) applicationContext.
@@ -129,7 +121,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants, CommandLi
             (AuthenticationServiceSpecification) applicationContext.getBean(
                 AUTHENTICATION_ENTRY_POINT);
 
-        final FrameworkEventListenerAdapter frameworkEventListenerAdapter =
+        def frameworkEventListenerAdapter =
             (FrameworkEventListenerAdapter)
                 applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
 
@@ -142,14 +134,14 @@ public class ExampleGroovyApplication implements MarketPriceConstants, CommandLi
         final MarketMakerServiceGatewaySpecification marketMakerService =
             applicationContext.getBean(MarketMakerServiceGatewaySpecification.class);
 
-        frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
+        frameworkEventListenerAdapter.addInitialisationSuccessfulListeners ([
             new FrameworkEventListener() {
                 @Override
                 public void onEventReceived(Session session) {
                     pauseResumeService.resume(true);
                 }
             }
-        );
+        ]);
 
         frameworkEventListenerAdapter.addInitialisationFailedListeners (
             new FrameworkEventListener () {
@@ -4336,3 +4328,21 @@ public class ExampleGroovyApplication implements MarketPriceConstants, CommandLi
         "ZWAA.VI"
     ]
 }
+
+/*@GrabExclude('org.eclipse.equinox:app')
+
+@Grab(group='org.hibernate', module='hibernate-search-orm', version='5.1.0.Final')
+@Grab(group='org.hibernate', module='hibernate-search-engine', version='5.1.0.Final')
+@Grab(group='org.hibernate.common', module='hibernate-commons-annotations', version='5.0.1.Final')
+@Grab(group='org.hibernate', module='hibernate-core', version='5.1.0.Final')
+@Grab(group='org.hibernate', module='hibernate-entitymanager', version='5.1.0.Final')
+@GrabExclude('xml-apis:xml-apis')
+@Grab(group='xml-apis', module='xml-apis', version='1.0.b2')
+@Grab(group='org.hibernate', module='hibernate-tools', version='4.3.2.Final')
+*/
+
+//@Grab(group='org.springframework.boot', module='spring-boot', version='1.3.3.RELEASE')
+//@Grab(group='org.springframework.boot', module='spring-boot-starter', version='1.3.3.RELEASE')
+//@Grab(group='org.springframework.boot', module='spring-boot-actuator', version='1.3.3.RELEASE')
+//@Grab(group='org.springframework.boot', module='spring-boot-starter-remote-shell', version='1.3.3.RELEASE')
+//@GrabExclude('org.springframework.boot:spring-boot-starter-logging')
