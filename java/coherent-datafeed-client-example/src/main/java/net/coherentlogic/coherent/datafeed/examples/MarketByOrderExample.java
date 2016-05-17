@@ -6,6 +6,7 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER_SERVICE_GATEWAY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,13 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
@@ -69,8 +67,8 @@ public class MarketByOrderExample implements CommandLineRunner, MarketPriceConst
             (AuthenticationServiceSpecification) applicationContext.getBean(
                 AUTHENTICATION_ENTRY_POINT);
 
-        final FrameworkEventListenerAdapter frameworkEventListenerAdapter =
-            (FrameworkEventListenerAdapter)
+        final FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter =
+            (FrameworkEventListenerAdapterSpecification)
                 applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
 
         final MarketByOrderServiceSpecification marketByOrderService =
@@ -80,21 +78,26 @@ public class MarketByOrderExample implements CommandLineRunner, MarketPriceConst
         final PauseResumeService pauseResumeService = new PauseResumeService ();
 
         frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
-            new FrameworkEventListener() {
-                @Override
-                public void onEventReceived(Session session) {
-                    pauseResumeService.resume(true);
+            Arrays.asList(
+                new FrameworkEventListener() {
+                    @Override
+                    public void onEventReceived(Session session) {
+                        pauseResumeService.resume(true);
+                    }
                 }
-            }
+            )
         );
 
         frameworkEventListenerAdapter.addInitialisationFailedListeners (
-            new FrameworkEventListener () {
-                @Override
-                public void onEventReceived(Session session) {
-                    pauseResumeService.resume(false);
+            Arrays.asList(
+                new FrameworkEventListener () {
+                    @Override
+                    public void onEventReceived(Session session) {
+                        pauseResumeService.resume(false);
+                    }
                 }
-        });
+            )
+        );
 
         String dacsId = System.getenv(DACS_ID);
 

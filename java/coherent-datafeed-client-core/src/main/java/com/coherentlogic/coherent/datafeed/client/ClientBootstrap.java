@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.client;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -21,7 +21,7 @@ public class ClientBootstrap
     private ClientBootstrap(
         ExecutorService executorService,
         Client client,
-        FrameworkEventListenerAdapter frameworkEventListenerAdapter
+        FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter
     ) {
         super();
         this.executorService = executorService;

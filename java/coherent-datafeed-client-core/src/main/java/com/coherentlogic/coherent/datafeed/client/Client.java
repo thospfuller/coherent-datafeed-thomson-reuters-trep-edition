@@ -10,13 +10,16 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE
 import static com.coherentlogic.coherent.datafeed.misc.Constants.TIME_SERIES_SERVICE_GATEWAY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.TS1_DEF_SERVICE;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter;
+import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.ClientNotInitializedException;
@@ -88,25 +91,29 @@ public class Client {
 //            applicationContext.registerShutdownHook();
 //            applicationContext.start();
 
-            FrameworkEventListenerAdapter frameworkEventListenerAdapter =
+            FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter =
                 getFrameworkEventListenerAdapter ();
 
             frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
-                new FrameworkEventListener() {
-                    @Override
-                    public void onEventReceived(Session session) {
-                        pauseResumeService.resume(true);
+                Arrays.asList(
+                    new FrameworkEventListener() {
+                        @Override
+                        public void onEventReceived(Session session) {
+                            pauseResumeService.resume(true);
+                        }
                     }
-                }
+                )
             );
 
             frameworkEventListenerAdapter.addInitialisationFailedListeners (
-                new FrameworkEventListener () {
-                    @Override
-                    public void onEventReceived(Session session) {
-                        pauseResumeService.resume(false);
+                Arrays.asList(
+                    new FrameworkEventListener () {
+                        @Override
+                        public void onEventReceived(Session session) {
+                            pauseResumeService.resume(false);
+                        }
                     }
-                }
+                )
             );
 
             setStarted(true);
@@ -151,12 +158,12 @@ public class Client {
         }
     }
 
-    public FrameworkEventListenerAdapter getFrameworkEventListenerAdapter () {
+    public FrameworkEventListenerAdapterSpecification getFrameworkEventListenerAdapter () {
         // The app will not have been started when this method is invoked so
         // we don't want to check as is below.
         //assertHasStarted();
 
-        return (FrameworkEventListenerAdapter)
+        return (FrameworkEventListenerAdapterSpecification)
             applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
     }
 
