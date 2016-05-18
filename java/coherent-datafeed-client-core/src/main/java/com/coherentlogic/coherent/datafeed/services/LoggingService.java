@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.LogManager;
@@ -40,15 +42,41 @@ import com.coherentlogic.coherent.datafeed.exceptions.
  */
 public class LoggingService {
 
-    private static final String ROOT_PROPERTIES_FILE_PATH
-        = "/logging.properties";
+    private static final String
+        ROOT_PROPERTIES_FILE_PATH = "/logging.properties",
+        LOGGING_CONFIGURATION_FILE = "CDATAFEED_LOGGING_CONFIGURATION_FILE";
 
     public static final String BEAN_NAME = "loggingService";
 
     @PostConstruct
     public void initialize () {
-        InputStream inputStream = LoggingService.class.getResourceAsStream(
-            ROOT_PROPERTIES_FILE_PATH);
+
+        String result = System.getProperty(LOGGING_CONFIGURATION_FILE);
+
+        if (result == null)
+            result = System.getenv(LOGGING_CONFIGURATION_FILE);
+
+        if (result == null)
+            System.out.println("The logging properties will be read from the " + ROOT_PROPERTIES_FILE_PATH +
+                " included in this jar file. This can be overridden by setting the " + LOGGING_CONFIGURATION_FILE +
+                " system properties settings -- for example -D" + LOGGING_CONFIGURATION_FILE +
+                "=C:/Temp/logging.properties");
+                // In Eclipse this is a VM arg.
+        else
+            System.out.println("The logging properties will be read from the file " + result);
+
+        InputStream inputStream = null;
+
+        if (result == null)
+            inputStream = LoggingService.class.getResourceAsStream(ROOT_PROPERTIES_FILE_PATH);
+        else
+            try {
+                inputStream = new FileInputStream (new File (result));
+            } catch (final IOException ioException) {
+                throw new ApplicationInitializationFailedException ("Unable to read the logging configuration file: " +
+                    result + " (note that if this value is null then the file is being read from the jar and is " +
+                    "likely missing).", ioException);
+            }
 
         try {
             LogManager.getLogManager().readConfiguration(inputStream);
