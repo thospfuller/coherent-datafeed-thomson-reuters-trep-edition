@@ -48,7 +48,7 @@ public class AuthenticationService
         log.warn("***                                                                                             ***");
         log.warn("***         Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version          ***");
         log.warn("***                                                                                             ***");
-        log.warn("***                                    Version 1.0.3-RELEASE                                    ***");
+        log.warn("***                                    Version 1.0.4-RELEASE                                    ***");
         log.warn("***                                                                                             ***");
         log.warn("***                         Please take a moment to follow us on Twitter:                       ***");
         log.warn("***                                                                                             ***");
@@ -56,11 +56,11 @@ public class AuthenticationService
         log.warn("***                                                                                             ***");
         log.warn("***                                     or on LinkedIn:                                         ***");
         log.warn("***                                                                                             ***");
-        log.warn("***                         www.linkedin.com/company/coherent-logic-limited                     ***");
+        log.warn("***                       www.linkedin.com/company/coherent-logic-limited                       ***");
         log.warn("***                                                                                             ***");
-        log.warn("***                        The project and issue tracker can be found here:                     ***");
+        log.warn("***                       The project and issue tracker can be found here:                      ***");
         log.warn("***                                                                                             ***");
-        log.warn("***       https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition    ***");
+        log.warn("***      https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition     ***");
         log.warn("***                                                                                             ***");
         log.warn("***************************************************************************************************");
     }
