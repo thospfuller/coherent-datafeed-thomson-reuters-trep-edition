@@ -48,7 +48,7 @@ public class AuthenticationService
         log.warn("***                                                                                             ***");
         log.warn("***         Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version          ***");
         log.warn("***                                                                                             ***");
-        log.warn("***                                    Version 1.0.4-RELEASE                                    ***");
+        log.warn("***                                    Version 1.0.5-RELEASE                                    ***");
         log.warn("***                                                                                             ***");
         log.warn("***                         Please take a moment to follow us on Twitter:                       ***");
         log.warn("***                                                                                             ***");
