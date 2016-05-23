@@ -26,7 +26,7 @@ import org.codehaus.jettison.mapped.Configuration
 
 @Grab(group='org.slf4j', module='slf4j-api', version='1.7.5')
 
-@Grab(group='com.coherentlogic.coherent.datafeed.client', module='coherent-datafeed-client-core', version='1.0.3-RELEASE')
+@Grab(group='com.coherentlogic.coherent.datafeed.client', module='coherent-datafeed-client-core', version='1.0.4-RELEASE')
 @GrabExclude('xml-apis:xml-apis')
 @Grab(group='stax', module='stax', version='1.2.0')
 
