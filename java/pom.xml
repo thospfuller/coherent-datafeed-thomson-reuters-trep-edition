@@ -117,9 +117,9 @@
         <module>coherent-datafeed-client-core</module>
         <module>coherent-datafeed-config</module>
         <module>coherent-datafeed-misc</module>
-        <!-- module>coherent-datafeed-client-example</module -->
+        <module>coherent-datafeed-client-example</module>
         <!-- Connection to TREP required to run tests in core-it. -->
-        <!-- module>coherent-datafeed-client-core-it</module -->
+        <module>coherent-datafeed-client-core-it</module>
         <!-- module>coherent-datafeed-db-int</module>
         <module>coherent-datafeed-jms-int</module>
         <module>coherent-datafeed-flink-int</module>
