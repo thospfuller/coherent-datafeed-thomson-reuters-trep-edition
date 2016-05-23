@@ -4,16 +4,19 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.DictionaryServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
+import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -47,9 +50,7 @@ public class ClientTest {
 
         authenticationService = client.getAuthenticationService();
 
-        authenticationService.login(DEFAULT_DACS_ID);
-
-        loginHandle = authenticationService.getHandle();
+        loginHandle = authenticationService.login(DEFAULT_DACS_ID);
 
         DictionaryServiceSpecification dictionaryService =
             (DictionaryServiceSpecification) client.getDictionaryService();
@@ -80,30 +81,31 @@ public class ClientTest {
         List<String> marketPrices =
             new ArrayList<String> ();
 
-        marketPriceService.query(
-            Constants.dELEKTRON_DD,
+        Map<String, MarketPrice> result = marketPriceService.query(
+            ServiceName.dELEKTRON_DD,
             loginHandle,
             DEFAULT_RICS
         );
-
-        for (int ctr = 0; ctr < DEFAULT_SIZE; ctr++)
-            marketPrices.add(marketPriceService.getNextUpdateAsJSON("9000"));
 
         assertEquals (DEFAULT_SIZE, marketPrices.size());
     }
 
     /**
      * This test performs a query using an invalid RIC.
+     *
+     * Note that this test needs to be re-written since we'll need to inspect the status response in order to see if TR
+     * rejected the request.
+     *
      * @throws InterruptedException 
      */
     @Test
     public void getMarketPricesForInvalidRICS()
         throws InterruptedException {
 
-        marketPriceService.query(Constants.dELEKTRON_DD, loginHandle, "foo.bar");
+        Map<String, MarketPrice> result = marketPriceService.query(ServiceName.dELEKTRON_DD, loginHandle, "foo.bar");
         // Note that if this test just ends here that RFA will still try to send
         // events to be processed -- in particular status events, since the ric
         // provided here is invalid.
-        Thread.sleep(5000);
+//        Thread.sleep(5000);
     }
 }

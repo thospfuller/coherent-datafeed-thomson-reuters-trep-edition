@@ -6,6 +6,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +24,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.coherentlogic.coherent.datafeed.client.Client;
 import com.coherentlogic.coherent.datafeed.domain.Sample;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
-import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Constants;
 
@@ -73,18 +76,18 @@ public class TimeSeriesServiceTest {
     }
 
     @Test
-    public void getNextTimeSeries() {
+    public void getNextTimeSeries() throws InterruptedException, ExecutionException, TimeoutException {
 
         // At the moment we're going to wait for the dictionary to load.
 
-        Handle timeSeriesHandle = timeSeriesService.queryTimeSeriesFor(
-            Constants.IDN_RDF,
+        CompletableFuture<TimeSeries> result = timeSeriesService.getTimeSeriesFor(
+            ServiceName.ELEKTRON_DD.toString(),
             loginHandle,
             "TRI.N",
             TS1Constants.DAILY_PERIOD
         );
 
-        TimeSeries timeSeries = timeSeriesService.getNextUpdate(2500L);
+        TimeSeries timeSeries = result.get(2L, TimeUnit.SECONDS);
 
         assertNotNull (timeSeries);
 
