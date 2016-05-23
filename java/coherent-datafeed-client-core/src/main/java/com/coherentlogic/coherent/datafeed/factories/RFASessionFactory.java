@@ -56,8 +56,8 @@ public class RFASessionFactory implements TypedFactory<Session> {
         Session session = Session.acquire(sessionName);
 
         if (session == null)
-            throw new ApplicationInitializationFailedException("Cannot " +
-                "acquire the session with the name '" + sessionName + "'.");
+            throw new ApplicationInitializationFailedException("Cannot acquire the session with the name '" +
+                sessionName + "'.");
 
         return session;
     }
