@@ -80,7 +80,7 @@
     <!-- The context must be created before the session factory is instantiated,
          which explains why we have the depends-on attribute below.
       -->
-    <bean id="defaultSessionFactory" class="com.coherentlogic.coherent.datafeed.factories.rfa.RFASessionFactory"
+    <bean id="defaultSessionFactory" class="com.coherentlogic.coherent.datafeed.factories.RFASessionFactory"
      depends-on="context">
         <constructor-arg name="sessionName" value="mySession"/>
     </bean>
