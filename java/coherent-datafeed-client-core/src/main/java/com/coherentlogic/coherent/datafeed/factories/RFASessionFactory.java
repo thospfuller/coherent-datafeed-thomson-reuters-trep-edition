@@ -9,16 +9,11 @@ import com.coherentlogic.coherent.datafeed.exceptions.
 import com.reuters.rfa.session.Session;
 
 /**
- * Factory class for creating sessions using a sessionName string. The sessionName can be overridden as follows:
+ * Factory class for creating a single session using a sessionName string. The sessionName can be overridden as follows:
  * - By setting the CDATAFEED_SESSION_NAME system property (ie. -DCDATAFEED_SESSION_NAME="blahSession").
  * - By setting the CDATAFEED_SESSION_NAME environment variable.
  * 
- * -- if neither of these are set the sessionName will default to what the bean has been constructed with -- ie.
- * "mySession".
- *
- * @TODO Should we have start/stop methods map to acquire/release?
- * @TODO Rename this class to RFASessionFactory.
- * @todo See .rfa.SessionFactory -- is this the same as this class?
+ * -- if neither of these are set the sessionName will default to the sessionName property -- ie. "mySession".
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
@@ -31,7 +26,6 @@ public class RFASessionFactory implements TypedFactory<Session> {
     private final String sessionName;
 
     public RFASessionFactory(String sessionName) {
-        super();
         this.sessionName = sessionName;
     }
 
