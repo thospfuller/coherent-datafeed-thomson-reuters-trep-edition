@@ -368,10 +368,10 @@
         <constructor-arg ref="marketByOrderCache"/>
     </bean>
 
-    <bean id="statusResponseMessageProcessor"
+    <!-- bean id="statusResponseMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
         <constructor-arg ref="statusResponseAdapter"/>
-    </bean>
+    </bean -->
 
     <bean id="ts1DefDbLoaderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefDbLoaderMessageProcessor">
@@ -429,14 +429,13 @@
     <bean id="marketByOrderOrder" class="com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order" scope="prototype"/>
     <bean id="marketMaker" class="com.coherentlogic.coherent.datafeed.domain.MarketMaker" scope="prototype"/>
     <bean id="marketMakerOrder" class="com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order" scope="prototype"/>
+    <bean id="statusResponse" class="com.coherentlogic.coherent.datafeed.domain.StatusResponse" scope="prototype"/>
 
     <bean id="marketMakerFactory" class="com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory"/>
 
     <bean id="statusResponseAdapter"
      class="com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter">
-        <constructor-arg name="attribInfoFactory" ref="attribInfoFactory"/>
-        <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
-        <constructor-arg name="fieldEntryAdapters" ref="fieldEntryAdapters"/>
+        <constructor-arg name="statusResponseFactory" ref="statusResponseFactory"/>
     </bean>
 
     <bean id="marketPriceAdapter" class="com.coherentlogic.coherent.datafeed.adapters.MarketPriceAdapter">
