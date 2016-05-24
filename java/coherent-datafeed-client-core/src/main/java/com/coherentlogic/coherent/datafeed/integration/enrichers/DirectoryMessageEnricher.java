@@ -33,7 +33,7 @@ public class DirectoryMessageEnricher extends AbstractMessageEnricher {
 
     public Message<Event> enrich (Message<Event> message) {
 
-        log.info("enrich: method begins; message: " + message);
+        log.debug("enrich: method begins; message: " + message);
 
         Session session = getSession (message, getSessionCache());
 
@@ -43,8 +43,7 @@ public class DirectoryMessageEnricher extends AbstractMessageEnricher {
                 .setHeader(SESSION, session)
                 .build ();
 
-        log.info("enrich: method ends; enrichedMessage: " +
-            enrichedMessage);
+        log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);
 
         return enrichedMessage;
     }
