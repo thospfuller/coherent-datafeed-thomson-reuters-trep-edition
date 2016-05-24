@@ -38,8 +38,7 @@ import com.reuters.rfa.rdm.RDMUser;
  */
 public class RFABeanAdapter<T extends RFABean> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(RFABeanAdapter.class);
+    private static final Logger log = LoggerFactory.getLogger(RFABeanAdapter.class);
 
     private final TypedFactory<T> rfaBeanFactory;
 
@@ -130,8 +129,7 @@ public class RFABeanAdapter<T extends RFABean> {
         toRFABean (data, rfaBean);
     }
 
-    void toRFABean (
-        OMMAttribInfo ommAttribInfo, T rfaBean) {
+    void toRFABean (OMMAttribInfo ommAttribInfo, T rfaBean) {
 
         Integer id = getId (ommAttribInfo);
         Integer filter = getFilter(ommAttribInfo);
@@ -157,7 +155,7 @@ public class RFABeanAdapter<T extends RFABean> {
         attribInfo.setNameType(nameType);
         attribInfo.setElements(elements);
 
-        rfaBean.withAttribInfo(attribInfo);
+        rfaBean.setAttribInfo(attribInfo);
     }
 
     /**
@@ -187,8 +185,7 @@ public class RFABeanAdapter<T extends RFABean> {
 
             String text = (data == null) ? "null" : data.toString();
 
-            log.warn("The data param is null or cannot be converted; "
-                + "data: " + text);
+            log.warn("The data param is null or cannot be converted; data: " + text);
         }
     }
 
