@@ -38,7 +38,7 @@ public class MarketByOrderAdapter
 
     private final OrderAdapter orderAdapter;
 
-    private final TypedFactory<MarketByOrder.Order> orderFactory; //TypedFactory<MarketByOrder.Order>
+    private final TypedFactory<MarketByOrder.Order> orderFactory;
 
     public MarketByOrderAdapter (
         TypedFactory<MarketByOrder> marketByOrderFactory,
