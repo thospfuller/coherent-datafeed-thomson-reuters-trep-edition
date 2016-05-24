@@ -76,7 +76,7 @@
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
         <int:mapping channel="updateMarketByOrderChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).UPDATE_RESP}"/>
-        <int:mapping channel="processStatusResponseChannel"
+        <int:mapping channel="processMarketByOrderStatusResponseChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
     </int:router>
 
@@ -94,6 +94,21 @@
      input-channel="updateMarketByOrderChannel"
      output-channel="marketByOrderWorkflowEndsChannel"
      ref="updateMarketByOrderMessageProcessor"
+     method="process"/>
+
+    <int:channel id="processMarketByOrderStatusResponseChannel"/>
+
+    <bean id="marketByOrderStatusResponseMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
+        <constructor-arg ref="statusResponseAdapter"/>
+        <constructor-arg ref="marketByOrderRICCache"/>
+        <constructor-arg ref="marketByOrderCache"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="processMarketByOrderStatusResponseChannel"
+     output-channel="marketByOrderWorkflowEndsChannel"
+     ref="marketByOrderStatusResponseMessageProcessor"
      method="process"/>
 
     <int:channel id="marketByOrderWorkflowEndsChannel"/>

@@ -78,7 +78,7 @@
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
         <int:mapping channel="updateMarketPriceChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).UPDATE_RESP}"/>
-        <int:mapping channel="processStatusResponseChannel"
+        <int:mapping channel="processMarketPriceStatusResponseChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
     </int:router>
 
@@ -96,6 +96,32 @@
      input-channel="updateMarketPriceChannel"
      output-channel="marketPriceWorkflowEndsChannel"
      ref="updateMarketPriceMessageProcessor"
+     method="process"/>
+
+    <!-- int:channel id="marketPriceWorkflowEndsChannel"/>
+
+    <bean id="marketPriceWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The marketPrice workflow ends."/>
+    </bean>
+
+    <int:service-activator
+     input-channel="marketPriceWorkflowEndsChannel"
+     ref="marketPriceWorkflowEndsService"
+     method="end"/ -->
+
+    <int:channel id="processMarketPriceStatusResponseChannel"/>
+
+    <bean id="marketPriceStatusResponseMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
+        <constructor-arg ref="statusResponseAdapter"/>
+        <constructor-arg ref="marketPriceRICCache"/>
+        <constructor-arg ref="marketPriceCache"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="processMarketPriceStatusResponseChannel"
+     output-channel="marketPriceWorkflowEndsChannel"
+     ref="marketPriceStatusResponseMessageProcessor"
      method="process"/>
 
     <int:channel id="marketPriceWorkflowEndsChannel"/>
