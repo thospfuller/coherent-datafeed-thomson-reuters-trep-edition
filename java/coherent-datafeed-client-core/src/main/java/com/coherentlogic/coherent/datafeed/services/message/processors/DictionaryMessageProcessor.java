@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
@@ -54,7 +54,7 @@ public class DictionaryMessageProcessor
      * dictionary service for these dictionaries; 
      */
     @Override
-    @Transactional
+//    @Transactional
     public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
 
         /* Note that it is possible that this method is paused prior and then

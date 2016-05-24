@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
@@ -77,7 +76,7 @@ public class DictionaryService
      *  a request by passing a single name.
      */
     @Override
-    @Transactional
+//    @Transactional
     protected List<Handle> executeRequest(
         String serviceName,
         Handle loginHandle,

@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.*;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
@@ -53,7 +52,7 @@ public class GetTimeSeriesForMessageProcessor
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Message<CompletableFuture<TimeSeries>> process(
         Message<TimeSeriesQueryParameter> message
     ) {

@@ -8,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
-import com.coherentlogic.coherent.datafeed.misc.Utils;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesLoader;
@@ -39,7 +37,7 @@ public class LoadTimeSeriesEntriesMessageProcessor
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
 
         log.info("loadTimeSeriesEntriesMessageProcessor.process: method " +

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
@@ -45,7 +44,7 @@ public class QueryMarketPriceMessageProcessor
      * @todo Unit test this method.
      */
     @Override
-    @Transactional
+//    @Transactional
     public Message<Map<String, MarketPrice>> process(Message<QueryParameters> message) {
 
         Message<Map<String, MarketPrice>> result = null;

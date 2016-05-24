@@ -7,7 +7,6 @@ import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
@@ -47,7 +46,7 @@ public class QueryNextRICMessageProcessor implements
      * @todo This method is too big and should be refactored. 
      */
     @Override
-    @Transactional
+//    @Transactional
     public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
 
         log.info("queryNextRICMessageProcessor.process: method begins; " +

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
@@ -38,7 +37,7 @@ public class LoginMessageProcessor
      * 
      */
     @Override
-    @Transactional
+//    @Transactional
     public Message<Handle> process(Message<String> message) {
 
         Message<Handle> result = null;

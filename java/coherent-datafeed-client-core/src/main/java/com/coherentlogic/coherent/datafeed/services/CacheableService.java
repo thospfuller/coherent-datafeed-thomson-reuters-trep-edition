@@ -1,7 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
 
@@ -19,7 +17,7 @@ import com.reuters.rfa.common.Client;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@Transactional
+//@Transactional
 public abstract class CacheableService
     extends RequestService {
 

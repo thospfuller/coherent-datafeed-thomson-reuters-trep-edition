@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
@@ -51,7 +50,7 @@ public class QueryTimeSeriesMessageProcessor
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Message<Handle> process(
         Message<TimeSeriesQueryParameter> message
     ) {

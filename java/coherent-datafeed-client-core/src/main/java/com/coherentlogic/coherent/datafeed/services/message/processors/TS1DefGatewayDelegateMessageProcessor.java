@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
 import com.coherentlogic.coherent.datafeed.beans.TS1DefQueryParameters;
@@ -59,7 +58,7 @@ public class TS1DefGatewayDelegateMessageProcessor implements
      * As COMPLETION_EVENTS are received these will be removed from the 
      */
     @Override
-    @Transactional
+//    @Transactional
     public Message<List<Handle>> process(
         Message<TS1DefQueryParameters> message) {
 
