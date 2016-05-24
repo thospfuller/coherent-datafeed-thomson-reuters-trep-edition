@@ -25,6 +25,8 @@ import com.reuters.rfa.common.Handle;
  *
  * @deprecated Rename this to OMMBean.
  *
+ * @TODO: Refactor this class and make each property Changeable.
+ *
  * @TODO: Consider adding StatusResponseEventListener capabilities.
  */
 public class RFABean extends SerializableBean
@@ -130,13 +132,6 @@ public class RFABean extends SerializableBean
         }
     }
 
-    public RFABean withAttribInfo (AttribInfo attribInfo) {
-
-        setAttribInfo(attribInfo);
-
-        return this;
-    }
-
     public Handle getHandle() {
         return handle;
     }
@@ -151,13 +146,6 @@ public class RFABean extends SerializableBean
 
             firePropertyChange("handle", oldValue, handle);
         }
-    }
-
-    public RFABean withHandle (Handle handle) {
-
-        setHandle (handle);
-
-        return this;
     }
 
     public Date getTimestamp() {
@@ -176,10 +164,9 @@ public class RFABean extends SerializableBean
         }
     }
 
-    public RFABean withTimestamp (Date timestamp) {
-
-        setTimestamp(timestamp);
-
-        return this;
+    @Override
+    public String toString() {
+        return "RFABean [timestamp=" + timestamp + ", id=" + id + ", uniqueId=" + uniqueId + ", attribInfo="
+            + attribInfo + ", handle=" + handle + "]";
     }
 }
