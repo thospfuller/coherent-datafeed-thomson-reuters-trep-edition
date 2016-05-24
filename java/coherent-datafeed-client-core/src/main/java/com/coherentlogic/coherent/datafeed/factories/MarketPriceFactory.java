@@ -20,6 +20,5 @@ public class MarketPriceFactory implements TypedFactory<MarketPrice> {
     @Override
     public MarketPrice getInstance() {
         return applicationContext.getBean(MarketPrice.class);
-            // new MarketPrice ();
     }
 }
