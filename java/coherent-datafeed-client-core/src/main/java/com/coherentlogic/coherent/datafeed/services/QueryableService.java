@@ -88,15 +88,13 @@ public abstract class QueryableService extends RequestService {
         assertNotNull("loginHandle", loginHandle);
         assertNotNullOrEmpty ("items", items);
 
-        log.info("serviceName: " + serviceName + ", loginHandle: " +
-            loginHandle + ", items: " + items);
+        log.debug("serviceName: " + serviceName + ", loginHandle: " + loginHandle + ", items: " + items);
 
         List<Handle> results = null;
 
         if (loginHandle == null)
-            throw new InvalidQueryException ("The login handle is null, " +
-                "which may indicate that you either didn't login, or the " +
-                "login failed.");
+            throw new InvalidQueryException ("The login handle is null, which may indicate that you either didn't " +
+                "login, or the login failed.");
 
         results = executeRequest(
             serviceName, loginHandle, msgModelType, items);
