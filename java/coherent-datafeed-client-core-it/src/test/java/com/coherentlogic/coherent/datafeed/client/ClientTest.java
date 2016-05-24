@@ -93,8 +93,11 @@ public class ClientTest {
     /**
      * This test performs a query using an invalid RIC.
      *
-     * Note that this test needs to be re-written since we'll need to inspect the status response in order to see if TR
+     * TODO: This test needs to be re-written since we'll need to inspect the status response in order to see if TR
      * rejected the request.
+     *
+     * [ARSD.N] statusResponse: StatusResponse [
+     *     code=NOT_FOUND, streamState=CLOSED, dataState=SUSPECT, text=The record could not be found]
      *
      * @throws InterruptedException 
      */
