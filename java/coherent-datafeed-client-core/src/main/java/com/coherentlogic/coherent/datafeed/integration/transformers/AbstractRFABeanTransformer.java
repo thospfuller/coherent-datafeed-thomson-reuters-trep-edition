@@ -2,7 +2,6 @@ package com.coherentlogic.coherent.datafeed.integration.transformers;
 
 import org.infinispan.Cache;
 import org.springframework.integration.transformer.AbstractPayloadTransformer;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.adapters.RFABeanAdapter;
 import com.coherentlogic.coherent.datafeed.beans.CachedEntry;
@@ -18,7 +17,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-@Transactional
+//@Transactional
 public abstract class AbstractRFABeanTransformer
     <C extends CachedEntry, R extends RFABean>
         extends AbstractPayloadTransformer<OMMItemEvent, R> {
