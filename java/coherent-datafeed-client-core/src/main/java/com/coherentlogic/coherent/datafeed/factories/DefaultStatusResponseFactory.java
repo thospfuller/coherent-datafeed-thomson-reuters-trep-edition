@@ -1,22 +1,25 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 
 /**
- * Factory class for creating {@link StatusResponse} objects with a unique id
- * and timestamp. This factory is used when we need to pipe status response
- * messages to a database.
+ * Factory class for creating {@link StatusResponse} objects.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DefaultStatusResponseFactory
-    implements TypedFactory<StatusResponse> {
+public class DefaultStatusResponseFactory implements TypedFactory<StatusResponse> {
 
     public static final String BEAN_NAME = "statusResponseFactory";
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Override
     public StatusResponse getInstance() {
-        return new StatusResponse();
+        return applicationContext.getBean(StatusResponse.class);
     }
 }
