@@ -21,9 +21,9 @@ public class AuthenticationTransformer
         LoggerFactory.getLogger(AuthenticationTransformer.class);
 
     private final StatusResponseAdapter statusResponseAdapter;
-    
+
     private final StatusResponse statusResponse;
-    
+
     public AuthenticationTransformer(
         StatusResponseAdapter statusResponseAdapter,
         StatusResponse statusResponse
