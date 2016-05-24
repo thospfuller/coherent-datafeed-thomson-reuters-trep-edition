@@ -157,7 +157,7 @@ public class TimeSeriesService
         String ric,
         int period
     ) {
-        log.info("getTimeSeriesFor: method begins; serviceName: " + serviceName + ", loginHandle: " + loginHandle +
+        log.debug("getTimeSeriesFor: method begins; serviceName: " + serviceName + ", loginHandle: " + loginHandle +
             ", ric: " + ric);
 
         CompletableFuture<TimeSeries> result = null;
