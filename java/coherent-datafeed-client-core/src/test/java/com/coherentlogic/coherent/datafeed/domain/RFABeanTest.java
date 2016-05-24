@@ -1,6 +1,7 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,7 +13,7 @@ public class RFABeanTest {
 
     @Before
     public void setUp() throws Exception {
-        bean = new StatusResponse();
+        bean = new MarketPrice();
     }
 
     @After
