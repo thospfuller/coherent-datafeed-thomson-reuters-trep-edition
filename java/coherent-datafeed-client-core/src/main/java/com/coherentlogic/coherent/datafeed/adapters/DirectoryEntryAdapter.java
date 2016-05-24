@@ -51,8 +51,7 @@ import com.reuters.rfa.rdm.RDMService;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DirectoryEntryAdapter
-    implements BasicAdapter<OMMMsg, List<DirectoryEntry>> {
+public class DirectoryEntryAdapter implements BasicAdapter<OMMMsg, List<DirectoryEntry>> {
 
     static final String
         SERVICE_STATE = "ServiceState",
@@ -338,7 +337,7 @@ public class DirectoryEntryAdapter
      */
     List<String> convert (OMMElementList elementList, String target) {
 
-        log.info("convert: method begins; elementList: " + elementList +
+        log.debug("convert: method begins; elementList: " + elementList +
             ", target: " + target);
 
         OMMElementEntry entry =
@@ -408,7 +407,7 @@ public class DirectoryEntryAdapter
                 OMMTypes.toString(dataType) + " so this will be ignored.");
         }
 
-        log.info ("result: " + result);
+        log.debug ("result: " + result);
 
         return result;
     }
