@@ -67,7 +67,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=MARKET_BY_ORDER)
 @XStreamAlias(MARKET_BY_ORDER)
-public class MarketByOrder extends RFABean {
+public class MarketByOrder extends StatusResponseBean {
 
     private static final long serialVersionUID = 1L;
 
