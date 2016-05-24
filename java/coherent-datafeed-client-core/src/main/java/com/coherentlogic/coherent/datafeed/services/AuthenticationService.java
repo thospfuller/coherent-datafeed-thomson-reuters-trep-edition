@@ -3,7 +3,6 @@ package com.coherentlogic.coherent.datafeed.services;
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationIdException;
@@ -36,7 +35,7 @@ import com.reuters.rfa.session.omm.OMMItemIntSpec;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-@Transactional
+//@Transactional
 public class AuthenticationService
     implements AuthenticationServiceSpecification {
 
