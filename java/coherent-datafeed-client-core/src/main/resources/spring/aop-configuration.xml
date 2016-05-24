@@ -43,6 +43,18 @@
             advice-ref="performanceMonitorInterceptor" />
     </aop:config>
 
+    <bean id="statusResponseSetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.StatusResponse"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="statusResponseSetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.StatusResponse.set*(..))"/>
+        <aop:advisor pointcut-ref="statusResponseSetterPointcut"
+            advice-ref="statusResponseSetterInterceptor" />
+    </aop:config>
+
     <bean id="marketPriceSetterInterceptor"
      class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
         <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketPrice"/>
