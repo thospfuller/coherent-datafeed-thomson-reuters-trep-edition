@@ -5234,6 +5234,7 @@ public class MarketPrice extends AbstractCommonProperties {
             + impliedVolatilitytOfBidPrice + ", openInterest=" + openInterest + ", openInterestNetChange="
             + openInterestNetChange + ", strikePrice=" + strikePrice + ", contractMonth=" + contractMonth
             + ", lotSizeUnits=" + lotSizeUnits + ", openAskPrice=" + openAskPrice + ", expiryDate=" + expiryDate
-            + ", settlementPrice=" + settlementPrice + ", settleDate=" + settleDate + "]";
+            + ", settlementPrice=" + settlementPrice + ", settleDate=" + settleDate + ", toString()="
+            + super.toString() + "]";
     }
 }
