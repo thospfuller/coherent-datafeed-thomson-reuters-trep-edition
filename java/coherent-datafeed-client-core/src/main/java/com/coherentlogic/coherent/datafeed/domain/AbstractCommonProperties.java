@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public abstract class AbstractCommonProperties extends RFABean {
+public abstract class AbstractCommonProperties extends StatusResponseBean {
 
     /**
      * Product permissions information.
@@ -127,5 +127,12 @@ public abstract class AbstractCommonProperties extends RFABean {
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setExchangeId(String exchangeId) {
         this.exchangeId = exchangeId;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractCommonProperties [permission=" + permission + ", displayName=" + displayName + ", currency="
+            + currency + ", recordType=" + recordType + ", exchangeId2=" + exchangeId2 + ", providerSymbol="
+            + providerSymbol + ", exchangeId=" + exchangeId + ", toString()=" + super.toString() + "]";
     }
 }
