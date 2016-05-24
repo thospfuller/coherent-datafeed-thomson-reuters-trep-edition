@@ -67,8 +67,8 @@ public class EventDrivenEndpoint extends AbstractEndpoint
     @Override
     public void processEvent(Event event) {
 
-        log.info("Received event number " + eventCounter.addAndGet(ONE)
-            + " at time " + System.currentTimeMillis() + "; event: " + event);
+        log.debug("Received event number " + eventCounter.addAndGet(ONE) + " at time " + System.currentTimeMillis() +
+            "; event: " + event);
 
         Message<Event> message = MessageBuilder
             .withPayload(event)
