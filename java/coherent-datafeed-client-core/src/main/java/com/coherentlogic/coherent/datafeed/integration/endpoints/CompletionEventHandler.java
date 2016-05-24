@@ -4,7 +4,6 @@ import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.beans.CachedEntry;
 import com.reuters.rfa.common.Event;
@@ -27,11 +26,10 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@Transactional
+//@Transactional
 public class CompletionEventHandler {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(CompletionEventHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(CompletionEventHandler.class);
 
     private final Cache<Handle, ? extends CachedEntry> sessionCache;
 
@@ -70,12 +68,12 @@ public class CompletionEventHandler {
             CachedEntry cachedObject =
                 (CachedEntry) sessionCache.remove(handle);
 
-            text = "The sessionCache contained the handle " + handle + ", which " +
-                "was removed; this pointed to the following: " + cachedObject;
+            text = "The sessionCache contained the handle " + handle + ", which was removed; this pointed to the " +
+                "following: " + cachedObject;
 
         } else {
             text = "The sessionCache does not contain the handle " + handle + ".";
         }
-        log.info(text);
+        log.debug(text);
     }
 }
