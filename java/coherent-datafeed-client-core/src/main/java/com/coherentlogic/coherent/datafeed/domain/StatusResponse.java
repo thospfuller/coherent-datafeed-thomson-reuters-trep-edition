@@ -9,8 +9,10 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.TEXT;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
+import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -31,7 +33,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=STATUS_RESPONSE)
 @XStreamAlias(STATUS_RESPONSE)
-public class StatusResponse extends RFABean {
+public class StatusResponse extends SerializableBean {
 
     @XStreamAlias(CODE)
     private String code;
@@ -54,50 +56,44 @@ public class StatusResponse extends RFABean {
         String dataStateOK,
         String text
     ) {
-        super();
         this.code = code;
         this.streamState = streamStateOpen;
         this.dataState = dataStateOK;
         this.text = text;
     }
 
+    /**
+     * Resets all properties to null and does not result in any of the fire methods being called.
+     */
+    public void reset () {
+        this.code = null;
+        this.streamState = null;
+        this.dataState = null;
+        this.text = null;
+    }
+
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-
-        String oldValue = this.code;
-
+    public void setCode(@Changeable(CODE) String code) {
         this.code = code;
-
-        firePropertyChange(CODE, oldValue, code);
     }
 
     public String getStreamState() {
         return streamState;
     }
 
-    public void setStreamState(String streamState) {
-
-        String oldValue = this.streamState;
-
+    public void setStreamState(@Changeable(STREAM_STATE) String streamState) {
         this.streamState = streamState;
-
-        firePropertyChange(STREAM_STATE, oldValue, streamState);
     }
 
     public String getDataState() {
         return dataState;
     }
 
-    public void setDataState(String dataState) {
-
-        String oldValue = this.dataState;
-
+    public void setDataState(@Changeable(DATA_STATE) String dataState) {
         this.dataState = dataState;
-
-        firePropertyChange(DATA_STATE, oldValue, dataState);
     }
 
     @UsingKey(type=TEXT)
@@ -107,14 +103,13 @@ public class StatusResponse extends RFABean {
 
     @RFAType(type=TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public StatusResponse setText(String text) {
-
-        String oldValue = this.text;
-
+    public void setText(@Changeable(TEXT) String text) {
         this.text = text;
+    }
 
-        firePropertyChange(TEXT, oldValue, text);
-
-        return this;
+    @Override
+    public String toString() {
+        return "StatusResponse [code=" + code + ", streamState=" + streamState + ", dataState=" + dataState + ", text="
+            + text + "]";
     }
 }
