@@ -6,9 +6,8 @@ import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.Message;
 import org.springframework.integration.support.MessageBuilder;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Event;
@@ -31,7 +30,7 @@ public class AuthenticationMessageEnricher extends AbstractMessageEnricher {
         super(sessionCache);
     }
 
-    @Transactional
+//    @Transactional
     public Message<Event> enrich (Message<Event> message) {
 
         Message<Event> enrichedMessage = null;
@@ -49,7 +48,7 @@ public class AuthenticationMessageEnricher extends AbstractMessageEnricher {
          */
         synchronized (cache) {
 
-            log.info("enrich: method begins; message: " + message);
+            log.debug("enrich: method begins; message: " + message);
 
             Session session = getSession(message, cache);
 
@@ -59,8 +58,7 @@ public class AuthenticationMessageEnricher extends AbstractMessageEnricher {
                     .setHeader(SESSION, session)
                     .build ();
 
-            log.info("enrich: method ends; enrichedMessage: " +
-                enrichedMessage);
+            log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);
         }
         return enrichedMessage;
     }

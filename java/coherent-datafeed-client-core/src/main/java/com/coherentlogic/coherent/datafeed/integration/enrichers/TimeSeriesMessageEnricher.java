@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
@@ -40,10 +39,10 @@ public class TimeSeriesMessageEnricher extends AbstractMessageEnricher {
     /**
      * @todo This method could be moved to a base class.
      */
-    @Transactional
+//    @Transactional
     public Message<Event> enrich (Message<Event> message) {
 
-        log.info("enrich: method begins; message: " + message);
+        log.debug("enrich: method begins; message: " + message);
 
         // TODO: Add comments regarding why this is necessary.
         MessageHeaders headers = message.getHeaders();
@@ -83,8 +82,7 @@ public class TimeSeriesMessageEnricher extends AbstractMessageEnricher {
                     .setHeader(SESSION, session)
                     .build ();
         }
-        log.info("enrich: method ends; enrichedMessage: " +
-            enrichedMessage);
+        log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);
 
         return enrichedMessage;
     }

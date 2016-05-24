@@ -1,14 +1,10 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
-
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Event;
@@ -41,10 +37,10 @@ public class MarketByOrderMessageEnricher extends AbstractMessageEnricher {
     /**
      * @todo This method could be moved to a base class.
      */
-    @Transactional
+//    @Transactional
     public Message<Event> enrich (Message<Event> message) {
 
-        log.info("enrich: method begins; message: " + message);
+        log.debug("enrich: method begins; message: " + message);
 
         Message<Event> enrichedMessage = null;
 
@@ -64,7 +60,7 @@ public class MarketByOrderMessageEnricher extends AbstractMessageEnricher {
                     .fromMessage(message)
                     .build ();
 //        }
-        log.info("enrich: method ends; enrichedMessage: " +
+        log.debug("enrich: method ends; enrichedMessage: " +
             enrichedMessage);
 
         return enrichedMessage;
