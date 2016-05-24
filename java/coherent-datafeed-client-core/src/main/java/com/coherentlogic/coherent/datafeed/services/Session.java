@@ -23,7 +23,6 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
-import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -375,8 +374,7 @@ public class Session extends SerializableBean {
             for (Entry <String, DirectoryEntry> nextDirectoryEntry :
                 directoryEntrySet
             ) {
-                log.info("nextDirectoryEntry: " +
-                    ToStringBuilder.reflectionToString(nextDirectoryEntry));
+                log.debug("nextDirectoryEntry: " + ToStringBuilder.reflectionToString(nextDirectoryEntry));
 
                 DirectoryEntry directoryEntry =
                     nextDirectoryEntry.getValue();
@@ -421,7 +419,7 @@ public class Session extends SerializableBean {
             for (Entry <String, DirectoryEntry> nextDirectoryEntry :
                 directoryEntrySet
             ) {
-                log.info("nextDirectoryEntry: " +
+                log.debug("nextDirectoryEntry: " +
                     ToStringBuilder.reflectionToString(nextDirectoryEntry));
 
                 DirectoryEntry directoryEntry =
