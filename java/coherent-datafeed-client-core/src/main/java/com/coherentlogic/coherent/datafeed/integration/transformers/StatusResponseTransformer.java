@@ -32,9 +32,7 @@ public class StatusResponseTransformer
 
     private final StatusResponseAdapter statusResponseAdapter;
 
-    public StatusResponseTransformer(
-        StatusResponseAdapter statusResponseAdapter
-    ) {
+    public StatusResponseTransformer(StatusResponseAdapter statusResponseAdapter) {
         this.statusResponseAdapter = statusResponseAdapter;
     }
 
