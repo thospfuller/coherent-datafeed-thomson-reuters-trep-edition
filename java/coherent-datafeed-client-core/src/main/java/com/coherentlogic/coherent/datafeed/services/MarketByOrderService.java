@@ -30,8 +30,7 @@ public class MarketByOrderService
         RequestMessageBuilderFactory factory,
         Client client,
         Map<Handle, String> ricCache,
-        Map<String, MarketByOrder> marketByOrderCache,
-        TypedFactory<MarketByOrder> marketByOrderFactory
+        Map<String, MarketByOrder> marketByOrderCache
     ) {
         super(
             Constants.dELEKTRON_DD,
@@ -39,8 +38,7 @@ public class MarketByOrderService
             factory,
             client,
             ricCache,
-            marketByOrderCache,
-            marketByOrderFactory
+            marketByOrderCache
         );
     }
 

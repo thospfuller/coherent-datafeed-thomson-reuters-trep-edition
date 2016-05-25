@@ -40,8 +40,7 @@ public class MarketMakerService
         RequestMessageBuilderFactory factory,
         Client client,
         Map<Handle, String> ricCache,
-        Map<String, MarketMaker> marketMakerCache,
-        TypedFactory<MarketMaker> marketMakerFactory
+        Map<String, MarketMaker> marketMakerCache
     ) {
         super(
             Constants.dELEKTRON_DD,
@@ -49,8 +48,7 @@ public class MarketMakerService
             factory,
             client,
             ricCache,
-            marketMakerCache,
-            marketMakerFactory
+            marketMakerCache
         );
     }
 

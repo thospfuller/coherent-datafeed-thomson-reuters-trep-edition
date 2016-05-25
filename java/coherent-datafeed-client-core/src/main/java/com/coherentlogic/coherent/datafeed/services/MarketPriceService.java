@@ -32,8 +32,7 @@ public class MarketPriceService extends CacheableQueryableService<MarketPrice>
         RequestMessageBuilderFactory factory,
         Client client,
         Map<Handle, String> ricCache,
-        Map<String, MarketPrice> marketPriceCache,
-        TypedFactory<MarketPrice> marketPriceFactory
+        Map<String, MarketPrice> marketPriceCache
     ) {
         super(
             Constants.dELEKTRON_DD,
@@ -41,8 +40,7 @@ public class MarketPriceService extends CacheableQueryableService<MarketPrice>
             factory,
             client,
             ricCache,
-            marketPriceCache,
-            marketPriceFactory
+            marketPriceCache
         );
     }
 
