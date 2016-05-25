@@ -18,7 +18,7 @@ public abstract class CacheableQueryableService<T> extends QueryableService {
 
     private final Map<String, T> objectCache;
 
-    private final TypedFactory<T> objectFactory;
+//    private final TypedFactory<T> objectFactory;
 
     public CacheableQueryableService(
         String serviceName,
@@ -26,16 +26,16 @@ public abstract class CacheableQueryableService<T> extends QueryableService {
         RequestMessageBuilderFactory factory,
         Client client,
         Map<Handle, String> ricCache,
-        Map<String, T> objectCache,
-        TypedFactory<T> objectFactory
+        Map<String, T> objectCache
+//        TypedFactory<T> objectFactory
     ) {
         super(serviceName, msgModelType, factory, client);
         this.ricCache = ricCache;
         this.objectCache = objectCache;
-        this.objectFactory = objectFactory;
+//        this.objectFactory = objectFactory;
     }
 
-    public Map<String, T> query(ServiceName serviceName, Handle loginHandle, String... rics) {
+    public void query(ServiceName serviceName, Handle loginHandle, String... rics) {
 
         Utils.assertNotNull("serviceName", serviceName);
         Utils.assertNotNull("rics", rics);
@@ -48,45 +48,45 @@ public abstract class CacheableQueryableService<T> extends QueryableService {
 
             Handle handle = findHandle (ric);
 
-            /*
-             * Consider a proper association from handle to object looks like this:
-             *
-             * handle -> ric -> object
-             *
-             * So for below, if the object (marketPrice, for example) is not null but the handle is null then we have an
-             * invalid state because an object should always be associated with a handle and instead we have:
-             * 
-             * null -> ric -> object
-             *
-             * Likewise if the object is null and the handle is not then this is also invalid because the link from the
-             * handle to the object is broken:
-             *
-             * handle -> ric -> null
-             *
-             * NOTE: This scenario can happen when there's a cache shared between instances of this class (say MBO and
-             *       MP services. Caches should *not* be shared between services.
-             */
-            if (object != null && handle == null)
-                throw new InvalidStateException ("Invalid state detected: the domain object is not null however " +
-                    "there is no handle associated with the ric " + ric);
-            else if (object == null && handle != null)
+//            /*
+//             * Consider a proper association from handle to object looks like this:
+//             *
+//             * handle -> ric -> object
+//             *
+//             * So for below, if the object (marketPrice, for example) is not null but the handle is null then we have an
+//             * invalid state because an object should always be associated with a handle and instead we have:
+//             * 
+//             * null -> ric -> object
+//             *
+//             * Likewise if the object is null and the handle is not then this is also invalid because the link from the
+//             * handle to the object is broken:
+//             *
+//             * handle -> ric -> null
+//             *
+//             * NOTE: This scenario can happen when there's a cache shared between instances of this class (say MBO and
+//             *       MP services. Caches should *not* be shared between services.
+//             */
+//            if (object != null && handle == null)
+//                throw new InvalidStateException ("Invalid state detected: the domain object is not null however " +
+//                    "there is no handle associated with the ric " + ric);
+            if (object == null && handle != null)
                 throw new InvalidStateException ("Invalid state detected: the domain object is null however there is " +
                     "a non-null handle associated with the ric " + ric);
 
-            if (object == null) {
+//            if (object == null) {
 
-                object = objectFactory.getInstance();
-
-                objectCache.put(ric, object);
+//                object = objectFactory.getInstance();
+//
+//                objectCache.put(ric, object);
 
                 List<Handle> handleList = query(serviceName.toString(), loginHandle, ric);
 
                 ricCache.put(handleList.get(0), ric);
-            }
-            result.put(ric, object);
+//            }
+//            result.put(ric, object);
         }
 
-        return result;
+//        return result;
     }
 
     Handle findHandle (String ric) {
