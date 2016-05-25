@@ -16,5 +16,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketMakerServiceGatewaySpecification {
 
-    Map<String, MarketMaker> query (ServiceName serviceName, Handle loginHandle, String... rics);
+    Map<String, MarketMaker> query (ServiceName serviceName, Handle loginHandle, MarketMaker... marketMakers);
 }

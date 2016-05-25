@@ -16,5 +16,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketByOrderServiceGatewaySpecification {
 
-    Map<String, MarketByOrder> query (ServiceName serviceName, Handle loginHandle, String... rics);
+    Map<String, MarketByOrder> query (ServiceName serviceName, Handle loginHandle, MarketByOrder... marketByOrders);
 }
