@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
+
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.messaging.MessageHeaders;
 import com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponseBean;
+import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
@@ -63,14 +66,17 @@ public class StatusResponseMessageProcessor
 
         StatusResponse statusResponse = statusResponseBean.getStatusResponse();
 
-        if (statusResponse == null) {
-            statusResponse = statusResponseAdapter.adapt(ommMsg);
-            statusResponseBean.setStatusResponse(statusResponse);
-        } else {
+        assertNotNull("statusResponse", statusResponse);
+
+//        if (statusResponse == null) {
+//            statusResponse = statusResponseAdapter.adapt(ommMsg);
+//            statusResponseBean.setStatusResponse(statusResponse);
+//        }
+//        else {
             // TODO: Is this else block (for updates) realistic?
             statusResponse.reset ();
             statusResponseAdapter.adapt(ommMsg, statusResponse);
-        }
+//        }
 
         log.debug("statusResponse: " + statusResponse);
 
