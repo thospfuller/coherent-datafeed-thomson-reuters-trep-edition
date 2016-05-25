@@ -13,5 +13,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketPriceServiceSpecification {
 
-    Map<String, MarketPrice> query (ServiceName serviceName, Handle loginHandle, String... rics);
+    void query (ServiceName serviceName, Handle loginHandle, String... rics);
 }

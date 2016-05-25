@@ -17,7 +17,7 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketMakerServiceSpecification {
 
-    Map<String, MarketMaker> query(
+    void query(
         ServiceName serviceName,
         Handle loginHandle,
         String... items
