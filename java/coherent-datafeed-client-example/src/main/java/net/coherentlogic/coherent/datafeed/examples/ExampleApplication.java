@@ -5,7 +5,9 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,10 +21,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
+import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewaySpecification;
@@ -173,142 +177,191 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         //       login.
     }
 
-    public static void queryMarketByOrderService (
+    public void queryMarketByOrderService (
         final StatusResponseServiceSpecification statusResponseService,
         final MarketByOrderServiceGatewaySpecification marketByOrderService,
         final Handle loginHandle
     ) {
-        Map<String, MarketByOrder> marketByOrderMap = marketByOrderService.query(
-            ServiceName.dELEKTRON_DD,
-            loginHandle,
-            rics
-        );
+
+        List<MarketByOrder> marketByOrderList = new ArrayList<MarketByOrder> (rics.length);
 
         AtomicLong ctr = new AtomicLong (0);
 
-        marketByOrderMap.forEach(
-            (String key, MarketByOrder value) -> {
+        for (String nextRic : rics) {
 
-                System.out.println("Adding an instance of PropertyChangeListener for the ric " + key +
-                    " and marketByOrder " + value);
+            /* We *MUST* acquire the MarketByOrder instance from the Spring container because we are using AOP and if we
+             * simply create the class directly by calling the ctor, none of the property change events will fire when
+             * an update is applied and the same applies to the StatusResponse.
+             */
+            MarketByOrder marketByOrder = applicationContext.getBean(MarketByOrder.class);
 
-                value.addPropertyChangeListener(
-                    event -> {
+            marketByOrder.setRic(nextRic);
 
-                        long currentCtr = ctr.incrementAndGet();
+            StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
 
-                        String text = "[ric: "+ key +"]; nextMarketByOrderUpdate[" + currentCtr + "]: " + event;
+            marketByOrder.setStatusResponse(statusResponse);
 
-                        System.out.println (text);
-                    }
-                );
+            statusResponse.addPropertyChangeListener(
+                event -> {
 
-                value.getOrders().forEach(
-                    (String orderKey, MarketByOrder.Order order) -> {
+                    long currentCtr = ctr.incrementAndGet();
 
-//                        System.out.println("Adding an instance of PropertyChangeListener for the orderKey " + orderKey +
-//                            " and marketByOrder.order " + order.getUniqueId());
+                    System.out.println("[mbo.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
+                        event);
+                }
+            );
 
-                        AtomicLong orderCtr = new AtomicLong (0);
+            marketByOrder.addPropertyChangeListener(
+                event -> {
 
-                        order.addPropertyChangeListener(
-                            event -> {
+                    long currentCtr = ctr.incrementAndGet();
 
-                                long orderCtrValue = orderCtr.getAndIncrement();
+                    System.out.println ("[mbo.ric: "+ nextRic +"]; nextMarketByOrderUpdate[" + currentCtr + "]." +
+                        "event: " + event);
+                }
+            );
 
-                                if (orderCtrValue % 100 == 0) {
-                                    String text = "[orderKey: "+ orderKey +"]; nextMarketByOrderOrderUpdate[" +
-                                        orderCtrValue + "]: " + event;
-                                    System.out.println(text);
-                                }
-                            }
-                        );
-                    }
-                );
-            }
+            marketByOrderList.add(marketByOrder);
+        }
+
+        MarketByOrder[] marketByOrderArray = new MarketByOrder[marketByOrderList.size()];
+
+        Map<String, MarketByOrder> marketMakerMap = marketByOrderService.query(
+            ServiceName.dELEKTRON_DD,
+            loginHandle,
+            (MarketByOrder[]) marketByOrderList.toArray(marketByOrderArray)
         );
     }
 
-    public static void queryMarketMakerService (
+    public void queryMarketMakerService (
         final StatusResponseServiceSpecification statusResponseService,
         final MarketMakerServiceGatewaySpecification marketMakerService,
         final Handle loginHandle
     ) {
-        Map<String, MarketMaker> marketMakerMap = marketMakerService.query(
-            ServiceName.dELEKTRON_DD,
-            loginHandle,
-            rics
-        );
+
+        List<MarketMaker> marketMakerList = new ArrayList<MarketMaker> (rics.length);
 
         AtomicLong ctr = new AtomicLong (0);
 
-        marketMakerMap.forEach(
-            (String key, MarketMaker value) -> {
+        for (String nextRic : rics) {
 
-                value.addPropertyChangeListener(
-                    event -> {
+            /* We *MUST* acquire the MarketMaker instance from the Spring container because we are using AOP and if we
+             * simply create the class directly by calling the ctor, none of the property change events will fire when
+             * an update is applied and the same applies to the StatusResponse.
+             */
+            MarketMaker marketMaker = applicationContext.getBean(MarketMaker.class);
 
-                        long currentCtr = ctr.incrementAndGet();
+            marketMaker.setRic(nextRic);
 
-                        String text = "[ric: "+ key +"]; nextMarketMakerUpdate[" + currentCtr + "]: " + event;
+            StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
 
-                        System.out.println (text);
-                    }
-                );
+            marketMaker.setStatusResponse(statusResponse);
 
-                value.getOrders().forEach(
-                    (String orderKey, MarketMaker.Order order) -> {
+            statusResponse.addPropertyChangeListener(
+                event -> {
 
-                        System.out.println("Adding an instance of PropertyChangeListener for the orderKey " + orderKey +
-                            " and marketMaker.order " + order);
+                    long currentCtr = ctr.incrementAndGet();
 
-                        AtomicLong orderCtr = new AtomicLong (0);
+                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
+                        event);
+                }
+            );
 
-                        order.addPropertyChangeListener(
+            marketMaker.addPropertyChangeListener(
+                event -> {
+
+                    long currentCtr = ctr.incrementAndGet();
+
+                    System.out.println ("[mm.ric: "+ nextRic +"]; nextMarketMakerUpdate[" + currentCtr + "]." +
+                        "event: " + event);
+                }
+            );
+
+            marketMaker.addOrderListener(
+                orderEvent -> {
+                    if (orderEvent.getEventType() == EventType.instantiated) {
+                        orderEvent
+                        .getOrder()
+                        .addPropertyChangeListener(
                             event -> {
 
-                                long orderCtrValue = orderCtr.getAndIncrement();
+                                long currentCtr = ctr.incrementAndGet();
 
-                                String text = "[orderKey: "+ orderKey +"]; nextMarketMakerOrderUpdate[" +
-                                    orderCtrValue + "]: " + event;
-
-                                if (orderCtrValue % 100 == 0)
-                                    System.out.println(text);
+                                System.out.println ("[mm.ric: "+ nextRic +"]; mm.order updated[" + currentCtr +
+                                    "]; event: " + event);
                             }
                         );
                     }
-                );
-            }
+                }
+            );
+
+            marketMakerList.add(marketMaker);
+        }
+
+        MarketMaker[] marketMakerArray = new MarketMaker[marketMakerList.size()];
+
+        Map<String, MarketMaker> marketMakerMap = marketMakerService.query(
+            ServiceName.dELEKTRON_DD,
+            loginHandle,
+            (MarketMaker[]) marketMakerList.toArray(marketMakerArray)
         );
     }
 
-    public static void queryMarketPriceService (
+    public void queryMarketPriceService (
         final StatusResponseServiceSpecification statusResponseService,
         final MarketPriceServiceGatewaySpecification marketPriceService,
         final Handle loginHandle
     ) {
-        Map<String, MarketPrice> marketPriceMap = marketPriceService.query (
-            ServiceName.dELEKTRON_DD,
-            loginHandle,
-            rics
-        );
+
+        List<MarketPrice> marketPriceList = new ArrayList<MarketPrice> (rics.length);
 
         AtomicLong ctr = new AtomicLong (0);
 
-        marketPriceMap.forEach(
-            (String key, MarketPrice value) -> {
-                value.addPropertyChangeListener(
-                    event -> {
+        for (String nextRic : rics) {
 
-                        long currentCtr = ctr.incrementAndGet();
+            /* We *MUST* acquire the MarketPrice instance from the Spring container because we are using AOP and if we
+             * simply create the class directly by calling the ctor, none of the property change events will fire when
+             * an update is applied and the same applies to the StatusResponse.
+             */
+            MarketPrice marketPrice = applicationContext.getBean(MarketPrice.class);
 
-                        String text = "[ric: "+ key +"]; nextMarketPriceUpdate[" + currentCtr + "]: " + event;
+            marketPrice.setRic(nextRic);
 
-                        if (currentCtr % 1000 == 0)
-                            System.out.println (text);
-                    }
-                );
-            }
+            StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
+
+            marketPrice.setStatusResponse(statusResponse);
+
+            statusResponse.addPropertyChangeListener(
+                event -> {
+
+                    long currentCtr = ctr.incrementAndGet();
+
+                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " + event);
+                }
+            );
+
+            marketPrice.addPropertyChangeListener(
+                event -> {
+
+                long currentCtr = ctr.incrementAndGet();
+
+                MarketPrice result = (MarketPrice) event.getSource ();
+
+                if (currentCtr % 1000 == 0)
+                    System.out.println ("[ric: "+ nextRic +"]; nextMarketPriceUpdate[" + currentCtr + "]." +
+                        "event: " + event);
+                }
+            );
+
+            marketPriceList.add(marketPrice);
+        }
+
+        MarketPrice[] marketPriceArray = new MarketPrice[marketPriceList.size()];
+
+        marketPriceService.query (
+            ServiceName.dELEKTRON_DD,
+            loginHandle,
+            (MarketPrice[]) marketPriceList.toArray(marketPriceArray)
         );
     }
 
