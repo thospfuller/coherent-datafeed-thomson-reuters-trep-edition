@@ -77,8 +77,7 @@ public class MarketPriceServiceTest {
             requestMessageBuilderFactory,
             client,
             ricCache,
-            marketPriceCache,
-            new MarketPriceFactory()
+            marketPriceCache
         );
 
         handle = mock (Handle.class);
