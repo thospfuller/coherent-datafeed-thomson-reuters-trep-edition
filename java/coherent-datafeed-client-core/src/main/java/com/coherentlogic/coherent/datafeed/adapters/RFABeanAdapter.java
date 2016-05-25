@@ -189,6 +189,15 @@ public class RFABeanAdapter<T extends RFABean> {
         }
     }
 
+    T toRFABean (OMMFieldList fieldList) {
+
+        T target = rfaBeanFactory.getInstance();
+
+        toRFABean (fieldList, target);
+
+        return target;
+    }
+
     /**
      * Need to check the type -- if this is an OMMMap then handle it as a map
      * juxtaposed with an OMMFieldList.
