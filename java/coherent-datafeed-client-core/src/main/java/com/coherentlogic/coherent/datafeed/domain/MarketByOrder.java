@@ -67,7 +67,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=MARKET_BY_ORDER)
 @XStreamAlias(MARKET_BY_ORDER)
-public class MarketByOrder extends StatusResponseBean {
+public class MarketByOrder extends StatusResponseBean implements RICBeanSpecification {
 
     private static final long serialVersionUID = 1L;
 
@@ -90,6 +90,8 @@ public class MarketByOrder extends StatusResponseBean {
 //        TRD_STATUS = "TRD_STATUS",
 //        HALT_RSN = "HALT_RSN",
 //        ORDERS = "orders";
+
+    private String ric;
 
     /**
      * WARNING: COPY/PASTED FROM MARKETPRICE SIMPLY TO TEST THIS, SO I'M NOT
@@ -180,7 +182,16 @@ public class MarketByOrder extends StatusResponseBean {
     public MarketByOrder(Map<String, Order> orders) {
         this.orders = orders;
     }
-    
+
+    @Override
+    public String getRic() {
+        return ric;
+    }
+
+    public void setRic(String ric) {
+        this.ric = ric;
+    }
+
     public BigInteger getPermission() {
         return permission;
     }
