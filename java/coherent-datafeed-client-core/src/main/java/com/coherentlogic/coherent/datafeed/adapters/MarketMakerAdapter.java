@@ -11,9 +11,10 @@ import org.slf4j.LoggerFactory;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
+import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
+import com.coherentlogic.coherent.datafeed.domain.OrderEvent;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
-import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.DeleteFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.UpdateFailedException;
 import com.reuters.rfa.dictionary.FieldDictionary;
@@ -35,14 +36,17 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
     private final MarketMakerAdapter.OrderAdapter orderAdapter;
 
+    private final TypedFactory<MarketMaker.Order> orderFactory;
+
     public MarketMakerAdapter (
         TypedFactory<MarketMaker> marketMakerFactory,
         TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
-        MarketMakerAdapter.OrderAdapter orderAdapter)
-        throws SecurityException, NoSuchMethodException {
+        MarketMakerAdapter.OrderAdapter orderAdapter,
+        TypedFactory<MarketMaker.Order> orderFactory
+    ) throws SecurityException, NoSuchMethodException {
         this (
             marketMakerFactory,
             attribInfoFactory,
@@ -50,24 +54,25 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
             fieldEntryAdapters,
             new HashMap<String, Method> (),
             MarketMaker.class,
-            orderAdapter
+            orderAdapter,
+            orderFactory
         );
         
     }
 
     public MarketMakerAdapter (
-        TypedFactory<MarketMaker> marketByOrderFactory,
+        TypedFactory<MarketMaker> marketMakerFactory,
         TypedFactory<AttribInfo> attribInfoFactory,
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
         OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
         Map<String, Method> methodMap,
         Class<? extends RFABean> rfaBeanClass,
-        MarketMakerAdapter.OrderAdapter orderAdapter)
-        throws SecurityException, NoSuchMethodException {
-
+        MarketMakerAdapter.OrderAdapter orderAdapter,
+        TypedFactory<MarketMaker.Order> orderFactory
+    ) throws SecurityException, NoSuchMethodException {
         super (
-            marketByOrderFactory,
+            marketMakerFactory,
             attribInfoFactory,
             fieldDictionary,
             fieldEntryAdapters,
@@ -75,6 +80,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
         );
 
         this.orderAdapter = orderAdapter;
+        this.orderFactory = orderFactory;
     }
 
     /**
@@ -149,18 +155,25 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
         MarketMaker.Order order = orders.get(key);
 
         if (order != null) {
-            throw new AddFailedException("An order already exists under the " +
-                "key: " + key + " (order: " + order + ").");
+            // Not sure if we should throw new AddFailedException exception but adding an order when one already exists
+            // seems wrong -- this is possibly a replace?
+            log.warn("An order already exists under the key: " + key + " (order: " + order + ") -- will treat this "
+                + "as an update (need to ask TR about this because we've not seen this behavior before).");
+            updateOrder (marketMaker, key, mapEntry);
+        } else {
+
+            order = orderFactory.getInstance();
+
+            marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.instantiated));
+
+            OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
+
+            orderAdapter.toRFABean(fieldList, order);
+
+            marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.added));
+
+            orders.put(key, order);
         }
-
-        order = new MarketMaker.Order ();
-
-        OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
-
-        orderAdapter.toRFABean(fieldList, order);
-
-        orders.put(key,  order);
-
         log.info("addOrder: method ends; order: " + order);
     }
 
@@ -172,6 +185,8 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
          Map<String, MarketMaker.Order> orders = marketMaker.getOrders();
 
          MarketMaker.Order order = orders.remove(key);
+
+         marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.deleted));
 
          if (order == null) {
              throw new DeleteFailedException("An order did not already exist " +
@@ -190,12 +205,14 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
         MarketMaker.Order order = orders.get(key);
 
         if (order == null) {
-            throw new UpdateFailedException("An order did not already exist under the key" + key + ".");
+            throw new UpdateFailedException("An order did not already exist under the key: " + key + ".");
         }
 
         OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
 
         orderAdapter.toRFABean(fieldList, order);
+
+        marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.updated));
 
         log.info("updateOrder: method ends; order: " + order);
     }
