@@ -30,7 +30,7 @@ import com.reuters.rfa.common.Handle;
  * @TODO: Consider adding StatusResponseEventListener capabilities.
  */
 public class RFABean extends SerializableBean
-    implements IdentitySpecification<Integer> {
+    implements IdentitySpecification<Integer>, Clearable {
 
     private static final long serialVersionUID = 7776545263194460567L;
 
@@ -165,6 +165,15 @@ public class RFABean extends SerializableBean
     }
 
     @Override
+	public void clear() {
+//        timestamp = null;
+//        id = null;
+//        uniqueId = null;
+        attribInfo.clear ();
+        //handle = null;
+	}
+
+	@Override
     public String toString() {
         return "RFABean [timestamp=" + timestamp + ", id=" + id + ", uniqueId=" + uniqueId + ", attribInfo="
             + attribInfo + ", handle=" + handle + "]";
