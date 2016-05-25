@@ -124,7 +124,7 @@
         <int:method name="query"
          request-channel="queryMarketPriceUpdatesChannel"
          reply-channel="queryMarketPriceUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketPriceQueryParameters (#args[0], #args[1], #args[2])"/>
     </int:gateway>
 
     <int:channel id="queryMarketPriceUpdatesChannel"/>
@@ -132,7 +132,8 @@
 
     <bean id="queryMarketPriceUpdatesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketPriceMessageProcessor">
-        <constructor-arg name="marketPriceService" ref="marketPriceService"/>
+        <constructor-arg name="queryableService" ref="marketPriceService"/>
+        <constructor-arg name="objectCache" ref="marketPriceCache"/>
     </bean>
 
     <int:service-activator
@@ -148,7 +149,7 @@
         <int:method name="query"
          request-channel="queryMarketMakerUpdatesChannel"
          reply-channel="queryMarketMakerUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketMakerQueryParameters (#args[0], #args[1], #args[2])"/>
     </int:gateway>
 
     <int:channel id="queryMarketMakerUpdatesChannel"/>
@@ -156,7 +157,8 @@
 
     <bean id="queryMarketMakerUpdatesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketMakerMessageProcessor">
-        <constructor-arg name="marketMakerService" ref="marketMakerService"/>
+        <constructor-arg name="queryableService" ref="marketMakerService"/>
+        <constructor-arg name="objectCache" ref="marketMakerCache"/>
     </bean>
 
     <int:service-activator
@@ -172,7 +174,7 @@
         <int:method name="query"
          request-channel="queryMarketByOrderUpdatesChannel"
          reply-channel="queryMarketByOrderUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.QueryParameters (#args[0], #args[1], #args[2])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketByOrderQueryParameters (#args[0], #args[1], #args[2])"/>
     </int:gateway>
 
     <int:channel id="queryMarketByOrderUpdatesChannel"/>
@@ -180,7 +182,8 @@
 
     <bean id="queryMarketByOrderUpdatesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketByOrderMessageProcessor">
-        <constructor-arg name="marketByOrderService" ref="marketByOrderService"/>
+        <constructor-arg name="queryableService" ref="marketByOrderService"/>
+        <constructor-arg name="objectCache" ref="marketByOrderCache"/>
     </bean>
 
     <int:service-activator
