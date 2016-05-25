@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class AttribInfo extends SerializableBean implements IdentitySpecification<Integer> {
+public class AttribInfo extends SerializableBean implements IdentitySpecification<Integer>, Clearable {
 
 //    ServiceName: dELEKTRON_DD
 //    ServiceId: 8008
@@ -133,6 +133,17 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
     }
 
     @Override
+	public void clear() {
+        // id = null;
+        filter = null;
+        serviceName = null;
+        name = null;
+        serviceId = null;
+        nameType = null;
+        elements.clear();
+	}
+
+	@Override
     public String toString() {
         return "AttribInfo [id=" + id + ", filter=" + filter + ", serviceName=" + serviceName + ", name=" + name
                 + ", serviceId=" + serviceId + ", nameType=" + nameType + ", elements=" + elements + "]";
