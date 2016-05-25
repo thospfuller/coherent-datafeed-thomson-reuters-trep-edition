@@ -81,11 +81,11 @@ public class ClientTest {
         List<String> marketPrices =
             new ArrayList<String> ();
 
-        Map<String, MarketPrice> result = marketPriceService.query(
-            ServiceName.dELEKTRON_DD,
-            loginHandle,
-            DEFAULT_RICS
-        );
+//        Map<String, MarketPrice> result = marketPriceService.query(
+//            ServiceName.dELEKTRON_DD,
+//            loginHandle,
+//            DEFAULT_RICS
+//        );
 
         assertEquals (DEFAULT_SIZE, marketPrices.size());
     }
@@ -105,7 +105,7 @@ public class ClientTest {
     public void getMarketPricesForInvalidRICS()
         throws InterruptedException {
 
-        Map<String, MarketPrice> result = marketPriceService.query(ServiceName.dELEKTRON_DD, loginHandle, "foo.bar");
+//        Map<String, MarketPrice> result = marketPriceService.query(ServiceName.dELEKTRON_DD, loginHandle, "foo.bar");
         // Note that if this test just ends here that RFA will still try to send
         // events to be processed -- in particular status events, since the ric
         // provided here is invalid.
