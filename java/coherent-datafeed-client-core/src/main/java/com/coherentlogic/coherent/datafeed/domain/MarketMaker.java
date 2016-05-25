@@ -3,7 +3,9 @@ package com.coherentlogic.coherent.datafeed.domain;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_MAKER;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
@@ -26,8 +28,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=MARKET_MAKER)
 @XStreamAlias(MARKET_MAKER)
-public class MarketMaker extends AbstractAdvancedCommonProperties
-    implements MarketPriceConstants {
+public class MarketMaker extends AbstractAdvancedCommonProperties implements RICBeanSpecification,
+    MarketPriceConstants {
+
+    private String ric;
 
     @XStreamAlias(OFFCL_CODE)
     private String officialCode;
@@ -77,12 +81,24 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
     @XStreamAlias(ORDERS)
     private final Map<String, Order> orders;
 
+    private transient final List<OrderListener<MarketMaker.Order>> orderListeners;
+
     public MarketMaker () {
-        this (new HashMap<String, Order> ());
+        this (new HashMap<String, Order> (), new ArrayList<OrderListener<MarketMaker.Order>>());
     }
 
-    public MarketMaker (Map<String, Order> orders) {
+    public MarketMaker (Map<String, Order> orders, List<OrderListener<MarketMaker.Order>> orderListeners) {
         this.orders = orders;
+        this.orderListeners = orderListeners;
+    }
+
+    @Override
+    public String getRic() {
+        return ric;
+    }
+
+    public void setRic(String ric) {
+        this.ric = ric;
     }
 
     @UsingKey(type=MarketPriceConstants.OFFCL_CODE)
@@ -184,7 +200,6 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         this.financialStatusIndicator = financialStatusIndicator;
     }
 
-
     public String getMarketStatusIndicator() {
         return marketStatusIndicator;
     }
@@ -200,12 +215,38 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
     }
 
     @Override
+    public void clear() {
+        super.clear();
+        orders.clear ();
+    }
+
+    public List<OrderListener<MarketMaker.Order>> getOrderListeners() {
+        return orderListeners;
+    }
+
+    public void addOrderListener (OrderListener<MarketMaker.Order> orderListener) {
+        orderListeners.add(orderListener);
+    }
+
+    public boolean removeOrderListener (OrderListener<MarketMaker.Order> orderListener) {
+        return orderListeners.remove(orderListener);
+    }
+
+    public void fireOrderEvent (OrderEvent<MarketMaker.Order> orderEvent) {
+        orderListeners.forEach(
+            listener -> {
+                listener.onOrderEvent(orderEvent);
+            }
+        );
+    }
+
+    @Override
     public String toString() {
-        return "MarketMaker [officialCode=" + officialCode + ", nasdStatus=" + nasdStatus + ", lotSize=" + lotSize
-            + ", officialCodeIndicator=" + officialCodeIndicator + ", listingMarket=" + listingMarket
-            + ", instrumentClass=" + instrumentClass + ", periodCode=" + periodCode + ", financialStatusIndicator="
-            + financialStatusIndicator + ", marketStatusIndicator=" + marketStatusIndicator + ", orders=" + orders
-            + "]";
+        return "MarketMaker [ric=" + ric + ", officialCode=" + officialCode + ", nasdStatus=" + nasdStatus
+            + ", lotSize=" + lotSize + ", officialCodeIndicator=" + officialCodeIndicator + ", listingMarket="
+            + listingMarket + ", instrumentClass=" + instrumentClass + ", periodCode=" + periodCode
+            + ", financialStatusIndicator=" + financialStatusIndicator + ", marketStatusIndicator="
+            + marketStatusIndicator + ", orders=" + orders + "]";
     }
 
     /**
@@ -213,7 +254,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
      *
      * @author <a href="mailto:support@coherentlogic.com">Support</a>
      */
-    public static class Order extends RFABean {
+    public static class Order extends RFABean implements Clearable {
 
         @XStreamAlias(BID)
         private BigDecimal bid = null;
@@ -446,6 +487,25 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         @Adapt(using=OMMDateTimeAdapter.class)
         public void setPriortyDate(@Changeable(PRIORITY_DATE) Long priortyDate) {
             this.priortyDate = priortyDate;
+        }
+
+        @Override
+        public void clear() {
+            super.clear();
+            bid = null;
+            ask = null;
+            bidSize = null;
+            askSize = null;
+            marketMakerName = null;
+            marketMakerId = null;
+            askTimeMillis = null;
+            lastActivityTimeMillis = null;
+            bidTimeMillis = null;
+            primaryMarketMaker = null;
+            marketMakerMode = null;
+            marketMakerState = null;
+            priorityTimeMillis = null;
+            priortyDate = null;
         }
 
         @Override
