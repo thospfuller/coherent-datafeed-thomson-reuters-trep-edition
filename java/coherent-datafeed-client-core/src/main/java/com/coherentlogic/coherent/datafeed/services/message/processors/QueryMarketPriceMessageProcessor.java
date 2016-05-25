@@ -2,18 +2,8 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-
-import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.services.MarketPriceService;
-import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.reuters.rfa.common.Handle;
+import com.coherentlogic.coherent.datafeed.services.CacheableQueryableService;
 
 /**
  * Message processor implementation that delegates calls to the {@link
@@ -27,52 +17,73 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class QueryMarketPriceMessageProcessor
-    implements MessageProcessorSpecification <QueryParameters, Map<String, MarketPrice>> {
-
-    private static final Logger log = LoggerFactory.getLogger(QueryMarketPriceMessageProcessor.class);
-
-    private final MarketPriceService marketPriceService;
+public class QueryMarketPriceMessageProcessor extends AbstractQueryMessageProcessor<MarketPrice> {
+    //implements MessageProcessorSpecification <MarketPriceQueryParameters, Map<String, MarketPrice>> {
 
     public QueryMarketPriceMessageProcessor(
-        MarketPriceService marketPriceService
+        CacheableQueryableService<MarketPrice> queryableService,
+        Map<String, MarketPrice> objectCache
     ) {
-        this.marketPriceService = marketPriceService;
+        super(queryableService, objectCache);
     }
 
-    /**
-     * @todo Unit test this method.
-     */
-    @Override
-//    @Transactional
-    public Message<Map<String, MarketPrice>> process(Message<QueryParameters> message) {
-
-        Message<Map<String, MarketPrice>> result = null;
-
-        QueryParameters parameters = message.getPayload();
-
-        log.info("parameters: " + parameters);
-
-        String serviceName = parameters.getServiceName();
-
-        Handle loginHandle = parameters.getLoginHandle();
-
-        String[] items = parameters.getItem();
-
-        Map<String, MarketPrice> results = marketPriceService.query(
-            ServiceName.valueOf(serviceName),
-            loginHandle,
-            items
-        );
-
-        MessageHeaders headers = message.getHeaders();
-
-        result =
-            MessageBuilder
-                .withPayload(results)
-                .copyHeaders(headers)
-                .build();
-
-        return result;
-    }
+//    private static final Logger log = LoggerFactory.getLogger(QueryMarketPriceMessageProcessor.class);
+//
+//    private final MarketPriceService marketPriceService;
+//
+//    private final Map<String, MarketPrice> marketPriceCache;
+//
+//    public QueryMarketPriceMessageProcessor(
+//        MarketPriceService marketPriceService,
+//        Map<String, MarketPrice> marketPriceCache
+//    ) {
+//        this.marketPriceService = marketPriceService;
+//        this.marketPriceCache = marketPriceCache;
+//    }
+//
+//    /**
+//     * @todo Unit test this method.
+//     * @TODO Need to properly throw the exception from the assertNotNull (right now it ends up in the log file but it
+//     *  should be returned to the method caller. 
+//     */
+//    @Override
+//    public Message<Map<String, MarketPrice>> process(Message<MarketPriceQueryParameters> message) {
+//
+//        Message<Map<String, MarketPrice>> result = null;
+//
+//        MarketPriceQueryParameters parameters = message.getPayload();
+//
+//        log.info("parameters: " + parameters);
+//
+//        String serviceName = parameters.getServiceName();
+//
+//        Handle loginHandle = parameters.getLoginHandle();
+//
+//        MarketPrice[] items = parameters.getItem();
+//
+//        for (MarketPrice nextMarketPrice : items) {
+//
+//            String ric = nextMarketPrice.getRic();
+//
+//            assertNotNull ("ric", ric);
+//
+//            marketPriceCache.put(ric, nextMarketPrice);
+//
+//            marketPriceService.query(
+//                ServiceName.valueOf(serviceName),
+//                loginHandle,
+//                ric
+//            );
+//        }
+//
+//        MessageHeaders headers = message.getHeaders();
+//
+//        result =
+//            MessageBuilder
+//                .withPayload(marketPriceCache)
+//                .copyHeaders(headers)
+//                .build();
+//
+//        return result;
+//    }
 }

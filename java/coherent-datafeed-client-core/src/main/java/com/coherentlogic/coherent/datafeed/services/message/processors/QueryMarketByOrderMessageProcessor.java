@@ -2,18 +2,8 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-
-import com.coherentlogic.coherent.datafeed.beans.QueryParameters;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
-import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.reuters.rfa.common.Handle;
+import com.coherentlogic.coherent.datafeed.services.CacheableQueryableService;
 
 /**
  * Message processor implementation that delegates calls to the {@link
@@ -27,48 +17,60 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class QueryMarketByOrderMessageProcessor
-    implements MessageProcessorSpecification <QueryParameters, Map<String, MarketByOrder>> {
+public class QueryMarketByOrderMessageProcessor extends AbstractQueryMessageProcessor<MarketByOrder> {
 
-    private static final Logger log = LoggerFactory.getLogger(QueryMarketByOrderMessageProcessor.class);
-
-    private final MarketByOrderServiceSpecification marketByOrderService;
-
-    public QueryMarketByOrderMessageProcessor(MarketByOrderServiceSpecification marketByOrderService) {
-        this.marketByOrderService = marketByOrderService;
+    public QueryMarketByOrderMessageProcessor(
+        CacheableQueryableService<MarketByOrder> queryableService,
+        Map<String, MarketByOrder> objectCache
+    ) {
+        super(queryableService, objectCache);
     }
+    //implements MessageProcessorSpecification <QueryParameters, Map<String, MarketByOrder>> {
 
-    /**
-     * @todo Unit test this method.
-     */
-    @Override
-//    @Transactional
-    public Message<Map<String, MarketByOrder>> process(
-        Message<QueryParameters> message) {
-
-        Message<Map<String, MarketByOrder>> result = null;
-
-        QueryParameters parameters = message.getPayload();
-
-        log.info("parameters: " + parameters);
-
-        String serviceName = parameters.getServiceName();
-
-        Handle loginHandle = parameters.getLoginHandle();
-
-        String[] items = parameters.getItem();
-
-        Map<String, MarketByOrder> results = marketByOrderService.query(
-            ServiceName.valueOf(serviceName), loginHandle, items);
-
-        MessageHeaders headers = message.getHeaders();
-
-        result =
-            MessageBuilder
-                .withPayload(results)
-                .copyHeaders(headers)
-                .build();
-
-        return result;
-    }
+//    private static final Logger log = LoggerFactory.getLogger(QueryMarketByOrderMessageProcessor.class);
+//
+//    private final MarketByOrderServiceSpecification marketByOrderService;
+//
+//    private final Map<String, MarketByOrder> marketByOrderCache;
+//
+//    public QueryMarketByOrderMessageProcessor(
+//        MarketByOrderServiceSpecification marketByOrderService,
+//        Map<String, MarketByOrder> marketByOrderCache
+//    ) {
+//        this.marketByOrderService = marketByOrderService;
+//        this.marketByOrderCache = marketByOrderCache;
+//    }
+//
+//    /**
+//     * @todo Unit test this method.
+//     */
+//    @Override
+////    @Transactional
+//    public Message<Map<String, MarketByOrder>> process(
+//        Message<QueryParameters> message) {
+//
+//        Message<Map<String, MarketByOrder>> result = null;
+//
+//        QueryParameters parameters = message.getPayload();
+//
+//        log.info("parameters: " + parameters);
+//
+//        String serviceName = parameters.getServiceName();
+//
+//        Handle loginHandle = parameters.getLoginHandle();
+//
+//        String[] items = parameters.getItem();
+//
+//        marketByOrderService.query(ServiceName.valueOf(serviceName), loginHandle, items);
+//
+//        MessageHeaders headers = message.getHeaders();
+//
+//        result =
+//            MessageBuilder
+//                .withPayload(marketByOrderCache)
+//                .copyHeaders(headers)
+//                .build();
+//
+//        return result;
+//    }
 }
