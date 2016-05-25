@@ -31,9 +31,11 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @Entity
 @Table(name=MARKET_PRICE)
 @XStreamAlias(MARKET_PRICE)
-public class MarketPrice extends AbstractCommonProperties {
+public class MarketPrice extends AbstractCommonProperties implements RICBeanSpecification {
 
     private static final long serialVersionUID = -8330990635265356088L;
+
+    private String ric;
 
     /**
      * Display information for the IDN terminal device.
@@ -950,6 +952,15 @@ public class MarketPrice extends AbstractCommonProperties {
      */
     @XStreamAlias(MarketPriceConstants.SETTLE)
     private BigDecimal settlementPrice = null;
+
+    @Override
+    public String getRic() {
+        return ric;
+    }
+
+    public void setRic(String ric) {
+        this.ric = ric;
+    }
 
     /**
      * The date of the settlement price held in the SETTLE field.
