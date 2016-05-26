@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
+import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
+import com.coherentlogic.coherent.datafeed.domain.OrderEvent;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.AddFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.DeleteFailedException;
@@ -33,8 +35,7 @@ import com.reuters.rfa.omm.OMMMsg;
 public class MarketByOrderAdapter
     extends RFABeanAdapter<MarketByOrder> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(MarketByOrderAdapter.class);
+    private static final Logger log = LoggerFactory.getLogger(MarketByOrderAdapter.class);
 
     private final OrderAdapter orderAdapter;
 
@@ -107,8 +108,7 @@ public class MarketByOrderAdapter
     @Override
     public void adapt(OMMMsg ommMsg, MarketByOrder marketByOrder) {
 
-        log.info ("adapt: method begins; ommMsg: " + ommMsg +
-            ", marketByOrder: " + marketByOrder);
+        log.debug ("adapt: method begins; ommMsg: " + ommMsg + ", marketByOrder: " + marketByOrder);
 
         OMMData marketByOrderData = ommMsg.getPayload();
 
@@ -123,11 +123,11 @@ public class MarketByOrderAdapter
             toRFABean (attribInfo, marketByOrder);
         }
 
-        Iterator iterator = marketByOrderMap.iterator();
+        Iterator<OMMMapEntry> iterator = marketByOrderMap.iterator();
 
         while (iterator.hasNext()) {
 
-            OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
+            OMMMapEntry mapEntry = iterator.next();
 
             OMMData ommKey = (OMMData) mapEntry.getKey();
 
@@ -143,25 +143,24 @@ public class MarketByOrderAdapter
                 updateOrder (marketByOrder, key, mapEntry);
             }
         }
-        log.info ("adapt: method ends.");
+        log.debug ("adapt: method ends.");
     }
 
-    void addOrder (MarketByOrder marketByOrder, String key,
-        OMMMapEntry mapEntry) {
+    void addOrder (MarketByOrder marketByOrder, String key, OMMMapEntry mapEntry) {
 
-        log.info("addOrder: method begins; marketByOrder: " + marketByOrder +
-            ", key: " + key + ", mapEntry: " + mapEntry);
+        log.debug("addOrder: method begins; marketByOrder: " + marketByOrder + ", key: " + key + ", mapEntry: " +
+            mapEntry);
 
         Map<String, Order> orders = marketByOrder.getOrders();
 
         Order order = orders.get(key);
 
-        if (order != null) {
-            throw new AddFailedException("An order already exists under the " +
-                "key: " + key + " (order: " + order + ").");
-        }
+        if (order != null)
+            throw new AddFailedException("An order already exists under the key: " + key + " (order: " + order + ").");
 
         order = orderFactory.getInstance();
+
+        marketByOrder.fireOrderEvent(new OrderEvent<MarketByOrder.Order> (order, key, EventType.instantiated));
 
         OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
 
@@ -169,46 +168,47 @@ public class MarketByOrderAdapter
 
         orders.put(key,  order);
 
-        log.info("addOrder: method ends; order: " + order);
+        marketByOrder.fireOrderEvent(new OrderEvent<MarketByOrder.Order> (order, key, EventType.added));
+
+        log.debug("addOrder: method ends; order: " + order);
     }
 
-    void deleteOrder (MarketByOrder marketByOrder, String key,
-        OMMMapEntry mapEntry) {
+    void deleteOrder (MarketByOrder marketByOrder, String key, OMMMapEntry mapEntry) {
 
-        log.info("deleteOrder: method begins; marketByOrder: " + marketByOrder +
-            ", key: " + key + ", mapEntry: " + mapEntry);
+        log.debug("deleteOrder: method begins; marketByOrder: " + marketByOrder + ", key: " + key + ", mapEntry: " +
+            mapEntry);
 
          Map<String, Order> orders = marketByOrder.getOrders();
 
          Order order = orders.remove(key);
 
+         marketByOrder.fireOrderEvent(new OrderEvent<MarketByOrder.Order> (order, key, EventType.deleted));
+
          if (order == null) {
-             throw new DeleteFailedException("An order did not already exist " +
-                 "under the key: " + key + ".");
+             throw new DeleteFailedException("An order did not already exist under the key: " + key + ".");
          }
-         log.info("deleteOrder: method ends; order: " + order);
+         log.debug("deleteOrder: method ends; order: " + order);
     }
 
-    void updateOrder (MarketByOrder marketByOrder, String key,
-        OMMMapEntry mapEntry) {
+    void updateOrder (MarketByOrder marketByOrder, String key, OMMMapEntry mapEntry) {
 
-        log.info("updateOrder: method begins; marketByOrder: " + marketByOrder +
-            ", key: " + key + ", mapEntry: " + mapEntry);
+        log.debug("updateOrder: method begins; marketByOrder: " + marketByOrder + ", key: " + key + ", mapEntry: " +
+            mapEntry);
 
         Map<String, Order> orders = marketByOrder.getOrders();
 
         Order order = orders.get(key);
 
-        if (order == null) {
-            throw new UpdateFailedException("An order did not already exist " +
-                "under the key" + key + ".");
-        }
+        if (order == null)
+            throw new UpdateFailedException("An order did not already exist under the key: " + key + ".");
 
         OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
 
         orderAdapter.toRFABean(fieldList, order);
 
-        log.info("updateOrder: method ends; order: " + order);
+        marketByOrder.fireOrderEvent(new OrderEvent<MarketByOrder.Order> (order, key, EventType.updated));
+
+        log.debug("updateOrder: method ends; order: " + order);
     }
 
     /**
@@ -220,8 +220,7 @@ public class MarketByOrderAdapter
     public static class OrderAdapter
         extends RFABeanAdapter<Order> {
 
-        private static final Logger log =
-            LoggerFactory.getLogger(OrderAdapter.class);
+        private static final Logger log = LoggerFactory.getLogger(OrderAdapter.class);
 
         public OrderAdapter (
             TypedFactory<Order> orderFactory,

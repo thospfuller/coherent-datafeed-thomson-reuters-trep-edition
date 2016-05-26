@@ -101,7 +101,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
     @Override
     public void adapt(OMMMsg ommMsg, MarketMaker marketMaker) {
 
-        log.info ("adapt: method begins; ommMsg: " + ommMsg + ", marketMaker: " + marketMaker);
+        log.debug ("adapt: method begins; ommMsg: " + ommMsg + ", marketMaker: " + marketMaker);
 
         OMMData marketMakerData = ommMsg.getPayload();
 
@@ -111,11 +111,11 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
             toRFABean(marketMakerMap, marketMaker);
 
-            Iterator iterator = marketMakerMap.iterator();
+            Iterator<OMMMapEntry> iterator = marketMakerMap.iterator();
 
             while (iterator.hasNext()) {
 
-                OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
+                OMMMapEntry mapEntry = iterator.next();
 
                 OMMData ommKey = (OMMData) mapEntry.getKey();
 
@@ -142,13 +142,12 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
             toRFABean (attribInfo, marketMaker);
         }
 
-        log.info ("adapt: method ends.");
+        log.debug ("adapt: method ends.");
     }
 
     void addOrder (MarketMaker marketMaker, String key, OMMMapEntry mapEntry) {
 
-        log.info("addOrder: method begins; marketMaker: " + marketMaker + ", key: " + key +
-            ", mapEntry: " + mapEntry);
+        log.debug("addOrder: method begins; marketMaker: " + marketMaker + ", key: " + key + ", mapEntry: " + mapEntry);
 
         Map<String, MarketMaker.Order> orders = marketMaker.getOrders();
 
@@ -170,17 +169,17 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
             orderAdapter.toRFABean(fieldList, order);
 
-            marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.added));
-
             orders.put(key, order);
+
+            marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.added));
         }
-        log.info("addOrder: method ends; order: " + order);
+        log.debug("addOrder: method ends; order: " + order);
     }
 
     void deleteOrder (MarketMaker marketMaker, String key, OMMMapEntry mapEntry) {
 
-        log.info("deleteOrder: method begins; marketMaker: " + marketMaker + ", key: " + key +
-            ", mapEntry: " + mapEntry);
+        log.debug("deleteOrder: method begins; marketMaker: " + marketMaker + ", key: " + key + ", mapEntry: " +
+            mapEntry);
 
          Map<String, MarketMaker.Order> orders = marketMaker.getOrders();
 
@@ -188,25 +187,23 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
          marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.deleted));
 
-         if (order == null) {
-             throw new DeleteFailedException("An order did not already exist " +
-                 "under the key: " + key + ".");
-         }
-         log.info("deleteOrder: method ends; order: " + order);
+         if (order == null)
+             throw new DeleteFailedException("An order did not already exist under the key: " + key + ".");
+
+         log.debug("deleteOrder: method ends; order: " + order);
     }
 
     void updateOrder (MarketMaker marketMaker, String key, OMMMapEntry mapEntry) {
 
-        log.info("updateOrder: method begins; marketMaker: " + marketMaker + ", key: " + key +
-            ", mapEntry: " + mapEntry);
+        log.debug("updateOrder: method begins; marketMaker: " + marketMaker + ", key: " + key + ", mapEntry: " +
+            mapEntry);
 
         Map<String, MarketMaker.Order> orders = marketMaker.getOrders();
 
         MarketMaker.Order order = orders.get(key);
 
-        if (order == null) {
+        if (order == null)
             throw new UpdateFailedException("An order did not already exist under the key: " + key + ".");
-        }
 
         OMMFieldList fieldList = (OMMFieldList) mapEntry.getData();
 
@@ -214,7 +211,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         marketMaker.fireOrderEvent(new OrderEvent<MarketMaker.Order> (order, key, EventType.updated));
 
-        log.info("updateOrder: method ends; order: " + order);
+        log.debug("updateOrder: method ends; order: " + order);
     }
 
     /**
