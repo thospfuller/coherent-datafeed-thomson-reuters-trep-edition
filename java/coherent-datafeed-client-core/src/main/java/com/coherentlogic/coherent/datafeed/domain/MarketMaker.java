@@ -28,8 +28,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=MARKET_MAKER)
 @XStreamAlias(MARKET_MAKER)
-public class MarketMaker extends AbstractAdvancedCommonProperties implements RICBeanSpecification,
-    MarketPriceConstants {
+public class MarketMaker extends AbstractAdvancedCommonProperties
+    implements RICBeanSpecification, OrderEventGenerator<MarketMaker.Order>, MarketPriceConstants {
 
     private String ric;
 
@@ -81,13 +81,13 @@ public class MarketMaker extends AbstractAdvancedCommonProperties implements RIC
     @XStreamAlias(ORDERS)
     private final Map<String, Order> orders;
 
-    private transient final List<OrderListener<MarketMaker.Order>> orderListeners;
+    private transient final List<OrderEventListener<MarketMaker.Order>> orderListeners;
 
     public MarketMaker () {
-        this (new HashMap<String, Order> (), new ArrayList<OrderListener<MarketMaker.Order>>());
+        this (new HashMap<String, Order> (), new ArrayList<OrderEventListener<MarketMaker.Order>>());
     }
 
-    public MarketMaker (Map<String, Order> orders, List<OrderListener<MarketMaker.Order>> orderListeners) {
+    public MarketMaker (Map<String, Order> orders, List<OrderEventListener<MarketMaker.Order>> orderListeners) {
         this.orders = orders;
         this.orderListeners = orderListeners;
     }
@@ -220,15 +220,15 @@ public class MarketMaker extends AbstractAdvancedCommonProperties implements RIC
         orders.clear ();
     }
 
-    public List<OrderListener<MarketMaker.Order>> getOrderListeners() {
+    public List<OrderEventListener<MarketMaker.Order>> getOrderEventListeners() {
         return orderListeners;
     }
 
-    public void addOrderListener (OrderListener<MarketMaker.Order> orderListener) {
+    public void addOrderEventListener (OrderEventListener<MarketMaker.Order> orderListener) {
         orderListeners.add(orderListener);
     }
 
-    public boolean removeOrderListener (OrderListener<MarketMaker.Order> orderListener) {
+    public boolean removeOrderEventListener (OrderEventListener<MarketMaker.Order> orderListener) {
         return orderListeners.remove(orderListener);
     }
 
@@ -246,7 +246,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties implements RIC
             + ", lotSize=" + lotSize + ", officialCodeIndicator=" + officialCodeIndicator + ", listingMarket="
             + listingMarket + ", instrumentClass=" + instrumentClass + ", periodCode=" + periodCode
             + ", financialStatusIndicator=" + financialStatusIndicator + ", marketStatusIndicator="
-            + marketStatusIndicator + ", orders=" + orders + "]";
+            + marketStatusIndicator + ", orders=" + orders + ", orderListeners=" + orderListeners + "]";
     }
 
     /**
