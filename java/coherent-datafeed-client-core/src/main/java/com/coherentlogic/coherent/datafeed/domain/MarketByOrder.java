@@ -4,7 +4,9 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -67,7 +70,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Entity
 @Table(name=MARKET_BY_ORDER)
 @XStreamAlias(MARKET_BY_ORDER)
-public class MarketByOrder extends StatusResponseBean implements RICBeanSpecification {
+public class MarketByOrder extends StatusResponseBean
+    implements RICBeanSpecification, OrderEventGenerator<MarketByOrder.Order> {
 
     private static final long serialVersionUID = 1L;
 
@@ -175,12 +179,15 @@ public class MarketByOrder extends StatusResponseBean implements RICBeanSpecific
     // Probably RMTES_STRING -- same as orderId so probably not needed.
     // private String key;
 
+    private transient final List<OrderEventListener<MarketByOrder.Order>> orderListeners;
+
     public MarketByOrder() {
-        this (new HashMap<String, Order> ());
+        this (new HashMap<String, Order> (), new ArrayList<OrderEventListener<MarketByOrder.Order>> ());
     }
 
-    public MarketByOrder(Map<String, Order> orders) {
+    public MarketByOrder(Map<String, Order> orders, List<OrderEventListener<MarketByOrder.Order>> orderListeners) {
         this.orders = orders;
+        this.orderListeners = orderListeners;
     }
 
     @Override
@@ -340,12 +347,13 @@ public class MarketByOrder extends StatusResponseBean implements RICBeanSpecific
         return elektronDataSourceOwnerId;
     }
 
-    public static final String DATA_SOURCE_OWNER_ID = "dataSourceOwnerId";
+    public static final String ELEKTRON_DATA_SOURCE_OWNER_ID = "elektronDataSourceOwnerId";
 
     @RFAType(type=MarketPriceConstants.DDS_DSO_ID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setElektronDataSourceOwnerId(@Changeable(DATA_SOURCE_OWNER_ID) Integer dataSourceOwnerId) {
-        this.elektronDataSourceOwnerId = dataSourceOwnerId;
+    public void setElektronDataSourceOwnerId(@Changeable(ELEKTRON_DATA_SOURCE_OWNER_ID)
+        Integer elektronDataSourceOwnerId) {
+        this.elektronDataSourceOwnerId = elektronDataSourceOwnerId;
     }
 
     @UsingKey(type=MarketPriceConstants.RDN_EXCHD2)
@@ -432,15 +440,39 @@ public class MarketByOrder extends StatusResponseBean implements RICBeanSpecific
     }
 
     @Override
+    public List<OrderEventListener<Order>> getOrderEventListeners() {
+        return orderListeners;
+    }
+
+    @Override
+    public void addOrderEventListener(OrderEventListener<Order> orderListener) {
+        orderListeners.add(orderListener);
+    }
+
+    @Override
+    public boolean removeOrderEventListener(OrderEventListener<Order> orderListener) {
+        return orderListeners.remove(orderListener);
+    }
+
+    @Override
+    public void fireOrderEvent(OrderEvent<Order> orderEvent) {
+        orderListeners.forEach(
+            listener -> {
+                listener.onOrderEvent(orderEvent);
+            }
+        );
+    }
+
+    @Override
     public String toString() {
-        return "MarketByOrder [permission=" + permission + ", displayName=" + displayName + ", tradingUnits="
-            + tradingUnits + ", recordType=" + recordType + ", currency=" + currency + ", exchangeId2="
-            + exchangeId2 + ", providerSymbol=" + providerSymbol + ", exchangeId=" + exchangeId
+        return "MarketByOrder [ric=" + ric + ", permission=" + permission + ", displayName=" + displayName
+            + ", tradingUnits=" + tradingUnits + ", recordType=" + recordType + ", currency=" + currency
+            + ", exchangeId2=" + exchangeId2 + ", providerSymbol=" + providerSymbol + ", exchangeId=" + exchangeId
             + ", lastActivityTimeMillis=" + lastActivityTimeMillis + ", contextId=" + contextId
             + ", elektronDataSourceOwnerId=" + elektronDataSourceOwnerId + ", spsSubProviderLevelRic="
             + spsSubProviderLevelRic + ", orderBookState=" + orderBookState + ", haltReason=" + haltReason
             + ", tradingStatus=" + tradingStatus + ", haltReasonCode=" + haltReasonCode + ", orders=" + orders
-            + "]";
+            + ", orderListeners=" + orderListeners + "]";
     }
 
     /**
