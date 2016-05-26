@@ -221,6 +221,25 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
                 }
             );
 
+            marketByOrder.addOrderEventListener(
+                orderEvent -> {
+
+                    if (orderEvent.getEventType() == EventType.instantiated) {
+                        orderEvent
+                        .getOrder()
+                        .addPropertyChangeListener(
+                            event -> {
+
+                                long currentCtr = ctr.incrementAndGet();
+
+                                System.out.println ("[mbo.ric: "+ nextRic +"]; mbo.order updated[" + currentCtr +
+                                    "]; event: " + event);
+                            }
+                        );
+                    }
+                }
+            );
+
             marketByOrderList.add(marketByOrder);
         }
 
@@ -277,7 +296,7 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
                 }
             );
 
-            marketMaker.addOrderListener(
+            marketMaker.addOrderEventListener(
                 orderEvent -> {
                     if (orderEvent.getEventType() == EventType.instantiated) {
                         orderEvent
@@ -336,20 +355,21 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
                     long currentCtr = ctr.incrementAndGet();
 
-                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " + event);
+                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
+                        event);
                 }
             );
 
             marketPrice.addPropertyChangeListener(
                 event -> {
 
-                long currentCtr = ctr.incrementAndGet();
+                    long currentCtr = ctr.incrementAndGet();
 
-                MarketPrice result = (MarketPrice) event.getSource ();
+                    MarketPrice result = (MarketPrice) event.getSource ();
 
-                if (currentCtr % 1000 == 0)
-                    System.out.println ("[ric: "+ nextRic +"]; nextMarketPriceUpdate[" + currentCtr + "]." +
-                        "event: " + event);
+                    if (currentCtr % 1000 == 0)
+                        System.out.println ("[ric: "+ nextRic +"]; nextMarketPriceUpdate[" + currentCtr + "]." +
+                            "event: " + event);
                 }
             );
 
