@@ -11,7 +11,7 @@
 
     <groupId>com.coherentlogic.coherent.datafeed</groupId>
     <artifactId>client</artifactId>
-    <version>1.0.5-RELEASE</version>
+    <version>1.0.6-RELEASE</version>
     <packaging>pom</packaging>
     <name>Coherent Datafeed Client</name>
     <description>Java client for accessing market data via Thomson Reuters Realtime Enterprise Platform (TREP).</description>
@@ -119,7 +119,7 @@
         <module>coherent-datafeed-misc</module>
         <module>coherent-datafeed-client-example</module>
         <!-- Connection to TREP required to run tests in core-it. -->
-        <module>coherent-datafeed-client-core-it</module>
+        <!-- module>coherent-datafeed-client-core-it</module -->
         <!-- module>coherent-datafeed-db-int</module>
         <module>coherent-datafeed-jms-int</module>
         <module>coherent-datafeed-flink-int</module>
