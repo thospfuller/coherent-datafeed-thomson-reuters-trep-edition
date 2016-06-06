@@ -8,10 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.datafeed.annotations.DoNotAnalyze;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 /**
  * A factory class that creates iterates over the setter methods of an
@@ -29,8 +31,7 @@ import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeExceptio
  */
 public class MethodMapFactory implements TypedFactory<Map<String, Method>> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(MethodMapFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodMapFactory.class);
 
     private final Class<RFABean> targetClass;
 
@@ -63,33 +64,36 @@ public class MethodMapFactory implements TypedFactory<Map<String, Method>> {
      *  constant RFA dictionary values and the values will be methods that the
      *  key is associated with.
      */
-    public static void analyze (Class<? extends RFABean> type,
-        Map<String, Method> methodMap) {
+    public static void analyze (Class<? extends RFABean> type, Map<String, Method> methodMap) {
 
-        if (type == null)
-            throw new NullPointerRuntimeException("The type is null.");
+        if (type != null && type.isAnnotationPresent(DoNotAnalyze.class)) {
 
-        if (methodMap == null)
-            throw new NullPointerRuntimeException("The methodMap is null.");
+            log.debug("The type " + type + " is marked as " + DoNotAnalyze.class + " so the analysis for this bean " +
+                "will be skipped.");
+
+            return;
+        }
+
+        assertNotNull ("type", type);
+        assertNotNull ("methodMap", methodMap);
 
         Method[] methods = type.getMethods();
 
         for (Method method : methods) {
             if (method.isAnnotationPresent(RFAType.class)) {
+
                 RFAType rfaType = method.getAnnotation(RFAType.class);
 
                 String key = rfaType.type();
 
-                log.debug("Putting the following key: " + key +
-                    ", method: " + method);
+                log.debug("Putting the following key: " + key + ", method: " + method);
 
                 methodMap.put(key, method);
             }
         }
 
         if (methodMap.isEmpty())
-            throw new MissingDataException("No annotation on the type " + type +
-                " were found.");
+            throw new MissingDataException("No annotation on the type " + type + " were found.");
     }
 
     /**
@@ -101,8 +105,7 @@ public class MethodMapFactory implements TypedFactory<Map<String, Method>> {
      * @return An instance of {@link java.util.Map} with populated with the
      *  key/value (String/method) pairs.
      */
-    public static Map<String, Method> analyze (
-        Class<? extends RFABean> type) {
+    public static Map<String, Method> analyze (Class<? extends RFABean> type) {
 
         Map<String, Method> methodMap = new HashMap<String, Method>();
 
