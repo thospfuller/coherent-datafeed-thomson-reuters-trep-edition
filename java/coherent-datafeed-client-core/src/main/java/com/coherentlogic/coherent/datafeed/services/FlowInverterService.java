@@ -9,13 +9,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.coherentlogic.coherent.datafeed.exceptions.TimeoutExpiredException;
 
 /**
- * A class that can be used to pause a workflow until something happens, at
- * which point the resume method sends a signal to waiting threads, allowing
- * them to continue with their task.
+ * A class that can be used to pause a workflow until something happens, at which point the resume method sends a signal
+ * to waiting threads, allowing them to continue with their task.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class PauseResumeService {
+public class FlowInverterService {
 
     private final Lock lock = new ReentrantLock ();
 
@@ -38,11 +37,11 @@ public class PauseResumeService {
     /**
      * A default ctor that sets the timeout to 2 minutes.
      */
-    public PauseResumeService () {
+    public FlowInverterService () {
         this (5L, TimeUnit.MINUTES, false, false);
     }
 
-    public PauseResumeService (
+    public FlowInverterService (
         long time,
         TimeUnit timeUnit,
         boolean hasCompleted,
@@ -54,7 +53,7 @@ public class PauseResumeService {
         this.successFlag = new AtomicBoolean (successFlag);
     }
 
-    public PauseResumeService (
+    public FlowInverterService (
         long time,
         TimeUnit timeUnit,
         AtomicBoolean hasCompleted,
