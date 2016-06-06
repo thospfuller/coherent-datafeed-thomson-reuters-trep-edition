@@ -10,8 +10,11 @@ import org.springframework.integration.support.management.TrackableComponent;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Event;
+
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
 /**
  * An endpoint which receives messages from an RFA client, converts them to
@@ -70,8 +73,11 @@ public class EventDrivenEndpoint extends AbstractEndpoint
         log.debug("Received event number " + eventCounter.addAndGet(ONE) + " at time " + System.currentTimeMillis() +
             "; event: " + event);
 
+        SessionBean sessionBean = (SessionBean) event.getClosure();
+
         Message<Event> message = MessageBuilder
             .withPayload(event)
+            .setHeader(SESSION, sessionBean)
             .build();
 
         try {
