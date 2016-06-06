@@ -5,10 +5,17 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -21,22 +28,28 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.Sample;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
+import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
-import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
+import com.coherentlogic.coherent.datafeed.misc.Constants;
+import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceGatewaySpecification;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceGatewaySpecification;
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
+import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.reuters.rfa.common.Handle;
+import com.reuters.ts1.TS1Constants;
 
 /**
  * An example application that authenticates, executes a query, and gets the
@@ -62,7 +75,7 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
     private static final Logger log =
         LoggerFactory.getLogger(ExampleApplication.class);
 
-    private final PauseResumeService pauseResumeService = new PauseResumeService ();
+    private final FlowInverterService flowInverterService = new FlowInverterService ();
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -70,27 +83,21 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
     public ExampleApplication () {
     }
 
-//    public ExampleApplication (ApplicationContext applicationContext) {
-//        this.applicationContext = applicationContext;
-//    }
-
-//    public static void main (String[] unused) throws Exception {
-//
-//        ApplicationContext context = new ClassPathXmlApplicationContext(
-//            "classpath*:spring/application-context.xml", "classpath*:spring/cache-beans.xml");
-//
-//        new ExampleApplication (context).run(unused);
-//    }
-
     public static void main (String[] unused) throws InterruptedException {
 
-        SpringApplicationBuilder builder = new SpringApplicationBuilder (ExampleApplication.class);
+        try {
 
-        builder
-            .web(false)
-            .headless(false)
-            .registerShutdownHook(true)
-            .run(unused);
+            SpringApplicationBuilder builder = new SpringApplicationBuilder (ExampleApplication.class);
+
+            builder
+                .web(false)
+                .headless(false)
+                .registerShutdownHook(true)
+                .run(unused);
+
+        } catch (Throwable thrown) {
+            log.error("ExampleApplication.main caught an exception.", thrown);
+        }
 
         Thread.sleep(Long.MAX_VALUE);
 
@@ -100,12 +107,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
     @Override
     public void run(String... args) throws Exception {
 
-        final StatusResponseServiceSpecification statusResponseService =
-            (StatusResponseServiceSpecification) applicationContext.
-                getBean(STATUS_RESPONSE_SERVICE_GATEWAY);
-
-        final AuthenticationServiceSpecification authenticationService =
-            (AuthenticationServiceSpecification) applicationContext.getBean(
+        final AuthenticationServiceGatewaySpecification authenticationServiceGateway =
+            (AuthenticationServiceGatewaySpecification) applicationContext.getBean(
                 AUTHENTICATION_ENTRY_POINT);
 
         final FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter =
@@ -121,12 +124,15 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         final MarketMakerServiceGatewaySpecification marketMakerService =
             applicationContext.getBean(MarketMakerServiceGatewaySpecification.class);
 
+        final TimeSeriesGatewaySpecification timeSeriesService =
+            applicationContext.getBean(TimeSeriesGatewaySpecification.class);
+
         frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
             Arrays.asList(
                 new FrameworkEventListener() {
                     @Override
-                    public void onEventReceived(Session session) {
-                        pauseResumeService.resume(true);
+                    public void onEventReceived(SessionBean session) {
+                        flowInverterService.resume(true);
                     }
                 }
             )
@@ -136,8 +142,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
             Arrays.asList(
                 new FrameworkEventListener () {
                     @Override
-                    public void onEventReceived(Session session) {
-                        pauseResumeService.resume(false);
+                    public void onEventReceived(SessionBean session) {
+                        flowInverterService.resume(false);
                     }
                 }
             )
@@ -145,28 +151,48 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         String dacsId = System.getenv(DACS_ID);
 
-        Handle loginHandle = authenticationService.login(dacsId);
+        SessionBean sessionBean = applicationContext.getBean(SessionBean.class);
 
-        boolean result = pauseResumeService.pause();
+        sessionBean.setDacsId(dacsId);
+
+        StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
+
+        statusResponse.addPropertyChangeListener(
+            event -> {
+                System.out.println("event: " + event);
+            }
+        );
+
+        sessionBean.setStatusResponse(statusResponse);
+
+        Handle loginHandle = authenticationServiceGateway.login(sessionBean);
+
+        sessionBean.setHandle(loginHandle);
+
+        boolean result = flowInverterService.pause();
 
         log.info("result: " + result);
 
+        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "TRI.N");
+        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "MSFT.O");
+        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "BFb.N");
+
         queryMarketMakerService (
-            statusResponseService,
             marketMakerService,
-            loginHandle
+            loginHandle,
+            sessionBean
         );
 
         queryMarketPriceService (
-            statusResponseService,
             marketPriceService,
-            loginHandle
+            loginHandle,
+            sessionBean
         );
 
         queryMarketByOrderService (
-            statusResponseService,
             marketByOrderService,
-            loginHandle
+            loginHandle,
+            sessionBean
         );
 
         log.info("...done!");
@@ -177,10 +203,84 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         //       login.
     }
 
+//  public ExampleApplication (ApplicationContext applicationContext) {
+//  this.applicationContext = applicationContext;
+//}
+
+//public static void main (String[] unused) throws Exception {
+//
+//  ApplicationContext context = new ClassPathXmlApplicationContext(
+//      "classpath*:spring/application-context.xml", "classpath*:spring/cache-beans.xml");
+//
+//  new ExampleApplication (context).run(unused);
+//}
+
+    public void queryTimeSeriesService (
+        final TimeSeriesGatewaySpecification timeSeriesService,
+        final Handle loginHandle,
+        SessionBean sessionBean,
+        String ric
+    ) throws InterruptedException, ExecutionException, TimeoutException {
+
+        CompletableFuture<TimeSeries> timeSeriesPromise = null;
+
+        timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
+            Constants.ELEKTRON_DD,
+            loginHandle,
+            sessionBean,
+            ric,
+            TS1Constants.WEEKLY_PERIOD
+        );
+
+        System.out.println ("timeSeriesPromise: " + timeSeriesPromise);
+
+        TimeSeries timeSeries = timeSeriesPromise.get(60, TimeUnit.SECONDS);
+
+        if (timeSeries != null) {
+
+            AttribInfo attribInfo = timeSeries.getAttribInfo();
+
+            System.out.print("timeSeries: " + timeSeries + ", attribInfo: " + attribInfo + ", sampleSize: " + timeSeries.getSamples().size() + "\n\n\n");
+
+            DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
+
+            String TABS = "\t\t\t\t\t";
+
+            boolean closeAdded = false;
+
+            for (String nextHeader : timeSeries.getHeaders()) {
+                if (!closeAdded) {
+                    closeAdded = true;
+                    System.out.print(nextHeader + TABS);
+                } else {
+                    System.out.print(nextHeader + "\t\t\t");
+                }
+            }
+
+            for (Sample sample : timeSeries.getSamples()) {
+
+                long timeMillis = sample.getDate();
+
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.setTimeInMillis(timeMillis);
+
+                String date = formatter.format(calendar.getTime());
+
+                System.out.print("\n" + date);
+
+                for (String nextPoint : sample.getPoints())
+                    System.out.print ("\t\t\t" + nextPoint);
+            }
+        } else {
+            System.out.println("The timeSeries reference is null.");
+        }
+    }
+
     public void queryMarketByOrderService (
-        final StatusResponseServiceSpecification statusResponseService,
         final MarketByOrderServiceGatewaySpecification marketByOrderService,
-        final Handle loginHandle
+        final Handle loginHandle,
+        SessionBean sessionBean
     ) {
 
         List<MarketByOrder> marketByOrderList = new ArrayList<MarketByOrder> (rics.length);
@@ -248,14 +348,15 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         Map<String, MarketByOrder> marketMakerMap = marketByOrderService.query(
             ServiceName.dELEKTRON_DD,
             loginHandle,
+            sessionBean,
             (MarketByOrder[]) marketByOrderList.toArray(marketByOrderArray)
         );
     }
 
     public void queryMarketMakerService (
-        final StatusResponseServiceSpecification statusResponseService,
         final MarketMakerServiceGatewaySpecification marketMakerService,
-        final Handle loginHandle
+        final Handle loginHandle,
+        final SessionBean sessionBean
     ) {
 
         List<MarketMaker> marketMakerList = new ArrayList<MarketMaker> (rics.length);
@@ -322,14 +423,15 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         Map<String, MarketMaker> marketMakerMap = marketMakerService.query(
             ServiceName.dELEKTRON_DD,
             loginHandle,
+            sessionBean,
             (MarketMaker[]) marketMakerList.toArray(marketMakerArray)
         );
     }
 
     public void queryMarketPriceService (
-        final StatusResponseServiceSpecification statusResponseService,
         final MarketPriceServiceGatewaySpecification marketPriceService,
-        final Handle loginHandle
+        final Handle loginHandle,
+        SessionBean sessionBean
     ) {
 
         List<MarketPrice> marketPriceList = new ArrayList<MarketPrice> (rics.length);
@@ -381,6 +483,7 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         marketPriceService.query (
             ServiceName.dELEKTRON_DD,
             loginHandle,
+            sessionBean,
             (MarketPrice[]) marketPriceList.toArray(marketPriceArray)
         );
     }
