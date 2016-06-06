@@ -21,13 +21,11 @@ import com.reuters.rfa.common.Handle;
  */
 public class GetDirectoryEntriesMessageProcessor implements DirectoryGatewaySpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(GetDirectoryEntriesMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(GetDirectoryEntriesMessageProcessor.class);
 
     private final Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache;
 
     public GetDirectoryEntriesMessageProcessor(Map<Handle, Map<Handle, DirectoryEntry>> directoryEntryCache) {
-        super();
         this.directoryEntryCache = directoryEntryCache;
     }
 
@@ -43,19 +41,15 @@ public class GetDirectoryEntriesMessageProcessor implements DirectoryGatewaySpec
 
         Set<DirectoryEntry> directoryEntrySet = new HashSet<DirectoryEntry> ();
 
-        DirectoryEntries directoryEntries =
-            new DirectoryEntries (directoryEntrySet);
+        DirectoryEntries directoryEntries = new DirectoryEntries (directoryEntrySet);
 
-        Set<Entry<Handle, Map<Handle, DirectoryEntry>>> directoryEntryCacheSet =
-            directoryEntryCache.entrySet();
+        Set<Entry<Handle, Map<Handle, DirectoryEntry>>> directoryEntryCacheSet = directoryEntryCache.entrySet();
 
         for (Entry<Handle, Map<Handle, DirectoryEntry>> nextEntry : directoryEntryCacheSet) {
 
-            Map<Handle, DirectoryEntry> directoryEntryMap =
-                nextEntry.getValue();
+            Map<Handle, DirectoryEntry> directoryEntryMap = nextEntry.getValue();
 
-            Set<Entry<Handle, DirectoryEntry>> subDirectoryEntrySet =
-                directoryEntryMap.entrySet();
+            Set<Entry<Handle, DirectoryEntry>> subDirectoryEntrySet = directoryEntryMap.entrySet();
 
             addAll (subDirectoryEntrySet, directoryEntrySet);
 
@@ -68,10 +62,8 @@ public class GetDirectoryEntriesMessageProcessor implements DirectoryGatewaySpec
         return directoryEntries;
     }
 
-    void addAll (
-        Set<Entry<Handle, DirectoryEntry>> source,
-        Set<DirectoryEntry> target
-    ) {
+    void addAll (Set<Entry<Handle, DirectoryEntry>> source, Set<DirectoryEntry> target) {
+
         for (Entry<Handle, DirectoryEntry> sourceEntry : source) {
 
             log.debug("addAll: handle: " + sourceEntry.getKey() + ", value: " + sourceEntry.getValue());

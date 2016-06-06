@@ -1,17 +1,18 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
-import org.infinispan.Cache;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
+import com.coherentlogic.coherent.datafeed.beans.LoginQueryParameters;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -20,64 +21,54 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class LoginMessageProcessor
-    extends AbstractAuthenticationMessageProcessor<String, Handle> {
+public class LoginMessageProcessor implements MessageProcessorSpecification<LoginQueryParameters, Handle> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(LoginMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(LoginMessageProcessor.class);
+
+    private final AuthenticationServiceSpecification authenticationService;
+
+    private final Map<Handle, String> dacsIdCache;
+
+    private final Map<String, SessionBean> sessionBeanCache;
 
     public LoginMessageProcessor(
         AuthenticationServiceSpecification authenticationService,
-        Cache<Handle, Session> sessionCache
+        Map<Handle, String> dacsIdCache,
+        Map<String, SessionBean> sessionBeanCache
     ) {
-        super(authenticationService, sessionCache);
+        this.authenticationService = authenticationService;
+        this.dacsIdCache = dacsIdCache;
+        this.sessionBeanCache = sessionBeanCache;
     }
 
     /**
      * 
      */
     @Override
-//    @Transactional
-    public Message<Handle> process(Message<String> message) {
+    public Message<Handle> process(Message<LoginQueryParameters> message) {
 
-        Message<Handle> result = null;
+        LoginQueryParameters loginQueryParameters = message.getPayload();
 
-        AuthenticationServiceSpecification authenticationService =
-            getAuthenticationService();
+        SessionBean sessionBean = loginQueryParameters.getSessionBean();
 
-        Cache<Handle, Session> sessionCache = getSessionCache();
+        String dacsId = sessionBean.getDacsId();
 
-        /* Note that it is possible that this method is paused prior and then
-         * the AuthenticationMessageEnricher.enrich method is executed, which
-         * can result in an NPE progresses. The solution is to sync here and in
-         * the AuthenticationMessageEnricher.enrich method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         */
-        synchronized (sessionCache) {
+        assertNotNull("dacsId", dacsId);
 
-            String dacsId = message.getPayload();
+        sessionBeanCache.put(dacsId, sessionBean);
 
-            if (dacsId == null)
-                throw new InvalidApplicationSessionException(
-                    "The dacsId is null.");
+        Handle handle = authenticationService.login(sessionBean);
 
-            Handle loginHandle = authenticationService.login(dacsId);
+        log.debug("handle: " + handle);
 
-//            sessionCache.getAdvancedCache().lock(loginHandle);
+        dacsIdCache.put(handle, dacsId);
 
-            log.info("loginHandle: " + loginHandle);
+        sessionBean.setHandle(handle);
 
-            Session session = (Session) sessionCache.get(loginHandle);
+        Message<Handle> result = MessageBuilder
+            .withPayload(handle)
+            .build();
 
-            assertNotNull (SESSION, session);
-
-            result = MessageBuilder
-                .withPayload(loginHandle)
-                .setHeader(SESSION, session)
-                .build();
-        }
         return result;
     }
 }

@@ -11,11 +11,9 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.beans.AbstractQuery;
-import com.coherentlogic.coherent.datafeed.beans.MarketPriceQueryParameters;
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RICBeanSpecification;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.services.CacheableQueryableService;
-import com.coherentlogic.coherent.datafeed.services.MarketPriceService;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.reuters.rfa.common.Handle;
@@ -44,11 +42,13 @@ public class AbstractQueryMessageProcessor<T extends RICBeanSpecification>
 
       AbstractQuery<T[]> parameters = message.getPayload();
 
-      log.info("parameters: " + parameters);
+      log.debug("parameters: " + parameters);
 
       String serviceName = parameters.getServiceName();
 
       Handle loginHandle = parameters.getLoginHandle();
+
+      SessionBean sessionBean = parameters.getSessionBean();
 
       T[] items = parameters.getItem();
 
@@ -63,6 +63,7 @@ public class AbstractQueryMessageProcessor<T extends RICBeanSpecification>
           queryableService.query(
               ServiceName.valueOf(serviceName),
               loginHandle,
+              sessionBean,
               ric
           );
       }
