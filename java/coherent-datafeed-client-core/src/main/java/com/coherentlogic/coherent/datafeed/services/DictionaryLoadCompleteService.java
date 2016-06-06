@@ -1,6 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import org.slf4j.Logger;
@@ -8,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
+import com.coherentlogic.coherent.datafeed.caches.DictionaryEntryCache;
+import com.coherentlogic.coherent.datafeed.caches.DirectoryEntryCache;
 import com.coherentlogic.coherent.datafeed.domain.DictionaryEntry;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMAttribInfo;
@@ -21,17 +22,19 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class DictionaryLoadCompleteService
-    implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {
+public class DictionaryLoadCompleteService {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(DictionaryLoadCompleteService.class);
+    private static final Logger log = LoggerFactory.getLogger(DictionaryLoadCompleteService.class);
 
     public static final String BEAN_NAME = "dictionaryLoadCompleteService";
 
-    @Override
-    public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
-        throw new RuntimeException ("This method has not been implemented.");
+    private final DictionaryEntryCache dictionaryEntryCache;
+
+    public DictionaryLoadCompleteService(
+        DirectoryEntryCache directoryEntryCache,
+        DictionaryEntryCache dictionaryEntryCache
+    ) {
+        this.dictionaryEntryCache = dictionaryEntryCache;
     }
 
     /**
@@ -39,24 +42,61 @@ public class DictionaryLoadCompleteService
      */
     public boolean allDictionariesAreLoaded (MessageHeaders headers) {
 
-        Session session = (Session) headers.get(SESSION);
+        boolean result = dictionaryEntryCache.allDictionariesAreLoaded();
 
-        boolean result = session.allDictionariesAreLoaded();
-
-        log.info("allDictionariesAreLoaded: method ends; result: " + result);
+        log.debug("allDictionariesAreLoaded: method ends; result: " + result);
 
         return result;
     }
+
+//    /**
+//     * @return True when the loaded flag for ever dictionary has been set to true otherwise this method returns false.
+//     */
+//    public boolean allDictionariesAreLoaded () {
+//
+//        boolean result = true;
+//
+//        Set<Entry<Handle, DictionaryEntry>> dictionaryEntries = getDictionaryEntryCache().entrySet();
+//
+//        Iterator<Entry<Handle, DictionaryEntry>> iterator = dictionaryEntries.iterator();
+//
+//        while (iterator.hasNext()) {
+//
+//            Entry<Handle, DictionaryEntry> nextEntry = iterator.next();
+//
+//            DictionaryEntry nextDictionaryServiceEntry = nextEntry.getValue();
+//
+//            boolean subResult = nextDictionaryServiceEntry.isLoaded();
+//
+//            if (!subResult) {
+//                result = false;
+//                break;
+//            }
+//        }
+//        return result;
+//    }
+//
+//    public DictionaryEntry findDictionaryServiceEntry (Handle handle) {
+//
+//        assertNotNull (HANDLE, handle);
+//  
+//        Map<Handle, DictionaryEntry> dictionaryServiceEntriesMap = getDictionaryEntryCache();
+//  
+//        DictionaryEntry result = dictionaryServiceEntriesMap.get(handle);
+//  
+//        return result;
+//    }
 
     /**
      * Method find the {@link DictionaryEntry} and marks it as loaded.
      */
     public Message<OMMItemEvent> markAsLoaded (Message<OMMItemEvent> message) {
-        log.info("markAsLoaded: method begins; message: " + message);
 
-        MessageHeaders headers = message.getHeaders();
+        log.debug("markAsLoaded: method begins; message: " + message);
 
-        Session session = (Session) headers.get(SESSION);
+//        MessageHeaders headers = message.getHeaders();
+//
+//        Session session = (Session) headers.get(SESSION);
 
         OMMItemEvent itemEvent = (OMMItemEvent) message.getPayload();
 
@@ -64,17 +104,15 @@ public class DictionaryLoadCompleteService
 
         String dictionaryName = getDictionaryName (itemEvent);
 
-        log.info("handle: " + handle + ", dictionaryName: " + dictionaryName);
+        log.debug("handle: " + handle + ", dictionaryName: " + dictionaryName);
 
-        DictionaryEntry dictionaryEntry =
-            session.findDictionaryServiceEntry(handle);
+        DictionaryEntry dictionaryEntry = dictionaryEntryCache.findDictionaryServiceEntry(handle);
 
         assertNotNull ("dictionaryServiceEntry", dictionaryEntry);
 
         dictionaryEntry.setLoaded(true);
 
-        log.info("markAsLoaded: method ends; dictionaryServiceEntry: " +
-            dictionaryEntry);
+        log.debug("markAsLoaded: method ends; dictionaryServiceEntry: " + dictionaryEntry);
 
         return message;
     }
