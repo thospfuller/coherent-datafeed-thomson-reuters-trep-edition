@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -66,6 +67,6 @@ public class RequestMessageBuilderTest {
 
     @Test(expected=MissingDataException.class)
     public void testRegister() {
-        builder.register(client, Constants.dELEKTRON_DD);
+        builder.register(client, Constants.dELEKTRON_DD, new SessionBean ());
     }
 }

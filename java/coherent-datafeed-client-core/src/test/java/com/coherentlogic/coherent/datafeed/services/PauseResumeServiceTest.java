@@ -16,11 +16,11 @@ import com.coherentlogic.coherent.datafeed.adapters.IntegrationEndpointAdapter;
  */
 public class PauseResumeServiceTest {
 
-    private PauseResumeService service = null;
+    private FlowInverterService service = null;
 
     @Before
     public void setUp() throws Exception {
-        service = new PauseResumeService();
+        service = new FlowInverterService();
     }
 
     @After

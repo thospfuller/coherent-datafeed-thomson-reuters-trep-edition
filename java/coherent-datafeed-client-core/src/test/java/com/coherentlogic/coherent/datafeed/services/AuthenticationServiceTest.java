@@ -84,7 +84,7 @@ public class AuthenticationServiceTest {
 
     @Test(expected=InvalidDacsIdException.class)
     public void loginWithNullDacsId () {
-        authenticationService.login(null);
+        authenticationService.login((String) null);
     }
 
     @Test(expected=InvalidDacsIdException.class)

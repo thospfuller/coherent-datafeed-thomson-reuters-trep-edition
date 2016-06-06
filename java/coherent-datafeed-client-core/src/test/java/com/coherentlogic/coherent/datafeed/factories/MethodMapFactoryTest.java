@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
+import com.coherentlogic.coherent.datafeed.domain.StatusResponseBean;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
 
@@ -27,6 +28,22 @@ public class MethodMapFactoryTest {
         Map<String, Method> methodMap = new HashMap<String, Method> ();
 
         MethodMapFactory.analyze(null, methodMap);
+    }
+
+    public void testAnalyzeWhereTypeIsMarkedAsDoNotAnalyze () {
+
+        Map<String, Method> methodMap = new HashMap<String, Method> ();
+
+        MethodMapFactory.analyze(StatusResponseBean.class, methodMap);
+    }
+
+    class FooRFABean extends RFABean {}
+
+    public void testAnalyzeWhereTypeIsNotMarkedAsDoNotAnalyzeAndHasNoMethodsMarked () {
+
+        Map<String, Method> methodMap = new HashMap<String, Method> ();
+
+        MethodMapFactory.analyze(FooRFABean.class, methodMap);
     }
 
     @Test(expected=NullPointerRuntimeException.class)

@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.adapters.DirectoryEntryAdapter;
+import com.coherentlogic.coherent.datafeed.caches.DirectoryEntryCache;
 import com.coherentlogic.coherent.datafeed.domain.ActionType;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDataTypeException;
@@ -44,18 +45,31 @@ public class DirectoryServiceLoaderTest {
     private DirectoryEntry directoryEntryA = null;
     private DirectoryEntry directoryEntryB = null;
 
-    private Map<String, DirectoryEntry> directoryServiceEntryCache = null;
+    private Map<Handle, Map<String, DirectoryEntry>> directoryEntryMap = null;
+
+    private Map<String, DirectoryEntry> directoryServiceEntryMap = null;
+
+    private DirectoryEntryCache directoryEntryCache = null;
 
     @Before
     public void setUp() throws Exception {
+
+        directoryEntryMap = new HashMap<Handle, Map<String, DirectoryEntry>> ();// mock (Map.class);
+
         directoryEntryA = new DirectoryEntry();
         directoryEntryB = new DirectoryEntry();
         serviceEntryAdapter = mock (DirectoryEntryAdapter.class);
-        directoryServiceLoader =
-            new DirectoryServiceLoader (serviceEntryAdapter);
-        directoryEntryList =
-                new ArrayList<DirectoryEntry> (2);
-        directoryServiceEntryCache = new HashMap<String, DirectoryEntry> ();
+
+        directoryEntryList = new ArrayList<DirectoryEntry> (5);
+
+        directoryServiceEntryMap = new HashMap<String, DirectoryEntry> ();
+
+        directoryEntryCache = new DirectoryEntryCache (directoryEntryMap);
+
+        directoryServiceLoader = new DirectoryServiceLoader (
+            directoryEntryCache,
+            serviceEntryAdapter
+        );
     }
 
     @After
@@ -63,9 +77,13 @@ public class DirectoryServiceLoaderTest {
         directoryEntryA = null;
         directoryEntryB = null;
         serviceEntryAdapter = null;
+
+        directoryEntryMap = null;
+
         directoryServiceLoader = null;
         directoryEntryList = null;
-        directoryServiceEntryCache = null;
+        directoryServiceEntryMap = null;
+        directoryEntryCache = null;
     }
 
     @Test(expected=InvalidDataTypeException.class)
@@ -106,7 +124,10 @@ public class DirectoryServiceLoaderTest {
 
     @Test
     public void testExecuteActionOnWithTwoParams() {
+
         loadDirectoryEntryList ();
+
+        Map<String, DirectoryEntry> directoryServiceEntryCache = new HashMap<String, DirectoryEntry> (2);
 
         directoryServiceLoader.executeActionOn(
             directoryEntryList,
@@ -120,17 +141,12 @@ public class DirectoryServiceLoaderTest {
 
     @Test
     public void testExecuteActionOnWithFourParams() {
-        loadDirectoryEntryList ();
 
-        Map<Handle, Map<String, DirectoryEntry>> directoryEntryCache =
-            new HashMap<Handle, Map<String, DirectoryEntry>> ();
+        loadDirectoryEntryList ();
 
         OMMMsg msg = mock (OMMMsg.class);
         OMMMap serviceMap = mock (OMMMap.class);
         Handle handle = mock (Handle.class);
-
-        Session session = new Session (
-            directoryEntryCache, null, null, null);
 
         Iterator<OMMMapEntry> iterator = mock (Iterator.class);
         OMMMapEntry mapEntry = mock (OMMMapEntry.class);
@@ -151,15 +167,13 @@ public class DirectoryServiceLoaderTest {
             directoryEntryList
         );
 
-        directoryServiceLoader.executeActionOn(
-            msg, serviceMap, handle, session);
+        directoryEntryCache.put (handle, directoryServiceEntryMap);
 
-        Map<String, DirectoryEntry> directoryServiceEntryCache =
-            session.getDirectoryServiceEntryCache(handle);
+        directoryServiceLoader.executeActionOn(msg, serviceMap, handle);
 
-        assertNotNull (directoryServiceEntryCache);
-        assertEquals (2, directoryServiceEntryCache.size());
+        Map<String, DirectoryEntry> result = directoryEntryCache.getDirectoryServiceEntryCache(handle);
 
-        
+        assertNotNull (result);
+        assertEquals (2, result.size());
     }
 }

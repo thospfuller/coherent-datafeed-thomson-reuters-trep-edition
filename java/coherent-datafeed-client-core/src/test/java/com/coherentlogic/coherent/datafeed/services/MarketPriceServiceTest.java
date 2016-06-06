@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Map;
 
 import org.infinispan.Cache;
 import org.junit.After;
@@ -15,9 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
-import com.coherentlogic.coherent.datafeed.factories.MarketPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -93,7 +92,7 @@ public class MarketPriceServiceTest {
 
     @Test(expected=NullPointerRuntimeException.class)
     public void queryPassingNullString() {
-        marketPriceService.query(handle, (String)null);
+        marketPriceService.query(handle, (SessionBean) null, (String)null);
     }
 
     /**
@@ -102,7 +101,7 @@ public class MarketPriceServiceTest {
      */
     @Test(expected=NullPointerRuntimeException.class)
     public void queryPassingValidString() {
-        marketPriceService.query(handle, RIC);
+        marketPriceService.query(handle, (SessionBean) null, RIC);
     }
 
     /**
@@ -130,6 +129,7 @@ public class MarketPriceServiceTest {
         List<Handle> handles = marketPriceService.query(
             Constants.dELEKTRON_DD,
             handle,
+            (SessionBean) null,
             RIC
         );
 
@@ -143,6 +143,7 @@ public class MarketPriceServiceTest {
         marketPriceService.query(
             Constants.dELEKTRON_DD,
             handle,
+            (SessionBean) null,
             (String[])null
         );
     }
@@ -153,6 +154,7 @@ public class MarketPriceServiceTest {
         marketPriceService.query(
             Constants.dELEKTRON_DD,
             handle,
+            new SessionBean (),
             new String[] {}
         );
     }

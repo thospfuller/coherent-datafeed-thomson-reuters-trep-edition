@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 
 /**
  * Unit test for the {@link IntegrationEndpointAdapter} class.
@@ -15,8 +15,8 @@ import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
  */
 public class IntegrationEndpointAdapterTest {
 
-    private final PauseResumeService pauseResumeService =
-        new PauseResumeService ();
+    private final FlowInverterService pauseResumeService =
+        new FlowInverterService ();
 
     private IntegrationEndpointAdapter adapter = null;
 

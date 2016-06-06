@@ -20,7 +20,7 @@ public class TimeSeriesQueryParameterTest {
     @Test
     public void testCtorWithDailyPeriod () {
         TimeSeriesQueryParameter timeSeriesQueryParameter =
-            new TimeSeriesQueryParameter(UNKNOWN, null, null, Constants.DAILY);
+            new TimeSeriesQueryParameter(UNKNOWN, null, null, null, Constants.DAILY);
 
         assertEquals (
             TS1Constants.DAILY_PERIOD,
@@ -31,7 +31,7 @@ public class TimeSeriesQueryParameterTest {
     @Test
     public void testCtorWithWeeklyPeriod () {
         TimeSeriesQueryParameter timeSeriesQueryParameter =
-            new TimeSeriesQueryParameter(UNKNOWN, null, null, Constants.WEEKLY);
+            new TimeSeriesQueryParameter(UNKNOWN, null, null, null, Constants.WEEKLY);
 
         assertEquals (
             TS1Constants.WEEKLY_PERIOD,
@@ -43,7 +43,7 @@ public class TimeSeriesQueryParameterTest {
     public void testCtorWithMonthlyPeriod () {
         TimeSeriesQueryParameter timeSeriesQueryParameter =
             new TimeSeriesQueryParameter(
-                UNKNOWN, null, null, Constants.MONTHLY);
+                UNKNOWN, null, null, null, Constants.MONTHLY);
 
         assertEquals (
             TS1Constants.MONTHLY_PERIOD,
@@ -54,12 +54,12 @@ public class TimeSeriesQueryParameterTest {
     @Test(expected=ConversionFailedException.class)
     public void testCtorWithUnknownPeriod () {
         TimeSeriesQueryParameter timeSeriesQueryParameter =
-            new TimeSeriesQueryParameter(UNKNOWN, null, null, UNKNOWN);
+            new TimeSeriesQueryParameter(UNKNOWN, null, null, null, UNKNOWN);
     }
 
     @Test(expected=ConversionFailedException.class)
     public void testCtorWithNullPeriodPeriod () {
         TimeSeriesQueryParameter timeSeriesQueryParameter =
-            new TimeSeriesQueryParameter(UNKNOWN, null, null, (String) null);
+            new TimeSeriesQueryParameter(UNKNOWN, null, null, null, (String) null);
     }
 }
