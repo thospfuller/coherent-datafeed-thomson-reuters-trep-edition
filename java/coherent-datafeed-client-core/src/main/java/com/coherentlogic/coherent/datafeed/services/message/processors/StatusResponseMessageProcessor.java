@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import java.util.Map;
@@ -8,12 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponseBean;
-import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
@@ -26,10 +26,9 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class StatusResponseMessageProcessor
-    implements MessageProcessorSpecification<OMMItemEvent, StatusResponseBean> {
+    implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(StatusResponseMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(StatusResponseMessageProcessor.class);
 
     private final StatusResponseAdapter statusResponseAdapter;
 
@@ -48,11 +47,11 @@ public class StatusResponseMessageProcessor
     }
 
     @Override
-    public Message<StatusResponseBean> process(Message<OMMItemEvent> message) {
+    public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
 
         log.debug("process: method begins; message: " + message);
 
-        MessageHeaders headers = message.getHeaders();
+//        SessionBean sessionBean = (SessionBean) message.getHeaders().get(SESSION);
 
         OMMItemEvent itemEvent = message.getPayload();
 
@@ -80,12 +79,9 @@ public class StatusResponseMessageProcessor
 
         log.debug("statusResponse: " + statusResponse);
 
-        Message<StatusResponseBean> result = MessageBuilder
-            .withPayload(statusResponseBean)
-            .copyHeaders(headers)
-            .build();
+        Message<OMMItemEvent> result = MessageBuilder.fromMessage(message).copyHeadersIfAbsent(message.getHeaders()).build();
 
-        log.debug("statusResponseMessageProcessor.process: method ends; result: " + result);
+        log.debug("statusResponseMessageProcessor.process: method ends; message: " + message);
 
         return result;
     }
