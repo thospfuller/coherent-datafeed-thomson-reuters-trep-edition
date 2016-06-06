@@ -3,7 +3,7 @@ package com.coherentlogic.coherent.datafeed.adapters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 
 /**
  * This class is used when, for example, the user invokes the authenticate
@@ -35,9 +35,9 @@ public class IntegrationEndpointAdapter {
     private static final Logger log =
         LoggerFactory.getLogger(IntegrationEndpointAdapter.class);
 
-    private final PauseResumeService pauseResumeService;
+    private final FlowInverterService pauseResumeService;
 
-    public IntegrationEndpointAdapter(PauseResumeService pauseResumeService) {
+    public IntegrationEndpointAdapter(FlowInverterService pauseResumeService) {
         super();
         this.pauseResumeService = pauseResumeService;
     }
