@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDacsIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.SessionFinalizationFailedException;
 import com.coherentlogic.coherent.datafeed.factories.PositionFactory;
 import com.coherentlogic.coherent.datafeed.factories.SessionFactory;
 import com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint;
+import com.coherentlogic.coherent.datafeed.misc.Utils;
 import com.reuters.rfa.common.EventQueue;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMElementList;
@@ -47,7 +49,7 @@ public class AuthenticationService
         log.warn("***                                                                                             ***");
         log.warn("***         Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version          ***");
         log.warn("***                                                                                             ***");
-        log.warn("***                                    Version 1.0.5-RELEASE                                    ***");
+        log.warn("***                                    Version 1.0.6-RELEASE                                    ***");
         log.warn("***                                                                                             ***");
         log.warn("***                         Please take a moment to follow us on Twitter:                       ***");
         log.warn("***                                                                                             ***");
@@ -105,8 +107,17 @@ public class AuthenticationService
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
+    public Handle login (SessionBean sessionBean) {
+        return login (sessionBean.getDacsId(), DEFAULT_APPLICATION_ID, sessionBean);
+    }
+
     public Handle login (String dacsId) {
-        return login (dacsId, DEFAULT_APPLICATION_ID);
+        return login (dacsId, DEFAULT_APPLICATION_ID, new SessionBean ());
+    }
+
+    public Handle login (String dacsId, SessionBean sessionBean) {
+        return login (dacsId, DEFAULT_APPLICATION_ID, sessionBean);
     }
 
     /**
@@ -119,7 +130,7 @@ public class AuthenticationService
      * @todo Do we want to return the handle and hence keep this class
      *  stateless?
      */
-    public Handle login (String dacsId, String applicationId) {
+    public Handle login (String dacsId, String applicationId, SessionBean sessionBean) {
         if (dacsId == null || "".equals(dacsId))
             throw new InvalidDacsIdException ("The dacs id cannot be null " +
                 "or an empty string (dacsId: '" + dacsId + "').");
@@ -129,7 +140,9 @@ public class AuthenticationService
                 + "cannot be null or an empty string (applicationId: '"
                 + applicationId + "').");
 
-        log.info("dacsId: " + dacsId + ", applicationId: " + applicationId);
+        Utils.assertNotNull("sessionBean", sessionBean);
+
+        log.info("dacsId: " + dacsId + ", applicationId: " + applicationId + ", sessionBean: " + sessionBean);
 
         try {
 
@@ -163,7 +176,7 @@ public class AuthenticationService
                 eventQueue,
                 ommItemIntSpec,
                 eventDrivenEndpoint,
-                null
+                sessionBean
             );
 
             Session session = sessionFactory.getInstance(handle);
