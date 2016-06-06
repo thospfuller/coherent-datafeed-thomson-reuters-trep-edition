@@ -1,10 +1,9 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.assertNotNull;
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -13,28 +12,30 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
+import com.coherentlogic.coherent.datafeed.caches.TS1DefCache;
+import com.coherentlogic.coherent.datafeed.caches.TS1DefEntryCache;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.session.omm.OMMItemEvent;
+import com.reuters.ts1.TS1Def;
 
 /**
  * 
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class TS1DefMessageProcessor
-    implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {
+public class TS1DefMessageProcessor implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(TS1DefMessageProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(TS1DefMessageProcessor.class);
 
     public static final String BEAN_NAME = "ts1DefMessageProcessor";
 
-    private final Map<Handle, Session> sessionCache;
+//    private final TS1DefCache ts1DefCache;
 
-    private final Map<Handle, Session> ts1DefCache;
+    private final TS1DefEntryCache ts1DefEntryCache;
 
     private final TS1DefServiceSpecification ts1DefService;
 
@@ -43,12 +44,12 @@ public class TS1DefMessageProcessor
      * @param ts1DefService
      */
     public TS1DefMessageProcessor(
-        Map<Handle, Session> sessionCache,
-        Map<Handle, Session> ts1DefCache,
+//        TS1DefCache ts1DefCache,
+        TS1DefEntryCache ts1DefEntryCache,
         TS1DefServiceSpecification ts1DefService
     ) {
-        this.sessionCache = sessionCache;
-        this.ts1DefCache = ts1DefCache;
+//        this.ts1DefCache = ts1DefCache;
+        this.ts1DefEntryCache = ts1DefEntryCache;
         this.ts1DefService = ts1DefService;
     }
 
@@ -64,28 +65,30 @@ public class TS1DefMessageProcessor
      * As COMPLETION_EVENTS are received these will be removed from the 
      */
     @Override
-//    @Transactional
     public Message<OMMItemEvent> process(Message<OMMItemEvent> message) {
 
         log.debug("ts1DefMessageProcessor.process: method begins; message: " + message);
 
         MessageHeaders headers = message.getHeaders();
 
-        Session session = (Session) headers.get(SESSION);
+        SessionBean sessionBean = (SessionBean) headers.get(SESSION);
 
-        assertNotNull(session);
+        assertNotNull("sessionBean", sessionBean);
 
-        Handle loginHandle = session.getLoginHandle();
+        Handle loginHandle = sessionBean.getHandle();
 
-        List<Handle> handles = ts1DefService.initialize(loginHandle);
+        List<Handle> handles = ts1DefService.initialize(loginHandle, sessionBean);
 
         log.debug("handles.size: " + handles.size());
 
         for (Handle nextHandle : handles) {
-            ts1DefCache.put (nextHandle, session);
-            TS1DefEntry ts1DefEntry = new TS1DefEntry ();
-            session.putTS1DefEntry(nextHandle, ts1DefEntry);
-            sessionCache.put(nextHandle, session);
+
+        	TS1DefEntry ts1DefEntry = new TS1DefEntry ();
+
+//            ts1DefCache.put (nextHandle, ts1DefEntry); // this should not be a ts1DefEntry instance!
+
+            ts1DefEntryCache.put(nextHandle, ts1DefEntry);
+//            sessionCache.put(nextHandle, session);
         }
 
         log.debug("ts1DefMessageProcessor.process: method ends; message: " +
