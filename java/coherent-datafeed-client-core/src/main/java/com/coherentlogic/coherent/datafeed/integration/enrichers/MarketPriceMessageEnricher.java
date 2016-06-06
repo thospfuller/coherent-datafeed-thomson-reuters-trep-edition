@@ -1,8 +1,5 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
-
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
