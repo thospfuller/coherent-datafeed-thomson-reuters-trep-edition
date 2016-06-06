@@ -3,7 +3,8 @@ package com.coherentlogic.coherent.datafeed.misc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.caches.TS1DefEntryCache;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Event;
 
 /**
@@ -17,19 +18,23 @@ import com.reuters.rfa.common.Event;
  */
 public class TS1DefDbHelper {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(TS1DefDbHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(TS1DefDbHelper.class);
 
     public static final String BEAN_NAME = "ts1DefDbHelper";
 
-    public boolean allTS1DefDbEntriesAreLoaded (Event event, Session session) {
-        log.info ("allTS1DefDbEntriesAreLoaded: method begins; event: " + event
-            + ", session: " + session);
+    private final TS1DefEntryCache ts1DefEntryCache;
 
-        boolean result = session.allTS1DefDbEntriesAreLoaded();
+    public TS1DefDbHelper(TS1DefEntryCache ts1DefEntryCache) {
+        this.ts1DefEntryCache = ts1DefEntryCache;
+    }
 
-        log.info ("allTS1DefDbEntriesAreLoaded: method ends; result: " +
-            result);
+    public boolean allTS1DefDbEntriesAreLoaded (Event event, SessionBean session) {
+
+        log.info ("allTS1DefDbEntriesAreLoaded: method begins; event: " + event + ", session: " + session);
+
+        boolean result = ts1DefEntryCache.allTS1DefDbEntriesAreLoaded();
+
+        log.info ("allTS1DefDbEntriesAreLoaded: method ends; result: " + result);
 
         return result;
     }
