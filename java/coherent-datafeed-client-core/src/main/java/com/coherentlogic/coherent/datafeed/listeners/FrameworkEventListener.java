@@ -2,7 +2,7 @@ package com.coherentlogic.coherent.datafeed.listeners;
 
 import java.util.EventListener;
 
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 
 /**
  * An interface that is used to listen for events that are sent from the
@@ -12,5 +12,5 @@ import com.coherentlogic.coherent.datafeed.services.Session;
  */
 public interface FrameworkEventListener extends EventListener {
 
-    void onEventReceived (Session session);
+    void onEventReceived (SessionBean sessionBean);
 }
