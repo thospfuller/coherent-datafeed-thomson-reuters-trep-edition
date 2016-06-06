@@ -1,6 +1,7 @@
 package com.coherentlogic.coherent.datafeed.beans;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -8,9 +9,14 @@ import com.reuters.rfa.common.Handle;
  */
 public class MarketMakerQueryParameters extends AbstractQuery<MarketMaker[]> {
 
-    private static final long serialVersionUID = -2906849392823013754L;
+    private static final long serialVersionUID = -2244535172899622273L;
 
-    public MarketMakerQueryParameters(String serviceName, Handle loginHandle, MarketMaker[] item) {
-        super(serviceName, loginHandle, item);
+    public MarketMakerQueryParameters(
+        String serviceName,
+        Handle loginHandle,
+        SessionBean sessionBean,
+        MarketMaker[] items
+    ) {
+        super(serviceName, loginHandle, sessionBean, items);
     }
 }

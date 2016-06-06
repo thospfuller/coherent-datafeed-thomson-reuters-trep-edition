@@ -1,6 +1,7 @@
 package com.coherentlogic.coherent.datafeed.beans;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -10,7 +11,7 @@ public class MarketByOrderQueryParameters extends AbstractQuery<MarketByOrder[]>
 
     private static final long serialVersionUID = -4049102953592195180L;
 
-    public MarketByOrderQueryParameters(String serviceName, Handle loginHandle, MarketByOrder[] item) {
-        super(serviceName, loginHandle, item);
+    public MarketByOrderQueryParameters(String serviceName, Handle loginHandle, SessionBean sessionBean, MarketByOrder[] item) {
+        super(serviceName, loginHandle, sessionBean, item);
     }
 }

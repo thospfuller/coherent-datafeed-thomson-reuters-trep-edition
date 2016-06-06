@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -20,12 +21,15 @@ public abstract class AbstractQuery<T> implements Serializable {
 
     private final Handle loginHandle;
 
+    private final SessionBean sessionBean;
+
     private final T item;
 
-    public AbstractQuery(String serviceName, Handle loginHandle, T item) {
+    public AbstractQuery(String serviceName, Handle loginHandle, SessionBean sessionBean, T item) {
         super();
         this.serviceName = serviceName;
         this.loginHandle = loginHandle;
+        this.sessionBean = sessionBean;
         this.item = item;
     }
 
@@ -35,6 +39,10 @@ public abstract class AbstractQuery<T> implements Serializable {
 
     public Handle getLoginHandle() {
         return loginHandle;
+    }
+
+    public SessionBean getSessionBean() {
+        return sessionBean;
     }
 
     public T getItem() {

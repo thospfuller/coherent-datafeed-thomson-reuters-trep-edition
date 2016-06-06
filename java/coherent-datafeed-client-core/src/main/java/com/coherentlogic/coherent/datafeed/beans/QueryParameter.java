@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.beans;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -10,13 +11,14 @@ import com.reuters.rfa.common.Handle;
  */
 public class QueryParameter extends AbstractQuery<String> {
 
-    private static final long serialVersionUID = 6335351867406815676L;
+    private static final long serialVersionUID = -900023712494047554L;
 
     public QueryParameter(
         String serviceName,
         Handle loginHandle,
-        String item
+        SessionBean sessionBean,
+        String items
     ) {
-        super (serviceName, loginHandle, item);
+        super (serviceName, loginHandle, sessionBean, items);
     }
 }
