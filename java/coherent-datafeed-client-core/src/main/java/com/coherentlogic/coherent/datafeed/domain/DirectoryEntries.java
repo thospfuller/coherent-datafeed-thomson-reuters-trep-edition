@@ -17,7 +17,9 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias(DIRECTORY_ENTRIES)
 public class DirectoryEntries extends SerializableBean {
 
-    private static final long serialVersionUID = 2271484647334046161L;
+    private static final long serialVersionUID = 1657930759501402190L;
+
+    public static final String DIRECTORIES = "directories";
 
     @XStreamAlias(DIRECTORY_ENTRIES)
     @XStreamImplicit
