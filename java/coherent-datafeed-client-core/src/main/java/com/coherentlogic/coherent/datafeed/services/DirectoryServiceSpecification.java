@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -12,5 +13,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface DirectoryServiceSpecification {
 
-    List<Handle> query (Handle loginHandle);
+    List<Handle> query (SessionBean sessionBean);
 }

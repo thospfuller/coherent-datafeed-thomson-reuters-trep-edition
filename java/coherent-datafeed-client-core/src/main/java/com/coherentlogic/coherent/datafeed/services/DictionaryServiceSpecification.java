@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -15,6 +16,7 @@ public interface DictionaryServiceSpecification {
     List<Handle> loadDictionaries (
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String... dictionaryIds
     );
 }
