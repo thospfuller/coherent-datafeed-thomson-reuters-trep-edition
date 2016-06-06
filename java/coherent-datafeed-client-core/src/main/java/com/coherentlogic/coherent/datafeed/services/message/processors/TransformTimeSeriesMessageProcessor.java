@@ -10,6 +10,7 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.AbstractAdapter;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
+import com.coherentlogic.coherent.datafeed.caches.TimeSeriesEntriesCache;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.coherentlogic.coherent.datafeed.services.Session;
@@ -24,10 +25,14 @@ public class TransformTimeSeriesMessageProcessor
     private final AbstractAdapter<TimeSeriesEntries, TimeSeries>
         timeSeriesAdapter;
 
+    private final TimeSeriesEntriesCache timeSeriesEntriesCache;
+
     public TransformTimeSeriesMessageProcessor(
-        AbstractAdapter<TimeSeriesEntries, TimeSeries> timeSeriesAdapter
+        AbstractAdapter<TimeSeriesEntries, TimeSeries> timeSeriesAdapter,
+        TimeSeriesEntriesCache timeSeriesEntriesCache
     ) {
         this.timeSeriesAdapter = timeSeriesAdapter;
+        this.timeSeriesEntriesCache = timeSeriesEntriesCache;
     }
 
     /**
@@ -38,16 +43,11 @@ public class TransformTimeSeriesMessageProcessor
 
         MessageHeaders headers = message.getHeaders();
 
-        Session session = (Session) headers.get(SESSION);
-
-        assertNotNull (SESSION, session);
-
         OMMItemEvent itemEvent = message.getPayload();
 
         Handle handle = itemEvent.getHandle();
 
-        TimeSeriesEntries timeSeriesEntries =
-            session.getTimeSeriesEntries(handle);
+        TimeSeriesEntries timeSeriesEntries = timeSeriesEntriesCache.get(handle);
 
         TimeSeries timeSeries = timeSeriesAdapter.adapt(timeSeriesEntries);
 
