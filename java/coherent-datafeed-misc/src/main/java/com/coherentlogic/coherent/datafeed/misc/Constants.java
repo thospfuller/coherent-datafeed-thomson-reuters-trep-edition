@@ -10,6 +10,8 @@ public interface Constants {
     static final String dIDN_RDF = "dIDN_RDF", IDN_RDF = "IDN_RDF",
         ELEKTRON_DD = "ELEKTRON_DD", dELEKTRON_DD = "dELEKTRON_DD";
 
+    static final String LOGIN_HANDLE = "loginHandle";
+
     static final int DEFAULT_INT_RETURN_VALUE = -9999, ZERO = 0, ONE = 1;
 
     static final long THREE_MINUTES = 1000 * 60 * 3;
