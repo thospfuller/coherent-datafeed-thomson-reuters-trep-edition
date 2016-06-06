@@ -50,18 +50,6 @@ public class StatusResponse extends SerializableBean {
     public StatusResponse() {
     }
 
-    public StatusResponse(
-        String code,
-        String streamStateOpen,
-        String dataStateOK,
-        String text
-    ) {
-        this.code = code;
-        this.streamState = streamStateOpen;
-        this.dataState = dataStateOK;
-        this.text = text;
-    }
-
     /**
      * Resets all properties to null and does not result in any of the fire methods being called.
      */
