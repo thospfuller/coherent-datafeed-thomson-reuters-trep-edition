@@ -1,11 +1,11 @@
 package com.coherentlogic.coherent.datafeed.services;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.UNUSED;
+
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Handle;
@@ -25,12 +25,7 @@ import com.reuters.rfa.rdm.RDMService;
  * @todo We don't need a serviceName for this class (I believe) as we're
  *  requesting the directories available.
  */
-public class DirectoryService
-    extends QueryableService
-    implements DirectoryServiceSpecification {
-
-    private static final Logger log =
-        LoggerFactory.getLogger(DirectoryService.class);
+public class DirectoryService extends QueryableService implements DirectoryServiceSpecification {
 
     public DirectoryService(
         String serviceName,
@@ -46,10 +41,10 @@ public class DirectoryService
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
-        RequestMessageBuilderFactory factory =
-            getRequestMessageBuilderFactory();
+        RequestMessageBuilderFactory factory = getRequestMessageBuilderFactory();
 
         Client client = getClient();
 
@@ -70,8 +65,14 @@ public class DirectoryService
             .setAttribInfo(attribInfo)
             .register(
                 client,
-                null,// We do not include a service name for directory requests.
+                (String) null,// We do not include a service name for directory requests.
+                sessionBean,
                 (String) null
             );
+    }
+
+    @Override
+    public List<Handle> query(SessionBean sessionBean) {
+        return query(sessionBean.getHandle(), sessionBean, UNUSED);
     }
 }
