@@ -6,6 +6,7 @@ import java.util.Map;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -51,6 +52,7 @@ public class MarketByOrderService
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
         RequestMessageBuilderFactory factory =
@@ -68,7 +70,7 @@ public class MarketByOrderService
             .setAttribInfo(serviceName, RDMInstrument.NameType.RIC, itemNames)
             .setPriority(OMMPriority.DEFAULT)
             .setAssociatedMetaInfo(loginHandle)
-            .register(client, serviceName, itemNames);
+            .register(client, serviceName, sessionBean, itemNames);
 
         return handles;
     }

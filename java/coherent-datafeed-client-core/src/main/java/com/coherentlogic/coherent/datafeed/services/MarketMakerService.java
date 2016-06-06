@@ -6,9 +6,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -60,10 +60,10 @@ public class MarketMakerService
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
-        RequestMessageBuilderFactory factory =
-            getRequestMessageBuilderFactory();
+        RequestMessageBuilderFactory factory = getRequestMessageBuilderFactory();
 
         Client client = getClient();
 
@@ -77,7 +77,7 @@ public class MarketMakerService
             .setAttribInfo(serviceName, RDMInstrument.NameType.RIC, itemNames)
             .setPriority(OMMPriority.DEFAULT)
             .setAssociatedMetaInfo(loginHandle)
-            .register(client, serviceName, itemNames);
+            .register(client, serviceName, sessionBean, itemNames);
 
         return handles;
     }

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Handle;
@@ -22,12 +23,9 @@ import com.reuters.ts1.TS1DefDb;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class TS1DefService
-    extends QueryableService
-    implements TS1DefServiceSpecification {
+public class TS1DefService extends QueryableService implements TS1DefServiceSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(TS1DefService.class);
+    private static final Logger log = LoggerFactory.getLogger(TS1DefService.class);
 
     public static final String BEAN_NAME = "ts1DefService";
 
@@ -51,11 +49,11 @@ public class TS1DefService
      *
      * @param loginHandle The login handle.
      */
-    public List<Handle> initialize (Handle loginHandle) {
+    public List<Handle> initialize (Handle loginHandle, SessionBean sessionBean) {
 
         String[] rics = TS1DefDb.getTs1DbRics();
 
-        return initialize (loginHandle, rics);
+        return initialize (loginHandle, sessionBean, rics);
     }
 
     /**
@@ -65,12 +63,12 @@ public class TS1DefService
      * @param loginHandle The login handle.
      * @param rics The rics required to initialize the {@link TS1DefDb}.
      */
-    public List<Handle> initialize (Handle loginHandle, String... rics) {
+    public List<Handle> initialize (Handle loginHandle, SessionBean sessionBean, String... rics) {
 
-        log.info("initialize: method begins; loginHandle: " + loginHandle +
-            ", rics: " + ToStringBuilder.reflectionToString(rics));
+        log.info("initialize: method begins; loginHandle: " + loginHandle + ", rics: " +
+            ToStringBuilder.reflectionToString(rics));
 
-        List<Handle> handles = query(loginHandle, rics);
+        List<Handle> handles = query(loginHandle, sessionBean, rics);
 
         return handles;
     }
@@ -80,12 +78,14 @@ public class TS1DefService
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
         return commonRequestExecutor.executeRequest(
             serviceName,
             loginHandle,
             msgModelType,
+            sessionBean,
             itemNames
         );
     }
