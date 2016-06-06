@@ -11,16 +11,15 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.TIME_SERIES_SER
 import static com.coherentlogic.coherent.datafeed.misc.Constants.TS1_DEF_SERVICE;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.ClientNotInitializedException;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
@@ -28,7 +27,7 @@ import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecifi
 import com.coherentlogic.coherent.datafeed.services.DictionaryGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
@@ -52,8 +51,8 @@ public class Client {
 
     private AbstractApplicationContext applicationContext;
 
-    private final PauseResumeService pauseResumeService =
-        new PauseResumeService ();
+    private final FlowInverterService pauseResumeService =
+        new FlowInverterService ();
 
     private boolean started = false;
 
@@ -98,7 +97,7 @@ public class Client {
                 Arrays.asList(
                     new FrameworkEventListener() {
                         @Override
-                        public void onEventReceived(Session session) {
+                        public void onEventReceived(SessionBean session) {
                             pauseResumeService.resume(true);
                         }
                     }
@@ -109,7 +108,7 @@ public class Client {
                 Arrays.asList(
                     new FrameworkEventListener () {
                         @Override
-                        public void onEventReceived(Session session) {
+                        public void onEventReceived(SessionBean session) {
                             pauseResumeService.resume(false);
                         }
                     }
@@ -215,11 +214,11 @@ public class Client {
             applicationContext.getBean(STATUS_RESPONSE_SERVICE_GATEWAY);
     }
 
-    public void loadTS1Definitions (Handle loginHandle) {
+    public void loadTS1Definitions (Handle loginHandle, SessionBean sessionBean) {
 
         TS1DefServiceSpecification ts1DefService = getTS1DefService();
 
-        ts1DefService.initialize(loginHandle);
+        ts1DefService.initialize(loginHandle, sessionBean);
     }
 
     public Handle login (String dacsId) {
@@ -230,7 +229,11 @@ public class Client {
         AuthenticationServiceSpecification authenticationService =
             getAuthenticationService();
 
-        Handle loginHandle = authenticationService.login(dacsId);
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setDacsId(dacsId);
+
+        Handle loginHandle = authenticationService.login(sessionBean);
 
         log.info("login: method returned; loginHandle: " + loginHandle +
             "; loadDictionaries: method begins.");
