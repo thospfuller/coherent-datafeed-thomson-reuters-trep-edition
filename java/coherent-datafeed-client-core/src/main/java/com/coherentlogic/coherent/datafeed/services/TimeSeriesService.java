@@ -5,8 +5,6 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.HANDLE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MONTHLY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.YEARLY;
-import static com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor.addRicsFromSeriesTo;
-import static com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor.getTimeSeriesEntries;
 import static com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor.newTimeSeriesEntry;
 
 import java.util.HashMap;
@@ -14,15 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
-import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
+import com.coherentlogic.coherent.datafeed.caches.TimeSeriesEntriesCache;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
@@ -60,19 +58,16 @@ import com.reuters.ts1.TS1Series;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-public class TimeSeriesService
-    extends QueryableService
-    implements TimeSeriesServiceSpecification {
+public class TimeSeriesService extends QueryableService implements TimeSeriesServiceSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(TimeSeriesService.class);
+    private static final Logger log = LoggerFactory.getLogger(TimeSeriesService.class);
 
     private final Map<String, Integer> ts1ConstantsMap =
         new HashMap<String, Integer> ();
 
     private final CommonRequestExecutor commonRequestExecutor;
 
-    private final Cache<Handle, Session> sessionCache;
+    private final TimeSeriesEntriesCache timeSeriesEntriesCache;
 
     private final Map<Handle, CompletableFuture<TimeSeries>> handleToCompletableFutureCache;
 
@@ -82,7 +77,7 @@ public class TimeSeriesService
         RequestMessageBuilderFactory factory,
         Client client,
         CommonRequestExecutor commonRequestExecutor,
-        final Cache<Handle, Session> sessionCache,
+        TimeSeriesEntriesCache timeSeriesEntriesCache,
         final Map<Handle, CompletableFuture<TimeSeries>> handleToCompletableFutureCache,
         final Map<TimeSeriesKey, CompletableFuture<TimeSeries>> timeSeriesKeyToCompletableFutureCache
     ) {
@@ -95,7 +90,7 @@ public class TimeSeriesService
 
         this.commonRequestExecutor = commonRequestExecutor;
 
-        this.sessionCache = sessionCache;
+        this.timeSeriesEntriesCache = timeSeriesEntriesCache;
         this.handleToCompletableFutureCache = handleToCompletableFutureCache;
         this.timeSeriesKeyToCompletableFutureCache = timeSeriesKeyToCompletableFutureCache;
 
@@ -109,12 +104,14 @@ public class TimeSeriesService
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
         return commonRequestExecutor.executeRequest(
             serviceName,
             loginHandle,
             msgModelType,
+            sessionBean,
             itemNames
         );
     }
@@ -135,9 +132,10 @@ public class TimeSeriesService
     public Handle queryTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String ric
     ) {
-        List<Handle> results = query (serviceName, loginHandle, ric);
+        List<Handle> results = query (serviceName, loginHandle, sessionBean, ric);
 
         return results.get(0);
     }
@@ -145,15 +143,17 @@ public class TimeSeriesService
     public CompletableFuture<TimeSeries> getTimeSeriesFor (
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String ric,
         String period
     ) {
-        return getTimeSeriesFor (serviceName, loginHandle, ric, Integer.valueOf(period));
+        return getTimeSeriesFor (serviceName, loginHandle, sessionBean, ric, Integer.valueOf(period));
     }
 
     public CompletableFuture<TimeSeries> getTimeSeriesFor (
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String ric,
         int period
     ) {
@@ -172,44 +172,35 @@ public class TimeSeriesService
 
         } else {
 
-            Session session = (Session) sessionCache.get(loginHandle);
+            CompletableFuture<TimeSeries> newTimeSeriesPromise = new CompletableFuture<TimeSeries> ();
 
-            synchronized (session) {
+            TS1Series series = TS1Series.createSeries(ric, period);
 
-                CompletableFuture<TimeSeries> newTimeSeriesPromise = new CompletableFuture<TimeSeries> ();
+            String primaryRic = series.getPrimaryRic();
 
-                TS1Series series = TS1Series.createSeries(ric, period);
+            Handle handle = queryTimeSeriesFor(serviceName, loginHandle, sessionBean, primaryRic);
 
-                String primaryRic = series.getPrimaryRic();
+            TimeSeriesKey timeSeriesKey = new TimeSeriesKey (serviceName, ric, period);
 
-                Handle handle = queryTimeSeriesFor(serviceName, loginHandle, primaryRic);
+            sessionBean.putTimeSeriesKey(handle, timeSeriesKey);
 
-                TimeSeriesKey timeSeriesKey = new TimeSeriesKey (serviceName, ric, period);
+            log.error("1. loginHandle: " + loginHandle + ", handle: " + handle + ", ric: " + ric + ", primaryRic: " +
+                primaryRic);
 
-                session.putTimeSeriesKey(handle, timeSeriesKey);
+            TimeSeriesEntries timeSeriesEntries =
+                timeSeriesEntriesCache.getTimeSeriesEntries (serviceName, handle, period);
 
-                log.error("1. loginHandle: " + loginHandle + ", handle: " + handle + ", ric: " + ric + ", primaryRic: " + primaryRic);
+            timeSeriesEntries.addRicsFromSeriesTo (series);
 
-                TimeSeriesEntries timeSeriesEntries = getTimeSeriesEntries (session, serviceName, handle, period);
+            TimeSeriesEntry timeSeriesEntry = newTimeSeriesEntry (series);
 
-                addRicsFromSeriesTo (series, timeSeriesEntries);
+            timeSeriesEntries.putTimeSeriesEntry(handle, timeSeriesEntry);
 
-                TimeSeriesEntry timeSeriesEntry = newTimeSeriesEntry (series);
+            timeSeriesEntriesCache.put(handle, timeSeriesEntries);
 
-                timeSeriesEntries.putTimeSeriesEntry(handle, timeSeriesEntry);
+            timeSeriesKeyToCompletableFutureCache.put(timeSeriesKey, newTimeSeriesPromise);
 
-                session.putTimeSeriesEntries(handle, timeSeriesEntries);
-
-                sessionCache.put(handle,  session);
-
-                log.error("1. handleToCompletableFutureCache.put: " + handle + ", newTimeSeriesPromise: " + newTimeSeriesPromise);
-
-//                handleToCompletableFutureCache.put(handle, newTimeSeriesPromise);
-
-                timeSeriesKeyToCompletableFutureCache.put(timeSeriesKey, newTimeSeriesPromise);
-
-                result = newTimeSeriesPromise;
-            }
+            result = newTimeSeriesPromise;
         }
 
         log.info("getTimeSeriesFor: method ends; result: " + result);
@@ -238,52 +229,26 @@ public class TimeSeriesService
         //       above) which means we don't need to associate the handle with a ric and then get the promise -- all we
         //       need is the handle and we're good.
 
-        Session session = (Session) headers.get(SESSION);
+        SessionBean sessionBean = (SessionBean) headers.get(SESSION);
 
-        synchronized (session) {
+        Handle handle = (Handle) headers.get(HANDLE);
 
-            Handle handle = (Handle) headers.get(HANDLE);
-//
-//            log.error("2. handle: " + handle + ", handleToCompletableFutureCache: " + handleToCompletableFutureCache + ", size: " + handleToCompletableFutureCache.size());
-//
-//            handleToCompletableFutureCache.forEach((Object key, Object value) -> { log.error("onTimeSeriesArrival.handleToCompletableFutureCache.key: " + key + ", value: " + value); });
-//
-//            CompletableFuture<TimeSeries> newTimeSeriesPromise = handleToCompletableFutureCache.remove(handle);
-//
-//            log.error("2. newTimeSeriesPromise: " + newTimeSeriesPromise + ", timeSeries: " + timeSeries);
+        TimeSeriesKey timeSeriesKey = sessionBean.getTimeSeriesKey(handle);
 
-            TimeSeriesKey timeSeriesKey = session.getTimeSeriesKey(handle);
+        if (timeSeriesKey == null) {
+            throw new NullPointerRuntimeException("The timeSeriesKey is null for the timeSeries associated with the "
+                + "handle: " + handle + "; this is definitely a bug and should never happen.");
+        } else {
+            log.info ("timeSeriesKey: " + timeSeriesKey);
+        }
 
-            if (timeSeriesKey == null) {
-                throw new NullPointerRuntimeException("The timeSeriesKey is null for the timeSeries associated with the "
-                    + "handle: " + handle + "; this is definitely a bug and should never happen.");
-            } else {
-                log.info ("timeSeriesKey: " + timeSeriesKey);
-            }
+        CompletableFuture<TimeSeries> timeSeriesPromise = timeSeriesKeyToCompletableFutureCache.get(timeSeriesKey);
 
-            CompletableFuture<TimeSeries> timeSeriesPromise = timeSeriesKeyToCompletableFutureCache.get(timeSeriesKey);
-
-            if (timeSeriesPromise != null) {
-                boolean completed = timeSeriesPromise.complete(timeSeries);
-                log.info("onTimeSeriesArrival: method ends; completed: " + completed + " for timeSeriesKey " + timeSeriesKey + " and timeSeries: " + timeSeries);
-            } else {
-                throw new NullPointerRuntimeException("onTimeSeriesArrival: method ends; note that the newTimeSeriesPromise is null for the timeSeriesKey: " + timeSeriesKey);
-            }
+        if (timeSeriesPromise != null) {
+            boolean completed = timeSeriesPromise.complete(timeSeries);
+            log.info("onTimeSeriesArrival: method ends; completed: " + completed + " for timeSeriesKey " + timeSeriesKey + " and timeSeries: " + timeSeries);
+        } else {
+            throw new NullPointerRuntimeException("onTimeSeriesArrival: method ends; note that the newTimeSeriesPromise is null for the timeSeriesKey: " + timeSeriesKey);
         }
     }
-
-//    @Override
-//    public TimeSeries getNextUpdate(Long timeout) {
-//        throw new UnsupportedOperationException("The getNextUpdate method is not supported.");
-//    }
-//
-//    @Override
-//    public String getNextUpdateAsJSON(String timeout) {
-//        throw new UnsupportedOperationException("The getNextUpdateAsJSON method is not supported.");
-//    }
-//
-//    @Override
-//    public String getNextUpdateAsJSON(Long timeout) {
-//        throw new UnsupportedOperationException("The getNextUpdateAsJSON method is not supported.");
-//    }
 }
