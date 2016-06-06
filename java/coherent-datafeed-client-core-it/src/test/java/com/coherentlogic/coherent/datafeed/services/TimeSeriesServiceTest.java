@@ -83,6 +83,7 @@ public class TimeSeriesServiceTest {
         CompletableFuture<TimeSeries> result = timeSeriesService.getTimeSeriesFor(
             ServiceName.ELEKTRON_DD.toString(),
             loginHandle,
+            null, // need to set the SessionBean here but right now this is null.
             "TRI.N",
             TS1Constants.DAILY_PERIOD
         );
