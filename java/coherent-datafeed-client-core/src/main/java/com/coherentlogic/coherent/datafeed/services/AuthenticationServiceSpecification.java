@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -14,7 +15,7 @@ import com.reuters.rfa.common.Handle;
  */
 public interface AuthenticationServiceSpecification {
 
-    Handle login (String dacsId);
+    Handle login (SessionBean sessionBean);
 
     void logout ();
 }
