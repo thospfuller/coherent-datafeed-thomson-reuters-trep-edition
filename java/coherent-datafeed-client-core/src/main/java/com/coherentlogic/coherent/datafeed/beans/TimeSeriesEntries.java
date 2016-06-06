@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1DefDb;
+import com.reuters.ts1.TS1Series;
 
 
 /**
@@ -177,5 +178,21 @@ public class TimeSeriesEntries implements Serializable {
 
     public boolean ricsHaveBeenAdded () {
         return ricsHaveBeenAdded;
+    }
+
+    /**
+     * @deprecated Rename to addRicsFromSeriesFrom.
+     */
+    public void addRicsFromSeriesTo (TS1Series series) {
+
+        String[] rics = series.getRics();
+
+        if (rics != null && 0 < rics.length) {
+            addRics(rics);
+        } else {
+            // This is not a problem as the first query will only have one RIC
+            // -- the primary RIC.
+            log.debug("The rics variable was either null or empty.");
+        }
     }
 }
