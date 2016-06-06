@@ -12,7 +12,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class RefreshMarketByOrderMessageProcessor  extends AbstractRefreshRFABeanMessageProcessor<MarketByOrder> {
+public class RefreshMarketByOrderMessageProcessor extends AbstractRefreshRFABeanMessageProcessor<MarketByOrder> {
 
     public RefreshMarketByOrderMessageProcessor(
         RFABeanAdapter<MarketByOrder> objectAdapter,
