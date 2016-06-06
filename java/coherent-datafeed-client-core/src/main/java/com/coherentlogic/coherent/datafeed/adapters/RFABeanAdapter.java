@@ -58,8 +58,8 @@ public class RFABeanAdapter<T extends RFABean> {
         FieldDictionary fieldDictionary,
         Map<Class<? extends OMMFieldEntryAdapter<? extends OMMData>>,
             OMMFieldEntryAdapter<? extends OMMData>> fieldEntryAdapters,
-        Class<? extends RFABean> rfaBeanClass)
-        throws SecurityException, NoSuchMethodException {
+        Class<? extends RFABean> rfaBeanClass
+    ) throws SecurityException, NoSuchMethodException {
         this (
             rfaBeanFactory,
             attribInfoFactory,
