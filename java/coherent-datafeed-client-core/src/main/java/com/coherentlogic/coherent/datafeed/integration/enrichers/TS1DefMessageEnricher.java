@@ -1,17 +1,15 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.caches.TS1DefCache;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Event;
-import com.reuters.rfa.common.Handle;
 
 /**
  * This class is used to enrich the message returned from the RFA api by using
@@ -23,16 +21,9 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class TS1DefMessageEnricher extends AbstractMessageEnricher {
+public class TS1DefMessageEnricher implements EnricherSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(TS1DefMessageEnricher.class);
-
-    public TS1DefMessageEnricher(
-        Cache<Handle, Session> ts1DefCache
-    ) {
-        super(ts1DefCache);
-    }
+    private static final Logger log = LoggerFactory.getLogger(TS1DefMessageEnricher.class);
 
     /**
      * @todo This method could be moved to a base class.
@@ -42,7 +33,11 @@ public class TS1DefMessageEnricher extends AbstractMessageEnricher {
 
         log.debug("enrich: method begins; message: " + message);
 
-        Cache<Handle, Session> ts1DefCache = getSessionCache();
+//        Cache<Handle, Session> ts1DefCache = getSessionCache();
+
+        Event event = message.getPayload();
+
+        SessionBean sessionBean = (SessionBean) event.getClosure();
 
         Message<Event> enrichedMessage = null;
 
@@ -57,12 +52,12 @@ public class TS1DefMessageEnricher extends AbstractMessageEnricher {
          */
 //        synchronized (ts1DefCache) {
 
-            Session session = getSession (message, getSessionCache());
+//            Session session = getSession (message, getSessionCache());
 
             enrichedMessage =
                 MessageBuilder
                     .fromMessage(message)
-                    .setHeader(SESSION, session)
+                    .setHeader(SESSION, sessionBean)
                     .build ();
 //        }
         log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);

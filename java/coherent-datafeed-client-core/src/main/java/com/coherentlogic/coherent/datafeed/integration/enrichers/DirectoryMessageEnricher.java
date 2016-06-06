@@ -1,50 +1,41 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.Message;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Event;
-import com.reuters.rfa.common.Handle;
 
 /**
  * This class is used to enrich the message returned from the RFA api by using
  * the directory handle to find the associated session; this session is then
  * added to the message headers under the Constants.SESSION key.
  *
+ * @deprecated This class can be combined with the other enrichers.
+ *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DirectoryMessageEnricher extends AbstractMessageEnricher {
+public class DirectoryMessageEnricher implements EnricherSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(DirectoryMessageEnricher.class);
-
-    public DirectoryMessageEnricher(
-        Cache<Handle, Session> directoryCache
-    ) {
-        super(directoryCache);
-    }
+    private static final Logger log = LoggerFactory.getLogger(DirectoryMessageEnricher.class);
 
     public Message<Event> enrich (Message<Event> message) {
 
         log.debug("enrich: method begins; message: " + message);
 
-        Session session = getSession (message, getSessionCache());
+        SessionBean session = (SessionBean) message.getPayload().getClosure();
 
         Message<Event> enrichedMessage =
-            MessageBuilder
-                .fromMessage(message)
-                .setHeader(SESSION, session)
+            MessageBuilder.fromMessage(message)
+                .setHeaderIfAbsent(SESSION, session)
                 .build ();
 
         log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);
 
-        return enrichedMessage;
+        return message;
     }
 }

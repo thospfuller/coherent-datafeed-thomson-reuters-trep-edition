@@ -1,17 +1,14 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.Message;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Event;
-import com.reuters.rfa.common.Handle;
 
 /**
  * This class is used to enrich the message returned from the RFA api by using
@@ -23,31 +20,23 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DictionaryMessageEnricher extends AbstractMessageEnricher {
+public class DictionaryMessageEnricher implements EnricherSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(DictionaryMessageEnricher.class);
-
-    private DictionaryMessageEnricher(
-        Cache<Handle, Session> dictionaryCache
-    ) {
-        super(dictionaryCache);
-    }
+    private static final Logger log = LoggerFactory.getLogger(DictionaryMessageEnricher.class);
 
     public Message<Event> enrich (Message<Event> message) {
 
         log.debug("enrich: method begins; message: " + message);
 
-        Session session = getSession(message, getSessionCache());
+        SessionBean session = (SessionBean) message.getPayload().getClosure();
 
         Message<Event> enrichedMessage =
             MessageBuilder
                 .fromMessage(message)
-                .setHeader(SESSION, session)
+                .setHeaderIfAbsent(SESSION, session)
                 .build ();
 
-        log.debug("enrich: method ends; enrichedMessage: " +
-            enrichedMessage);
+        log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);
 
         return enrichedMessage;
     }
