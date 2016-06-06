@@ -24,6 +24,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  *
  * @see OMMSubAppContext.processDictionaryMsg
  *
+ * @deprecated This is only referenced once and isn't being used do delete this class.
+ *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class OMMSeriesHelper {
