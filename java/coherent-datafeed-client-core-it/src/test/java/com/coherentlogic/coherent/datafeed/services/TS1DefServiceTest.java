@@ -1,6 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.CACHE_BEAN_ID;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.coherentlogic.coherent.datafeed.beans.CachedEntry;
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -63,10 +65,15 @@ public class TS1DefServiceTest {
     @Test
     public void testInitializeHandleStringArray() throws InterruptedException {
 
-        Handle loginHandle = authenticationService.login(DACS_ID);
+        String dacsId = System.getenv(DACS_ID);
 
-        List<Handle> handles =
-            ts1DefService.initialize(loginHandle, "QQCN", "QQCO", "QQCP");
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setDacsId(dacsId);
+
+        Handle loginHandle = authenticationService.login(sessionBean);
+
+        List<Handle> handles = ts1DefService.initialize(loginHandle, sessionBean, "QQCN", "QQCO", "QQCP");
 
         assertEquals(3, handles.size());
 
