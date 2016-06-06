@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.coherentlogic.coherent.data.model.core.exceptions.ConversionFailedException;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Constants;
 
@@ -35,10 +36,11 @@ public class TimeSeriesQueryParameter extends QueryParameter {
     public TimeSeriesQueryParameter(
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String item,
         Integer period
     ) {
-        super(serviceName, loginHandle, item);
+        super(serviceName, loginHandle, sessionBean, item);
         this.period = period;
     }
 
@@ -48,10 +50,11 @@ public class TimeSeriesQueryParameter extends QueryParameter {
     public TimeSeriesQueryParameter(
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String item,
         String period
     ) {
-        super(serviceName, loginHandle, item);
+        super(serviceName, loginHandle, sessionBean, item);
 
         Integer periodValue = periodMap.get(period);
 
