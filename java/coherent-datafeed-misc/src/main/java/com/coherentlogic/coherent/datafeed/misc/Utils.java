@@ -42,7 +42,6 @@ public class Utils {
         Map<String, FidDef> nameMap,
         Action<Map.Entry<String, FidDef>> action
     ) {
-
         Set<Map.Entry<String, FidDef>> nameSet = nameMap.entrySet();
 
         for (Map.Entry<String, FidDef> next : nameSet)
@@ -134,11 +133,7 @@ public class Utils {
      * 
      * @throws NullPointerRuntimeException When the object is null.
      */
-    public static void assertNotNull(
-        String variableName,
-        Object object,
-        String message
-    ) {
+    public static void assertNotNull(String variableName, Object object, String message) {
         if (object == null) {
             String text = "The variable named " + variableName + " is null. "
                 + ((message == null) ? "" : message);
@@ -147,22 +142,23 @@ public class Utils {
         }
     }
 
-    public static void assertNotNullOrEmpty(String variableName,
-        Object[] objects) {
+    public static void assertNotNullOrEmpty(String variableName, Object[] objects) {
+
         assertNotNull(variableName, objects);
 
         if (objects.length == 0)
-            throw new MissingDataException("The array named " + variableName
-                + " is empty.");
+            throw new MissingDataException("The array named " + variableName + " is empty.");
     }
 
-    public static void assertNotNullOrEmpty(String variableName,
-        Collection<?> objects) {
-        assertNotNull(variableName, objects);
+    public static void assertNotEmpty(String variableName, Collection<?> objects) {
 
         if (objects.size() == 0)
-            throw new MissingDataException("The list named " + variableName
-                + " is empty.");
+            throw new MissingDataException("The list named " + variableName + " is empty.");
+    }
+
+    public static void assertNotNullOrEmpty(String variableName, Collection<?> objects) {
+        assertNotNull(variableName, objects);
+        assertNotEmpty(variableName, objects);
     }
 
     public static void assertSameSize (
@@ -175,9 +171,8 @@ public class Utils {
         assertNotNullOrEmpty(listBName, listB);
 
         if (listA.size() != listB.size())
-            throw new ImbalancedCollectionsException ("The size of the " +
-                "lists should be equal (" + listAName + ".size: " +
-                listA.size() + ", " + listB + ".size: " + listB.size());
+            throw new ImbalancedCollectionsException ("The size of the lists should be equal (" + listAName + ".size: "
+                + listA.size() + ", " + listB + ".size: " + listB.size());
     }
 
     /**
