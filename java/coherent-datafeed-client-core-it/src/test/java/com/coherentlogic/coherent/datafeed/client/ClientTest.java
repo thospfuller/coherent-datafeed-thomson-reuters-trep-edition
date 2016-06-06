@@ -12,6 +12,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.DictionaryServiceSpecification;
@@ -27,7 +28,7 @@ import com.reuters.rfa.common.Handle;
 @Ignore
 public class ClientTest {
 
-    private static final String DEFAULT_DACS_ID = "CoherentLogic_Fuller";
+    private static final String DEFAULT_DACS_ID = "defaultDacsId";
 
     private static final String[] DEFAULT_RICS = {
         "MSFT.O", "GOOG.O"
@@ -50,13 +51,17 @@ public class ClientTest {
 
         authenticationService = client.getAuthenticationService();
 
-        loginHandle = authenticationService.login(DEFAULT_DACS_ID);
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setDacsId(DEFAULT_DACS_ID);
+
+        Handle loginHandle = authenticationService.login(sessionBean);
 
         DictionaryServiceSpecification dictionaryService =
             (DictionaryServiceSpecification) client.getDictionaryService();
 
         dictionaryService.loadDictionaries(
-            Constants.IDN_RDF, loginHandle, "RWFFld", "RWFEnum");
+            Constants.IDN_RDF, loginHandle, sessionBean, "RWFFld", "RWFEnum");
 
         marketPriceService = client.getMarketPriceService();
     }
