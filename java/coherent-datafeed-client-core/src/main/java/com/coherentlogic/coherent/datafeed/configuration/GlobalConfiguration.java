@@ -13,6 +13,10 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
+import com.coherentlogic.coherent.datafeed.caches.DictionaryEntryCache;
+import com.coherentlogic.coherent.datafeed.caches.DirectoryEntryCache;
+import com.coherentlogic.coherent.datafeed.caches.TS1DefEntryCache;
+import com.coherentlogic.coherent.datafeed.caches.TimeSeriesEntriesCache;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory;
@@ -218,9 +222,10 @@ public class GlobalConfiguration {
 
     @Bean(name=TransformTimeSeriesMessageProcessor.BEAN_NAME)
     public TransformTimeSeriesMessageProcessor getTransformTimeSeriesMessageProcessor (
-        @Qualifier (TimeSeriesAdapter.BEAN_NAME) TimeSeriesAdapter timeSeriesAdapter
+        @Qualifier (TimeSeriesAdapter.BEAN_NAME) TimeSeriesAdapter timeSeriesAdapter,
+        @Qualifier(TimeSeriesEntriesCache.BEAN_NAME) TimeSeriesEntriesCache timeSeriesEntriesCache
     ) {
-        return new TransformTimeSeriesMessageProcessor (timeSeriesAdapter);
+        return new TransformTimeSeriesMessageProcessor (timeSeriesAdapter, timeSeriesEntriesCache);
     }
 
     @Bean(name=StatusInterpreter.BEAN_NAME)
@@ -278,9 +283,15 @@ public class GlobalConfiguration {
         return new OMMSeriesTransformer ();
     }
 
+    public static final String DIRECTORY_ENTRY_CACHE = "directoryEntryCache",
+        DICTIONARY_ENTRY_CACHE = "dictionaryEntryCache";
+
     @Bean(name=DictionaryLoadCompleteService.BEAN_NAME)
-    public DictionaryLoadCompleteService getDictionaryLoadCompleteService () {
-        return new DictionaryLoadCompleteService ();
+    public DictionaryLoadCompleteService getDictionaryLoadCompleteService (
+        @Qualifier (DIRECTORY_ENTRY_CACHE) DirectoryEntryCache directoryEntryCache,
+        @Qualifier (DICTIONARY_ENTRY_CACHE) DictionaryEntryCache dictionaryEntryCache
+    ) {
+        return new DictionaryLoadCompleteService (directoryEntryCache, dictionaryEntryCache);
     }
 
     @Bean(name=WorkflowEndsService.BEAN_NAME)
@@ -289,13 +300,14 @@ public class GlobalConfiguration {
     }
 
     @Bean(name=TS1DefDbHelper.BEAN_NAME)
-    public TS1DefDbHelper getTS1DefDbHelper () {
-        return new TS1DefDbHelper ();
+    public TS1DefDbHelper getTS1DefDbHelper (@Qualifier(TS1DefEntryCache.BEAN_NAME) TS1DefEntryCache ts1DefEntryCache) {
+        return new TS1DefDbHelper (ts1DefEntryCache);
     }
 
     @Bean(name=TimeSeriesHelper.BEAN_NAME)
-    public TimeSeriesHelper getTimeSeriesHelper () {
-        return new TimeSeriesHelper ();
+    public TimeSeriesHelper getTimeSeriesHelper (@Qualifier(TimeSeriesEntriesCache.BEAN_NAME)
+        TimeSeriesEntriesCache timeSeriesEntriesCache) {
+        return new TimeSeriesHelper (timeSeriesEntriesCache);
     }
 
     @Bean(name=MarketPriceFactory.BEAN_NAME)
