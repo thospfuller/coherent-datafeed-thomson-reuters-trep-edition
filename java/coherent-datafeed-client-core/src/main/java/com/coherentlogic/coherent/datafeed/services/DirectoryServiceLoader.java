@@ -1,7 +1,8 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.getSession;
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.adapters.DirectoryEntryAdapter;
+import com.coherentlogic.coherent.datafeed.caches.DirectoryEntryCache;
 import com.coherentlogic.coherent.datafeed.domain.ActionType;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDataTypeException;
@@ -33,9 +35,15 @@ public class DirectoryServiceLoader {
 
     private static final Logger log = LoggerFactory.getLogger(DirectoryServiceLoader.class);
 
+    private final DirectoryEntryCache directoryEntryCache;
+
     private final DirectoryEntryAdapter directoryEntryAdapter;
 
-    public DirectoryServiceLoader(DirectoryEntryAdapter directoryEntryAdapter) {
+    public DirectoryServiceLoader(
+        DirectoryEntryCache directoryEntryCache,
+        DirectoryEntryAdapter directoryEntryAdapter
+    ) {
+        this.directoryEntryCache = directoryEntryCache;
         this.directoryEntryAdapter = directoryEntryAdapter;
     }
 
@@ -44,8 +52,6 @@ public class DirectoryServiceLoader {
      */
     public Message<OMMItemEvent> load(Message<OMMItemEvent> message) {
 
-        Session session = getSession(message);
-
         OMMItemEvent ommItemEvent = message.getPayload();
         OMMMsg msg = ommItemEvent.getMsg();
 
@@ -53,7 +59,7 @@ public class DirectoryServiceLoader {
 
         OMMMap serviceMap = getServiceMap (ommItemEvent);
 
-        executeActionOn (msg, serviceMap, handle, session);
+        executeActionOn (msg, serviceMap, handle);
 
         return message;
     }
@@ -80,8 +86,7 @@ public class DirectoryServiceLoader {
         short dataType = msg.getDataType();
 
         if (dataType != OMMTypes.MAP)
-            throw new InvalidDataTypeException("Expected an OMMTypes.MAP, "
-                + "however received the following dataType: "
+            throw new InvalidDataTypeException("Expected an OMMTypes.MAP, however received the following dataType: "
                 + OMMTypes.toString(dataType));
 
         OMMMap serviceMap = (OMMMap) msg.getPayload();
@@ -89,21 +94,15 @@ public class DirectoryServiceLoader {
         return serviceMap;
     }
 
-    List<DirectoryEntry> transform (
-        OMMMsg msg,
-        OMMMapEntry mapEntry
-    ) {
+    List<DirectoryEntry> transform (OMMMsg msg, OMMMapEntry mapEntry) {
+
         short mapEntryDataType = mapEntry.getDataType();
 
         if (mapEntryDataType != OMMTypes.FILTER_LIST)
-            throw new InvalidDataTypeException(
-                "Expected an "
-                    + "OMMTypes.FILTER_LIST, however received "
-                    + "the following dataType: "
-                    + OMMTypes.toString(mapEntryDataType));
+            throw new InvalidDataTypeException("Expected an OMMTypes.FILTER_LIST, however received the following "
+                + "dataType: " + OMMTypes.toString(mapEntryDataType));
 
-        List<DirectoryEntry> directoryEntries =
-            transform(msg);
+        List<DirectoryEntry> directoryEntries = transform(msg);
 
         return directoryEntries;
     }
@@ -120,20 +119,33 @@ public class DirectoryServiceLoader {
         return directoryEntries;
     }
 
-    void executeActionOn (
-        OMMMsg msg,
-        OMMMap serviceMap,
-        Handle handle,
-        Session session
-    ) {
-        Map<String, DirectoryEntry> directoryServiceEntryMap =
-            session.getDirectoryServiceEntryCache(handle);
+    /**
+     * Method returns reference to the map of String:DirectoryEntry; note
+     * that if the reference is null a new reference will be created and stored
+     * using the handle reference.
+     */
+    public Map<String, DirectoryEntry> getDirectoryServiceEntryCache (Handle handle) {
 
-        for (
-            Iterator<?> iterator = serviceMap.iterator();
-            iterator.hasNext();
-        ) {
+        assertNotNull("handle", handle);
+
+        Map<String, DirectoryEntry> result = directoryEntryCache.get (handle);
+
+        if (result == null) {
+            result = new HashMap<String, DirectoryEntry> ();
+            directoryEntryCache.put(handle, result);
+        }
+        return result;
+    }
+
+    void executeActionOn (OMMMsg msg, OMMMap serviceMap, Handle handle) {
+
+        Map<String, DirectoryEntry> directoryServiceEntryMap =
+            directoryEntryCache.getDirectoryServiceEntryCache(handle);
+
+        for (Iterator<?> iterator = serviceMap.iterator(); iterator.hasNext();) {
+
             OMMMapEntry mapEntry = (OMMMapEntry) iterator.next();
+
             List<DirectoryEntry> directoryEntries = transform(msg, mapEntry);
 
             executeActionOn(directoryEntries, directoryServiceEntryMap);
@@ -146,11 +158,11 @@ public class DirectoryServiceLoader {
      *
      * @todo We need to test the update logic below.
      */
-    void executeActionOn(List<DirectoryEntry> directoryEntries,
-        Map<String, DirectoryEntry> directoryServiceEntryCache) {
-
-        log.debug("directoryServiceEntries.size: "
-                + directoryEntries.size());
+    void executeActionOn(
+        List<DirectoryEntry> directoryEntries,
+        Map<String, DirectoryEntry> directoryServiceEntryCache
+    ) {
+        log.debug("directoryServiceEntries.size: " + directoryEntries.size());
 
         for (DirectoryEntry entry : directoryEntries) {
 
@@ -158,13 +170,9 @@ public class DirectoryServiceLoader {
 
             ActionType actionType = entry.getActionType();
 
-            log.info ("actionType: " + actionType + ", name (key): " + key +
-                ", entry: " + entry);
+            log.debug ("actionType: " + actionType + ", name (key): " + key + ", entry: " + entry);
 
-            if (actionType == ActionType.ADD
-                ||
-                actionType == ActionType.UPDATE
-            ) {
+            if (actionType == ActionType.ADD || actionType == ActionType.UPDATE) {
                 directoryServiceEntryCache.put(key, entry);
             } else
                 directoryServiceEntryCache.remove(key);
