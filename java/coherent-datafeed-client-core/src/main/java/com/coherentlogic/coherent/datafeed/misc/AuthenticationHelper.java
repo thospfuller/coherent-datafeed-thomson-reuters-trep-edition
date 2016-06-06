@@ -6,7 +6,6 @@ import static com.reuters.rfa.omm.OMMState.Stream.OPEN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.datafeed.client.ui.MainUI;
 import com.reuters.rfa.internal.rwf.RwfMsgOverride;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMState;
@@ -44,10 +43,9 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  */
 public class AuthenticationHelper {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(AuthenticationHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationHelper.class);
 
-    public boolean loginSucceeded (OMMItemEvent itemEvent) {
+	public boolean loginSucceeded (OMMItemEvent itemEvent) {
 
         OMMMsg msg = itemEvent.getMsg();
 
@@ -63,15 +61,7 @@ public class AuthenticationHelper {
      */
     public boolean loginSucceeded (OMMMsg ommMsg) {
 
-        /* We originally wanted to throw an exception and have this handled by
-         * the exception-type-router handle this appropriately. We ran into
-         * trouble, however, because when we throw an exception here, it results
-         * in other exceptions being thrown, and hence we end up receiving an
-         * AggregateMessageDeliveryException, which is not what we want.
-         */
-
-        log.info ("loginSucceeded: method begins; ommMsg: " + ommMsg +
-            ", ommMsg.isFinal: " + ommMsg.isFinal());
+        log.debug ("loginSucceeded: method begins; ommMsg: " + ommMsg + ", ommMsg.isFinal: " + ommMsg.isFinal());
 
         byte msgType = ommMsg.getMsgType();
 
@@ -91,25 +81,13 @@ public class AuthenticationHelper {
 
         boolean dataStateOK = (dataState == OK);
 
-        boolean loginSuccessful =
-            hasStatusResp
-            &&
-            hasState
-            &&
-            streamStateOpen
-            &&
-            dataStateOK;
+        boolean finalFlag = ommMsg.isFinal();
 
-        String text = "loginSucceeded: method ends; loginSuccessful: " +
-                loginSuccessful +
-                ", code: " + code +
-                ", hasStatusResp: " + hasStatusResp +
-                ", hasState: " + hasState +
-                ", streamStateOpen: " + streamStateOpen +
-                ", dataStateOK: " + dataStateOK +
-                ", toString: " + state.getText();
+        boolean loginSuccessful = hasStatusResp && hasState && streamStateOpen && dataStateOK && !finalFlag;
 
-        log.info(text);
+        log.debug("loginSucceeded: method ends; loginSuccessful: " + loginSuccessful + ", code: " + code +
+            ", hasStatusResp: " + hasStatusResp + ", hasState: " + hasState + ", streamStateOpen: " + streamStateOpen +
+            ", dataStateOK: " + dataStateOK + ", finalFlag: " + finalFlag +  ", text: " + state.getText());
 
         return loginSuccessful;
     }
@@ -147,3 +125,27 @@ public class AuthenticationHelper {
 //        );
     }
 }
+
+//public AuthenticationHelper(Map<Handle, String> dacsIdCache, Map<String, SessionBean> sessionBeanCache) {
+//	this.dacsIdCache = dacsIdCache;
+//	this.sessionBeanCache = sessionBeanCache;
+//}
+//
+//public boolean loginSucceeded (OMMItemEvent itemEvent) {
+//
+//	Handle handle = itemEvent.getHandle();
+//
+//	String dacsId = dacsIdCache.get(key);
+//
+//	SessionBean sessionBean = sessionBeanCache.get(dacsId);
+//
+//	StatusResponse statusResponse = sessionBean.getStatusResponse();
+//
+//	String streamState = statusResponse.getStreamState();
+//	String dataState = statusResponse.getDataState();
+//	short code = statusResponse.getCode();
+//
+//	boolean loginSuccessful =
+//        hasStatusResp && hasState && streamStateOpen && dataStateOK;
+//	
+//}
