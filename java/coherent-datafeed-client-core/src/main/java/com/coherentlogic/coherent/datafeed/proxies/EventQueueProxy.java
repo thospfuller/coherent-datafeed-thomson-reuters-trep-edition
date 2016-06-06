@@ -43,14 +43,16 @@ public class EventQueueProxy {
         DispatchableNotificationClient dispatchableNotificationClient,
         Object closure
     ) {
-
         this.eventQueue = eventQueue;
         this.dispatchableNotificationClient = dispatchableNotificationClient;
         this.closure = closure;
 
         if (dispatchableNotificationClient != null)
-            eventQueue.registerNotificationClient(
-                dispatchableNotificationClient, closure);
+            eventQueue.registerNotificationClient(dispatchableNotificationClient, closure);
+    }
+
+    public void stop () {
+        eventQueue.unregisterNotificationClient(dispatchableNotificationClient);
     }
 
     public EventQueue getEventQueue() {
@@ -59,10 +61,6 @@ public class EventQueueProxy {
 
     public DispatchableNotificationClient getDispatchableNotificationClient() {
         return dispatchableNotificationClient;
-    }
-
-    public Object getClosure() {
-        return closure;
     }
 
     /**
