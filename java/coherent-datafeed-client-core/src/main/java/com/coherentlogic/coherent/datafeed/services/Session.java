@@ -1,7 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
@@ -88,8 +86,7 @@ public class Session extends SerializableBean {
     /** @TODO: Set this property via the ctor.
      *  @deprecated See comment above.
      */
-    private final Map<Handle, TimeSeriesKey> timeSeriesKeyCache =
-        new HashMap<Handle, TimeSeriesKey> ();
+    private final Map<Handle, TimeSeriesKey> timeSeriesKeyCache = new HashMap<Handle, TimeSeriesKey> ();
 
     private PropertyChangeSupport propertyChangeSupport = null;
 
@@ -164,112 +161,112 @@ public class Session extends SerializableBean {
 //        nameToDirectoryMap.put(name, directoryEntry);
 //    }
 
-    /**
-     * @todo Rename this method to put or addDictionaryEntry.
-     */
-    public void putDictionary (
-        Handle handle,
-        DictionaryEntry dictionaryEntry
-    ) {
-        assertNotNull(HANDLE, handle);
-        assertNotNull(DICTIONARY_SERVICE_ENTRY, dictionaryEntry);
+//    /**
+//     * @todo Rename this method to put or addDictionaryEntry.
+//     */
+//    public void putDictionary (
+//        Handle handle,
+//        DictionaryEntry dictionaryEntry
+//    ) {
+//        assertNotNull(HANDLE, handle);
+//        assertNotNull(DICTIONARY_SERVICE_ENTRY, dictionaryEntry);
+//
+//        dictionaryEntryCache.put(handle, dictionaryEntry);
+//    }
 
-        dictionaryEntryCache.put(handle, dictionaryEntry);
-    }
+//    public DictionaryEntry findDictionaryServiceEntry (
+//        Handle handle
+//    ) {
+//        assertNotNull ("handle", handle);
+//
+//        Map<Handle, DictionaryEntry> dictionaryServiceEntriesMap =
+//            getDictionaryCache();
+//
+//        DictionaryEntry result = dictionaryServiceEntriesMap.get(handle);
+//
+//        return result;
+//    }
 
-    public DictionaryEntry findDictionaryServiceEntry (
-        Handle handle
-    ) {
-        assertNotNull ("handle", handle);
+//    /**
+//     * Method attempts to find the {@link DictionaryEntry} associated with the
+//     * given dictionaryName.
+//     *
+//     * @return The dictionaryName or null if none was found.
+//     *
+//     * @todo Unit test this method. 
+//     */
+//    public DictionaryEntry findDictionaryServiceEntry (
+//        String dictionaryName
+//    ) {
+//        assertNotNull (DICTIONARY_NAME, dictionaryName);
+//
+//        Map<Handle, DictionaryEntry> dictionaryServiceEntriesMap =
+//            getDictionaryCache();
+//
+//        DictionaryEntry result = null;
+//
+//        for (Map.Entry<Handle, DictionaryEntry> dictionaryEntrySet :
+//            dictionaryServiceEntriesMap.entrySet()) {
+//
+//            DictionaryEntry nextDictionaryEntry = dictionaryEntrySet.getValue();
+//
+//            String nextName = nextDictionaryEntry.getName();
+//
+//            if (dictionaryName.equals(nextName)) {
+//                result = nextDictionaryEntry;
+//                break;
+//            }
+//        }
+//        return result;
+//    }
 
-        Map<Handle, DictionaryEntry> dictionaryServiceEntriesMap =
-            getDictionaryCache();
+//    public void putTS1DefEntry (Handle handle, TS1DefEntry ts1DefEntry) {
+//        ts1DefEntryCache.put(handle, ts1DefEntry);
+//    }
+//
+//    public TS1DefEntry getTS1DefEntry (Handle handle) {
+//        return ts1DefEntryCache.get (handle);
+//    }
+//
+//    public TS1DefEntry removeTS1DefEntry (Handle handle) {
+//        return ts1DefEntryCache.remove(handle);
+//    }
+//
+//    public Map<Handle, TS1DefEntry> getTS1DefEntryCache () {
+//        return ts1DefEntryCache;
+//    }
 
-        DictionaryEntry result = dictionaryServiceEntriesMap.get(handle);
-
-        return result;
-    }
-
-    /**
-     * Method attempts to find the {@link DictionaryEntry} associated with the
-     * given dictionaryName.
-     *
-     * @return The dictionaryName or null if none was found.
-     *
-     * @todo Unit test this method. 
-     */
-    public DictionaryEntry findDictionaryServiceEntry (
-        String dictionaryName
-    ) {
-        assertNotNull (DICTIONARY_NAME, dictionaryName);
-
-        Map<Handle, DictionaryEntry> dictionaryServiceEntriesMap =
-            getDictionaryCache();
-
-        DictionaryEntry result = null;
-
-        for (Map.Entry<Handle, DictionaryEntry> dictionaryEntrySet :
-            dictionaryServiceEntriesMap.entrySet()) {
-
-            DictionaryEntry nextDictionaryEntry = dictionaryEntrySet.getValue();
-
-            String nextName = nextDictionaryEntry.getName();
-
-            if (dictionaryName.equals(nextName)) {
-                result = nextDictionaryEntry;
-                break;
-            }
-        }
-        return result;
-    }
-
-    public void putTS1DefEntry (Handle handle, TS1DefEntry ts1DefEntry) {
-        ts1DefEntryCache.put(handle, ts1DefEntry);
-    }
-
-    public TS1DefEntry getTS1DefEntry (Handle handle) {
-        return ts1DefEntryCache.get (handle);
-    }
-
-    public TS1DefEntry removeTS1DefEntry (Handle handle) {
-        return ts1DefEntryCache.remove(handle);
-    }
-
-    public Map<Handle, TS1DefEntry> getTS1DefEntryCache () {
-        return ts1DefEntryCache;
-    }
-
-    /**
-     * @return True when the loaded flag for ever dictionary has been set to
-     *  true otherwise this method returns false.
-     */
-    public boolean allDictionariesAreLoaded () {
-
-        boolean result = true;
-
-        Set<Entry<Handle, DictionaryEntry>> dictionaryEntries =
-            dictionaryEntryCache.entrySet();
-
-        Iterator<Entry<Handle, DictionaryEntry>> iterator =
-            dictionaryEntries.iterator();
-
-        while (iterator.hasNext()) {
-
-            Entry<Handle, DictionaryEntry>
-                nextEntry = iterator.next();
-
-            DictionaryEntry nextDictionaryServiceEntry =
-                nextEntry.getValue();
-
-            boolean subResult = nextDictionaryServiceEntry.isLoaded();
-
-            if (!subResult) {
-                result = false;
-                break;
-            }
-        }
-        return result;
-    }
+//    /**
+//     * @return True when the loaded flag for ever dictionary has been set to
+//     *  true otherwise this method returns false.
+//     */
+//    public boolean allDictionariesAreLoaded () {
+//
+//        boolean result = true;
+//
+//        Set<Entry<Handle, DictionaryEntry>> dictionaryEntries =
+//            dictionaryEntryCache.entrySet();
+//
+//        Iterator<Entry<Handle, DictionaryEntry>> iterator =
+//            dictionaryEntries.iterator();
+//
+//        while (iterator.hasNext()) {
+//
+//            Entry<Handle, DictionaryEntry>
+//                nextEntry = iterator.next();
+//
+//            DictionaryEntry nextDictionaryServiceEntry =
+//                nextEntry.getValue();
+//
+//            boolean subResult = nextDictionaryServiceEntry.isLoaded();
+//
+//            if (!subResult) {
+//                result = false;
+//                break;
+//            }
+//        }
+//        return result;
+//    }
 
     boolean allDictionariesAreLoaded (
         Set<DictionaryEntry> dictionaryEntries
@@ -291,171 +288,171 @@ public class Session extends SerializableBean {
         return result;
     }
 
-    public Set<String> getAllDirectoryNames () {
+//    public Set<String> getAllDirectoryNames () {
+//
+//        Set<String> results = new HashSet<String> ();
+//
+//        Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
+//            directoryEntryCache.entrySet();
+//
+//        for (Entry <Handle, Map<String, DirectoryEntry>> nextDirectory :
+//            directories
+//        ) {
+//            Map<String, DirectoryEntry> directoryEntryMap =
+//                nextDirectory.getValue();
+//
+//            getAllDirectoryNames (directoryEntryMap, results);
+//        }
+//        return results;
+//    }
+//
+//    void getAllDirectoryNames (
+//        Map<String, DirectoryEntry> directoryEntryMap,
+//        Set<String> results
+//    ) {
+//        // Results, at least as we've written it above, cannot be a non-null
+//        // value, so we're only going to assertNotNull on the dEM.
+//        assertNotNull("directoryEntryMap", directoryEntryMap);
+//
+//        Set<Entry <String, DirectoryEntry>> directoryEntrySet =
+//            directoryEntryMap.entrySet();
+//
+//        for (Entry <String, DirectoryEntry> nextDirectoryEntry :
+//            directoryEntrySet
+//        ) {
+//            String result = nextDirectoryEntry.getKey();
+//            results.add(result);
+//        }
+//    }
 
-        Set<String> results = new HashSet<String> ();
+//    /**
+//     * Method returns reference to the map of String:DirectoryEntry; note
+//     * that if the reference is null a new reference will be created and stored
+//     * using the handle reference.
+//     */
+//    public Map<String, DirectoryEntry> getDirectoryServiceEntryCache (
+//        Handle handle
+//    ) {
+//        assertNotNull("handle", handle);
+//
+//        Map<String, DirectoryEntry> result =
+//            directoryEntryCache.get (handle);
+//
+//        if (result == null) {
+//            result = new HashMap<String, DirectoryEntry> ();
+//            directoryEntryCache.put(handle, result);
+//        }
+//        return result;
+//    }
 
-        Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
-            directoryEntryCache.entrySet();
+//    /**
+//     * This method iterates over all {@link DirectoryServiceEntries} in the
+//     * directoryEntryCache and builds a set of strings that contain the
+//     * dictionariesUsed 
+//     */
+//    public Set<String> getAllDictionariesUsed (String directoryName) {
+//
+//        log.info ("getAllDictionariesUsed: method invoked with directoryName: " + directoryName);
+//
+//        Set<String> results = new HashSet<String> ();
+//
+//        Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
+//            directoryEntryCache.entrySet();
+//
+//        for (Entry <Handle, Map<String, DirectoryEntry>> nextDirectory :
+//            directories
+//        ) {
+//            Map<String, DirectoryEntry> directoryEntryMap =
+//                nextDirectory.getValue();
+//
+//            Set<Entry <String, DirectoryEntry>> directoryEntrySet =
+//                directoryEntryMap.entrySet();
+//
+//            for (Entry <String, DirectoryEntry> nextDirectoryEntry :
+//                directoryEntrySet
+//            ) {
+//                log.debug("nextDirectoryEntry: " + ToStringBuilder.reflectionToString(nextDirectoryEntry));
+//
+//                DirectoryEntry directoryEntry =
+//                    nextDirectoryEntry.getValue();
+//
+//                if (directoryName.equals(directoryEntry.getName())) {
+//                    List<String> dictionariesUsed =
+//                        directoryEntry.getDictionariesUsed();
+//
+//                    results.addAll(dictionariesUsed);
+//                }
+//            }
+//        }
+//        return results;
+//    }
 
-        for (Entry <Handle, Map<String, DirectoryEntry>> nextDirectory :
-            directories
-        ) {
-            Map<String, DirectoryEntry> directoryEntryMap =
-                nextDirectory.getValue();
+//    /**
+//     * This method iterates over all {@link DirectoryServiceEntries} in the
+//     * directoryEntryCache and builds a set of strings that contain the
+//     * dictionariesUsed
+//     *
+//     * @todo There's a better way to do this -- either pass a closure, or
+//     *  possibly create a map that has a name key pointing to all the DSE's w.
+//     *  that name.
+//     */
+//    public Set<String> getAllDictionariesUsedForDirectoryName (
+//        String directoryName) {
+//
+//        Set<String> results = new HashSet<String> ();
+//
+//        Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
+//            directoryEntryCache.entrySet();
+//
+//        for (Entry <Handle, Map<String, DirectoryEntry>> nextDirectory :
+//            directories
+//        ) {
+//            Map<String, DirectoryEntry> directoryEntryMap =
+//                nextDirectory.getValue();
+//
+//            Set<Entry <String, DirectoryEntry>> directoryEntrySet =
+//                directoryEntryMap.entrySet();
+//
+//            for (Entry <String, DirectoryEntry> nextDirectoryEntry :
+//                directoryEntrySet
+//            ) {
+//                log.debug("nextDirectoryEntry: " +
+//                    ToStringBuilder.reflectionToString(nextDirectoryEntry));
+//
+//                DirectoryEntry directoryEntry =
+//                    nextDirectoryEntry.getValue();
+//
+//                if (directoryName.equals(directoryEntry.getName())) {
+//                    List<String> dictionariesUsed =
+//                        directoryEntry.getDictionariesUsed();
+//                    results.addAll(dictionariesUsed);
+//                    break;
+//                }
+//            }
+//        }
+//        return results;
+//    }
 
-            getAllDirectoryNames (directoryEntryMap, results);
-        }
-        return results;
-    }
-
-    void getAllDirectoryNames (
-        Map<String, DirectoryEntry> directoryEntryMap,
-        Set<String> results
-    ) {
-        // Results, at least as we've written it above, cannot be a non-null
-        // value, so we're only going to assertNotNull on the dEM.
-        assertNotNull("directoryEntryMap", directoryEntryMap);
-
-        Set<Entry <String, DirectoryEntry>> directoryEntrySet =
-            directoryEntryMap.entrySet();
-
-        for (Entry <String, DirectoryEntry> nextDirectoryEntry :
-            directoryEntrySet
-        ) {
-            String result = nextDirectoryEntry.getKey();
-            results.add(result);
-        }
-    }
-
-    /**
-     * Method returns reference to the map of String:DirectoryEntry; note
-     * that if the reference is null a new reference will be created and stored
-     * using the handle reference.
-     */
-    public Map<String, DirectoryEntry> getDirectoryServiceEntryCache (
-        Handle handle
-    ) {
-        assertNotNull("handle", handle);
-
-        Map<String, DirectoryEntry> result =
-            directoryEntryCache.get (handle);
-
-        if (result == null) {
-            result = new HashMap<String, DirectoryEntry> ();
-            directoryEntryCache.put(handle, result);
-        }
-        return result;
-    }
-
-    /**
-     * This method iterates over all {@link DirectoryServiceEntries} in the
-     * directoryEntryCache and builds a set of strings that contain the
-     * dictionariesUsed 
-     */
-    public Set<String> getAllDictionariesUsed (String directoryName) {
-
-        log.info ("getAllDictionariesUsed: method invoked with directoryName: " + directoryName);
-
-        Set<String> results = new HashSet<String> ();
-
-        Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
-            directoryEntryCache.entrySet();
-
-        for (Entry <Handle, Map<String, DirectoryEntry>> nextDirectory :
-            directories
-        ) {
-            Map<String, DirectoryEntry> directoryEntryMap =
-                nextDirectory.getValue();
-
-            Set<Entry <String, DirectoryEntry>> directoryEntrySet =
-                directoryEntryMap.entrySet();
-
-            for (Entry <String, DirectoryEntry> nextDirectoryEntry :
-                directoryEntrySet
-            ) {
-                log.debug("nextDirectoryEntry: " + ToStringBuilder.reflectionToString(nextDirectoryEntry));
-
-                DirectoryEntry directoryEntry =
-                    nextDirectoryEntry.getValue();
-
-                if (directoryName.equals(directoryEntry.getName())) {
-                    List<String> dictionariesUsed =
-                        directoryEntry.getDictionariesUsed();
-
-                    results.addAll(dictionariesUsed);
-                }
-            }
-        }
-        return results;
-    }
-
-    /**
-     * This method iterates over all {@link DirectoryServiceEntries} in the
-     * directoryEntryCache and builds a set of strings that contain the
-     * dictionariesUsed
-     *
-     * @todo There's a better way to do this -- either pass a closure, or
-     *  possibly create a map that has a name key pointing to all the DSE's w.
-     *  that name.
-     */
-    public Set<String> getAllDictionariesUsedForDirectoryName (
-        String directoryName) {
-
-        Set<String> results = new HashSet<String> ();
-
-        Set<Entry <Handle, Map<String, DirectoryEntry>>> directories =
-            directoryEntryCache.entrySet();
-
-        for (Entry <Handle, Map<String, DirectoryEntry>> nextDirectory :
-            directories
-        ) {
-            Map<String, DirectoryEntry> directoryEntryMap =
-                nextDirectory.getValue();
-
-            Set<Entry <String, DirectoryEntry>> directoryEntrySet =
-                directoryEntryMap.entrySet();
-
-            for (Entry <String, DirectoryEntry> nextDirectoryEntry :
-                directoryEntrySet
-            ) {
-                log.debug("nextDirectoryEntry: " +
-                    ToStringBuilder.reflectionToString(nextDirectoryEntry));
-
-                DirectoryEntry directoryEntry =
-                    nextDirectoryEntry.getValue();
-
-                if (directoryName.equals(directoryEntry.getName())) {
-                    List<String> dictionariesUsed =
-                        directoryEntry.getDictionariesUsed();
-                    results.addAll(dictionariesUsed);
-                    break;
-                }
-            }
-        }
-        return results;
-    }
-
-    public boolean allTS1DefDbEntriesAreLoaded (
-        Set<Map.Entry<Handle, TS1DefEntry>> ts1DefEntries
-    ) {
-        boolean result = true;
-
-        for (Map.Entry<Handle, TS1DefEntry> nextEntry : ts1DefEntries) {
-
-            TS1DefEntry ts1DefEntry = nextEntry.getValue();
-
-            if (!ts1DefEntry.isLoaded()) {
-                result = false;
-                break;
-            }
-        }
-        return result;
-    }
-
-    public boolean allTS1DefDbEntriesAreLoaded () {
-        return allTS1DefDbEntriesAreLoaded (ts1DefEntryCache.entrySet());
-    }
+//    public boolean allTS1DefDbEntriesAreLoaded (
+//        Set<Map.Entry<Handle, TS1DefEntry>> ts1DefEntries
+//    ) {
+//        boolean result = true;
+//
+//        for (Map.Entry<Handle, TS1DefEntry> nextEntry : ts1DefEntries) {
+//
+//            TS1DefEntry ts1DefEntry = nextEntry.getValue();
+//
+//            if (!ts1DefEntry.isLoaded()) {
+//                result = false;
+//                break;
+//            }
+//        }
+//        return result;
+//    }
+//
+//    public boolean allTS1DefDbEntriesAreLoaded () {
+//        return allTS1DefDbEntriesAreLoaded (ts1DefEntryCache.entrySet());
+//    }
 
     /**
      * @return A reference to the {@link #dictionaryEntryCache}, which holds references
@@ -465,21 +462,21 @@ public class Session extends SerializableBean {
         return dictionaryEntryCache;
     }
 
-    public TimeSeriesEntries getTimeSeriesEntries (Handle handle) {
-        return timeSeriesEntryCache.get(handle);
-    }
+//    public TimeSeriesEntries getTimeSeriesEntries (Handle handle) {
+//        return timeSeriesEntryCache.get(handle);
+//    }
 
-    public TimeSeriesKey getTimeSeriesKey(Handle handle) {
-        return timeSeriesKeyCache.get (handle);
-    }
-
-    /**
-     * @param handle
-     * @param timeSeriesKey
-     */
-    public void putTimeSeriesKey(Handle handle, TimeSeriesKey timeSeriesKey) {
-        timeSeriesKeyCache.put (handle, timeSeriesKey);
-    }
+//    public TimeSeriesKey getTimeSeriesKey(Handle handle) {
+//        return timeSeriesKeyCache.get (handle);
+//    }
+//
+//    /**
+//     * @param handle
+//     * @param timeSeriesKey
+//     */
+//    public void putTimeSeriesKey(Handle handle, TimeSeriesKey timeSeriesKey) {
+//        timeSeriesKeyCache.put (handle, timeSeriesKey);
+//    }
 
     public void putTimeSeriesEntries (
         Handle handle,
