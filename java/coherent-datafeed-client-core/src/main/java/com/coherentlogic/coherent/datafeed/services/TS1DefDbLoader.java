@@ -24,15 +24,11 @@ import com.reuters.ts1.TS1DefDb;
  */
 public class TS1DefDbLoader extends BasicLoader<OMMItemEvent> {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(TS1DefDbLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(TS1DefDbLoader.class);
 
     private final TS1DefDb ts1DefDb;
 
-    public TS1DefDbLoader(
-        FieldDictionary fieldDictionary,
-        TS1DefDb ts1DefDb
-    ) {
+    public TS1DefDbLoader(FieldDictionary fieldDictionary, TS1DefDb ts1DefDb) {
         super(fieldDictionary);
         this.ts1DefDb = ts1DefDb;
     }
@@ -46,12 +42,10 @@ public class TS1DefDbLoader extends BasicLoader<OMMItemEvent> {
 
         FidDef fidDef = fieldDictionary.getFidDef(ROW64_3);
 
-        // If this exception is thrown then chances are the Spring configuration
-        // files are set up such that the fieldDictionary is loaded from the
-        // file but not completely configured completely.
+        // If this exception is thrown then chances are the Spring configuration files are set up such that the
+        // fieldDictionary is loaded from the file but not completely configured completely.
         if (fidDef == null)
-            throw new ClientNotInitializedException("The fieldDictionary " +
-                "does not appear to have been loaded properly.");
+            throw new ClientNotInitializedException("The fieldDictionary has not been loaded properly.");
 
         short fieldId = fidDef.getFieldId();
 
@@ -69,11 +63,7 @@ public class TS1DefDbLoader extends BasicLoader<OMMItemEvent> {
              * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              */
 
-            if (defDbBytes != null
-                &&
-                0 < defDbBytes.length
-                && (!defDbText.equals(EMPTY_STRING))
-            ) {
+            if (defDbBytes != null && 0 < defDbBytes.length && (!defDbText.equals(EMPTY_STRING))) {
                 // TS1DefDb - Invalid TS1 data will not be added: 37 22 2f 7b...
                 // happens here.
                 boolean parsed = ts1DefDb.add(defDbBytes);
@@ -81,16 +71,13 @@ public class TS1DefDbLoader extends BasicLoader<OMMItemEvent> {
                 int size = ts1DefDb.size();
 
                 if (!parsed)
-                    log.warn("Adding the following bytes to the defDb " +
-                        "failed: " + new String(defDbBytes));
-                else log.info("The defDb was able to parse the bytes " +
-                    "provided -- the defDb.size is now: " + size +
-                    ", defDbBytes: " + new String(defDbBytes));
+                    log.warn("Adding the following bytes to the defDb failed: " + new String(defDbBytes));
+                else
+                    log.info("The defDb was able to parse the bytes " + "provided -- the defDb.size is now: " + size +
+                        ", defDbBytes: " + new String(defDbBytes));
 
             } else {
-                log.debug(
-                    "The string '" + defDbText +
-                    "' was not added to the defDb.");
+                log.debug("The string '" + defDbText + "' was not added to the defDb.");
             }
         }
     }
