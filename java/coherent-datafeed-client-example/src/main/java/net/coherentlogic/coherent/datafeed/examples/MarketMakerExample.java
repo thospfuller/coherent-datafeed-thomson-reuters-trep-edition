@@ -23,10 +23,11 @@ import org.springframework.context.support.AbstractApplicationContext;
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
@@ -78,13 +79,13 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
             (MarketMakerServiceSpecification)
             applicationContext.getBean(MARKET_MAKER_SERVICE_GATEWAY);
 
-        final PauseResumeService pauseResumeService = new PauseResumeService ();
+        final FlowInverterService pauseResumeService = new FlowInverterService ();
 
         frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
             Arrays.asList(
                 new FrameworkEventListener() {
                     @Override
-                    public void onEventReceived(Session session) {
+                    public void onEventReceived(SessionBean session) {
                         pauseResumeService.resume(true);
                     }
                 }
@@ -95,7 +96,7 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
             Arrays.asList(
                 new FrameworkEventListener () {
                     @Override
-                    public void onEventReceived(Session session) {
+                    public void onEventReceived(SessionBean session) {
                         pauseResumeService.resume(false);
                     }
                 }
@@ -104,7 +105,11 @@ public class MarketMakerExample implements CommandLineRunner, MarketPriceConstan
 
         String dacsId = System.getenv(DACS_ID);
 
-        Handle loginHandle = authenticationService.login(dacsId);
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setDacsId(dacsId);
+
+        Handle loginHandle = authenticationService.login(sessionBean);
 
         log.info("main thread: " + Thread.currentThread());
 

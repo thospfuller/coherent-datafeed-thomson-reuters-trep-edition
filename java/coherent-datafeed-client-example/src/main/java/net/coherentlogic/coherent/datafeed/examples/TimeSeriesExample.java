@@ -85,6 +85,7 @@ public class TimeSeriesExample implements CommandLineRunner {
             timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
                 Constants.ELEKTRON_DD,
                 loginHandle,
+                null, // need to set the SessionBean here but right now this is null.
                 "TRI.N",
                 TS1Constants.WEEKLY_PERIOD
             );

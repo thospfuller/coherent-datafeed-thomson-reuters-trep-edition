@@ -18,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.DictionaryService;
@@ -74,7 +75,11 @@ public class AdvancedDictionaryExample implements CommandLineRunner {
 
         String dacsId = System.getenv(DACS_ID);
 
-        Handle handle = authenticationService.login(dacsId);
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setDacsId(dacsId);
+
+        Handle handle = authenticationService.login(sessionBean);
 
         log.info("Login handle is: " + handle);
 
@@ -84,6 +89,7 @@ public class AdvancedDictionaryExample implements CommandLineRunner {
         dictionaryService.loadDictionaries(
             Constants.ELEKTRON_DD,
             handle,
+            sessionBean,
             "RWFFld",
             "RWFEnum"
         );

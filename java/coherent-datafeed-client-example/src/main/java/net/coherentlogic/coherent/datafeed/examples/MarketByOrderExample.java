@@ -7,8 +7,6 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_ORDER
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +16,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
-import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
-import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.reuters.rfa.common.Handle;
 
@@ -75,13 +71,13 @@ public class MarketByOrderExample implements CommandLineRunner, MarketPriceConst
             (MarketByOrderServiceSpecification)
             applicationContext.getBean(MARKET_BY_ORDER_SERVICE_GATEWAY);
 
-        final PauseResumeService pauseResumeService = new PauseResumeService ();
+        final FlowInverterService pauseResumeService = new FlowInverterService ();
 
         frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
             Arrays.asList(
                 new FrameworkEventListener() {
                     @Override
-                    public void onEventReceived(Session session) {
+                    public void onEventReceived(SessionBean session) {
                         pauseResumeService.resume(true);
                     }
                 }
@@ -92,7 +88,7 @@ public class MarketByOrderExample implements CommandLineRunner, MarketPriceConst
             Arrays.asList(
                 new FrameworkEventListener () {
                     @Override
-                    public void onEventReceived(Session session) {
+                    public void onEventReceived(SessionBean session) {
                         pauseResumeService.resume(false);
                     }
                 }
@@ -101,7 +97,11 @@ public class MarketByOrderExample implements CommandLineRunner, MarketPriceConst
 
         String dacsId = System.getenv(DACS_ID);
 
-        Handle loginHandle = authenticationService.login(dacsId);
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setDacsId(dacsId);
+
+        Handle loginHandle = authenticationService.login(sessionBean);
 
         log.info("main thread: " + Thread.currentThread());
 
