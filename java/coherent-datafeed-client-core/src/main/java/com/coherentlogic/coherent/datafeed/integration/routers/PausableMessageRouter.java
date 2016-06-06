@@ -7,7 +7,7 @@ import org.springframework.integration.router.AbstractMessageRouter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 
 /**
  * A message router that can be paused when another thread needs to complete a
@@ -17,7 +17,7 @@ import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
  */
 public class PausableMessageRouter extends AbstractMessageRouter {
 
-    private final PauseResumeService pauseResumeService;
+    private final FlowInverterService pauseResumeService;
 
     private final MessageChannel successChannel;
 
@@ -27,11 +27,11 @@ public class PausableMessageRouter extends AbstractMessageRouter {
         MessageChannel successChannel,
         MessageChannel failChannel
     ) {
-        this (new PauseResumeService(), successChannel, failChannel);
+        this (new FlowInverterService(), successChannel, failChannel);
     }
 
     public PausableMessageRouter(
-        PauseResumeService pauseResumeService,
+        FlowInverterService pauseResumeService,
         MessageChannel successChannel,
         MessageChannel failChannel) {
         this.pauseResumeService = pauseResumeService;
