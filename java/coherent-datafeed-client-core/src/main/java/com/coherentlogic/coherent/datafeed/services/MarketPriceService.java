@@ -3,9 +3,9 @@ package com.coherentlogic.coherent.datafeed.services;
 import java.util.List;
 import java.util.Map;
 
-import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.reuters.rfa.common.Client;
@@ -55,11 +55,11 @@ public class MarketPriceService extends CacheableQueryableService<MarketPrice>
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
+        RequestMessageBuilderFactory factory = getRequestMessageBuilderFactory();
 
-        RequestMessageBuilderFactory factory =
-            getRequestMessageBuilderFactory();
         Client client = getClient();
 
         RequestMessageBuilder builder = factory.getInstance();
@@ -73,7 +73,7 @@ public class MarketPriceService extends CacheableQueryableService<MarketPrice>
                 .setAttribInfo(serviceName, RDMInstrument.NameType.RIC, itemNames)
                 .setPriority(OMMPriority.DEFAULT)
                 .setAssociatedMetaInfo(loginHandle)
-                .register(client, serviceName, itemNames);
+                .register(client, serviceName, sessionBean, itemNames);
 
         return handles;
     }

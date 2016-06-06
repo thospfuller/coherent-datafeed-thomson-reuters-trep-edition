@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.reuters.rfa.common.Handle;
 
@@ -26,6 +27,7 @@ public interface TimeSeriesGatewaySpecification {
     CompletableFuture<TimeSeries> getTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String ric,
         int period
     );
@@ -33,6 +35,7 @@ public interface TimeSeriesGatewaySpecification {
     CompletableFuture<TimeSeries> getTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String ric,
         String period
     );

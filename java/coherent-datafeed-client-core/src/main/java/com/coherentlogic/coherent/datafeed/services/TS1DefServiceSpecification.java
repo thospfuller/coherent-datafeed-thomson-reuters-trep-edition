@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1DefDb;
 
@@ -20,7 +21,7 @@ public interface TS1DefServiceSpecification {
      *
      * @param loginHandle The login handle.
      */
-    List<Handle> initialize (Handle loginHandle);
+    List<Handle> initialize (Handle loginHandle, SessionBean sessionBean);
 
     /**
      * Method initializes the application's {@link TS1DefDb} database by
@@ -29,5 +30,5 @@ public interface TS1DefServiceSpecification {
      * @param loginHandle The login handle.
      * @param rics The rics required to initialize the {@link TS1DefDb}.
      */
-    public List<Handle> initialize (Handle loginHandle, String... rics);
+    public List<Handle> initialize (Handle loginHandle, SessionBean sessionBean, String... rics);
 }

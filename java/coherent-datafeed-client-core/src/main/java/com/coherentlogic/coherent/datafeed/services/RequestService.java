@@ -2,6 +2,7 @@ package com.coherentlogic.coherent.datafeed.services;
 
 import java.util.List;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Handle;
@@ -41,6 +42,7 @@ public abstract class RequestService {
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     );
 

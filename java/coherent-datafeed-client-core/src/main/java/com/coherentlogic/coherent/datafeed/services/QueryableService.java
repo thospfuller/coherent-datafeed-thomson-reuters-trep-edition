@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidQueryException;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
@@ -43,15 +44,16 @@ public abstract class QueryableService extends RequestService {
         this.msgModelType = msgModelType;
     }
 
-    public List<Handle> query (Handle loginHandle) {
-        return query (loginHandle, UNUSED, UNUSED);
+    public List<Handle> query (Handle loginHandle, SessionBean sessionBean) {
+        return query (loginHandle, sessionBean, UNUSED, UNUSED);
     }
 
     public List<Handle> query (
         Handle loginHandle,
+        SessionBean sessionBean,
         String item
     ) {
-        return query (serviceName, loginHandle, item);
+        return query (serviceName, loginHandle, sessionBean, item);
     }
 
     /**
@@ -60,28 +62,26 @@ public abstract class QueryableService extends RequestService {
     public List<Handle> query (
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String item
     ) {
         assertNotNull ("item", item);
-        return query (
-            serviceName,
-            loginHandle,
-            new String[] {
-                item
-            }
-        );
+
+        return query (serviceName, loginHandle, sessionBean, new String[] {item});
     }
 
     public List<Handle> query (
         Handle loginHandle,
+        SessionBean sessionBean,
         String... items
     ) {
-        return query (serviceName, loginHandle, items);
+        return query (serviceName, loginHandle, sessionBean, items);
     }
 
     public List<Handle> query (
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String... items
     ) {
         assertNotNull("serviceName", serviceName);
@@ -96,8 +96,7 @@ public abstract class QueryableService extends RequestService {
             throw new InvalidQueryException ("The login handle is null, which may indicate that you either didn't " +
                 "login, or the login failed.");
 
-        results = executeRequest(
-            serviceName, loginHandle, msgModelType, items);
+        results = executeRequest(serviceName, loginHandle, msgModelType, sessionBean, items);
 
         return results;
     }

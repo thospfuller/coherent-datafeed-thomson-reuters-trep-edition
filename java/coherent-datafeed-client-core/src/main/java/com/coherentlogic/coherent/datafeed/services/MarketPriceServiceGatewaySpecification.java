@@ -3,6 +3,7 @@ package com.coherentlogic.coherent.datafeed.services;
 import java.util.Map;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -17,5 +18,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketPriceServiceGatewaySpecification {
 
-	Map<String, MarketPrice> query (ServiceName serviceName, Handle loginHandle, MarketPrice... marketPrices);
+    Map<String, MarketPrice> query (ServiceName serviceName, Handle loginHandle, SessionBean sessionBean, MarketPrice... marketPrices);
 }

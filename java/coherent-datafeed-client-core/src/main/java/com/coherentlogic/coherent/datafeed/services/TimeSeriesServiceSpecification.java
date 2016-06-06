@@ -1,5 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -17,6 +18,7 @@ public interface TimeSeriesServiceSpecification {
     Handle queryTimeSeriesFor(
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String ric
     );
 }
