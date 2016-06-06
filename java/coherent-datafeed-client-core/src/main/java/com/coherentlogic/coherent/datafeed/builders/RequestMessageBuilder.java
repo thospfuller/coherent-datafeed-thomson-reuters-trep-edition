@@ -1,16 +1,11 @@
 package com.coherentlogic.coherent.datafeed.builders;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX_PATH;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.REQUEST_MSG_BUILDER_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNullOrEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.coherentlogic.coherent.datafeed.misc.Constants;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.EventQueue;
 import com.reuters.rfa.common.Handle;
@@ -18,7 +13,6 @@ import com.reuters.rfa.omm.OMMEncoder;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMPool;
 import com.reuters.rfa.rdm.RDMInstrument;
-import com.reuters.rfa.rdm.RDMMsgTypes;
 import com.reuters.rfa.session.omm.OMMConsumer;
 import com.reuters.rfa.session.omm.OMMItemIntSpec;
 
@@ -46,9 +40,18 @@ public class RequestMessageBuilder
         this.eventQueue = eventQueue;
     }
 
+//    public List<Handle> register (
+//        Client client,
+//        String serviceName,
+//        String... itemNames
+//    ) {
+//        return register (client, serviceName, (Object) null, itemNames);
+//    }
+
     public List<Handle> register (
         Client client,
         String serviceName,
+        SessionBean sessionBean,
         String... itemNames
     ) {
         assertNotNullOrEmpty ("itemNames", itemNames);
@@ -71,7 +74,7 @@ public class RequestMessageBuilder
                 eventQueue,
                 ommItemIntSpec,
                 client,
-                null
+                sessionBean
             );
             handles.add(handle);
         }
@@ -82,6 +85,7 @@ public class RequestMessageBuilder
         Client client,
         String serviceName,
         Integer filter,
+        SessionBean sessionBean,
         String... itemNames
     ) {
         assertNotNullOrEmpty ("itemNames", itemNames);
@@ -102,7 +106,7 @@ public class RequestMessageBuilder
                 eventQueue,
                 ommItemIntSpec,
                 client,
-                null
+                sessionBean
             );
 
             handles.add(handle);
@@ -118,30 +122,30 @@ public class RequestMessageBuilder
         return eventQueue;
     }
 
-    public static void main (String[] unused) {
-
-        AbstractApplicationContext applicationContext =
-            new ClassPathXmlApplicationContext (
-                DEFAULT_APP_CTX_PATH);
-
-        applicationContext.registerShutdownHook();
-
-        RequestMessageBuilder builder =
-            (RequestMessageBuilder) applicationContext.getBean(
-                REQUEST_MSG_BUILDER_ID);
-
-        Client client = null;
-
-        Handle loginHandle = null;
-
-        builder
-            .createOMMMsg()
-            .setMsgType(OMMMsg.MsgType.REQUEST)
-            .setMsgModelType(RDMMsgTypes.MARKET_PRICE)
-            .setIndicationFlags(OMMMsg.Indication.REFRESH)
-            .setPriority((byte) 1, 1) // what are these values?
-            .setAssociatedMetaInfo(loginHandle)
-            .register(client, Constants.dELEKTRON_DD, "TRI.N", "MSFT.O");
-
-    }
+//    public static void main (String[] unused) {
+//
+//        AbstractApplicationContext applicationContext =
+//            new ClassPathXmlApplicationContext (
+//                DEFAULT_APP_CTX_PATH);
+//
+//        applicationContext.registerShutdownHook();
+//
+//        RequestMessageBuilder builder =
+//            (RequestMessageBuilder) applicationContext.getBean(
+//                REQUEST_MSG_BUILDER_ID);
+//
+//        Client client = null;
+//
+//        Handle loginHandle = null;
+//
+//        builder
+//            .createOMMMsg()
+//            .setMsgType(OMMMsg.MsgType.REQUEST)
+//            .setMsgModelType(RDMMsgTypes.MARKET_PRICE)
+//            .setIndicationFlags(OMMMsg.Indication.REFRESH)
+//            .setPriority((byte) 1, 1) // what are these values?
+//            .setAssociatedMetaInfo(loginHandle)
+//            .register(client, Constants.dELEKTRON_DD, "TRI.N", "MSFT.O");
+//
+//    }
 }
