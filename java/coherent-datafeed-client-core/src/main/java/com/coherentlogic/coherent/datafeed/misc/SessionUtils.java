@@ -14,10 +14,13 @@ import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.session.omm.OMMItemEvent;
 
+/**
+ * 
+ * @deprecated The session is no longer being used.
+ */
 public class SessionUtils {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(SessionUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(SessionUtils.class);
 
     /**
      * @todo Consider moving this into a helper class however note that we can't
