@@ -14,13 +14,13 @@ import com.reuters.rfa.common.Handle;
  * @todo getSession should be abstracted into a static method since this logic
  *  is also used in market price message processor -- see Utils.
  *
+ * @deprecated This class should no longer be necessary.
+ *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public abstract class AbstractMessageEnricher
-    implements EnricherSpecification {
+public abstract class AbstractMessageEnricher implements EnricherSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(AbstractMessageEnricher.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractMessageEnricher.class);
 
     /**
      * We need to be able to associate a directory handle with the correct
@@ -32,9 +32,7 @@ public abstract class AbstractMessageEnricher
      * Constructor requires an instance of {@link Cache} where the
      * {@link Handle} is the key and the {@link Session} is the value.
      */
-    public AbstractMessageEnricher (
-        Cache<Handle, Session> sessionCache
-    ) {
+    public AbstractMessageEnricher (Cache<Handle, Session> sessionCache) {
         this.sessionCache = sessionCache;
     }
 
