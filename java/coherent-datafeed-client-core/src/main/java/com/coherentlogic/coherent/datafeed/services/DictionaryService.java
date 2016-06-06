@@ -5,11 +5,11 @@ import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNullOrEmpt
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.EventQueue;
@@ -27,9 +27,7 @@ import com.reuters.rfa.session.omm.OMMItemIntSpec;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DictionaryService
-    extends QueryableService
-    implements DictionaryServiceSpecification {
+public class DictionaryService extends QueryableService implements DictionaryServiceSpecification {
 
     private static final Logger log =
         LoggerFactory.getLogger(DictionaryService.class);
@@ -52,8 +50,10 @@ public class DictionaryService
     public List<Handle> loadDictionaries (
         String serviceName,
         Handle loginHandle,
+        SessionBean sessionBean,
         String... dictionaryIds
     ) {
+
         assertNotNullOrEmpty("dictionaryIds", dictionaryIds);
 
         short msgModelType = getMsgModelType();
@@ -62,7 +62,8 @@ public class DictionaryService
             serviceName,
             loginHandle,
             msgModelType,
-            dictionaryIds
+            sessionBean,
+            (String[]) dictionaryIds
         );
 
         return results;
@@ -76,30 +77,20 @@ public class DictionaryService
      *  a request by passing a single name.
      */
     @Override
-//    @Transactional
     protected List<Handle> executeRequest(
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... dictionaryNames
     ) {
         List<Handle> results = new ArrayList<Handle> ();
 
-        /* Note that it is possible that this method is paused prior and then
-         * the DictionaryMessageEnricher.enrich method is executed, which
-         * can result in an NPE progresses. The solution is to sync here and in
-         * the DictionaryMessageEnricher.enrich method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         */
-//        synchronized (dictionaryCache) {
-            for (String dictionaryName : dictionaryNames) {
-                Handle handle = executeSingleRequest(
-                    serviceName, loginHandle, msgModelType, dictionaryName);
-                results.add(handle);
-            }
-//        }
+        for (String dictionaryName : dictionaryNames) {
+            Handle handle = executeSingleRequest(serviceName, loginHandle, msgModelType, sessionBean, dictionaryName);
+            results.add(handle);
+        }
+
         return results;
     }
 
@@ -114,14 +105,12 @@ public class DictionaryService
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String dictionaryName
     ) {
-        log.info("executeRequest: method begins: serviceName: " + serviceName +
-            ", dictionaryName: " +
-            ToStringBuilder.reflectionToString(dictionaryName));
+        log.debug("executeRequest: method begins: serviceName: " + serviceName + ", dictionaryName: " + dictionaryName);
 
-        RequestMessageBuilderFactory factory =
-            getRequestMessageBuilderFactory();
+        RequestMessageBuilderFactory factory = getRequestMessageBuilderFactory();
 
         Client client = getClient();
 
@@ -153,7 +142,7 @@ public class DictionaryService
         OMMConsumer consumer = requestMessageBuilder.getConsumer ();
         EventQueue eventQueue = requestMessageBuilder.getEventQueue();
 
-        Handle result = consumer.registerClient(eventQueue, spec, client, null);
+        Handle result = consumer.registerClient(eventQueue, spec, client, sessionBean);
 
         requestMessageBuilder.releaseMsg();
 
