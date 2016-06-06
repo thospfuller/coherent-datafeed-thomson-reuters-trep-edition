@@ -33,7 +33,7 @@
         <local-cache name="ts1DefEntryCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
-        <local-cache name="timeSeriesEntryCache">
+        <local-cache name="timeSeriesEntriesCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>
         <local-cache name="dictionaryCache">

@@ -64,8 +64,6 @@
 
     <int:channel id="marketByOrderChannel"/>
 
-    <!-- See the bean with id routeByQueryType in the application-context file.
-      -->
     <int:channel id="processMarketByOrderChannel"/>
 
     <int:router input-channel="processMarketByOrderChannel"

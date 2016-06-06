@@ -34,7 +34,7 @@
         <!-- constructor-arg name="messageConsumer" ref="timeSeriesConsumer"/>
         <constructor-arg name="jsonGenerator" ref="timeSeriesJSONGenerator"/ -->
         <constructor-arg name="commonRequestExecutor" ref="timeSeriesRequestExecutor"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="timeSeriesEntriesCache" ref="timeSeriesEntriesCache"/>
         <constructor-arg name="handleToCompletableFutureCache" ref="handleToCompletableFutureCache"/>
         <constructor-arg name="timeSeriesKeyToCompletableFutureCache" ref="timeSeriesKeyToCompletableFutureCache"/>
     </bean>
@@ -42,13 +42,12 @@
     <bean id="queryTimeSeriesUpdatesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryTimeSeriesMessageProcessor">
         <constructor-arg name="timeSeriesService" ref="timeSeriesService"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="timeSeriesEntriesCache" ref="timeSeriesEntriesCache"/>
     </bean>
 
     <bean id="getTimeSeriesForMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.GetTimeSeriesForMessageProcessor">
         <constructor-arg name="timeSeriesService" ref="timeSeriesService"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
     </bean>
 
     <bean id="timeSeriesEventDrivenEndpoint"
@@ -59,12 +58,12 @@
     <bean id="loadTimeSeriesEntriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.LoadTimeSeriesEntriesMessageProcessor">
         <constructor-arg name="timeSeriesLoader" ref="timeSeriesLoader"/>
-        <!-- constructor-arg name="sessionCache" ref="sessionCache"/ -->
+        <constructor-arg name="timeSeriesEntriesCache" ref="timeSeriesEntriesCache"/>
      </bean>
 
     <bean id="queryNextRICMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryNextRICMessageProcessor">
         <constructor-arg name="timeSeriesService" ref="timeSeriesService"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="timeSeriesEntriesCache" ref="timeSeriesEntriesCache"/>
      </bean>
 </beans>

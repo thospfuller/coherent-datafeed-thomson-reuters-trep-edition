@@ -15,25 +15,12 @@
         http://www.springframework.org/schema/integration
         http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-    <!-- NOTE: Authentication will return three events irrespective of it
-               succeeding or failing. It is for this reason that if we throw
-               an exception it will end up being wrapped in an aggregate
-               exception. There should be a way around this such that only one
-               exception is thrown, however so far we haven't sorted this out.
-
-               @see AuthenticationHelper
-               @see AggregateMessageDeliveryException
-      -->
-
-    <!-- NOTE: This was working prior to switching to Spring Boot and we did not have this channel here so I'm
-               not sure why adding this was necessary, or how this wasn't throwing an exception in the absence thereof.
-      -->
     <int:channel id="onAuthAddSessionToHeadersChannel"/>
 
     <int:service-activator
      input-channel="onAuthAddSessionToHeadersChannel"
      output-channel="routeByAuthEventTypeChannel"
-     ref="authenticationMessageEnricher"
+     ref="sessionEnricher"
      method="enrich"/>
 
     <int:channel id="routeByAuthEventTypeChannel"/>
@@ -53,30 +40,90 @@
      input-channel="ommItemEventReceivedChannel"
      output-channel="ommItemEventChannel"/>
 
-    <!-- See rfa.example.framework.OMMSubAppContext.java
-      -->
-    <int:router input-channel="ommItemEventChannel"
+    <int:router
      expression="payload.msg.msgModelType"
+     input-channel="ommItemEventChannel"
      default-output-channel="handleUnexpectedEventReceivedChannel">
-        <int:mapping channel="loginEventReceivedChannel"
+        <int:mapping channel="processLoginChannel"
          value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).LOGIN}"/>
     </int:router>
 
-    <int:publish-subscribe-channel id="loginEventReceivedChannel"/>
+    <int:channel id="processLoginChannel"/>
 
-    <int:router input-channel="loginEventReceivedChannel"
+    <int:router input-channel="processLoginChannel"
+     default-output-channel="errorChannel"
      resolution-required="true"
      expression="payload.msg.msgType">
-        <!-- previously loadDirectoriesChannel but adding this here ends up
-             querying the directories twice-->
-        <int:mapping channel="processStatusResponseChannel"
+        <int:mapping channel="refreshSessionBeanChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
-         <!-- TODO: We need to send this status response message to a queue as
-                    well, however for the moment we have refactored this such
-                    that we can cause the login to fail. -->
-        <int:mapping channel="processAuthenticationStatusResponseChannel"
+        <int:mapping channel="updateSessionBeanChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).UPDATE_RESP}"/>
+        <int:mapping channel="processLoginStatusResponseChannel"
          value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
     </int:router>
+
+    <int:channel id="refreshSessionBeanChannel"/>
+    <int:channel id="updateSessionBeanChannel"/>
+
+    <int:service-activator
+     input-channel="refreshSessionBeanChannel"
+     output-channel="loginWorkflowEndsChannel"
+     ref="refreshSessionBeanMessageProcessor"
+     method="process"/>
+
+    <int:service-activator
+     input-channel="updateSessionBeanChannel"
+     output-channel="loginWorkflowEndsChannel"
+     ref="refreshSessionBeanMessageProcessor"
+     method="process"/>
+
+    <bean id="loginStatusResponseMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
+        <constructor-arg ref="statusResponseAdapter"/>
+        <constructor-arg ref="dacsIdCache"/>
+        <constructor-arg ref="sessionBeanCache"/>
+    </bean>
+
+    <int:channel id="processLoginStatusResponseChannel"/>
+
+    <int:service-activator
+     input-channel="processLoginStatusResponseChannel"
+     output-channel="hasLoginSucceededChannel"
+     ref="loginStatusResponseMessageProcessor"
+     method="process"/>
+
+    <int:channel id="hasLoginSucceededChannel"/>
+
+    <int:router input-channel="hasLoginSucceededChannel" expression="@authenticationHelper.loginSucceeded(payload)">
+        <int:mapping channel="loadDirectoriesChannel"
+         value="#{T(java.lang.Boolean).TRUE}"/>
+        <int:mapping channel="loginFailedChannel"
+         value="#{T(java.lang.Boolean).FALSE}"/>
+    </int:router>
+
+    <int:channel id="loginFailedChannel"/>
+
+    <int:service-activator
+     input-channel="loginFailedChannel"
+     output-channel="loginWorkflowEndsChannel"
+     ref="frameworkEventListenerAdapter"
+     method="initialisationFailed"/>
+
+    <bean id="loginWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The login workflow ends."/>
+    </bean>
+
+    <int:channel id="loginWorkflowEndsChannel"/>
+
+    <int:service-activator
+     input-channel="loginWorkflowEndsChannel"
+     ref="loginWorkflowEndsService"
+     method="end"/>
+
+    <!-- int:service-activator
+     input-channel="loginWorkflowEndsChannel"
+     ref="loginWorkflowEndsService"
+     method="end"/>
 
     <int:channel id="processAuthenticationStatusResponseChannel"/>
 
@@ -107,12 +154,6 @@
 
     <int:channel id="hasLoginSucceededChannel"/>
 
-    <!-- See: https://jira.springsource.org/browse/SPR-7831
-         payload.has(#{T(com.reuters.rfa.omm.OMMMsg).HAS_STATE})
-         hasStateBean is a hack solution for the problem above.
-
-         payload.has(#{T(com.reuters.rfa.omm.OMMMsg).HAS_STATE})
-      -->
     <int:router input-channel="hasLoginSucceededChannel"
      expression="@authenticationHelper.loginSucceeded(payload)">
         <int:mapping channel="loadDirectoriesChannel"
@@ -121,26 +162,18 @@
          value="#{T(java.lang.Boolean).FALSE}"/>
     </int:router>
 
-    <!-- NOTE: loginSuccessful will only be called once the dictionaries
-               have been loaded.
-      -->
     <int:channel id="loginFailedChannel"/>
 
     <int:service-activator
      input-channel="loginFailedChannel"
      output-channel="workflowEndsChannel"
      ref="frameworkEventListenerAdapter"
-     method="initialisationFailed"/>
-
-    <!-- int:service-activator
-     input-channel="loginFailedChannel"
-     output-channel="workflowEndsChannel"
-     ref="mainUI"
-     method="addStatusResponseText"/>
-
-    <int:service-activator
-     input-channel="hasLoginSucceededChannel"
-     output-channel="workflowEndsChannel"
-     ref="mainUI"
-     method="addStatusResponseText"/ -->
+     method="initialisationFailed"/ -->
 </beans>
+
+    <!-- See: https://jira.springsource.org/browse/SPR-7831
+         payload.has(#{T(com.reuters.rfa.omm.OMMMsg).HAS_STATE})
+         hasStateBean is a hack solution for the problem above.
+
+         payload.has(#{T(com.reuters.rfa.omm.OMMMsg).HAS_STATE})
+      -->

@@ -66,8 +66,6 @@
          value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_PRICE}"/>
     </int:router>
 
-    <!-- See the bean with id routeByQueryType in the application-context file.
-      -->
     <int:channel id="processMarketPriceChannel"/>
 
     <int:router input-channel="processMarketPriceChannel"

@@ -16,11 +16,14 @@
         http://www.springframework.org/schema/integration/spring-integration.xsd">
 
     <int:gateway id="authenticationEntryPoint"
-        service-interface="com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification"
+        service-interface="com.coherentlogic.coherent.datafeed.services.AuthenticationServiceGatewaySpecification"
         default-request-channel="logChannel"
         default-reply-channel="logChannel"
         error-channel="errorChannel">
-        <int:method name="login" request-channel="loginChannel" reply-channel="loginCompletedChannel"/>
+        <int:method name="login"
+         request-channel="loginChannel"
+         reply-channel="loginCompletedChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.LoginQueryParameters (#args[0])"/>
         <int:method name="logout" request-channel="logoutChannel"/>
     </int:gateway>
 
@@ -82,6 +85,18 @@
 
     <!-- /////////////////////////////////////////////////////////////////// -->
 
+    <!-- int:gateway id="directoryEntryPoint"
+        service-interface="com.coherentlogic.coherent.datafeed.services.DirectoryServiceGatewaySpecification"
+        default-request-channel="logChannel"
+        default-reply-channel="logChannel"
+        error-channel="errorChannel">
+        <int:method name="query"
+         request-channel="loginChannel"
+         reply-channel="loginCompletedChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.DirectoryQueryParameters (#args[0])"/>
+        <int:method name="logout" request-channel="logoutChannel"/>
+    </int:gateway -->
+
     <int:gateway id="directoryServiceGateway"
         service-interface="com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification"
         error-channel="errorChannel">
@@ -124,7 +139,7 @@
         <int:method name="query"
          request-channel="queryMarketPriceUpdatesChannel"
          reply-channel="queryMarketPriceUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketPriceQueryParameters (#args[0], #args[1], #args[2])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketPriceQueryParameters (#args[0], #args[1], #args[2], #args[3])"/>
     </int:gateway>
 
     <int:channel id="queryMarketPriceUpdatesChannel"/>
@@ -149,7 +164,7 @@
         <int:method name="query"
          request-channel="queryMarketMakerUpdatesChannel"
          reply-channel="queryMarketMakerUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketMakerQueryParameters (#args[0], #args[1], #args[2])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketMakerQueryParameters (#args[0], #args[1], #args[2], #args[3])"/>
     </int:gateway>
 
     <int:channel id="queryMarketMakerUpdatesChannel"/>
@@ -174,7 +189,7 @@
         <int:method name="query"
          request-channel="queryMarketByOrderUpdatesChannel"
          reply-channel="queryMarketByOrderUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketByOrderQueryParameters (#args[0], #args[1], #args[2])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketByOrderQueryParameters (#args[0], #args[1], #args[2], #args[3])"/>
     </int:gateway>
 
     <int:channel id="queryMarketByOrderUpdatesChannel"/>
@@ -215,9 +230,7 @@
      ref="directoryMessageProcessor"
      method="process"/>
 
-    <!-- This is driven by the completion of the directory workflow and is
-         called once all directories have been loaded.
-         @see routeByDirectoriesLoadedStatus in app ctx.
+    <!-- This is driven by the completion of the directory workflow.
          -->
     <int:channel id="loadDictionariesChannel"/>
 
@@ -304,11 +317,11 @@
         <int:method name="queryTimeSeriesFor"
          request-channel="queryTimeSeriesForRequestChannel"
          reply-channel="queryTimeSeriesForReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3], #args[4])"/>
         <int:method name="getTimeSeriesFor"
          request-channel="getTimeSeriesForRequestChannel"
          reply-channel="getTimeSeriesForReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3], #args[4])"/>
     </int:gateway>
 
     <int:channel id="queryTimeSeriesForRequestChannel"/>

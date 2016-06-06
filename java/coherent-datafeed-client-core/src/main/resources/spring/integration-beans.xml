@@ -19,7 +19,7 @@
         http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.2.xsd">
 
     <import resource="session-construction-workflow-beans.xml"/>
-    <import resource="statusresponse-workflow-beans.xml"/>
+    <!-- DEPRECATED REMOVE import resource="statusresponse-workflow-beans.xml"/ -->
     <import resource="authentication-workflow-beans.xml"/>
     <import resource="marketprice-workflow-beans.xml"/>
     <import resource="marketmaker-workflow-beans.xml"/>

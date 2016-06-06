@@ -136,7 +136,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="eventQueueProxy" class="com.coherentlogic.coherent.datafeed.proxies.EventQueueProxy">
+    <bean id="eventQueueProxy" class="com.coherentlogic.coherent.datafeed.proxies.EventQueueProxy" destroy-method="stop">
         <constructor-arg name="eventQueue" ref="eventQueue"/>
         <constructor-arg name="dispatchableNotificationClient" ref="dispatcher"/>
     </bean>
@@ -169,7 +169,7 @@
         <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
         <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
         <constructor-arg name="ts1DefEntryCache" ref="ts1DefEntryCache"/>
-        <constructor-arg name="timeSeriesEntryCache" ref="timeSeriesEntryCache"/>
+        <constructor-arg name="timeSeriesEntriesCache" ref="timeSeriesEntriesCache"/>
     </bean>
 
     <bean id="authenticationService" class="com.coherentlogic.coherent.datafeed.services.AuthenticationService"
@@ -197,6 +197,7 @@
             <array value-type="java.lang.Class">
                 <value>com.coherentlogic.coherent.datafeed.domain.AbstractCommonProperties</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.AbstractAdvancedCommonProperties</value>
+                <!-- value>com.coherentlogic.coherent.datafeed.domain.SessionBean</value -->
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker</value>
@@ -295,11 +296,12 @@
         <constructor-arg name="directoryEntryFactory" ref="directoryEntryFactory"/>
     </bean>
 
-    <bean id="authenitcationPauseResumeService" class="com.coherentlogic.coherent.datafeed.services.PauseResumeService"/>
+    <bean id="authenitcationFlowInverterService" class="com.coherentlogic.coherent.datafeed.services.FlowInverterService"/>
 
     <bean id="frameworkEventListenerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter"/>
 
     <bean id="directoryServiceLoader" class="com.coherentlogic.coherent.datafeed.services.DirectoryServiceLoader">
+        <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
         <constructor-arg name="directoryEntryAdapter" ref="directoryEntryAdapter"/>
     </bean>
 
@@ -311,7 +313,28 @@
      class="com.coherentlogic.coherent.datafeed.services.TimeSeriesLoader">
         <constructor-arg name="fieldDictionary" ref="fieldDictionary"/>
         <constructor-arg name="ts1DefDb" ref="ts1DefDb"/>
-     </bean>
+    </bean>
+
+    <bean id="sessionBeanFactory" class="com.coherentlogic.coherent.datafeed.factories.SessionBeanFactory"/>
+
+    <bean id="sessionBeanAdapter" class="com.coherentlogic.coherent.datafeed.adapters.SessionBeanAdapter">
+        <constructor-arg ref="sessionBeanFactory"/>
+        <constructor-arg ref="attribInfoFactory"/>
+    </bean>
+
+    <bean id="refreshSessionBeanMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshSessionBeanMessageProcessor">
+        <constructor-arg ref="sessionBeanAdapter"/>
+        <constructor-arg ref="dacsIdCache"/>
+        <constructor-arg ref="sessionBeanCache"/>
+    </bean>
+
+    <bean id="updateSessionBeanMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateSessionBeanMessageProcessor">
+        <constructor-arg ref="sessionBeanAdapter"/>
+        <constructor-arg ref="dacsIdCache"/>
+        <constructor-arg ref="sessionBeanCache"/>
+    </bean>
 
     <bean id="getDictionaryEntriesMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.GetDictionaryEntriesMessageProcessor">
@@ -335,14 +358,14 @@
         <constructor-arg ref="marketPriceAdapter"/>
         <constructor-arg ref="marketPriceRICCache"/>
         <constructor-arg ref="marketPriceCache"/>
-     </bean>
+    </bean>
 
     <bean id="refreshMarketMakerMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.RefreshMarketMakerMessageProcessor">
         <constructor-arg ref="marketMakerAdapter"/>
         <constructor-arg ref="marketMakerRICCache"/>
         <constructor-arg ref="marketMakerCache"/>
-     </bean>
+    </bean>
 
     <bean id="updateMarketMakerMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.UpdateMarketMakerMessageProcessor">
@@ -373,6 +396,7 @@
     <bean id="ts1DefDbLoaderMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefDbLoaderMessageProcessor">
         <constructor-arg ref="ts1DefDbLoader"/>
+        <constructor-arg ref="ts1DefEntryCache"/>
     </bean>
 
     <!-- bean id="transformTimeSeriesMessageProcessor"
@@ -419,6 +443,7 @@
       If the domain class utilizes the Changeable annotation then it must be declared as a prototype bean and it must be
       obtained via the Spring application context otherwise none of the fire methods will be called.
       -->
+    <bean id="sessionBean" class="com.coherentlogic.coherent.datafeed.domain.SessionBean" scope="prototype"/>
     <bean id="directoryEntry" class="com.coherentlogic.coherent.datafeed.domain.DirectoryEntry" scope="prototype"/>
     <bean id="attribInfo" class="com.coherentlogic.coherent.datafeed.domain.AttribInfo" scope="prototype"/>
     <bean id="marketPrice" class="com.coherentlogic.coherent.datafeed.domain.MarketPrice" scope="prototype"/>
@@ -495,7 +520,7 @@
         <property name="requestChannel" ref="nullChannel"/><!-- routeByCacheEntryTypeChannel -->
     </bean>
 
-    <bean id="refreshMarketPriceTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.RefreshMarketPriceTransformer">
+    <!-- bean id="refreshMarketPriceTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.RefreshMarketPriceTransformer">
         <constructor-arg name="queryCache" ref="queryCache"/>
         <constructor-arg name="marketPriceAdapter" ref="marketPriceAdapter"/>
     </bean>
@@ -513,23 +538,26 @@
     <bean id="updateMarketMakerTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.UpdateMarketMakerTransformer">
         <constructor-arg name="queryCache" ref="queryCache"/>
         <constructor-arg name="marketMakerAdapter" ref="marketMakerAdapter"/>
-    </bean>
+    </bean -->
 
     <!-- bean id="ommSeriesTransformer" class="com.coherentlogic.coherent.datafeed.integration.transformers.OMMSeriesTransformer"/ -->
 
-    <bean id="authenticationMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.AuthenticationMessageEnricher">
+    <!-- bean id="authenticationMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.AuthenticationMessageEnricher">
         <constructor-arg name="sessionCache" ref="sessionCache"/>
-    </bean>
+    </bean -->
 
     <bean id="loginMessageProcessor" class="com.coherentlogic.coherent.datafeed.services.message.processors.LoginMessageProcessor">
         <constructor-arg name="authenticationService" ref="authenticationService"/>
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
+        <constructor-arg name="dacsIdCache" ref="dacsIdCache"/>
+        <constructor-arg name="sessionBeanCache" ref="sessionBeanCache"/>
     </bean>
 
     <bean id="logoutMessageProcessor" class="com.coherentlogic.coherent.datafeed.services.message.processors.LogoutMessageProcessor">
         <constructor-arg name="authenticationService" ref="authenticationService"/>
         <constructor-arg name="sessionCache" ref="sessionCache"/>
     </bean>
+
+    <bean id="sessionEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.SessionEnricher"/>
 
     <bean id="directoryMessageProcessor" class="com.coherentlogic.coherent.datafeed.services.message.processors.DirectoryMessageProcessor">
         <constructor-arg name="directoryService" ref="directoryService"/>
@@ -538,16 +566,13 @@
 
     <bean id="dictionaryMessageProcessor" class="com.coherentlogic.coherent.datafeed.services.message.processors.DictionaryMessageProcessor">
         <constructor-arg name="dictionaryService" ref="dictionaryService"/>
-        <constructor-arg name="dictionaryCache" ref="dictionaryCache"/>
+        <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
+        <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
     </bean>
 
-    <bean id="directoryMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.DirectoryMessageEnricher">
-        <constructor-arg name="directoryCache" ref="directoryCache"/>
-    </bean>
+    <bean id="directoryMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.DirectoryMessageEnricher"/>
 
-    <bean id="dictionaryMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.DictionaryMessageEnricher">
-        <constructor-arg name="dictionaryCache" ref="dictionaryCache"/>
-    </bean>
+    <bean id="dictionaryMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.DictionaryMessageEnricher"/>
 
     <bean id="marketPriceMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.MarketPriceMessageEnricher">
         <constructor-arg name="marketPriceCache" ref="marketPriceCache"/>
@@ -561,9 +586,9 @@
         <constructor-arg name="marketByOrderCache" ref="marketByOrderCache"/>
     </bean>
 
-    <bean id="ts1DefMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.TS1DefMessageEnricher">
-        <constructor-arg name="ts1DefCache" ref="ts1DefCache"/>
-    </bean>
+    <bean id="ts1DefMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.TS1DefMessageEnricher"/>
+        <!-- constructor-arg name="ts1DefCache" ref="ts1DefCache"/>
+    </bean -->
 
     <bean id="timeSeriesMessageEnricher" class="com.coherentlogic.coherent.datafeed.integration.enrichers.TimeSeriesMessageEnricher">
         <constructor-arg name="sessionCache" ref="sessionCache"/>
@@ -606,8 +631,8 @@
 
     <bean id="ts1DefMessageProcessor"
      class="com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefMessageProcessor">
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
-        <constructor-arg name="ts1DefCache" ref="ts1DefCache"/>
+        <!-- constructor-arg name="ts1DefCache" ref="ts1DefCache"/ -->
+        <constructor-arg name="ts1DefEntryCache" ref="ts1DefEntryCache"/>
         <constructor-arg name="ts1DefService" ref="ts1DefService"/>
     </bean>
 

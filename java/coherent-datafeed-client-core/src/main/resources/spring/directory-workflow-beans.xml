@@ -18,6 +18,8 @@
         http://www.springframework.org/schema/integration/stream
         http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.2.xsd">
 
+    <int:channel id="onDirectoryAddSessionToHeadersChannel"/>
+
     <int:service-activator
      input-channel="onDirectoryAddSessionToHeadersChannel"
      output-channel="routeByDirectoryEventTypeChannel"

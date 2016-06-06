@@ -68,8 +68,6 @@
 
     <int:channel id="marketMakerChannel"/>
 
-    <!-- See the bean with id routeByQueryType in the application-context file.
-      -->
     <int:channel id="processMarketMakerChannel"/>
 
     <int:router input-channel="processMarketMakerChannel"

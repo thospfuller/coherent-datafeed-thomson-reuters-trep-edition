@@ -94,12 +94,4 @@
          See timeseries-workflow-beans.xml specifically the bean with the id
          classTypeRouter.
       -->
-
-    <!-- int:channel id="reviewInitializationChannel"/>
-
-    <int:service-activator input-channel="reviewInitializationChannel"
-     output-channel="errorChannel"
-     ref="ts1DefDbLoadCompleteService"
-     method="checkInitializationHasCompleted"/ -->
-
 </beans>
