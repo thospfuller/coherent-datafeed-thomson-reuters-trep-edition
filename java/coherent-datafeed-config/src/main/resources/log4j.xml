@@ -24,17 +24,17 @@
 
     <logger name="org.springframework.web.client">
         <level value="warn"/>
-        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="fileAppender"/>
     </logger>
 
     <logger name="httpclient.wire">
-        <level value="debug"/>
-        <appender-ref ref="consoleAppender"/>
+        <level value="warn"/>
+        <appender-ref ref="fileAppender"/>
     </logger>
 
     <root>
         <priority value ="info" />
-        <appender-ref ref="consoleAppender" />
+        <!-- appender-ref ref="consoleAppender" / -->
         <appender-ref ref="fileAppender" />
     </root>
 
