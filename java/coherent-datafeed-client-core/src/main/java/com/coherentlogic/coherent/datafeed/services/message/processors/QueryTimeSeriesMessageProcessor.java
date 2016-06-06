@@ -2,7 +2,6 @@ package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -12,11 +11,11 @@ import org.springframework.messaging.MessageHeaders;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntry;
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter;
+import com.coherentlogic.coherent.datafeed.caches.TimeSeriesEntriesCache;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesServiceSpecification;
 import com.reuters.rfa.common.Handle;
-import com.reuters.ts1.TS1DefDb;
 import com.reuters.ts1.TS1Series;
 
 /**
@@ -39,23 +38,20 @@ public class QueryTimeSeriesMessageProcessor
 
     private final TimeSeriesServiceSpecification timeSeriesService;
 
-    private final Cache<Handle, Session> sessionCache;
+    private final TimeSeriesEntriesCache timeSeriesEntriesCache;
 
     public QueryTimeSeriesMessageProcessor(
         TimeSeriesServiceSpecification timeSeriesService,
-        Cache<Handle, Session> sessionCache
+        TimeSeriesEntriesCache timeSeriesEntriesCache
     ) {
         this.timeSeriesService = timeSeriesService;
-        this.sessionCache = sessionCache;
+        this.timeSeriesEntriesCache = timeSeriesEntriesCache;
     }
 
     @Override
-//    @Transactional
-    public Message<Handle> process(
-        Message<TimeSeriesQueryParameter> message
-    ) {
-        log.info("queryTimeSeriesMessageProcessor.process: method begins; " +
-            "message: " + message);
+    public Message<Handle> process(Message<TimeSeriesQueryParameter> message) {
+
+        log.debug("queryTimeSeriesMessageProcessor.process: method begins; message: " + message);
 
         MessageHeaders headers = message.getHeaders();
 
@@ -63,115 +59,91 @@ public class QueryTimeSeriesMessageProcessor
 
         TimeSeriesQueryParameter parameters = message.getPayload();
 
-        /* Note that it is possible that this method is paused prior and then
-         * the TimeSeriesMessageEnricher.enrich method is executed, which
-         * can result in an NPE progresses. The solution is to sync here and in
-         * the TimeSeriesMessageEnricher.enrich method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         *
-         * @TODO Use the SessionUtils to get the session.
-         */
-        synchronized (sessionCache) {
+        log.debug("parameters: " + parameters);
 
-            log.info("parameters: " + parameters);
+        Handle loginHandle = parameters.getLoginHandle();
 
-            Handle loginHandle = parameters.getLoginHandle();
+        SessionBean sessionBean = parameters.getSessionBean();
 
-            Session session = (Session) sessionCache.get(loginHandle);
+        String serviceName = parameters.getServiceName();
 
-            String serviceName = parameters.getServiceName();
+        String ric = parameters.getItem();
 
-            String ric = parameters.getItem();
+        int period = parameters.getPeriod();
 
-            int period = parameters.getPeriod();
+        TS1Series series = TS1Series.createSeries(ric, period);
 
-            TS1Series series = TS1Series.createSeries(ric, period);
+        String primaryRic = series.getPrimaryRic();
 
-            String primaryRic = series.getPrimaryRic();
+        log.debug("primaryRic: " + primaryRic);
 
-            log.info("primaryRic: " + primaryRic);
+        Handle handle = timeSeriesService.queryTimeSeriesFor(
+            serviceName,
+            loginHandle,
+            sessionBean,
+            primaryRic
+        );
 
-            Handle handle = timeSeriesService.queryTimeSeriesFor(
-                serviceName,
-                loginHandle,
-                primaryRic
-            );
+        TimeSeriesEntries timeSeriesEntries = timeSeriesEntriesCache.getTimeSeriesEntries (serviceName, handle, period);
 
-            TimeSeriesEntries timeSeriesEntries =
-                getTimeSeriesEntries (session, serviceName, handle, period);
+        timeSeriesEntries.addRicsFromSeriesTo (series);
 
-            addRicsFromSeriesTo (series, timeSeriesEntries);
+        TimeSeriesEntry timeSeriesEntry = newTimeSeriesEntry (series);
 
-            TimeSeriesEntry timeSeriesEntry = newTimeSeriesEntry (series);
+        timeSeriesEntries.putTimeSeriesEntry(handle, timeSeriesEntry);
 
-            timeSeriesEntries.putTimeSeriesEntry(handle, timeSeriesEntry);
+        timeSeriesEntriesCache.put(handle, timeSeriesEntries);
 
-            session.putTimeSeriesEntries(handle, timeSeriesEntries);
+        result =
+            MessageBuilder
+                .withPayload(handle)
+                .copyHeaders(headers)
+                .setHeaderIfAbsent(SESSION, sessionBean)
+                .build();
 
-            sessionCache.put(handle, session);
-
-            result =
-                MessageBuilder
-                    .withPayload(handle)
-                    .copyHeaders(headers)
-                    .setHeader(SESSION, session)
-                    .build();
-        }
-
-        log.info("queryTimeSeriesMessageProcessor.process: method ends; " +
-            "result: " + result);
+        log.debug("queryTimeSeriesMessageProcessor.process: method ends; result: " + result);
 
         return result;
     }
 
-    /**
-     * Method gets the {@link TimeSeriesEntries} from the session using the
-     * handle and if this is null it will create a new instance of {@link
-     * TimeSeriesEntries} and add it to the session.
-     */
-    public static TimeSeriesEntries getTimeSeriesEntries (
-        Session session,
-        String serviceName,
-        Handle handle,
-        int period
-    ) {
-        TimeSeriesEntries timeSeriesEntries =
-            session.getTimeSeriesEntries(handle);
+//    /**
+//     * Method gets the {@link TimeSeriesEntries} from the session using the
+//     * handle and if this is null it will create a new instance of {@link
+//     * TimeSeriesEntries} and add it to the session.
+//     */
+//    public static TimeSeriesEntries getTimeSeriesEntries (
+//        Map<Handle, TimeSeriesEntries> timeSeriesEntryCache,
+//        String serviceName,
+//        Handle handle,
+//        int period
+//    ) {
+//        TimeSeriesEntries timeSeriesEntries = timeSeriesEntryCache.get(handle);
+//
+//        if (timeSeriesEntries == null) {
+//            TS1DefDb ts1DefDb = new TS1DefDb ();
+//
+//            timeSeriesEntries = new TimeSeriesEntries (ts1DefDb, serviceName, period);
+//
+//            timeSeriesEntryCache.put (handle, timeSeriesEntries);
+//        }
+//        return timeSeriesEntries;
+//    }
 
-        if (timeSeriesEntries == null) {
-            TS1DefDb ts1DefDb = new TS1DefDb ();
+//    public static void addRicsFromSeriesTo (TS1Series series, TimeSeriesEntries timeSeriesEntries) {
+//
+//        String[] rics = series.getRics();
+//
+//        if (rics != null && 0 < rics.length) {
+//            timeSeriesEntries.addRics(rics);
+//        } else {
+//            // This is not a problem as the first query will only have one RIC
+//            // -- the primary RIC.
+//            log.debug("The rics variable was either null or empty.");
+//        }
+//    }
 
-            timeSeriesEntries = new TimeSeriesEntries (
-                ts1DefDb,
-                serviceName,
-                period
-            );
+    public static TimeSeriesEntry newTimeSeriesEntry (TS1Series ts1Series) {
 
-            session.putTimeSeriesEntries(handle, timeSeriesEntries);
-        }
-        return timeSeriesEntries;
-    }
-
-    public static void addRicsFromSeriesTo (
-        TS1Series series,
-        TimeSeriesEntries timeSeriesEntries
-    ) {
-        String[] rics = series.getRics();
-
-        if (rics != null && 0 < rics.length) {
-            timeSeriesEntries.addRics(rics);
-        } else {
-            // This is not a problem as the first query will only have one RIC
-            // -- the primary RIC.
-            log.info("The rics variable was either null or empty.");
-        }
-    }
-
-    public static TimeSeriesEntry newTimeSeriesEntry (
-        TS1Series ts1Series
-    ) {
         String primaryRic = ts1Series.getPrimaryRic();
 
         TimeSeriesEntry result = new TimeSeriesEntry(primaryRic);
