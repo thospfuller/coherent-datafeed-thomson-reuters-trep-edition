@@ -33,8 +33,7 @@ public class DirectoryEntry extends SerializableBean {
 
     private static final long serialVersionUID = -7839342136372860963L;
 
-    private static final Map<Byte, ActionType> actionTypeMap =
-        new HashMap<Byte, ActionType> ();
+    private static final Map<Byte, ActionType> actionTypeMap = new HashMap<Byte, ActionType> ();
 
     static final String
         BIG_NAME = "Name",
@@ -102,14 +101,8 @@ public class DirectoryEntry extends SerializableBean {
 
     public static final String ACTION_TYPE = "actionType";
 
-    // No annotation is necessary.
     public void setActionType(@Changeable(ACTION_TYPE) ActionType actionType) {
-
-//        ActionType oldValue = this.actionType;
-
         this.actionType = actionType;
-
-//        firePropertyChange(ACTION_TYPE, oldValue, actionType);
     }
 
     /**
@@ -118,7 +111,6 @@ public class DirectoryEntry extends SerializableBean {
      *
      * @param value See OMMMapEntry.Action.[ADD, UPDATE, DELETE].
      */
-    // No annotation is necessary.
     public void setActionType(byte value) {
 
         ActionType actionType = actionTypeMap.get(value);
@@ -132,14 +124,8 @@ public class DirectoryEntry extends SerializableBean {
 
     public static final String LOADED = "loaded";
 
-    // No annotation is necessary.
     public void setLoaded(@Changeable(LOADED) boolean loaded) {
-
-//        boolean oldValue = this.loaded;
-
         this.loaded = loaded;
-
-//        firePropertyChange(LOADED, oldValue, loaded);
     }
 
     public Map<String, String> getStates() {
@@ -148,14 +134,8 @@ public class DirectoryEntry extends SerializableBean {
 
     public static final String STATE_MAP = "stateMap";
 
-    // No annotation is necessary.
     public void setStates(@Changeable(STATE_MAP) Map<String, String> stateMap) {
-
-//        Map<String, String> oldValue = this.stateMap;
-
         this.stateMap = stateMap;
-
-//        firePropertyChange(STATE_MAP, oldValue, stateMap);
     }
 
     public String getName() {
@@ -166,12 +146,7 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_NAME, value=OMMTypes.ASCII_STRING)
     public void setName(@Changeable(NAME) String name) {
-
-//        String oldValue = this.name;
-
         this.name = name;
-
-//        firePropertyChange(NAME, oldValue, name);
     }
 
     public List<String> getCapabilities() {
@@ -190,12 +165,7 @@ public class DirectoryEntry extends SerializableBean {
      */
     @OMMType(named=BIG_CAPABILITIES, value=OMMTypes.ARRAY)
     public void setCapabilities(@Changeable(CAPABILITIES) List<String> capabilities) {
-
-//        List<String> oldValue = this.capabilities;
-
         this.capabilities = capabilities;
-
-//        firePropertyChange(CAPABILITIES, oldValue, capabilities);
     }
 
     public List<String> getDictionariesProvided() {
@@ -206,12 +176,7 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_DICTIONARIES_PROVIDED, value=OMMTypes.ARRAY)
     public void setDictionariesProvided(@Changeable(DICTIONARIES_PROVIDED) List<String> dictionariesProvided) {
-
-//        List<String> oldValue = this.dictionariesProvided;
-
         this.dictionariesProvided = dictionariesProvided;
-
-//        firePropertyChange(DICTIONARIES_PROVIDED, oldValue, dictionariesProvided);
     }
 
     public List<String> getDictionariesUsed() {
@@ -222,12 +187,7 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_DICTIONARIES_USED, value=OMMTypes.ARRAY)
     public void setDictionariesUsed(@Changeable(DICTIONARIES_USED) List<String> dictionariesUsed) {
-
-//        List<String> oldValue = this.dictionariesUsed;
-
         this.dictionariesUsed = dictionariesUsed;
-
-//        firePropertyChange(DICTIONARIES_USED, oldValue, dictionariesUsed);
     }
 
     public List<QualityOfService> getQualityOfService() {
@@ -238,12 +198,7 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_QUALITY_OF_SERVICE, value=OMMTypes.ARRAY)
     public void setQualityOfService(@Changeable(QUALITY_OF_SERVICE) List<QualityOfService> qualityOfService) {
-
-//        List<QualityOfService> oldValue = this.qualityOfService;
-
         this.qualityOfService = qualityOfService;
-
-//        firePropertyChange(QUALITY_OF_SERVICE, oldValue, qualityOfService);
     }
 
     public int getSupportsQoSRange() {
@@ -254,12 +209,7 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_SUPPORTS_QOS_RANGE, value=OMMTypes.INT)
     public void setSupportsQoSRange(@Changeable(SUPPORTS_QOS_RANGE) int supportsQoSRange) {
-
-//        int oldValue = this.supportsQoSRange;
-
         this.supportsQoSRange = supportsQoSRange;
-
-//        firePropertyChange(SUPPORTS_QOS_RANGE, oldValue, supportsQoSRange);
     }
 
     public int getServiceID() {
@@ -273,12 +223,7 @@ public class DirectoryEntry extends SerializableBean {
      */
     @OMMType(named=BIG_SERVICE_ID, value=OMMTypes.INT)
     public void setServiceID(@Changeable(SERVICE_ID) int serviceID) {
-
-//        int oldValue = this.serviceID;
-
         this.serviceID = serviceID;
-
-//        firePropertyChange(SERVICE_ID, oldValue, serviceID);
     }
 
     public Long getServiceState() {
@@ -289,12 +234,7 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_SERVICE_STATE, value=OMMTypes.UINT)
     public void setServiceState(@Changeable(SERVICE_STATE) Long serviceState) {
-
-//        Long oldValue = this.serviceState;
-
         this.serviceState = serviceState;
-
-//        firePropertyChange(SERVICE_STATE, oldValue, serviceState);
     }
 
     public boolean isAcceptingRequests() {
@@ -305,11 +245,15 @@ public class DirectoryEntry extends SerializableBean {
 
     @OMMType(named=BIG_ACCEPTING_REQUESTS, value=OMMTypes.UINT)
     public void setAcceptingRequests(@Changeable(ACCEPTING_REQUESTS) boolean acceptingRequests) {
-
-//        boolean oldValue = this.acceptingRequests;
-
         this.acceptingRequests = acceptingRequests;
+    }
 
-//        firePropertyChange(ACCEPTING_REQUESTS, oldValue, acceptingRequests);
+    @Override
+    public String toString() {
+        return "DirectoryEntry [stateMap=" + stateMap + ", name=" + name + ", capabilities=" + capabilities
+            + ", dictionariesProvided=" + dictionariesProvided + ", dictionariesUsed=" + dictionariesUsed
+            + ", supportsQoSRange=" + supportsQoSRange + ", serviceID=" + serviceID + ", serviceState="
+            + serviceState + ", acceptingRequests=" + acceptingRequests + ", actionType=" + actionType
+            + ", attributeMap=" + attributeMap + ", loaded=" + loaded + "]";
     }
 }
