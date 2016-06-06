@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidStateException;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.coherentlogic.coherent.datafeed.misc.Utils;
@@ -35,7 +35,7 @@ public abstract class CacheableQueryableService<T> extends QueryableService {
 //        this.objectFactory = objectFactory;
     }
 
-    public void query(ServiceName serviceName, Handle loginHandle, String... rics) {
+    public void query(ServiceName serviceName, Handle loginHandle, SessionBean sessionBean, String... rics) {
 
         Utils.assertNotNull("serviceName", serviceName);
         Utils.assertNotNull("rics", rics);
@@ -79,7 +79,7 @@ public abstract class CacheableQueryableService<T> extends QueryableService {
 //
 //                objectCache.put(ric, object);
 
-                List<Handle> handleList = query(serviceName.toString(), loginHandle, ric);
+                List<Handle> handleList = query(serviceName.toString(), loginHandle, sessionBean, ric);
 
                 ricCache.put(handleList.get(0), ric);
 //            }

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.datafeed.builders.RequestMessageBuilder;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.factories.RequestMessageBuilderFactory;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.EventQueue;
@@ -69,6 +70,7 @@ public class CommonRequestExecutor {
         String serviceName,
         Handle loginHandle,
         short msgModelType,
+        SessionBean sessionBean,
         String... itemNames
     ) {
         log.info("executeRequest: method begins; loginHandle: " + loginHandle
@@ -102,7 +104,7 @@ public class CommonRequestExecutor {
 
         List<Handle> results = new ArrayList<Handle>();
 
-        Handle handle = consumer.registerClient(eventQueue, spec, client, null);
+        Handle handle = consumer.registerClient(eventQueue, spec, client, sessionBean);
 
         results.add(handle);
 
