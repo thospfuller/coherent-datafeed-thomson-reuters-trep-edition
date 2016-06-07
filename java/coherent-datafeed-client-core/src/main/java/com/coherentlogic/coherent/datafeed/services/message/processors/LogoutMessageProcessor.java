@@ -1,13 +1,10 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
-import com.reuters.rfa.common.Handle;
 
 /**
  * This class delegates calls to the {@link #authenticationService}'s login
@@ -24,11 +21,8 @@ public class LogoutMessageProcessor
     private static final Logger log =
         LoggerFactory.getLogger(LogoutMessageProcessor.class);
 
-    public LogoutMessageProcessor(
-        AuthenticationServiceSpecification authenticationService,
-        Cache<Handle, Session> sessionCache
-    ) {
-        super(authenticationService, sessionCache);
+    public LogoutMessageProcessor(AuthenticationServiceSpecification authenticationService) {
+        super(authenticationService);
     }
 
     @Override
@@ -36,8 +30,7 @@ public class LogoutMessageProcessor
 
         log.info("logoutMessageProcessor.process: method invoked.");
 
-        AuthenticationServiceSpecification authenticationService =
-            getAuthenticationService();
+        AuthenticationServiceSpecification authenticationService = getAuthenticationService();
 
         authenticationService.logout();
 

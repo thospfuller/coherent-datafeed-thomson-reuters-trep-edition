@@ -1,19 +1,13 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-import static com.coherentlogic.coherent.datafeed.misc.SessionUtils.assertNotNull;
-
 import java.util.Map;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesLoader;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.session.omm.OMMItemEvent;

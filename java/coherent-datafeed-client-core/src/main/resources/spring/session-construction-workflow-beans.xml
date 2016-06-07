@@ -139,7 +139,7 @@
         <int:method name="query"
          request-channel="queryMarketPriceUpdatesChannel"
          reply-channel="queryMarketPriceUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketPriceQueryParameters (#args[0], #args[1], #args[2], #args[3])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketPriceQueryParameters (#args[0], #args[1], #args[2])"/>
     </int:gateway>
 
     <int:channel id="queryMarketPriceUpdatesChannel"/>
@@ -164,7 +164,7 @@
         <int:method name="query"
          request-channel="queryMarketMakerUpdatesChannel"
          reply-channel="queryMarketMakerUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketMakerQueryParameters (#args[0], #args[1], #args[2], #args[3])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketMakerQueryParameters (#args[0], #args[1], #args[2])"/>
     </int:gateway>
 
     <int:channel id="queryMarketMakerUpdatesChannel"/>
@@ -189,7 +189,7 @@
         <int:method name="query"
          request-channel="queryMarketByOrderUpdatesChannel"
          reply-channel="queryMarketByOrderUpdatesReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketByOrderQueryParameters (#args[0], #args[1], #args[2], #args[3])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketByOrderQueryParameters (#args[0], #args[1], #args[2])"/>
     </int:gateway>
 
     <int:channel id="queryMarketByOrderUpdatesChannel"/>
@@ -317,11 +317,11 @@
         <int:method name="queryTimeSeriesFor"
          request-channel="queryTimeSeriesForRequestChannel"
          reply-channel="queryTimeSeriesForReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3], #args[4])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/>
         <int:method name="getTimeSeriesFor"
          request-channel="getTimeSeriesForRequestChannel"
          reply-channel="getTimeSeriesForReplyChannel"
-         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3], #args[4])"/>
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter (#args[0], #args[1], #args[2], #args[3])"/>
     </int:gateway>
 
     <int:channel id="queryTimeSeriesForRequestChannel"/>

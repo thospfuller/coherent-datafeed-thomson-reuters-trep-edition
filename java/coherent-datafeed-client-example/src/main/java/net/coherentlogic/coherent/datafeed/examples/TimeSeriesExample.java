@@ -12,15 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import com.coherentlogic.coherent.datafeed.client.Client;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.Sample;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
@@ -81,11 +79,14 @@ public class TimeSeriesExample implements CommandLineRunner {
 
         CompletableFuture<TimeSeries> timeSeriesPromise = null;
 
+        SessionBean sessionBean = new SessionBean();
+
+        sessionBean.setHandle(loginHandle);
+
         try {
             timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
                 Constants.ELEKTRON_DD,
-                loginHandle,
-                null, // need to set the SessionBean here but right now this is null.
+                sessionBean,
                 "TRI.N",
                 TS1Constants.WEEKLY_PERIOD
             );

@@ -13,10 +13,9 @@ public class MarketPriceQueryParameters extends AbstractQuery<MarketPrice[]> {
 
     public MarketPriceQueryParameters(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         MarketPrice[] items
     ) {
-        super(serviceName, loginHandle, sessionBean, items);
+        super(serviceName, sessionBean, items);
     }
 }

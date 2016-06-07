@@ -73,7 +73,7 @@ public class TS1DefServiceTest {
 
         Handle loginHandle = authenticationService.login(sessionBean);
 
-        List<Handle> handles = ts1DefService.initialize(loginHandle, sessionBean, "QQCN", "QQCO", "QQCP");
+        List<Handle> handles = ts1DefService.initialize(sessionBean, "QQCN", "QQCO", "QQCP");
 
         assertEquals(3, handles.size());
 

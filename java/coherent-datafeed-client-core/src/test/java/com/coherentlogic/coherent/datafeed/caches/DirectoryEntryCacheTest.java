@@ -18,7 +18,6 @@ import org.junit.Test;
 import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -98,7 +97,7 @@ public class DirectoryEntryCacheTest {
     }
 
     /**
-     * @see Session#getAllDirectoryNames(Map, Set)
+     * @see getAllDirectoryNames(Map, Set)
      */
     @Test(expected=NullPointerRuntimeException.class)
     public void getAllDirectoryNamesWithNullDirectoryEntryMap () {
@@ -109,7 +108,7 @@ public class DirectoryEntryCacheTest {
     }
 
     /**
-     * @see Session#getAllDirectoryNames(Map, Set)
+     * @see getAllDirectoryNames(Map, Set)
      */
     @Test
     public void getAllDirectoryNamesWithEmptyDirectoryEntryMap () {
@@ -124,7 +123,7 @@ public class DirectoryEntryCacheTest {
     }
 
     /**
-     * @see Session#getAllDirectoryNames(Map, Set)
+     * @see getAllDirectoryNames(Map, Set)
      */
     @Test
     public void getAllDirectoryNamesWithValidDirectoryEntryMap () {

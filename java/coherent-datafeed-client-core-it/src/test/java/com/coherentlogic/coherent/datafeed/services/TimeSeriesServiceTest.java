@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.coherentlogic.coherent.datafeed.client.Client;
 import com.coherentlogic.coherent.datafeed.domain.Sample;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Constants;
@@ -80,10 +81,13 @@ public class TimeSeriesServiceTest {
 
         // At the moment we're going to wait for the dictionary to load.
 
+        SessionBean sessionBean = new SessionBean();
+
+        sessionBean.setHandle(loginHandle);
+
         CompletableFuture<TimeSeries> result = timeSeriesService.getTimeSeriesFor(
             ServiceName.ELEKTRON_DD.toString(),
-            loginHandle,
-            null, // need to set the SessionBean here but right now this is null.
+            sessionBean,
             "TRI.N",
             TS1Constants.DAILY_PERIOD
         );

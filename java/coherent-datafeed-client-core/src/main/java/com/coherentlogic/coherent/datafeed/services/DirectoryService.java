@@ -39,7 +39,6 @@ public class DirectoryService extends QueryableService implements DirectoryServi
     @Override
     protected List<Handle> executeRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames
@@ -73,6 +72,6 @@ public class DirectoryService extends QueryableService implements DirectoryServi
 
     @Override
     public List<Handle> query(SessionBean sessionBean) {
-        return query(sessionBean.getHandle(), sessionBean, UNUSED);
+        return query(sessionBean, UNUSED);
     }
 }

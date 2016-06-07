@@ -76,7 +76,7 @@ public class QueryNextRICMessageProcessor implements MessageProcessorSpecificati
         TS1Series ts1Series = TS1Series.createSeries(nextRic, period);
 
         Handle queryHandle = timeSeriesService.queryTimeSeriesFor(
-            serviceName, loginHandle, sessionBean, nextRic);
+            serviceName, sessionBean, nextRic);
 
         log.info("nextRic: " + nextRic + ", queryHandle: " + queryHandle);
 

@@ -17,7 +17,6 @@ public interface TimeSeriesServiceSpecification {
      */
     Handle queryTimeSeriesFor(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String ric
     );

@@ -44,16 +44,15 @@ public abstract class QueryableService extends RequestService {
         this.msgModelType = msgModelType;
     }
 
-    public List<Handle> query (Handle loginHandle, SessionBean sessionBean) {
-        return query (loginHandle, sessionBean, UNUSED, UNUSED);
+    public List<Handle> query (SessionBean sessionBean) {
+        return query (sessionBean, UNUSED, UNUSED);
     }
 
     public List<Handle> query (
-        Handle loginHandle,
         SessionBean sessionBean,
         String item
     ) {
-        return query (serviceName, loginHandle, sessionBean, item);
+        return query (serviceName, sessionBean, item);
     }
 
     /**
@@ -61,42 +60,36 @@ public abstract class QueryableService extends RequestService {
      */
     public List<Handle> query (
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String item
     ) {
         assertNotNull ("item", item);
 
-        return query (serviceName, loginHandle, sessionBean, new String[] {item});
+        return query (serviceName, sessionBean, new String[] {item});
     }
 
     public List<Handle> query (
-        Handle loginHandle,
         SessionBean sessionBean,
         String... items
     ) {
-        return query (serviceName, loginHandle, sessionBean, items);
+        return query (serviceName, sessionBean, items);
     }
 
     public List<Handle> query (
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String... items
     ) {
         assertNotNull("serviceName", serviceName);
-        assertNotNull("loginHandle", loginHandle);
+        assertNotNull("sessionBean", sessionBean);
+        assertNotNull("sessionBean.handle", sessionBean.getHandle());
         assertNotNullOrEmpty ("items", items);
 
-        log.debug("serviceName: " + serviceName + ", loginHandle: " + loginHandle + ", items: " + items);
+        log.debug("serviceName: " + serviceName + ", sessionBean: " + sessionBean + ", items: " + items);
 
         List<Handle> results = null;
 
-        if (loginHandle == null)
-            throw new InvalidQueryException ("The login handle is null, which may indicate that you either didn't " +
-                "login, or the login failed.");
-
-        results = executeRequest(serviceName, loginHandle, msgModelType, sessionBean, items);
+        results = executeRequest(serviceName, msgModelType, sessionBean, items);
 
         return results;
     }

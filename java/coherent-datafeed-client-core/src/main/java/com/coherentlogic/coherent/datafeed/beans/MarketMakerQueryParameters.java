@@ -11,12 +11,7 @@ public class MarketMakerQueryParameters extends AbstractQuery<MarketMaker[]> {
 
     private static final long serialVersionUID = -2244535172899622273L;
 
-    public MarketMakerQueryParameters(
-        String serviceName,
-        Handle loginHandle,
-        SessionBean sessionBean,
-        MarketMaker[] items
-    ) {
-        super(serviceName, loginHandle, sessionBean, items);
+    public MarketMakerQueryParameters(String serviceName, SessionBean sessionBean, MarketMaker[] items) {
+        super(serviceName, sessionBean, items);
     }
 }

@@ -20,7 +20,7 @@ import com.reuters.ts1.TS1Series;
 
 /**
  * This service is called from the Spring Integration work flow, which will pass
- * along an instance of the {@link Session} which can be found in the message
+ * along an instance of the {@link SessionBean} which can be found in the message
  * headers.
  *
  * Note that we use this to shield the user from working with the service
@@ -61,9 +61,9 @@ public class QueryTimeSeriesMessageProcessor
 
         log.debug("parameters: " + parameters);
 
-        Handle loginHandle = parameters.getLoginHandle();
-
         SessionBean sessionBean = parameters.getSessionBean();
+
+        Handle loginHandle = sessionBean.getHandle();
 
         String serviceName = parameters.getServiceName();
 
@@ -79,7 +79,6 @@ public class QueryTimeSeriesMessageProcessor
 
         Handle handle = timeSeriesService.queryTimeSeriesFor(
             serviceName,
-            loginHandle,
             sessionBean,
             primaryRic
         );

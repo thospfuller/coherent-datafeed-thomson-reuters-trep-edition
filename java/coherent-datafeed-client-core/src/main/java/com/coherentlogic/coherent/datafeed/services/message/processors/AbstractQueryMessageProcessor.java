@@ -46,9 +46,9 @@ public class AbstractQueryMessageProcessor<T extends RICBeanSpecification>
 
       String serviceName = parameters.getServiceName();
 
-      Handle loginHandle = parameters.getLoginHandle();
-
       SessionBean sessionBean = parameters.getSessionBean();
+
+      Handle loginHandle = sessionBean.getHandle();
 
       T[] items = parameters.getItem();
 
@@ -62,7 +62,6 @@ public class AbstractQueryMessageProcessor<T extends RICBeanSpecification>
 
           queryableService.query(
               ServiceName.valueOf(serviceName),
-              loginHandle,
               sessionBean,
               ric
           );

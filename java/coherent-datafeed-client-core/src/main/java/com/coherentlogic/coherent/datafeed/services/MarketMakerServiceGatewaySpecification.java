@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
-import com.reuters.rfa.common.Handle;
 
 /**
  * Used as a gateway interface into the Spring Integration workflow. Note that we have a very similar interface named
@@ -17,5 +16,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketMakerServiceGatewaySpecification {
 
-    Map<String, MarketMaker> query (ServiceName serviceName, Handle loginHandle, SessionBean sessionBean, MarketMaker... marketMakers);
+    Map<String, MarketMaker> query (ServiceName serviceName, SessionBean sessionBean, MarketMaker... marketMakers);
 }

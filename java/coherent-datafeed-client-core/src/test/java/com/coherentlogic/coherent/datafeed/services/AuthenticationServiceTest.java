@@ -18,7 +18,6 @@ import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDacsIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.SessionFinalizationFailedException;
-import com.coherentlogic.coherent.datafeed.factories.SessionFactory;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.session.omm.OMMConsumer;
 
@@ -36,7 +35,6 @@ public class AuthenticationServiceTest {
     @Before
     public void setUp() throws Exception {
 
-        Cache<Handle, Session> sessionCache = mock (Cache.class);
         Cache<Handle, DictionaryEntry> dictionaryCache =
             mock (Cache.class);
 
@@ -50,21 +48,12 @@ public class AuthenticationServiceTest {
 
         ommConsumer = mock (OMMConsumer.class);
 
-        SessionFactory sessionFactory = new SessionFactory(
-            directoryMap,
-            dictionaryMap,
-            ts1DefEntryMap,
-            timeSeriesEntriesMap
-        );
-
         authenticationService = new AuthenticationService(
             null,
             null,
             ommConsumer,
             null,
-            null,
-            sessionCache,
-            sessionFactory
+            null
         );
     }
 

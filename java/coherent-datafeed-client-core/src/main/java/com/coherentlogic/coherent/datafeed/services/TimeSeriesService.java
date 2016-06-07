@@ -102,14 +102,12 @@ public class TimeSeriesService extends QueryableService implements TimeSeriesSer
     @Override
     protected List<Handle> executeRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames
     ) {
         return commonRequestExecutor.executeRequest(
             serviceName,
-            loginHandle,
             msgModelType,
             sessionBean,
             itemNames
@@ -131,33 +129,30 @@ public class TimeSeriesService extends QueryableService implements TimeSeriesSer
      */
     public Handle queryTimeSeriesFor(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String ric
     ) {
-        List<Handle> results = query (serviceName, loginHandle, sessionBean, ric);
+        List<Handle> results = query (serviceName, sessionBean, ric);
 
         return results.get(0);
     }
 
     public CompletableFuture<TimeSeries> getTimeSeriesFor (
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String ric,
         String period
     ) {
-        return getTimeSeriesFor (serviceName, loginHandle, sessionBean, ric, Integer.valueOf(period));
+        return getTimeSeriesFor (serviceName, sessionBean, ric, Integer.valueOf(period));
     }
 
     public CompletableFuture<TimeSeries> getTimeSeriesFor (
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String ric,
         int period
     ) {
-        log.debug("getTimeSeriesFor: method begins; serviceName: " + serviceName + ", loginHandle: " + loginHandle +
+        log.debug("getTimeSeriesFor: method begins; serviceName: " + serviceName + ", sessionBean: " + sessionBean +
             ", ric: " + ric);
 
         CompletableFuture<TimeSeries> result = null;
@@ -178,13 +173,13 @@ public class TimeSeriesService extends QueryableService implements TimeSeriesSer
 
             String primaryRic = series.getPrimaryRic();
 
-            Handle handle = queryTimeSeriesFor(serviceName, loginHandle, sessionBean, primaryRic);
+            Handle handle = queryTimeSeriesFor(serviceName, sessionBean, primaryRic);
 
             TimeSeriesKey timeSeriesKey = new TimeSeriesKey (serviceName, ric, period);
 
             sessionBean.putTimeSeriesKey(handle, timeSeriesKey);
 
-            log.error("1. loginHandle: " + loginHandle + ", handle: " + handle + ", ric: " + ric + ", primaryRic: " +
+            log.debug("sessionBean: " + sessionBean + ", handle: " + handle + ", ric: " + ric + ", primaryRic: " +
                 primaryRic);
 
             TimeSeriesEntries timeSeriesEntries =

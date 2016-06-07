@@ -1,6 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import java.util.List;
 
@@ -16,11 +17,8 @@ import com.coherentlogic.coherent.datafeed.beans.TS1DefQueryParameters;
 import com.coherentlogic.coherent.datafeed.caches.TS1DefEntryCache;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
 import com.reuters.rfa.common.Handle;
-
-import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 /**
  * 
@@ -65,11 +63,11 @@ public class TS1DefGatewayDelegateMessageProcessor
 
         TS1DefQueryParameters ts1DefQueryParameters = message.getPayload();
 
-        Handle loginHandle = ts1DefQueryParameters.getLoginHandle();
-
         SessionBean sessionBean = (SessionBean) message.getHeaders().get(SESSION);
 
         assertNotNull("sessionBean", sessionBean);
+
+        Handle loginHandle = sessionBean.getHandle();
 
         MessageHeaders headers = null;
 
@@ -82,15 +80,14 @@ public class TS1DefGatewayDelegateMessageProcessor
         List<Handle> handles = null;
 
         if (rics == null || rics.length == 0)
-            handles = ts1DefService.initialize(loginHandle, sessionBean);
+            handles = ts1DefService.initialize(sessionBean);
         else
-            handles = ts1DefService.initialize(loginHandle, sessionBean, rics);
+            handles = ts1DefService.initialize(sessionBean, rics);
 
         for (Handle nextHandle : handles) {
 //            ts1DefCache.put (nextHandle, session);
             TS1DefEntry ts1DefEntry = new TS1DefEntry ();
             ts1DefEntryCache.put(nextHandle, ts1DefEntry);
-//            sessionCache.put(nextHandle, session);
         }
 
         headers = message.getHeaders();
@@ -102,52 +99,3 @@ public class TS1DefGatewayDelegateMessageProcessor
         return result;
     }
 }
-/*
-    @Override
-    public Message<List<Handle>> process(
-        Message<TS1DefQueryParameters> message) {
-
-        TS1DefQueryParameters ts1DefQueryParameters = message.getPayload();
-
-        Handle loginHandle = ts1DefQueryParameters.getLoginHandle();
-
-        MessageHeaders headers = null;
-
-        Message<List<Handle>> result = null;
-
-        synchronized (sessionCache) {
-
-            Session session = sessionCache.get(loginHandle);
-
-            String[] rics = ts1DefQueryParameters.getRics();
-
-            log.debug("ts1DefQueryParameters: " + ts1DefQueryParameters);
-
-            List<Handle> handles = null;
-
-            if (rics == null || rics.length == 0)
-                handles = ts1DefService.initialize(loginHandle);
-            else
-                handles = ts1DefService.initialize(loginHandle, rics);
-
-            for (Handle nextHandle : handles) {
-                ts1DefCache.put (nextHandle, session);
-                TS1DefEntry ts1DefEntry = new TS1DefEntry ();
-                session.putTS1DefEntry(nextHandle, ts1DefEntry);
-                sessionCache.put(nextHandle, session);
-            }
-    
-            headers = message.getHeaders();
-
-            result = MessageBuilder
-                .withPayload(handles)
-                .copyHeaders(headers)
-                .build();
-        }
-
-        log.debug("process: method ends; result: " +
-            ToStringBuilder.reflectionToString(result));
-
-        return result;
-    }
- */

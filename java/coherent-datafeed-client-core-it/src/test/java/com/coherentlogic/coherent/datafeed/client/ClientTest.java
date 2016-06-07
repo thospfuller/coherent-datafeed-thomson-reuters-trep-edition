@@ -4,20 +4,17 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.DictionaryServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
-import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -61,7 +58,7 @@ public class ClientTest {
             (DictionaryServiceSpecification) client.getDictionaryService();
 
         dictionaryService.loadDictionaries(
-            Constants.IDN_RDF, loginHandle, sessionBean, "RWFFld", "RWFEnum");
+            Constants.IDN_RDF, sessionBean, "RWFFld", "RWFEnum");
 
         marketPriceService = client.getMarketPriceService();
     }

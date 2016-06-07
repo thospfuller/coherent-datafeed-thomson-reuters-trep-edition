@@ -57,7 +57,6 @@ public class GlobalConfiguration {
         ENCODER = "encoder",
         EVENT_QUEUE = "eventQueue",
         OMM_CONSUMER = "defaultOMMConsumer",
-        SESSION_CACHE = "sessionCache",
         TS1_DEF_CACHE = "ts1DefCache",
         MARKET_MAKER_MESSAGE_CONSUMER ="marketMakerEventDrivenEndpoint";
 

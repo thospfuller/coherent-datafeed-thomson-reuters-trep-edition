@@ -35,12 +35,11 @@ public class TimeSeriesQueryParameter extends QueryParameter {
 
     public TimeSeriesQueryParameter(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String item,
         Integer period
     ) {
-        super(serviceName, loginHandle, sessionBean, item);
+        super(serviceName, sessionBean, item);
         this.period = period;
     }
 
@@ -49,12 +48,11 @@ public class TimeSeriesQueryParameter extends QueryParameter {
      */
     public TimeSeriesQueryParameter(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String item,
         String period
     ) {
-        super(serviceName, loginHandle, sessionBean, item);
+        super(serviceName, sessionBean, item);
 
         Integer periodValue = periodMap.get(period);
 

@@ -49,7 +49,6 @@ public class DictionaryService extends QueryableService implements DictionarySer
      */
     public List<Handle> loadDictionaries (
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String... dictionaryIds
     ) {
@@ -60,7 +59,6 @@ public class DictionaryService extends QueryableService implements DictionarySer
 
         List<Handle> results = executeRequest(
             serviceName,
-            loginHandle,
             msgModelType,
             sessionBean,
             (String[]) dictionaryIds
@@ -79,7 +77,6 @@ public class DictionaryService extends QueryableService implements DictionarySer
     @Override
     protected List<Handle> executeRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... dictionaryNames
@@ -87,7 +84,7 @@ public class DictionaryService extends QueryableService implements DictionarySer
         List<Handle> results = new ArrayList<Handle> ();
 
         for (String dictionaryName : dictionaryNames) {
-            Handle handle = executeSingleRequest(serviceName, loginHandle, msgModelType, sessionBean, dictionaryName);
+            Handle handle = executeSingleRequest(serviceName, msgModelType, sessionBean, dictionaryName);
             results.add(handle);
         }
 
@@ -103,7 +100,6 @@ public class DictionaryService extends QueryableService implements DictionarySer
      */
     protected Handle executeSingleRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String dictionaryName

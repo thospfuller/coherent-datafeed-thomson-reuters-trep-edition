@@ -1,10 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import java.util.Map;
-
-import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
-import com.reuters.rfa.common.Handle;
 
 /**
  * The specification that defines the methods that market maker services must
@@ -20,7 +16,6 @@ public interface MarketMakerServiceSpecification {
 
     void query(
         ServiceName serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String... items
     );

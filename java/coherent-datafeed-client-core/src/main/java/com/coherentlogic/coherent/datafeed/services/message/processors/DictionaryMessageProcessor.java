@@ -1,7 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.LOGIN_HANDLE;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import java.util.Iterator;
@@ -10,11 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 //import org.springframework.transaction.annotation.Transactional;
@@ -81,16 +79,18 @@ public class DictionaryMessageProcessor implements MessageProcessorSpecification
         while (iterator.hasNext()) {
             String directoryName = iterator.next();
 
-            loadDictionariesFor (loginHandle, directoryName, sessionBean);
+            loadDictionariesFor (directoryName, sessionBean);
         }
 
         return message;
     }
 
-    void loadDictionariesFor (Handle loginHandle, String directoryName, SessionBean sessionBean) {
+    void loadDictionariesFor (String directoryName, SessionBean sessionBean) {
 
-        log.info("loadDictionariesFor: method begins; loginHandle: " + loginHandle + ", directoryName: " +
-            directoryName);
+        log.info("loadDictionariesFor: method begins; directoryName: " + directoryName + ", sessionBean: " +
+            sessionBean);
+
+        Handle loginHandle = sessionBean.getHandle();
 
         Set<Entry <Handle, Map<String, DirectoryEntry>>> directories = directoryEntryCache.entrySet();
 
@@ -102,7 +102,7 @@ public class DictionaryMessageProcessor implements MessageProcessorSpecification
         if (dictionaryNames != null && 0 < dictionaryNames.length) {
 
             List<Handle> dictionaryHandles = dictionaryService.loadDictionaries(
-                directoryName, loginHandle, sessionBean, dictionaryNames);
+                directoryName, sessionBean, dictionaryNames);
 
             int ctr = 0;
 
@@ -120,8 +120,7 @@ public class DictionaryMessageProcessor implements MessageProcessorSpecification
     }
 
     /**
-     * Method iterates over the keys of the next sessionCache and copies the
-     * dictionariesUsed into the set of dictionaryIds which will be loaded.
+     * Method iterates over the keys and copies the dictionariesUsed into the set of dictionaryIds which will be loaded.
      */
     void copyDictionaryIdsInto (Cache<String, DirectoryEntry> directoryCache, Set<String> dictionaryIds) {
 

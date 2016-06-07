@@ -1,17 +1,13 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
@@ -23,7 +19,7 @@ import com.coherentlogic.coherent.datafeed.domain.DirectoryEntry;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.session.omm.OMMItemEvent;
@@ -40,8 +36,6 @@ public class RefreshMarketPriceMessageProcessorTest {
     private OMMItemEvent event = null;
 
     private OMMMsg ommMsg = null;
-
-    private Session session = null;
 
     private Map<Handle, MarketPrice> marketPriceEntryCache = null;
 
@@ -81,13 +75,6 @@ public class RefreshMarketPriceMessageProcessorTest {
         Map<Handle, TimeSeriesEntries> timeSeriesEntryCache =
             mock (Map.class);
 
-        session = new Session (
-            directoryEntryCache,
-            dictionaryEntryCache,
-            ts1DefEntryCache,
-            timeSeriesEntryCache
-        );
-
         marketPriceAdapter = mock (MarketPriceAdapter.class);
 
         marketPrice = new MarketPrice ();
@@ -100,7 +87,6 @@ public class RefreshMarketPriceMessageProcessorTest {
         handle = null;
         event = null;
         ommMsg = null;
-        session = null;
         marketPriceEntryCache = null;
         marketPriceAdapter = null;
         marketPrice = null;
@@ -112,7 +98,7 @@ public class RefreshMarketPriceMessageProcessorTest {
         Message<OMMItemEvent> result =
             MessageBuilder
                 .withPayload(event)
-                .setHeader(SESSION, session)
+                .setHeader(SESSION, new SessionBean ())
                 .build();
 
         return result;

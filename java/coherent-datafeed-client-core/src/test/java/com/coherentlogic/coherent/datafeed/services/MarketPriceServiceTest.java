@@ -92,7 +92,7 @@ public class MarketPriceServiceTest {
 
     @Test(expected=NullPointerRuntimeException.class)
     public void queryPassingNullString() {
-        marketPriceService.query(handle, (SessionBean) null, (String)null);
+        marketPriceService.query((SessionBean) null, (String)null);
     }
 
     /**
@@ -101,7 +101,7 @@ public class MarketPriceServiceTest {
      */
     @Test(expected=NullPointerRuntimeException.class)
     public void queryPassingValidString() {
-        marketPriceService.query(handle, (SessionBean) null, RIC);
+        marketPriceService.query((SessionBean) null, RIC);
     }
 
     /**
@@ -126,10 +126,15 @@ public class MarketPriceServiceTest {
             )
         ).thenReturn(handle);
 
+        Handle handle = mock (Handle.class);
+
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setHandle(handle);
+
         List<Handle> handles = marketPriceService.query(
             Constants.dELEKTRON_DD,
-            handle,
-            (SessionBean) null,
+            sessionBean,
             RIC
         );
 
@@ -142,7 +147,6 @@ public class MarketPriceServiceTest {
         Handle handle = mock (Handle.class);
         marketPriceService.query(
             Constants.dELEKTRON_DD,
-            handle,
             (SessionBean) null,
             (String[])null
         );
@@ -150,11 +154,16 @@ public class MarketPriceServiceTest {
 
     @Test(expected=MissingDataException.class)
     public void queryPassingEmptyStringArray() {
+
         Handle handle = mock (Handle.class);
+
+        SessionBean sessionBean = new SessionBean ();
+
+        sessionBean.setHandle(handle);
+
         marketPriceService.query(
             Constants.dELEKTRON_DD,
-            handle,
-            new SessionBean (),
+            sessionBean,
             new String[] {}
         );
     }

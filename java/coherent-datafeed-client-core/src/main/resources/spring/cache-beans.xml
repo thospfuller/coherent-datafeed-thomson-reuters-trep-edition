@@ -20,13 +20,6 @@
             ref="cacheEntryRemovedEventListenerEndpoint" />
     </bean>
 
-    <!-- DEPRECATED This is a cache that holds primarily handle-to-domain object pairs. 
-        It is primarily used when TR is sending results that are chunked. The framework 
-        will create a domain object and add it to the cache, and then fill in the 
-        details with each result returned from RFA. -->
-    <bean id="sessionCache" class="org.infinispan.Cache" factory-bean="cacheFactory"
-        factory-method="getInstance" />
-
     <!-- For caching handles:RFAObjects that will be updated in chunks. -->
     <bean id="queryCache" class="org.infinispan.Cache" factory-bean="cacheFactory"
         factory-method="getInstance" />

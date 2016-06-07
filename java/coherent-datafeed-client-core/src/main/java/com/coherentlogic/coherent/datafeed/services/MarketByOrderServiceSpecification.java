@@ -1,7 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
-import com.reuters.rfa.common.Handle;
 
 /**
  * The specification that defines the methods that market by order services must
@@ -15,5 +14,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketByOrderServiceSpecification {
 
-    void query (ServiceName serviceName, Handle loginHandle, SessionBean sessionBean, String... rics);
+    void query (ServiceName serviceName, SessionBean sessionBean, String... rics);
 }

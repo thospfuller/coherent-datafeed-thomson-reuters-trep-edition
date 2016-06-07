@@ -2,7 +2,6 @@ package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -12,7 +11,6 @@ import org.springframework.messaging.MessageHeaders;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeriesKey;
 import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Event;
 import com.reuters.rfa.common.Handle;
 
@@ -27,16 +25,10 @@ import com.reuters.rfa.common.Handle;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class TimeSeriesMessageEnricher extends AbstractMessageEnricher {
+public class TimeSeriesMessageEnricher implements EnricherSpecification {
 
     private static final Logger log =
         LoggerFactory.getLogger(TimeSeriesMessageEnricher.class);
-
-    public TimeSeriesMessageEnricher(
-        Cache<Handle, Session> sessionCache
-    ) {
-        super(sessionCache);
-    }
 
     /**
      * @todo This method could be moved to a base class.

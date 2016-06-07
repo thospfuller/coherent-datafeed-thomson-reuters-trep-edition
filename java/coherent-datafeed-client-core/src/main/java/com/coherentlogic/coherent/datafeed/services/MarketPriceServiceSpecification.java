@@ -1,10 +1,6 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import java.util.Map;
-
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
-import com.reuters.rfa.common.Handle;
 
 /**
  * The specification that defines the methods that market price services must
@@ -14,5 +10,5 @@ import com.reuters.rfa.common.Handle;
  */
 public interface MarketPriceServiceSpecification {
 
-    void query (ServiceName serviceName, Handle loginHandle, SessionBean sessionBean, String... rics);
+    void query (ServiceName serviceName, SessionBean sessionBean, String... rics);
 }

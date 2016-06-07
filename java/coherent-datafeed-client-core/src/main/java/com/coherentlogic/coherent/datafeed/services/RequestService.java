@@ -40,7 +40,6 @@ public abstract class RequestService {
      */
     protected abstract List<Handle> executeRequest (
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames

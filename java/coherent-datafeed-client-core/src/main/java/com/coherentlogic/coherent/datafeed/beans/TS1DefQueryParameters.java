@@ -1,9 +1,11 @@
 package com.coherentlogic.coherent.datafeed.beans;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Handle;
 
 /**
@@ -16,29 +18,29 @@ public class TS1DefQueryParameters implements Serializable {
 
     private static final long serialVersionUID = 439055904590413504L;
 
-    private final Handle loginHandle;
+    private final SessionBean sessionBean;
 
     private final String[] rics;
 
-    public TS1DefQueryParameters(Handle loginHandle) {
-        this (loginHandle, (String[]) null);
+    public TS1DefQueryParameters(SessionBean sessionBean) {
+        this (sessionBean, (String[]) null);
     }
 
-    public TS1DefQueryParameters(Handle loginHandle, String... rics) {
-        super();
-        this.loginHandle = loginHandle;
+    public TS1DefQueryParameters(SessionBean sessionBean, String... rics) {
+        this.sessionBean = sessionBean;
         this.rics = rics;
     }
 
-    public Handle getLoginHandle() {
-        return loginHandle;
+    public SessionBean getSessionBean() {
+        return sessionBean;
     }
 
     public String[] getRics() {
         return rics;
     }
 
-    public String toString () {
-        return ToStringBuilder.reflectionToString(this);
+    @Override
+    public String toString() {
+        return "TS1DefQueryParameters [sessionBean=" + sessionBean + ", rics=" + Arrays.toString(rics) + "]";
     }
 }

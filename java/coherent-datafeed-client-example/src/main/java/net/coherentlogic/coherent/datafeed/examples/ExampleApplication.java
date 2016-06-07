@@ -3,7 +3,6 @@ package net.coherentlogic.coherent.datafeed.examples;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,7 +45,6 @@ import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewayS
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Constants;
@@ -159,7 +157,7 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         statusResponse.addPropertyChangeListener(
             event -> {
-                System.out.println("event: " + event);
+                System.out.println("statusResponse.event: " + event);
             }
         );
 
@@ -226,7 +224,6 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
             Constants.ELEKTRON_DD,
-            loginHandle,
             sessionBean,
             ric,
             TS1Constants.WEEKLY_PERIOD
@@ -347,7 +344,6 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         Map<String, MarketByOrder> marketMakerMap = marketByOrderService.query(
             ServiceName.dELEKTRON_DD,
-            loginHandle,
             sessionBean,
             (MarketByOrder[]) marketByOrderList.toArray(marketByOrderArray)
         );
@@ -422,7 +418,6 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         Map<String, MarketMaker> marketMakerMap = marketMakerService.query(
             ServiceName.dELEKTRON_DD,
-            loginHandle,
             sessionBean,
             (MarketMaker[]) marketMakerList.toArray(marketMakerArray)
         );
@@ -482,7 +477,6 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         marketPriceService.query (
             ServiceName.dELEKTRON_DD,
-            loginHandle,
             sessionBean,
             (MarketPrice[]) marketPriceList.toArray(marketPriceArray)
         );

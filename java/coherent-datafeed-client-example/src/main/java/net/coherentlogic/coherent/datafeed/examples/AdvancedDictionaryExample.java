@@ -6,15 +6,11 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DEFAULT_APP_CTX
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DICTIONARY_SERVICE;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FIELD_DICTIONARY;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.THREE_MINUTES;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -88,7 +84,6 @@ public class AdvancedDictionaryExample implements CommandLineRunner {
 
         dictionaryService.loadDictionaries(
             Constants.ELEKTRON_DD,
-            handle,
             sessionBean,
             "RWFFld",
             "RWFEnum"

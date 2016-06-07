@@ -68,12 +68,11 @@ public class CommonRequestExecutor {
      */
     protected List<Handle> executeRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames
     ) {
-        log.info("executeRequest: method begins; loginHandle: " + loginHandle
+        log.info("executeRequest: method begins; sessionBean: " + sessionBean
             + ", serviceName: " + serviceName + ", msgModelType: "
             + msgModelType + ", itemName: "
             + ToStringBuilder.reflectionToString(itemNames));

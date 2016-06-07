@@ -26,9 +26,8 @@ import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.DictionaryGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification;
-import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
@@ -214,11 +213,11 @@ public class Client {
             applicationContext.getBean(STATUS_RESPONSE_SERVICE_GATEWAY);
     }
 
-    public void loadTS1Definitions (Handle loginHandle, SessionBean sessionBean) {
+    public void loadTS1Definitions (SessionBean sessionBean) {
 
         TS1DefServiceSpecification ts1DefService = getTS1DefService();
 
-        ts1DefService.initialize(loginHandle, sessionBean);
+        ts1DefService.initialize(sessionBean);
     }
 
     public Handle login (String dacsId) {

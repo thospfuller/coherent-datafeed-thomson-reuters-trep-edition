@@ -8,6 +8,9 @@ import java.util.logging.LogManager;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.coherentlogic.coherent.datafeed.exceptions.
     ApplicationInitializationFailedException;
 
@@ -57,13 +60,13 @@ public class LoggingService {
             result = System.getenv(LOGGING_CONFIGURATION_FILE);
 
         if (result == null)
-            System.out.println("The logging properties will be read from the " + ROOT_PROPERTIES_FILE_PATH +
+            System.err.println("The logging properties will be read from the " + ROOT_PROPERTIES_FILE_PATH +
                 " included in this jar file. This can be overridden by setting the " + LOGGING_CONFIGURATION_FILE +
                 " system properties settings -- for example -D" + LOGGING_CONFIGURATION_FILE +
                 "=C:/Temp/logging.properties");
                 // In Eclipse this is a VM arg.
         else
-            System.out.println("The logging properties will be read from the file " + result);
+        	System.err.println("The logging properties will be read from the file " + result);
 
         InputStream inputStream = null;
 

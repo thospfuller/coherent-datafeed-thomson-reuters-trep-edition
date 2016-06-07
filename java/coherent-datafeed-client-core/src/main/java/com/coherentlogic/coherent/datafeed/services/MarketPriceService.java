@@ -53,7 +53,6 @@ public class MarketPriceService extends CacheableQueryableService<MarketPrice>
      */
     protected List<Handle> executeRequest (
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames
@@ -63,6 +62,8 @@ public class MarketPriceService extends CacheableQueryableService<MarketPrice>
         Client client = getClient();
 
         RequestMessageBuilder builder = factory.getInstance();
+
+        Handle loginHandle = sessionBean.getHandle();
 
         List<Handle> handles = 
             builder

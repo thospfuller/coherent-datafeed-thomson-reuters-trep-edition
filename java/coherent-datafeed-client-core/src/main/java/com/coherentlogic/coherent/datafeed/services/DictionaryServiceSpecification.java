@@ -15,7 +15,6 @@ public interface DictionaryServiceSpecification {
 
     List<Handle> loadDictionaries (
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String... dictionaryIds
     );

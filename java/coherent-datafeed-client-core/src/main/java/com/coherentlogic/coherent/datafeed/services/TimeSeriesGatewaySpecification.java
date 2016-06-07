@@ -4,7 +4,6 @@ import java.util.concurrent.CompletableFuture;
 
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
-import com.reuters.rfa.common.Handle;
 
 /**
  * The specification that defines the methods that time series services must
@@ -26,7 +25,6 @@ public interface TimeSeriesGatewaySpecification {
      */
     CompletableFuture<TimeSeries> getTimeSeriesFor(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String ric,
         int period
@@ -34,7 +32,6 @@ public interface TimeSeriesGatewaySpecification {
 
     CompletableFuture<TimeSeries> getTimeSeriesFor(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String ric,
         String period

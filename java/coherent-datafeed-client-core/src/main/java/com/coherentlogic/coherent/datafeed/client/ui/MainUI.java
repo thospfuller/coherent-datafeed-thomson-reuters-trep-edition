@@ -64,8 +64,6 @@ public class MainUI {
 
     private final MarketPriceServiceSpecification marketPriceGatewaySpecification;
 
-    private Handle loginHandle = null;
-
     /**
      * Create the application.
      */
@@ -84,14 +82,6 @@ public class MainUI {
     ) {
         this.timeSeriesGatewaySpecification = timeSeriesGatewaySpecification;
         this.marketPriceGatewaySpecification = marketPriceGatewaySpecification;
-    }
-
-    public Handle getLoginHandle() {
-        return loginHandle;
-    }
-
-    public void setLoginHandle(Handle loginHandle) {
-        this.loginHandle = loginHandle;
     }
 
     /**

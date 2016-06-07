@@ -11,7 +11,7 @@ public class MarketByOrderQueryParameters extends AbstractQuery<MarketByOrder[]>
 
     private static final long serialVersionUID = -4049102953592195180L;
 
-    public MarketByOrderQueryParameters(String serviceName, Handle loginHandle, SessionBean sessionBean, MarketByOrder[] item) {
-        super(serviceName, loginHandle, sessionBean, item);
+    public MarketByOrderQueryParameters(String serviceName, SessionBean sessionBean, MarketByOrder[] item) {
+        super(serviceName, sessionBean, item);
     }
 }

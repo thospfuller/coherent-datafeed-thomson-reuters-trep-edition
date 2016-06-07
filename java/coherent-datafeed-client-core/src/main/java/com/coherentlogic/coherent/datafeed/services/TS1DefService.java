@@ -49,11 +49,11 @@ public class TS1DefService extends QueryableService implements TS1DefServiceSpec
      *
      * @param loginHandle The login handle.
      */
-    public List<Handle> initialize (Handle loginHandle, SessionBean sessionBean) {
+    public List<Handle> initialize (SessionBean sessionBean) {
 
         String[] rics = TS1DefDb.getTs1DbRics();
 
-        return initialize (loginHandle, sessionBean, rics);
+        return initialize (sessionBean, rics);
     }
 
     /**
@@ -63,12 +63,12 @@ public class TS1DefService extends QueryableService implements TS1DefServiceSpec
      * @param loginHandle The login handle.
      * @param rics The rics required to initialize the {@link TS1DefDb}.
      */
-    public List<Handle> initialize (Handle loginHandle, SessionBean sessionBean, String... rics) {
+    public List<Handle> initialize (SessionBean sessionBean, String... rics) {
 
-        log.info("initialize: method begins; loginHandle: " + loginHandle + ", rics: " +
+        log.info("initialize: method begins; sessionBean: " + sessionBean + ", rics: " +
             ToStringBuilder.reflectionToString(rics));
 
-        List<Handle> handles = query(loginHandle, sessionBean, rics);
+        List<Handle> handles = query(sessionBean, rics);
 
         return handles;
     }
@@ -76,14 +76,12 @@ public class TS1DefService extends QueryableService implements TS1DefServiceSpec
     @Override
     protected List<Handle> executeRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames
     ) {
         return commonRequestExecutor.executeRequest(
             serviceName,
-            loginHandle,
             msgModelType,
             sessionBean,
             itemNames

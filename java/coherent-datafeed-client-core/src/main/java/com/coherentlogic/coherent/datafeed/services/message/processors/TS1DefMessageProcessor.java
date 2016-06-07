@@ -12,15 +12,12 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.beans.TS1DefEntry;
-import com.coherentlogic.coherent.datafeed.caches.TS1DefCache;
 import com.coherentlogic.coherent.datafeed.caches.TS1DefEntryCache;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.session.omm.OMMItemEvent;
-import com.reuters.ts1.TS1Def;
 
 /**
  * 
@@ -60,7 +57,7 @@ public class TS1DefMessageProcessor implements MessageProcessorSpecification<OMM
      * Note that the session is set in the headers earlier in the workflow.
      * 
      * this method returns a list of handles which are added to the {@link
-     * #ts1DefCache} using the {@link Session} as the key.
+     * #ts1DefCache} using the {@link SessionBean} as the key.
      *
      * As COMPLETION_EVENTS are received these will be removed from the 
      */
@@ -77,18 +74,17 @@ public class TS1DefMessageProcessor implements MessageProcessorSpecification<OMM
 
         Handle loginHandle = sessionBean.getHandle();
 
-        List<Handle> handles = ts1DefService.initialize(loginHandle, sessionBean);
+        List<Handle> handles = ts1DefService.initialize(sessionBean);
 
         log.debug("handles.size: " + handles.size());
 
         for (Handle nextHandle : handles) {
 
-        	TS1DefEntry ts1DefEntry = new TS1DefEntry ();
+            TS1DefEntry ts1DefEntry = new TS1DefEntry ();
 
 //            ts1DefCache.put (nextHandle, ts1DefEntry); // this should not be a ts1DefEntry instance!
 
             ts1DefEntryCache.put(nextHandle, ts1DefEntry);
-//            sessionCache.put(nextHandle, session);
         }
 
         log.debug("ts1DefMessageProcessor.process: method ends; message: " +

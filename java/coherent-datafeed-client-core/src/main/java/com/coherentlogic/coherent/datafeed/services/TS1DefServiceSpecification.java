@@ -18,10 +18,8 @@ public interface TS1DefServiceSpecification {
      * Method initializes the application's {@link TS1DefDb} database by
      * requesting all rics returned from the call to the {@link
      * TS1DefDb#getTs1DbRics} method.
-     *
-     * @param loginHandle The login handle.
      */
-    List<Handle> initialize (Handle loginHandle, SessionBean sessionBean);
+    List<Handle> initialize (SessionBean sessionBean);
 
     /**
      * Method initializes the application's {@link TS1DefDb} database by
@@ -30,5 +28,5 @@ public interface TS1DefServiceSpecification {
      * @param loginHandle The login handle.
      * @param rics The rics required to initialize the {@link TS1DefDb}.
      */
-    public List<Handle> initialize (Handle loginHandle, SessionBean sessionBean, String... rics);
+    public List<Handle> initialize (SessionBean sessionBean, String... rics);
 }

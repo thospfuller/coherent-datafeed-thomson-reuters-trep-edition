@@ -4,7 +4,6 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -15,13 +14,12 @@ import com.coherentlogic.coherent.datafeed.beans.TimeSeriesQueryParameter;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesService;
 import com.reuters.rfa.common.Handle;
 
 /**
  * This service is called from the Spring Integration work flow, which will pass
- * along an instance of the {@link Session} which can be found in the message
+ * along an instance of the {@link SessionBean} which can be found in the message
  * headers.
  *
  * Note that we use this to shield the user from working with the service
@@ -56,18 +54,18 @@ public class GetTimeSeriesForMessageProcessor
 
         String serviceName = parameters.getServiceName();
 
-        Handle loginHandle = parameters.getLoginHandle();
+        SessionBean sessionBean = parameters.getSessionBean();
+
+        Handle loginHandle = sessionBean.getHandle();
 
         String ric = parameters.getItem();
 
         int period = parameters.getPeriod();
 
-        SessionBean sessionBean = parameters.getSessionBean();
-
         // This service method will query for the *primary ric*, which happens inside the method whereas for the
         // Query, we do this *outside* the method (in the message processor).
         CompletableFuture<TimeSeries> payload = timeSeriesService.getTimeSeriesFor(
-            serviceName, loginHandle, sessionBean, ric, period);
+            serviceName, sessionBean, ric, period);
 
         Message<CompletableFuture<TimeSeries>> result =
             MessageBuilder

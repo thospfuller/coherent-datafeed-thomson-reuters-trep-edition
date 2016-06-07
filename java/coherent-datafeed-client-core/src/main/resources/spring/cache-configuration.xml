@@ -9,9 +9,6 @@
 
         <!-- jmx domain="com.coherentlogic.coherent.datafeed.trep" duplicate-domains="true"/ -->
 
-        <local-cache name="sessionCache">
-            <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
-        </local-cache>
         <local-cache name="handleToCompletableFutureCache">
             <transaction mode="NON_XA" locking="OPTIMISTIC" transaction-manager-lookup="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"/>
         </local-cache>

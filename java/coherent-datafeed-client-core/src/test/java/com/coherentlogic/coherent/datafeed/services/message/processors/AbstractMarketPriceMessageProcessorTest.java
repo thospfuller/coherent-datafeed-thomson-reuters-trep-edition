@@ -8,7 +8,6 @@ import org.junit.Ignore;
 import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
@@ -18,9 +17,6 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  */
 @Ignore
 public class AbstractMarketPriceMessageProcessorTest {
-
-    private final Session session = new Session (
-        null, null, null, null);
 
     private final OMMItemEvent itemEvent = mock (OMMItemEvent.class);
 

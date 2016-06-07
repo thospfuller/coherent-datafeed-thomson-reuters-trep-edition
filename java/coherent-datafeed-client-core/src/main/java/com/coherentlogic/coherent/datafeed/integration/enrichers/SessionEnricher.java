@@ -1,20 +1,17 @@
 package com.coherentlogic.coherent.datafeed.integration.enrichers;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
+import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
-import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
-import com.coherentlogic.coherent.datafeed.services.Session;
 import com.reuters.rfa.common.Event;
 
 /**
- * A service that adds a new {@link Session} to the message under the
+ * A service that adds a new {@link SessionBean} to the message under the
  * {@link com.coherentlogic.coherent.datafeed.misc.Constants#SESSION} key.
  *
  * @throws ApplicationInitializationFailedException Since this service should be

@@ -50,7 +50,6 @@ public class MarketByOrderService
     @Override
     protected List<Handle> executeRequest(
         String serviceName,
-        Handle loginHandle,
         short msgModelType,
         SessionBean sessionBean,
         String... itemNames
@@ -61,6 +60,8 @@ public class MarketByOrderService
         Client client = getClient();
 
         RequestMessageBuilder builder = factory.getInstance();
+
+        Handle loginHandle = sessionBean.getHandle();
 
         List<Handle> handles = builder
             .createOMMMsg()

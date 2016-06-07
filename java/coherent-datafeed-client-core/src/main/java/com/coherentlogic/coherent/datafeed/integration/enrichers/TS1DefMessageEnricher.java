@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
-import com.coherentlogic.coherent.datafeed.caches.TS1DefCache;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Event;
 
@@ -28,12 +27,9 @@ public class TS1DefMessageEnricher implements EnricherSpecification {
     /**
      * @todo This method could be moved to a base class.
      */
-//    @Transactional
     public Message<Event> enrich (Message<Event> message) {
 
         log.debug("enrich: method begins; message: " + message);
-
-//        Cache<Handle, Session> ts1DefCache = getSessionCache();
 
         Event event = message.getPayload();
 
@@ -41,25 +37,12 @@ public class TS1DefMessageEnricher implements EnricherSpecification {
 
         Message<Event> enrichedMessage = null;
 
-        /* Note that it is possible that this method is invoked before the
-         * TS1DefMessageProcessor.process method completes adding the
-         * session to the cache and if this happens we'll end up with a NPE as
-         * the workflow progresses. The solution is to sync here and in the
-         * TS1DefMessageProcessor.process method.
-         *
-         * @TODO: Investigate using transactions and the cache lock method as an
-         *  alternative.
-         */
-//        synchronized (ts1DefCache) {
+        enrichedMessage =
+            MessageBuilder
+                .fromMessage(message)
+                .setHeader(SESSION, sessionBean)
+                .build ();
 
-//            Session session = getSession (message, getSessionCache());
-
-            enrichedMessage =
-                MessageBuilder
-                    .fromMessage(message)
-                    .setHeader(SESSION, sessionBean)
-                    .build ();
-//        }
         log.debug("enrich: method ends; enrichedMessage: " + enrichedMessage);
 
         return enrichedMessage;

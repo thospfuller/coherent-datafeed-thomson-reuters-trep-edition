@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
-import com.reuters.rfa.common.Handle;
 
 /**
  * The abstract query contains the properties and associated methods that are
@@ -19,26 +18,19 @@ public abstract class AbstractQuery<T> implements Serializable {
 
     private final String serviceName;
 
-    private final Handle loginHandle;
-
     private final SessionBean sessionBean;
 
     private final T item;
 
-    public AbstractQuery(String serviceName, Handle loginHandle, SessionBean sessionBean, T item) {
+    public AbstractQuery(String serviceName, SessionBean sessionBean, T item) {
         super();
         this.serviceName = serviceName;
-        this.loginHandle = loginHandle;
         this.sessionBean = sessionBean;
         this.item = item;
     }
 
     public String getServiceName() {
         return serviceName;
-    }
-
-    public Handle getLoginHandle() {
-        return loginHandle;
     }
 
     public SessionBean getSessionBean() {

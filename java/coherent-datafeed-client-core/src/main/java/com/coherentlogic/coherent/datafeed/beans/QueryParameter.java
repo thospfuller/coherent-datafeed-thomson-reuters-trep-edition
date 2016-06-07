@@ -15,10 +15,9 @@ public class QueryParameter extends AbstractQuery<String> {
 
     public QueryParameter(
         String serviceName,
-        Handle loginHandle,
         SessionBean sessionBean,
         String items
     ) {
-        super (serviceName, loginHandle, sessionBean, items);
+        super (serviceName, sessionBean, items);
     }
 }
