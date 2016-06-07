@@ -8,8 +8,6 @@ import java.math.BigInteger;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
@@ -31,7 +29,8 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @Entity
 @Table(name=MARKET_PRICE)
 @XStreamAlias(MARKET_PRICE)
-public class MarketPrice extends AbstractCommonProperties implements RICBeanSpecification {
+public class MarketPrice extends AbstractCommonProperties
+    implements RICBeanSpecification, AggregatePropertyChangeGeneratorSpecification<MarketPrice> {
 
     private static final long serialVersionUID = -8330990635265356088L;
 
@@ -5247,5 +5246,17 @@ public class MarketPrice extends AbstractCommonProperties implements RICBeanSpec
             + ", lotSizeUnits=" + lotSizeUnits + ", openAskPrice=" + openAskPrice + ", expiryDate=" + expiryDate
             + ", settlementPrice=" + settlementPrice + ", settleDate=" + settleDate + ", toString()="
             + super.toString() + "]";
+    }
+
+    @Override
+    public void addAggregatePropertyChangeListener(
+        AggregatePropertyChangeListener<MarketPrice> aggregatePropertyChangeListener) {
+        throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
+    }
+
+    @Override
+    public void removeAggregatePropertyChangeListener(
+        AggregatePropertyChangeListener<MarketPrice> aggregatePropertyChangeListener) {
+        throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
     }
 }

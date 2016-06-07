@@ -29,7 +29,11 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Table(name=MARKET_MAKER)
 @XStreamAlias(MARKET_MAKER)
 public class MarketMaker extends AbstractAdvancedCommonProperties
-    implements RICBeanSpecification, OrderEventGenerator<MarketMaker.Order>, MarketPriceConstants {
+    implements
+        RICBeanSpecification,
+        OrderEventGenerator<MarketMaker.Order>,
+        MarketPriceConstants,
+        AggregatePropertyChangeGeneratorSpecification<MarketMaker> {
 
     private String ric;
 
@@ -249,12 +253,25 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             + marketStatusIndicator + ", orders=" + orders + ", orderListeners=" + orderListeners + "]";
     }
 
+    @Override
+    public void addAggregatePropertyChangeListener(
+        AggregatePropertyChangeListener<MarketMaker> aggregatePropertyChangeListener) {
+        throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
+    }
+
+    @Override
+    public void removeAggregatePropertyChangeListener(
+        AggregatePropertyChangeListener<MarketMaker> aggregatePropertyChangeListener) {
+        throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
+    }
+
     /**
      * 
      *
      * @author <a href="mailto:support@coherentlogic.com">Support</a>
      */
-    public static class Order extends RFABean implements Clearable {
+    public static class Order extends RFABean implements Clearable,
+        AggregatePropertyChangeGeneratorSpecification<MarketMaker.Order>{
 
         @XStreamAlias(BID)
         private BigDecimal bid = null;
@@ -506,6 +523,18 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             marketMakerState = null;
             priorityTimeMillis = null;
             priortyDate = null;
+        }
+
+        @Override
+        public void addAggregatePropertyChangeListener(
+            AggregatePropertyChangeListener<MarketMaker.Order> aggregatePropertyChangeListener) {
+            throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
+        }
+
+        @Override
+        public void removeAggregatePropertyChangeListener(
+            AggregatePropertyChangeListener<MarketMaker.Order> aggregatePropertyChangeListener) {
+            throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
         }
 
         @Override
