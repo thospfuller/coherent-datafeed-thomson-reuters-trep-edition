@@ -201,18 +201,6 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
         //       login.
     }
 
-//  public ExampleApplication (ApplicationContext applicationContext) {
-//  this.applicationContext = applicationContext;
-//}
-
-//public static void main (String[] unused) throws Exception {
-//
-//  ApplicationContext context = new ClassPathXmlApplicationContext(
-//      "classpath*:spring/application-context.xml", "classpath*:spring/cache-beans.xml");
-//
-//  new ExampleApplication (context).run(unused);
-//}
-
     public void queryTimeSeriesService (
         final TimeSeriesGatewaySpecification timeSeriesService,
         final Handle loginHandle,
@@ -292,6 +280,12 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
              */
             MarketByOrder marketByOrder = applicationContext.getBean(MarketByOrder.class);
 
+            // This method is not yet available however if you need this functionality you can vote for it here:
+            //
+            // http://bit.ly/1WDA5NR
+            //
+            // marketByOrder.addAggregatePropertyChangeListener(aggregatePropertyChangeEvent -> {});
+
             marketByOrder.setRic(nextRic);
 
             StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
@@ -367,6 +361,12 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
              */
             MarketMaker marketMaker = applicationContext.getBean(MarketMaker.class);
 
+            // This method is not yet available however if you need this functionality you can vote for it here:
+            //
+            // http://bit.ly/1WDA5NR
+            //
+            // marketMaker.addAggregatePropertyChangeListener(aggregatePropertyChangeEvent -> {});
+
             marketMaker.setRic(nextRic);
 
             StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
@@ -441,6 +441,12 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
              */
             MarketPrice marketPrice = applicationContext.getBean(MarketPrice.class);
 
+            // This method is not yet available however if you need this functionality you can vote for it here:
+            //
+            // http://bit.ly/1WDA5NR
+            //
+            // marketPrice.addAggregatePropertyChangeListener(aggregatePropertyChangeEvent -> {});
+
             marketPrice.setRic(nextRic);
 
             StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
@@ -481,6 +487,18 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
             (MarketPrice[]) marketPriceList.toArray(marketPriceArray)
         );
     }
+
+//  public ExampleApplication (ApplicationContext applicationContext) {
+//  this.applicationContext = applicationContext;
+//}
+
+//public static void main (String[] unused) throws Exception {
+//
+//  ApplicationContext context = new ClassPathXmlApplicationContext(
+//      "classpath*:spring/application-context.xml", "classpath*:spring/cache-beans.xml");
+//
+//  new ExampleApplication (context).run(unused);
+//}
 
     public static final String[] rics = {
         "LCOc1",
