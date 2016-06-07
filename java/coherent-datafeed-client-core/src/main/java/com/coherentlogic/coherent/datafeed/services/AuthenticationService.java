@@ -1,6 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import org.infinispan.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +9,6 @@ import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationIdExcept
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidDacsIdException;
 import com.coherentlogic.coherent.datafeed.exceptions.SessionFinalizationFailedException;
 import com.coherentlogic.coherent.datafeed.factories.PositionFactory;
-import com.coherentlogic.coherent.datafeed.factories.SessionFactory;
 import com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint;
 import com.coherentlogic.coherent.datafeed.misc.Utils;
 import com.reuters.rfa.common.EventQueue;
@@ -37,33 +35,67 @@ import com.reuters.rfa.session.omm.OMMItemIntSpec;
  *
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-//@Transactional
-public class AuthenticationService
-    implements AuthenticationServiceSpecification {
+public class AuthenticationService implements AuthenticationServiceSpecification {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(AuthenticationService.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
+
+    static final String[] WELCOME_MESSAGE = {
+        "*************************************************************************************************************",
+        "***                                                                                                       ***",
+        "***              Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version               ***",
+        "***                                                                                                       ***",
+        "***                                         Version 1.0.6-RELEASE                                         ***",
+        "***                                                                                                       ***",
+        "***                              Please take a moment to follow us on Twitter:                            ***",
+        "***                                                                                                       ***",
+        "***                                    www.twitter.com/CoherentMktData                                    ***",
+        "***                                                                                                       ***",
+        "***                                          or on LinkedIn:                                              ***",
+        "***                                                                                                       ***",
+        "***                            www.linkedin.com/company/coherent-logic-limited                            ***",
+        "***                                                                                                       ***",
+        "***                            The project and issue tracker can be found here:                           ***",
+        "***                                                                                                       ***",
+        "***           https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition          ***",
+        "***                                                                                                       ***",
+        "*** ----------------------------------------------------------------------------------------------------- ***",
+        "***                                                                                                       ***",
+        "*** When running the example application, an RFA session entry with the name \"mySession\" must exist in    ***",
+        "*** your configuration OR you must override this value — see below for an example of the configuration we ***",
+        "*** use. You may override this value using the following VM parameter:                                    ***",
+        "***                                                                                                       ***",
+        "***     -DCDATAFEED_SESSION_NAME=\"blahSession\"                                                            ***",
+        "***                                                                                                       ***",
+        "*** See also:                                                                                             ***",
+        "***                                                                                                       ***",
+        "***     http://bit.ly/1Oc0HTn                                                                             ***",
+        "***                                                                                                       ***",
+        "*** The logging properties will be read from the /logging.properties included in this jar file. This can  ***",
+        "*** be overridden by setting the CDATAFEED_LOGGING_CONFIGURATION_FILE VM parameter -- for example:        ***",
+        "***                                                                                                       ***",
+        "***     -DCDATAFEED_LOGGING_CONFIGURATION_FILE=C:/Temp/logging.properties                                 ***",
+        "***                                                                                                       ***",
+        "*** ----------------------------------------------------------------------------------------------------- ***",
+        "***                                                                                                       ***",
+        "*** We offer support and consulting services around this framework and for the Reuters Foundation API     ***",
+        "*** for Java (RFA) and Thomson Reuters Elektron Platform -- inquiries can be directed to:                 ***",
+        "***                                                                                                       ***",
+        "*** [M] sales@coherentlogic.com                                                                           ***",
+        "*** [T] +1.571.306.3403                                                                                   ***",
+        "***                                                                                                       ***",
+        "*************************************************************************************************************"
+    };
 
     static {
-        log.warn("***************************************************************************************************");
-        log.warn("***                                                                                             ***");
-        log.warn("***         Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version          ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***                                    Version 1.0.6-RELEASE                                    ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***                         Please take a moment to follow us on Twitter:                       ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***                               www.twitter.com/CoherentMktData                               ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***                                     or on LinkedIn:                                         ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***                       www.linkedin.com/company/coherent-logic-limited                       ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***                       The project and issue tracker can be found here:                      ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***      https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition     ***");
-        log.warn("***                                                                                             ***");
-        log.warn("***************************************************************************************************");
+        for (String next : WELCOME_MESSAGE) {
+            log.warn(next);
+            System.out.println(next);
+        }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException interruptedException) {
+            interruptedException.printStackTrace(System.err);
+        }
     }
 
     private final LoginMessageBuilder loginMessageBuilder;
@@ -75,10 +107,6 @@ public class AuthenticationService
     private final PositionFactory positionFactory;
 
     private final EventDrivenEndpoint eventDrivenEndpoint;
-
-    private final Cache<Handle, Session> sessionCache;
-
-    private final SessionFactory sessionFactory;
 
     private Handle handle = null;
 
@@ -93,9 +121,7 @@ public class AuthenticationService
         EventQueue eventQueue,
         OMMConsumer ommConsumer,
         PositionFactory positionFactory,
-        EventDrivenEndpoint client,
-        Cache<Handle, Session> sessionCache,
-        SessionFactory sessionFactory
+        EventDrivenEndpoint client
     ) {
         super();
         this.loginMessageBuilder = loginMessageBuilder;
@@ -103,8 +129,6 @@ public class AuthenticationService
         this.ommConsumer = ommConsumer;
         this.positionFactory = positionFactory;
         this.eventDrivenEndpoint = client;
-        this.sessionCache = sessionCache;
-        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -179,17 +203,10 @@ public class AuthenticationService
                 sessionBean
             );
 
-            Session session = sessionFactory.getInstance(handle);
-
-            session.setDacsId(dacsId);
-            session.setLoginHandle(handle);
-
-            sessionCache.put(handle, session);
-
             log.info("handle: " + handle);
+
         } catch (RuntimeException runtimeException) {
-            log.error("The call to login using the dacsId " + dacsId +
-                " failed.", runtimeException);
+            log.error("The call to login using the dacsId " + dacsId + " failed.", runtimeException);
             throw runtimeException;
         }
         return handle;
