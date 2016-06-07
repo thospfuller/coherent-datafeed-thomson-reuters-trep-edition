@@ -26,7 +26,7 @@ import org.codehaus.jettison.mapped.Configuration
 
 @Grab(group='org.slf4j', module='slf4j-api', version='1.7.5')
 
-@Grab(group='com.coherentlogic.coherent.datafeed.client', module='coherent-datafeed-client-core', version='1.0.5-RELEASE')
+@Grab(group='com.coherentlogic.coherent.datafeed.client', module='coherent-datafeed-client-core', version='1.0.6-RELEASE')
 @GrabExclude('xml-apis:xml-apis')
 @Grab(group='stax', module='stax', version='1.2.0')
 
@@ -37,34 +37,49 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.STATUS_RESPONSE_SERVICE_GATEWAY;
 
+import com.coherentlogic.coherent.datafeed.misc.Constants;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
+import com.coherentlogic.coherent.datafeed.domain.Sample;
+
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
+import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
+import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
-import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
+import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceGatewaySpecification;
-import com.coherentlogic.coherent.datafeed.services.PauseResumeService;
+import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.Session;
+import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.reuters.rfa.common.Handle;
+import com.reuters.ts1.TS1Constants;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 
@@ -95,7 +110,7 @@ ExampleGroovyApplication.main ([] as String[])
  */
 public class ExampleGroovyApplication implements MarketPriceConstants {
 
-    private final PauseResumeService pauseResumeService = new PauseResumeService ();
+    private final FlowInverterService flowInverterService = new FlowInverterService ();
 
     private def applicationContext;
 
@@ -119,12 +134,8 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
     public void run() throws Exception {
 
-        final StatusResponseServiceSpecification statusResponseService =
-            (StatusResponseServiceSpecification) applicationContext.
-                getBean(STATUS_RESPONSE_SERVICE_GATEWAY);
-
-        final AuthenticationServiceSpecification authenticationService =
-            (AuthenticationServiceSpecification) applicationContext.getBean(
+        final AuthenticationServiceGatewaySpecification authenticationService =
+            (AuthenticationServiceGatewaySpecification) applicationContext.getBean(
                 AUTHENTICATION_ENTRY_POINT);
 
         FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter =
@@ -142,46 +153,67 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
         final MarketMakerServiceGatewaySpecification marketMakerService =
             applicationContext.getBean(MarketMakerServiceGatewaySpecification.class);
 
+        final TimeSeriesGatewaySpecification timeSeriesService =
+            applicationContext.getBean(TimeSeriesGatewaySpecification.class);
+
         frameworkEventListenerAdapter.initialisationSuccessfulListenerList <<
             new FrameworkEventListener() {
                 @Override
-                public void onEventReceived(Session session) {
-                    pauseResumeService.resume(true);
+                public void onEventReceived(SessionBean sessionBean) {
+                    flowInverterService.resume(true);
                 }
             }
 
         frameworkEventListenerAdapter.initialisationFailedListenerList <<
             new FrameworkEventListener () {
                 @Override
-                public void onEventReceived(Session session) {
-                    pauseResumeService.resume(false);
+                public void onEventReceived(SessionBean sessionBean) {
+                    flowInverterService.resume(false);
                 }
             }
 
+        SessionBean sessionBean = applicationContext.getBean(SessionBean.class);
+
         String dacsId = System.getenv(DACS_ID);
 
-        Handle loginHandle = authenticationService.login(dacsId);
+        sessionBean.setDacsId(dacsId);
 
-        boolean result = pauseResumeService.pause();
+        Handle loginHandle = authenticationService.login(sessionBean);
 
-//        System.out.println("result: " + result);
+        StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
+
+        statusResponse.addPropertyChangeListener(
+            { event ->
+                System.out.println("statusResponse.event: " + event);
+            }
+        );
+
+        sessionBean.setStatusResponse(statusResponse);
+
+        sessionBean.setHandle(loginHandle);
+
+        boolean result = flowInverterService.pause();
+
+        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "TRI.N");
+        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "MSFT.O");
+        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "BFb.N");
 
         queryMarketMakerService (
-            statusResponseService,
             marketMakerService,
-            loginHandle
+            loginHandle,
+            sessionBean
         );
 
         queryMarketPriceService (
-            statusResponseService,
             marketPriceService,
-            loginHandle
+            loginHandle,
+            sessionBean
         );
 
         queryMarketByOrderService (
-            statusResponseService,
             marketByOrderService,
-            loginHandle
+            loginHandle,
+            sessionBean
         );
 
         log.info("...done!");
@@ -192,10 +224,71 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
         //       login.
     }
 
+    public void queryTimeSeriesService (
+        final TimeSeriesGatewaySpecification timeSeriesService,
+        final Handle loginHandle,
+        SessionBean sessionBean,
+        String ric
+    ) throws InterruptedException, ExecutionException, TimeoutException {
+
+        CompletableFuture<TimeSeries> timeSeriesPromise = null;
+
+        timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
+            Constants.ELEKTRON_DD,
+            sessionBean,
+            ric,
+            TS1Constants.WEEKLY_PERIOD
+        );
+
+        System.out.println ("timeSeriesPromise: " + timeSeriesPromise);
+
+        TimeSeries timeSeries = timeSeriesPromise.get(60, TimeUnit.SECONDS);
+
+        if (timeSeries != null) {
+
+            AttribInfo attribInfo = timeSeries.getAttribInfo();
+
+            System.out.print("timeSeries: " + timeSeries + ", attribInfo: " + attribInfo + ", sampleSize: " + timeSeries.getSamples().size() + "\n\n\n");
+
+            DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
+
+            String TABS = "\t\t\t\t\t";
+
+            boolean closeAdded = false;
+
+            for (String nextHeader : timeSeries.getHeaders()) {
+                if (!closeAdded) {
+                    closeAdded = true;
+                    System.out.print(nextHeader + TABS);
+                } else {
+                    System.out.print(nextHeader + "\t\t\t");
+                }
+            }
+
+            for (Sample sample : timeSeries.getSamples()) {
+
+                long timeMillis = sample.getDate();
+
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.setTimeInMillis(timeMillis);
+
+                String date = formatter.format(calendar.getTime());
+
+                System.out.print("\n" + date);
+
+                for (String nextPoint : sample.getPoints())
+                    System.out.print ("\t\t\t" + nextPoint);
+            }
+        } else {
+            System.out.println("The timeSeries reference is null.");
+        }
+    }
+
     public void queryMarketByOrderService (
-        final StatusResponseServiceSpecification statusResponseService,
         final MarketByOrderServiceGatewaySpecification marketByOrderService,
-        final Handle loginHandle
+        final Handle loginHandle,
+        final SessionBean sessionBean
     ) {
 
         List<MarketByOrder> marketByOrderList = new ArrayList<MarketByOrder> (rics.length);
@@ -262,15 +355,15 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
         Map<String, MarketByOrder> marketMakerMap = marketByOrderService.query(
             ServiceName.dELEKTRON_DD,
-            loginHandle,
+            sessionBean,
             (MarketByOrder[]) marketByOrderList.toArray(marketByOrderArray)
         );
     }
 
     public void queryMarketMakerService (
-        final StatusResponseServiceSpecification statusResponseService,
         final MarketMakerServiceGatewaySpecification marketMakerService,
-        final Handle loginHandle
+        final Handle loginHandle,
+        final SessionBean sessionBean
     ) {
 
         List<MarketMaker> marketMakerList = new ArrayList<MarketMaker> (rics.length);
@@ -336,15 +429,15 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
         Map<String, MarketMaker> marketMakerMap = marketMakerService.query(
             ServiceName.dELEKTRON_DD,
-            loginHandle,
+            sessionBean,
             (MarketMaker[]) marketMakerList.toArray(marketMakerArray)
         );
     }
 
     public void queryMarketPriceService (
-        final StatusResponseServiceSpecification statusResponseService,
         final MarketPriceServiceGatewaySpecification marketPriceService,
-        final Handle loginHandle
+        final Handle loginHandle,
+        final SessionBean sessionBean
     ) {
 
         List<MarketPrice> marketPriceList = new ArrayList<MarketPrice> (rics.length);
@@ -395,7 +488,7 @@ public class ExampleGroovyApplication implements MarketPriceConstants {
 
         marketPriceService.query (
             ServiceName.dELEKTRON_DD,
-            loginHandle,
+            sessionBean,
             (MarketPrice[]) marketPriceList.toArray(marketPriceArray)
         );
     }
