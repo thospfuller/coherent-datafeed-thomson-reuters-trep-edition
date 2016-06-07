@@ -82,7 +82,7 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "*** Reuters Elektron Platform. Inquiries can be directed to:                                              ***",
         "***                                                                                                       ***",
         "*** [M] sales@coherentlogic.com                                                                           ***",
-        "*** [T] +1.571.306.3403                                                                                   ***",
+        "*** [T] +1.571.306.3403 (GMT-5)                                                                           ***",
         "***                                                                                                       ***",
         "*************************************************************************************************************"
     };
