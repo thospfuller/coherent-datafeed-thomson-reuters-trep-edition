@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
-public interface AggregatePropertyChangeListener {
+public interface AggregatePropertyChangeListener<T> {
 
-    void onAggregatePropertyChangeEvent (AggregatePropertyChangeEventType aggregatePropertyChangeType);
+    void onAggregatePropertyChangeEvent (AggregatePropertyChangeEvent<T> aggregatePropertyChangeEvent);
 }

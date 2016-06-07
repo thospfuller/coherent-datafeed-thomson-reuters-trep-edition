@@ -6,20 +6,39 @@ import java.util.Map;
 
 public class AggregatePropertyChangeEvent<T> implements Serializable {
 
-	private final AggregatePropertyChangeEventType eventType;
+    private static final long serialVersionUID = -4448205480412645059L;
 
-	private final T source;
+    private final AggregatePropertyChangeEventType eventType;
 
-	private final Map<String, PropertyChangeEvent> propertyChangeEvent;
+    private final T source;
 
-	public AggregatePropertyChangeEvent(AggregatePropertyChangeEventType eventType, T source,
-			Map<String, PropertyChangeEvent> propertyChangeEvent) {
-		super();
-		this.eventType = eventType;
-		this.source = source;
-		this.propertyChangeEvent = propertyChangeEvent;
-	}
+    private final Map<String, PropertyChangeEvent> propertyChangeEvents;
 
-	
+    public AggregatePropertyChangeEvent(
+        AggregatePropertyChangeEventType eventType,
+        T source,
+        Map<String, PropertyChangeEvent> propertyChangeEvents
+    ) {
+        this.eventType = eventType;
+        this.source = source;
+        this.propertyChangeEvents = propertyChangeEvents;
+    }
 
+    public AggregatePropertyChangeEventType getEventType() {
+        return eventType;
+    }
+
+    public T getSource() {
+        return source;
+    }
+
+    public Map<String, PropertyChangeEvent> getPropertyChangeEvents() {
+        return propertyChangeEvents;
+    }
+
+    @Override
+    public String toString() {
+        return "AggregatePropertyChangeEvent [eventType=" + eventType + ", source=" + source + ", propertyChangeEvents="
+            + propertyChangeEvents + "]";
+    }
 }
