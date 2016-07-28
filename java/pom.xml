@@ -163,7 +163,7 @@
             <dependency>
                 <groupId>com.coherentlogic.coherent.data-model</groupId>
                 <artifactId>bom</artifactId>
-                <version>1.0.20-RELEASE</version>
+                <version>1.0.22-RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
