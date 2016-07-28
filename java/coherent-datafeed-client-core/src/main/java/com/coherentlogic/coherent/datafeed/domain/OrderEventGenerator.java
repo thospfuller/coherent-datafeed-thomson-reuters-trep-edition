@@ -2,6 +2,8 @@ package com.coherentlogic.coherent.datafeed.domain;
 
 import java.util.List;
 
+import javax.persistence.Transient;
+
 /**
  * 
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
@@ -10,6 +12,7 @@ import java.util.List;
  */
 public interface OrderEventGenerator<T> {
 
+    @Transient
     List<OrderEventListener<T>> getOrderEventListeners();
 
     void addOrderEventListener (OrderEventListener<T> orderEventListener);
