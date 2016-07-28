@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.annotations.Changeable;
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.OMMType;
 import com.reuters.rfa.common.QualityOfService;
 import com.reuters.rfa.omm.OMMMapEntry.Action;

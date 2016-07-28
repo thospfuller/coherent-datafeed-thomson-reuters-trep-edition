@@ -3,9 +3,7 @@ package com.coherentlogic.coherent.datafeed.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.DoNotAnalyze;
-import com.coherentlogic.coherent.datafeed.beans.TimeSeriesEntries;
 import com.reuters.rfa.common.Handle;
 
 /**

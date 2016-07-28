@@ -9,10 +9,10 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.TEXT;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.coherentlogic.coherent.data.model.core.annotations.Changeable;
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;

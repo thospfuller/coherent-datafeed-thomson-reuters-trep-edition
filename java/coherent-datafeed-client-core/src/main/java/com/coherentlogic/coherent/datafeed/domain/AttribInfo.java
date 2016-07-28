@@ -3,9 +3,9 @@ package com.coherentlogic.coherent.datafeed.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.annotations.Changeable;
 import com.coherentlogic.coherent.data.model.core.domain.IdentitySpecification;
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**

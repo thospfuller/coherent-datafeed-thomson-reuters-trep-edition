@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
+import com.coherentlogic.coherent.data.model.core.annotations.Changeable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
