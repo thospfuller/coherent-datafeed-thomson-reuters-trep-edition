@@ -61,10 +61,10 @@
         </dependency>
 
         <!-- The reflections dependency is included in the FDM. -->
-        <dependency>
+        <!-- dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-        </dependency> 
+        </dependency --> 
         <dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-misc</artifactId>
