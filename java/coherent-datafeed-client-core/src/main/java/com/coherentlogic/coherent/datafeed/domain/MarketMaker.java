@@ -8,15 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.coherentlogic.coherent.data.model.core.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDateTimeAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -83,17 +85,18 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
     private String marketStatusIndicator = null;
 
     @XStreamAlias(ORDERS)
-    private final Map<String, Order> orders;
+    private Map<String, Order> orders;
 
-    private transient final List<OrderEventListener<MarketMaker.Order>> orderListeners;
+//    @Transient
+    private transient final List<OrderEventListener<MarketMaker.Order>> orderEventListeners;
 
     public MarketMaker () {
         this (new HashMap<String, Order> (), new ArrayList<OrderEventListener<MarketMaker.Order>>());
     }
 
-    public MarketMaker (Map<String, Order> orders, List<OrderEventListener<MarketMaker.Order>> orderListeners) {
+    public MarketMaker (Map<String, Order> orders, List<OrderEventListener<MarketMaker.Order>> orderEventListeners) {
         this.orders = orders;
-        this.orderListeners = orderListeners;
+        this.orderEventListeners = orderEventListeners;
     }
 
     @Override
@@ -214,6 +217,11 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         this.marketStatusIndicator = marketStatusIndicator;
     }
 
+    public void setOrders(Map<String, Order> orders) {
+        this.orders = orders;
+    }
+
+    @ElementCollection
     public Map<String, Order> getOrders() {
         return orders;
     }
@@ -224,20 +232,22 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         orders.clear ();
     }
 
+    @Transient
+    @Override
     public List<OrderEventListener<MarketMaker.Order>> getOrderEventListeners() {
-        return orderListeners;
+        return orderEventListeners;
     }
 
     public void addOrderEventListener (OrderEventListener<MarketMaker.Order> orderListener) {
-        orderListeners.add(orderListener);
+        orderEventListeners.add(orderListener);
     }
 
     public boolean removeOrderEventListener (OrderEventListener<MarketMaker.Order> orderListener) {
-        return orderListeners.remove(orderListener);
+        return orderEventListeners.remove(orderListener);
     }
 
     public void fireOrderEvent (OrderEvent<MarketMaker.Order> orderEvent) {
-        orderListeners.forEach(
+        orderEventListeners.forEach(
             listener -> {
                 listener.onOrderEvent(orderEvent);
             }
@@ -250,7 +260,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             + ", lotSize=" + lotSize + ", officialCodeIndicator=" + officialCodeIndicator + ", listingMarket="
             + listingMarket + ", instrumentClass=" + instrumentClass + ", periodCode=" + periodCode
             + ", financialStatusIndicator=" + financialStatusIndicator + ", marketStatusIndicator="
-            + marketStatusIndicator + ", orders=" + orders + ", orderListeners=" + orderListeners + "]";
+            + marketStatusIndicator + ", orders=" + orders + ", orderListeners=" + orderEventListeners + "]";
     }
 
     @Override

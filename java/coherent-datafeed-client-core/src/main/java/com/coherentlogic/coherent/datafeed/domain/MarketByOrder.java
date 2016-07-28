@@ -9,14 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.coherentlogic.coherent.data.model.core.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataBufferAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMEnumAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
-import com.coherentlogic.coherent.datafeed.annotations.Changeable;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -176,12 +178,12 @@ public class MarketByOrder extends StatusResponseBean
     private String haltReasonCode;
 
     @XStreamAlias(MarketPriceConstants.ORDERS)
-    private final Map<String, Order> orders;
+    private Map<String, Order> orders;
 
     // Probably RMTES_STRING -- same as orderId so probably not needed.
     // private String key;
 
-    private transient final List<OrderEventListener<MarketByOrder.Order>> orderListeners;
+    private transient final List<OrderEventListener<MarketByOrder.Order>> orderEventListeners;
 
     public MarketByOrder() {
         this (new HashMap<String, Order> (), new ArrayList<OrderEventListener<MarketByOrder.Order>> ());
@@ -189,7 +191,7 @@ public class MarketByOrder extends StatusResponseBean
 
     public MarketByOrder(Map<String, Order> orders, List<OrderEventListener<MarketByOrder.Order>> orderListeners) {
         this.orders = orders;
-        this.orderListeners = orderListeners;
+        this.orderEventListeners = orderListeners;
     }
 
     @Override
@@ -437,28 +439,34 @@ public class MarketByOrder extends StatusResponseBean
         this.haltReasonCode = haltReasonCode;
     }
 
+    public void setOrders(Map<String, Order> orders) {
+        this.orders = orders;
+    }
+
+    @ElementCollection
     public Map<String, Order> getOrders() {
         return orders;
     }
 
+    @Transient
     @Override
     public List<OrderEventListener<Order>> getOrderEventListeners() {
-        return orderListeners;
+        return orderEventListeners;
     }
 
     @Override
-    public void addOrderEventListener(OrderEventListener<Order> orderListener) {
-        orderListeners.add(orderListener);
+    public void addOrderEventListener(OrderEventListener<Order> orderEventListener) {
+        orderEventListeners.add(orderEventListener);
     }
 
     @Override
-    public boolean removeOrderEventListener(OrderEventListener<Order> orderListener) {
-        return orderListeners.remove(orderListener);
+    public boolean removeOrderEventListener(OrderEventListener<Order> orderEventListener) {
+        return orderEventListeners.remove(orderEventListener);
     }
 
     @Override
     public void fireOrderEvent(OrderEvent<Order> orderEvent) {
-        orderListeners.forEach(
+        orderEventListeners.forEach(
             listener -> {
                 listener.onOrderEvent(orderEvent);
             }
@@ -486,7 +494,7 @@ public class MarketByOrder extends StatusResponseBean
             + ", elektronDataSourceOwnerId=" + elektronDataSourceOwnerId + ", spsSubProviderLevelRic="
             + spsSubProviderLevelRic + ", orderBookState=" + orderBookState + ", haltReason=" + haltReason
             + ", tradingStatus=" + tradingStatus + ", haltReasonCode=" + haltReasonCode + ", orders=" + orders
-            + ", orderListeners=" + orderListeners + "]";
+            + ", orderListeners=" + orderEventListeners + "]";
     }
 
     /**
