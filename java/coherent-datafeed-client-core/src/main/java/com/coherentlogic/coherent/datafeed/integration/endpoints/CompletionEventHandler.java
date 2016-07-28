@@ -38,6 +38,6 @@ public class CompletionEventHandler {
         Event event = message.getPayload();
 
         // TODO: Remove the entry from the data stream cache.
-        log.warn("A completionEvent has been received but will not be handled at this time; event: " + event);
+        log.debug("A completionEvent has been received but will not be handled at this time; event: " + event);
     }
 }
