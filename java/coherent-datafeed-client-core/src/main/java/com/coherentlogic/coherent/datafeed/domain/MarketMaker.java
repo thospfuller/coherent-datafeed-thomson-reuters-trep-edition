@@ -87,7 +87,6 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
     @XStreamAlias(ORDERS)
     private Map<String, Order> orders;
 
-//    @Transient
     private transient final List<OrderEventListener<MarketMaker.Order>> orderEventListeners;
 
     public MarketMaker () {
