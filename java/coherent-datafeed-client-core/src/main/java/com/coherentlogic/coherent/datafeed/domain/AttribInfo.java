@@ -9,7 +9,7 @@ import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * @TODO: Add firePropertyChangeListener logic.
+ *
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
@@ -146,6 +146,6 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 	@Override
     public String toString() {
         return "AttribInfo [id=" + id + ", filter=" + filter + ", serviceName=" + serviceName + ", name=" + name
-                + ", serviceId=" + serviceId + ", nameType=" + nameType + ", elements=" + elements + "]";
+            + ", serviceId=" + serviceId + ", nameType=" + nameType + ", elements=" + elements + "]";
     }
 }
