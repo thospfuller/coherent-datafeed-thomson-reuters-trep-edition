@@ -34,8 +34,8 @@
         <appender-ref ref="fileAppender"/>
     </logger>
 
-    <logger name="com.coherentlogic">
-        <level value="info"/>
+    <logger name="com.coherentlogic.coherent.datafeed.integration.endpoints">
+        <level value="trace"/>
         <appender-ref ref="fileAppender"/>
     </logger>
 
@@ -51,6 +51,6 @@
 
     <root>
         <priority value ="info" />
-        <appender-ref ref="fileAppender"/>
+        <appender-ref ref="consoleAppender"/>
     </root>
 </log4j:configuration>
