@@ -981,13 +981,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.RDN_EXCHID)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setIdnExchangeId(String idnExchangeId) {
-
-        String oldValue = this.idnExchangeId;
-
+    public void setIdnExchangeId(@Changeable(MarketPrice.IDN_EXCHANGE_ID) String idnExchangeId) {
         this.idnExchangeId = idnExchangeId;
-
-        firePropertyChange(MarketPrice.IDN_EXCHANGE_ID, oldValue, idnExchangeId);
     }
 
     @UsingKey(type=MarketPriceConstants.BID)
@@ -1012,13 +1007,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BID_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBid1(BigDecimal bid1) {
-
-        BigDecimal oldValue = this.bid1;
-
+    public void setBid1(@Changeable(MarketPrice.BID_1) BigDecimal bid1) {
         this.bid1 = bid1;
-
-        firePropertyChange(MarketPrice.BID_1, oldValue, bid1);
     }
 
     @UsingKey(type=MarketPriceConstants.BID_2)
@@ -1030,13 +1020,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BID_2)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBid2(BigDecimal bid2) {
-
-        BigDecimal oldValue = this.bid2;
-
+    public void setBid2(@Changeable(MarketPrice.BID_2) BigDecimal bid2) {
         this.bid2 = bid2;
-
-        firePropertyChange(MarketPrice.BID_2, oldValue, bid2);
     }
 
     @UsingKey(type=MarketPriceConstants.ASK)
@@ -1053,13 +1038,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.ASK)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAsk(@Changeable("ask") BigDecimal ask) {
-
-        BigDecimal oldValue = this.ask;
-
+    public void setAsk(@Changeable(MarketPrice.ASK) BigDecimal ask) {
         this.ask = ask;
-
-        firePropertyChange(MarketPrice.ASK, oldValue, ask);
     }
 
     @UsingKey(type=MarketPriceConstants.ASK_1)
@@ -1076,13 +1056,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.ASK_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAsk1(BigDecimal ask1) {
-
-        BigDecimal oldValue = this.ask1;
-
+    public void setAsk1(@Changeable(MarketPrice.ASK1) BigDecimal ask1) {
         this.ask1 = ask1;
-
-        firePropertyChange(MarketPrice.ASK1, oldValue, ask1);
     }
 
     @UsingKey(type=MarketPriceConstants.ASK_2)
@@ -1099,13 +1074,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.ASK_2)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAsk2(BigDecimal ask2) {
-
-        BigDecimal oldValue = this.ask2;
-
+    public void setAsk2(@Changeable(MarketPrice.ASK2) BigDecimal ask2) {
         this.ask2 = ask2;
-
-        firePropertyChange(MarketPrice.ASK2, oldValue, ask2);
     }
 
     public BigInteger getBidSize() {
@@ -1121,13 +1091,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.BIDSIZE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBidSize(BigInteger bidSize) {
-
-        BigInteger oldValue = this.bidSize;
-
+    public void setBidSize(@Changeable(MarketPrice.BID_SIZE) BigInteger bidSize) {
         this.bidSize = bidSize;
-
-        firePropertyChange(MarketPrice.BID_SIZE, oldValue, bidSize);
     }
 
     public BigInteger getAskSize() {
@@ -1143,13 +1108,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.ASKSIZE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAskSize(BigInteger askSize) {
-
-        BigInteger oldValue = this.askSize;
-
+    public void setAskSize(@Changeable(MarketPrice.ASK_SIZE) BigInteger askSize) {
         this.askSize = askSize;
-
-        firePropertyChange(MarketPrice.ASK_SIZE, oldValue, askSize);
     }
 
     public BigDecimal getLast() {
@@ -1165,13 +1125,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.TRDPRC_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLast(@Changeable("last") BigDecimal last) {
-
-        BigDecimal oldValue = this.last;
-
+    public void setLast(@Changeable(MarketPrice.LAST) BigDecimal last) {
         this.last = last;
-
-        firePropertyChange(MarketPrice.LAST, oldValue, last);
     }
 
     public BigDecimal getLast1() {
@@ -1187,13 +1142,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.TRDPRC_2)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLast1(BigDecimal last1) {
-
-        BigDecimal oldValue = this.last1;
-
+    public void setLast1(@Changeable(MarketPrice.LAST_1) BigDecimal last1) {
         this.last1 = last1;
-
-        firePropertyChange(MarketPrice.LAST_1, oldValue, last1);
     }
 
     public BigDecimal getLast2() {
@@ -1211,13 +1161,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.TRDPRC_3)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLast2(BigDecimal last2) {
-
-        BigDecimal oldValue = this.last2;
-
+    public void setLast2(@Changeable(MarketPrice.LAST_2) BigDecimal last2) {
         this.last2 = last2;
-
-        firePropertyChange(MarketPrice.LAST_2, oldValue, last2);
     }
 
     public BigDecimal getLast3() {
@@ -1233,13 +1178,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.TRDPRC_4)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLast3(BigDecimal last3) {
-
-        BigDecimal oldValue = this.last3;
-
+    public void setLast3(@Changeable(MarketPrice.LAST_3) BigDecimal last3) {
         this.last3 = last3;
-
-        firePropertyChange(MarketPrice.LAST_3, oldValue, last3);
     }
 
     public BigDecimal getLast4() {
@@ -1255,13 +1195,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.TRDPRC_5)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLast4(BigDecimal last4) {
-
-        BigDecimal oldValue = this.last4;
-
+    public void setLast4(@Changeable(MarketPrice.LAST_4) BigDecimal last4) {
         this.last4 = last4;
-
-        firePropertyChange(MarketPrice.LAST_4, oldValue, last4);
     }
 
     public BigInteger getDisplayTemplate() {
@@ -1277,13 +1212,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.RDNDISPLAY)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setDisplayTemplate(BigInteger displayTemplate) {
-
-        BigInteger oldValue = this.displayTemplate;
-
+    public void setDisplayTemplate(@Changeable(MarketPrice.DISPLAY_TEMPLATE) BigInteger displayTemplate) {
         this.displayTemplate = displayTemplate;
-
-        firePropertyChange(MarketPrice.DISPLAY_TEMPLATE, oldValue, displayTemplate);
     }
 
     public BigDecimal getNetChange() {
@@ -1294,13 +1224,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.NETCHNG_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setNetChange(BigDecimal netChange) {
-
-        BigDecimal oldValue = this.netChange;
-
+    public void setNetChange(@Changeable(MarketPrice.NET_CHANGE) BigDecimal netChange) {
         this.netChange = netChange;
-
-        firePropertyChange(MarketPrice.NET_CHANGE, oldValue, netChange);
     }
 
     @UsingKey(type=MarketPriceConstants.HIGH_1)
@@ -1312,13 +1237,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.HIGH_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTodaysHigh(BigDecimal todaysHigh) {
-
-        BigDecimal oldValue = this.todaysHigh;
-
+    public void setTodaysHigh(@Changeable(MarketPrice.TODAYS_HIGH) BigDecimal todaysHigh) {
         this.todaysHigh = todaysHigh;
-
-        firePropertyChange(MarketPrice.TODAYS_HIGH, oldValue, todaysHigh);
     }
 
     @UsingKey(type=MarketPriceConstants.LOW_1)
@@ -1335,13 +1255,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.LOW_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTodaysLow(BigDecimal todaysLow) {
-
-        BigDecimal oldValue = this.todaysLow;
-
+    public void setTodaysLow(@Changeable(MarketPrice.TODAYS_LOW) BigDecimal todaysLow) {
         this.todaysLow = todaysLow;
-
-        firePropertyChange(MarketPrice.TODAYS_LOW, oldValue, todaysLow);
     }
 
     @UsingKey(type=MarketPriceConstants.PRCTCK_1)
@@ -1353,13 +1268,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PRCTCK_1)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTickArrow(Integer tickArrow) {
-
-        Integer oldValue = this.tickArrow;
-
+    public void setTickArrow(@Changeable(MarketPrice.TICK_ARROW) Integer tickArrow) {
         this.tickArrow = tickArrow;
-
-        firePropertyChange(MarketPrice.TICK_ARROW, oldValue, tickArrow);
     }
 
 //    @UsingKey(type=CURRENCY)
@@ -1382,13 +1292,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRADE_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setTradeDateMillis(Long tradeDateMillis) {
-
-        Long oldValue = this.tradeDateMillis;
-
+    public void setTradeDateMillis(@Changeable(MarketPrice.TRADE_DATE_MILLIS) Long tradeDateMillis) {
         this.tradeDateMillis = tradeDateMillis;
-
-        firePropertyChange(MarketPrice.TRADE_DATE_MILLIS, oldValue, tradeDateMillis);
     }
 
     @UsingKey(type=MarketPriceConstants.TRDTIM_1)
@@ -1400,13 +1305,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRDTIM_1)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setTradeTimeMillis(Long tradeTimeMillis) {
-
-        Long oldValue = this.tradeTimeMillis;
-
+    public void setTradeTimeMillis(@Changeable(MarketPrice.TRADE_TIME_MILLIS) Long tradeTimeMillis) {
         this.tradeTimeMillis = tradeTimeMillis;
-
-        firePropertyChange(MarketPrice.TRADE_TIME_MILLIS, oldValue, tradeTimeMillis);
     }
 
     @UsingKey(type=MarketPriceConstants.OPEN_PRC)
@@ -1418,13 +1318,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OPEN_PRC)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOpenPrice(BigDecimal openPrice) {
-
-        BigDecimal oldValue = this.openPrice;
-
+    public void setOpenPrice(@Changeable(MarketPrice.OPEN_PRICE) BigDecimal openPrice) {
         this.openPrice = openPrice;
-
-        firePropertyChange(MarketPrice.OPEN_PRICE, oldValue, openPrice);
     }
 
     @UsingKey(type=MarketPriceConstants.HST_CLOSE)
@@ -1436,13 +1331,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.HST_CLOSE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setHistoricClose(BigDecimal historicClose) {
-
-        BigDecimal oldValue = this.historicClose;
-
+    public void setHistoricClose(@Changeable(MarketPrice.HISTORIC_CLOSE) BigDecimal historicClose) {
         this.historicClose = historicClose;
-
-        firePropertyChange(MarketPrice.HISTORIC_CLOSE, oldValue, historicClose);
     }
 
     @UsingKey(type=NEWS)
@@ -1454,13 +1344,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.NEWS)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setNews(String news) {
-
-        String oldValue = this.news;
-
+    public void setNews(@Changeable(MarketPrice.NEWS) String news) {
         this.news = news;
-
-        firePropertyChange(MarketPrice.NEWS, oldValue, news);
     }
 
     @UsingKey(type=NEWS_TIME)
@@ -1472,13 +1357,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.NEWS_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setNewsTime(Long newsTime) {
-
-        Long oldValue = this.newsTime;
-
+    public void setNewsTime(@Changeable(MarketPrice.NEWS_TIME) Long newsTime) {
         this.newsTime = newsTime;
-
-        firePropertyChange(MarketPrice.NEWS_TIME, oldValue, newsTime);
     }
 
     @UsingKey(type=MarketPriceConstants.ACVOL_1)
@@ -1490,13 +1370,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ACVOL_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setVolumeAccumulated(BigInteger volumeAccumulated) {
-
-        BigInteger oldValue = this.volumeAccumulated;
-
+    public void setVolumeAccumulated(@Changeable(MarketPrice.VOLUME_ACCUMULATED) BigInteger volumeAccumulated) {
         this.volumeAccumulated = volumeAccumulated;
-
-        firePropertyChange(MarketPrice.VOLUME_ACCUMULATED, oldValue, volumeAccumulated);
     }
 
     @UsingKey(type=MarketPriceConstants.EARNINGS)
@@ -1508,13 +1383,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.EARNINGS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setEarnings(BigDecimal earnings) {
-
-        BigDecimal oldValue = this.earnings;
-
+    public void setEarnings(@Changeable(MarketPrice.EARNINGS) BigDecimal earnings) {
         this.earnings = earnings;
-
-        firePropertyChange(MarketPrice.EARNINGS, oldValue, earnings);
     }
 
     @UsingKey(type=MarketPriceConstants.YIELD)
@@ -1526,13 +1396,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YIELD)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setYield(BigDecimal yield) {
-
-        BigDecimal oldValue = this.yield;
-
+    public void setYield(@Changeable(MarketPrice.YIELD) BigDecimal yield) {
         this.yield = yield;
-
-        firePropertyChange(MarketPrice.YIELD, oldValue, yield);
     }
 
     @UsingKey(type=MarketPriceConstants.PERATIO)
@@ -1544,13 +1409,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PERATIO)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPriceToEarningsRatio(BigDecimal priceToEarningsRatio) {
-
-        BigDecimal oldValue = this.priceToEarningsRatio;
-
+    public void setPriceToEarningsRatio(
+        @Changeable(MarketPrice.PRICE_TO_EARNINGS_RATIO) BigDecimal priceToEarningsRatio) {
         this.priceToEarningsRatio = priceToEarningsRatio;
-
-        firePropertyChange(MarketPrice.PRICE_TO_EARNINGS_RATIO, oldValue, priceToEarningsRatio);
     }
 
     @UsingKey(type=MarketPriceConstants.DIVIDENDTP)
@@ -1562,13 +1423,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.DIVIDENDTP)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setDividendType(String dividendType) {
-
-        String oldValue = this.dividendType;
-
+    public void setDividendType(@Changeable(MarketPrice.DIVIDEND_TYPE) String dividendType) {
         this.dividendType = dividendType;
-
-        firePropertyChange(MarketPrice.DIVIDEND_TYPE, oldValue, dividendType);
     }
 
     @UsingKey(type=MarketPriceConstants.DIVPAYDATE)
@@ -1580,13 +1436,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.DIVPAYDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setDividendPayDate(Long dividendPayDate) {
-
-        Long oldValue = this.dividendPayDate;
-
+    public void setDividendPayDate(@Changeable(MarketPrice.DIVIDEND_PAY_DATE) Long dividendPayDate) {
         this.dividendPayDate = dividendPayDate;
-
-        firePropertyChange(MarketPrice.DIVIDEND_PAY_DATE, oldValue, dividendPayDate);
     }
 
     @UsingKey(type=MarketPriceConstants.EXDIVDATE)
@@ -1598,13 +1449,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.EXDIVDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setExDividendDate(Long exDividendDate) {
-
-        Long oldValue = this.exDividendDate;
-
+    public void setExDividendDate(@Changeable(MarketPrice.EX_DIVIDEND_DATE) Long exDividendDate) {
         this.exDividendDate = exDividendDate;
-
-        firePropertyChange(MarketPrice.EX_DIVIDEND_DATE, oldValue, exDividendDate);
     }
 
     @UsingKey(type=MarketPriceConstants.CTS_QUAL)
@@ -1616,13 +1462,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CTS_QUAL)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTradePriceQualifier(String tradePriceQualifier) {
-
-        String oldValue = this.tradePriceQualifier;
-
+    public void setTradePriceQualifier(@Changeable(MarketPrice.TRADE_PRICE_QUALIFIER) String tradePriceQualifier) {
         this.tradePriceQualifier = tradePriceQualifier;
-
-        firePropertyChange(MarketPrice.TRADE_PRICE_QUALIFIER, oldValue, tradePriceQualifier);
     }
 
     @UsingKey(type=MarketPriceConstants.BLKCOUNT)
@@ -1634,13 +1475,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BLKCOUNT)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBlockCount(BigInteger blockCount) {
-
-        BigInteger oldValue = this.blockCount;
-
+    public void setBlockCount(@Changeable(MarketPrice.BLOCK_COUNT) BigInteger blockCount) {
         this.blockCount = blockCount;
-
-        firePropertyChange(MarketPrice.BLOCK_COUNT, oldValue, blockCount);
     }
 
     @UsingKey(type=MarketPriceConstants.BLKVOLUM)
@@ -1652,13 +1488,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BLKVOLUM)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBlockVolume(BigInteger blockVolume) {
-
-        BigInteger oldValue = this.blockVolume;
-
+    public void setBlockVolume(@Changeable(MarketPrice.BLOCK_VOLUME) BigInteger blockVolume) {
         this.blockVolume = blockVolume;
-
-        firePropertyChange(MarketPrice.BLOCK_VOLUME, oldValue, blockVolume);
     }
 
     @UsingKey(type=MarketPriceConstants.TRDXID_1)
@@ -1670,13 +1501,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRDXID_1)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTradeExchangeId(String tradeExchangeId) {
-
-        String oldValue = this.tradeExchangeId;
-
+    public void setTradeExchangeId(@Changeable(MarketPrice.TRADE_EXCHANGE_ID) String tradeExchangeId) {
         this.tradeExchangeId = tradeExchangeId;
-
-        firePropertyChange(MarketPrice.TRADE_EXCHANGE_ID, oldValue, tradeExchangeId);
     }
 
     @UsingKey(type=MarketPriceConstants.TRD_UNITS)
@@ -1688,13 +1514,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRD_UNITS)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTradingUnits(String tradingUnits) {
-
-        String oldValue = this.tradingUnits;
-
+    public void setTradingUnits(@Changeable(MarketPrice.TRADING_UNITS) String tradingUnits) {
         this.tradingUnits = tradingUnits;
-
-        firePropertyChange(MarketPrice.TRADING_UNITS, oldValue, tradingUnits);
     }
 
     @UsingKey(type=MarketPriceConstants.LOT_SIZE)
@@ -1706,13 +1527,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.LOT_SIZE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLotSize(BigInteger lotSize) {
-
-        BigInteger oldValue = this.lotSize;
-
+    public void setLotSize(@Changeable(MarketPrice.LOT_SIZE) BigInteger lotSize) {
         this.lotSize = lotSize;
-
-        firePropertyChange(MarketPrice.LOT_SIZE, oldValue, lotSize);
     }
 
     @UsingKey(type=MarketPriceConstants.PCTCHNG)
@@ -1724,13 +1540,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PCTCHNG)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPercentChange(BigDecimal percentChange) {
-
-        BigDecimal oldValue = this.percentChange;
-
+    public void setPercentChange(@Changeable(MarketPrice.PERCENTAGE_CHANGE) BigDecimal percentChange) {
         this.percentChange = percentChange;
-
-        firePropertyChange(MarketPrice.PERCENTAGE_CHANGE, oldValue, percentChange);
     }
 
     @UsingKey(type=MarketPriceConstants.OPEN_BID)
@@ -1742,13 +1553,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OPEN_BID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOpenBid(BigDecimal openBid) {
-
-        BigDecimal oldValue = this.openBid;
-
+    public void setOpenBid(@Changeable(MarketPrice.OPEN_BID) BigDecimal openBid) {
         this.openBid = openBid;
-
-        firePropertyChange(MarketPrice.OPEN_BID, oldValue, openBid);
     }
 
     @UsingKey(type=MarketPriceConstants.DJTIME)
@@ -1760,13 +1566,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.DJTIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setLatestDowJonesNewsStoryTime(Long latestDowJonesNewsStoryTime) {
-
-        Long oldValue = this.latestDowJonesNewsStoryTime;
-
+    public void setLatestDowJonesNewsStoryTime(
+        @Changeable(MarketPrice.LATEST_DOW_JONES_NEWS_STORY_TIME) Long latestDowJonesNewsStoryTime) {
         this.latestDowJonesNewsStoryTime = latestDowJonesNewsStoryTime;
-
-        firePropertyChange(MarketPrice.LATEST_DOW_JONES_NEWS_STORY_TIME, oldValue, latestDowJonesNewsStoryTime);
     }
 
     @UsingKey(type=MarketPriceConstants.CLOSE_BID)
@@ -1778,13 +1580,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CLOSE_BID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setCloseBid(BigDecimal closeBid) {
-
-        BigDecimal oldValue = this.closeBid;
-
+    public void setCloseBid(@Changeable(MarketPrice.CLOSE_BID) BigDecimal closeBid) {
         this.closeBid = closeBid;
-
-        firePropertyChange(MarketPrice.CLOSE_BID, oldValue, closeBid);
     }
 
     @UsingKey(type=MarketPriceConstants.CLOSE_ASK)
@@ -1796,13 +1593,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CLOSE_ASK)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setCloseAsk(BigDecimal closeAsk) {
-
-        BigDecimal oldValue = this.closeAsk;
-
+    public void setCloseAsk(@Changeable(MarketPrice.CLOSE_ASK) BigDecimal closeAsk) {
         this.closeAsk = closeAsk;
-
-        firePropertyChange(MarketPrice.CLOSE_ASK, oldValue, closeAsk);
     }
 
     @UsingKey(type=MarketPriceConstants.DIVIDEND)
@@ -1814,13 +1606,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.DIVIDEND)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setDividend(BigDecimal dividend) {
-
-        BigDecimal oldValue = this.dividend;
-
+    public void setDividend(@Changeable(MarketPrice.DIVIDEND) BigDecimal dividend) {
         this.dividend = dividend;
-
-        firePropertyChange(MarketPrice.DIVIDEND, oldValue, dividend);
     }
 
     @UsingKey(type=MarketPriceConstants.NUM_MOVES)
@@ -1832,13 +1619,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.NUM_MOVES)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTotalTradesToday(BigInteger totalTradesToday) {
-
-        BigInteger oldValue = this.totalTradesToday;
-
+    public void setTotalTradesToday(@Changeable(MarketPrice.TOTAL_TRADES_TODAY) BigInteger totalTradesToday) {
         this.totalTradesToday = totalTradesToday;
-
-        firePropertyChange(MarketPrice.TOTAL_TRADES_TODAY, oldValue, totalTradesToday);
     }
 
     @UsingKey(type=MarketPriceConstants.OFFCL_CODE)
@@ -1850,13 +1632,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OFFCL_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setOfficialCode(String officialCode) {
-
-        String oldValue = this.officialCode;
-
+    public void setOfficialCode(@Changeable(MarketPrice.OFFICIAL_CODE) String officialCode) {
         this.officialCode = officialCode;
-
-        firePropertyChange(MarketPrice.OFFICIAL_CODE, oldValue, officialCode);
     }
 
     @UsingKey(type=MarketPriceConstants.HSTCLSDATE)
@@ -1868,13 +1645,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.HSTCLSDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setHistoricCloseDate(Long historicCloseDate) {
-
-        Long oldValue = this.historicCloseDate;
-
+    public void setHistoricCloseDate(@Changeable(MarketPrice.HISTORIC_CLOSE_DATE) Long historicCloseDate) {
         this.historicCloseDate = historicCloseDate;
-
-        firePropertyChange(MarketPrice.HISTORIC_CLOSE_DATE, oldValue, historicCloseDate);
     }
 
     @UsingKey(type=MarketPriceConstants.YRHIGH)
@@ -1886,13 +1658,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YRHIGH)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setYearHigh(BigDecimal yearHigh) {
-
-        BigDecimal oldValue = this.yearHigh;
-
+    public void setYearHigh(@Changeable(MarketPrice.YEAR_HIGH) BigDecimal yearHigh) {
         this.yearHigh = yearHigh;
-
-        firePropertyChange(MarketPrice.YEAR_HIGH, oldValue, yearHigh);
     }
 
     @UsingKey(type=MarketPriceConstants.YRLOW)
@@ -1904,13 +1671,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YRLOW)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setYearLow(BigDecimal yearLow) {
-
-        BigDecimal oldValue = this.yearLow;
-
+    public void setYearLow(@Changeable(MarketPrice.YEAR_LOW) BigDecimal yearLow) {
         this.yearLow = yearLow;
-
-        firePropertyChange(MarketPrice.YEAR_LOW, oldValue, yearLow);
     }
 
     @UsingKey(type=MarketPriceConstants.TURNOVER)
@@ -1922,13 +1684,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TURNOVER)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setTurnover(BigDecimal turnover) {
-
-        BigDecimal oldValue = this.turnover;
-
+    public void setTurnover(@Changeable(MarketPrice.TURNOVER) BigDecimal turnover) {
         this.turnover = turnover;
-
-        firePropertyChange(MarketPrice.TURNOVER, oldValue, turnover);
     }
 
     @UsingKey(type=MarketPriceConstants.BOND_TYPE)
@@ -1940,13 +1697,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BOND_TYPE)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setBondType(String bondType) {
-
-        String oldValue = this.bondType;
-
+    public void setBondType(@Changeable(MarketPrice.BOND_TYPE) String bondType) {
         this.bondType = bondType;
-
-        firePropertyChange(MarketPrice.BOND_TYPE, oldValue, bondType);
     }
 
     @UsingKey(type=MarketPriceConstants.BCKGRNDPAG)
@@ -1958,13 +1710,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BCKGRNDPAG)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setBackgroundPage(String backgroundPage) {
-
-        String oldValue = this.backgroundPage;
-
+    public void setBackgroundPage(@Changeable(MarketPrice.BACKGROUND_PAGE) String backgroundPage) {
         this.backgroundPage = backgroundPage;
-
-        firePropertyChange(MarketPrice.BACKGROUND_PAGE, oldValue, backgroundPage);
     }
 
     @UsingKey(type=MarketPriceConstants.YCHIGH_IND)
@@ -1983,13 +1730,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.YCHIGH_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearOrContractHighIndicator(
-        String yearOrContractHighIndicator) {
-
-        String oldValue = this.yearOrContractHighIndicator;
-
+        @Changeable(MarketPrice.YEAR_OR_CONTRACT_HIGH_INDICATOR) String yearOrContractHighIndicator) {
         this.yearOrContractHighIndicator = yearOrContractHighIndicator;
-
-        firePropertyChange(MarketPrice.YEAR_OR_CONTRACT_HIGH_INDICATOR, oldValue, yearOrContractHighIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.YCLOW_IND)
@@ -2008,13 +1750,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.YCLOW_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setYearOrContractLowIndicator(
-        String yearOrContractLowIndicator) {
-
-        String oldValue = this.yearOrContractLowIndicator;
-
+        @Changeable(MarketPrice.YEAR_OR_CONTRACT_LOW_INDICATOR) String yearOrContractLowIndicator) {
         this.yearOrContractLowIndicator = yearOrContractLowIndicator;
-
-        firePropertyChange(MarketPrice.YEAR_OR_CONTRACT_LOW_INDICATOR, oldValue, yearOrContractLowIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.BID_NET_CH)
@@ -2026,13 +1763,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BID_NET_CH)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBidNetChange(BigDecimal bidNetChange) {
-
-        BigDecimal oldValue = this.bidNetChange;
-
+    public void setBidNetChange(@Changeable(MarketPrice.BID_NET_CHANGE) BigDecimal bidNetChange) {
         this.bidNetChange = bidNetChange;
-
-        firePropertyChange(MarketPrice.BID_NET_CHANGE, oldValue, bidNetChange);
     }
 
     @UsingKey(type=MarketPriceConstants.BID_TICK_1)
@@ -2044,13 +1776,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BID_TICK_1)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setBidTick1(String bidTick1) {
-
-        String oldValue = this.bidTick1;
-
+    public void setBidTick1(@Changeable(MarketPrice.BID_TICK_1) String bidTick1) {
         this.bidTick1 = bidTick1;
-
-        firePropertyChange(MarketPrice.BID_TICK_1, oldValue, bidTick1);
     }
 
     @UsingKey(type=MarketPriceConstants.CUM_EX_MKR)
@@ -2192,13 +1919,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.HSTCLBDDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setHistoricalClosingBidDate(Long historicalClosingBidDate) {
-
-        Long oldValue = this.historicalClosingBidDate;
-
+    public void setHistoricalClosingBidDate(
+        @Changeable(MarketPrice.HISTORIC_CLOSING_BID_DATE) Long historicalClosingBidDate) {
         this.historicalClosingBidDate = historicalClosingBidDate;
-
-        firePropertyChange(MarketPrice.HISTORIC_CLOSING_BID_DATE, oldValue, historicalClosingBidDate);
     }
 
     @UsingKey(type=MarketPriceConstants.YRBDHI_IND)
@@ -2210,13 +1933,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YRBDHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setYearBidHigh(String yearBidHigh) {
-
-        String oldValue = this.yearBidHigh;
-
+    public void setYearBidHigh(@Changeable(MarketPrice.YEAR_BID_HIGH) String yearBidHigh) {
         this.yearBidHigh = yearBidHigh;
-
-        firePropertyChange(MarketPrice.YEAR_BID_HIGH, oldValue, yearBidHigh);
     }
 
     @UsingKey(type=MarketPriceConstants.YRBDLO_IND)
@@ -2228,13 +1946,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YRBDLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setYearBidLow(String yearBidLow) {
-
-        String oldValue = this.yearBidLow;
-
+    public void setYearBidLow(@Changeable(MarketPrice.YEAR_BID_LOW) String yearBidLow) {
         this.yearBidLow = yearBidLow;
-
-        firePropertyChange(MarketPrice.YEAR_BID_LOW, oldValue, yearBidLow);
     }
 
     @UsingKey(type=MarketPriceConstants.NUM_BIDS)
@@ -2246,13 +1959,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.NUM_BIDS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setNumberOfBids(BigInteger numberOfBids) {
-
-        BigInteger oldValue = this.numberOfBids;
-
+    public void setNumberOfBids(@Changeable(MarketPrice.NUMBER_OF_BIDS) BigInteger numberOfBids) {
         this.numberOfBids = numberOfBids;
-
-        firePropertyChange(MarketPrice.NUMBER_OF_BIDS, oldValue, numberOfBids);
     }
 
 //    @UsingKey(type=RECORDTYPE)
@@ -2561,13 +2269,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GEN_VAL1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setGeneralPurposeValue1(BigDecimal generalPurposeValue1) {
-
-        BigDecimal oldValue = this.generalPurposeValue1;
-
+    public void setGeneralPurposeValue1(@Changeable(GENERAL_PURPOSE_VALUE_1) BigDecimal generalPurposeValue1) {
         this.generalPurposeValue1 = generalPurposeValue1;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_1, oldValue, generalPurposeValue1);
     }
 
     @UsingKey(type=MarketPriceConstants.GV1_TEXT)
@@ -2580,13 +2283,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.GV1_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue1Description(
-        String generalPurposeValue1Description) {
-
-        String oldValue = this.generalPurposeValue1Description;
-
+        @Changeable(GENERAL_PURPOSE_VALUE_1_DESCRIPTION) String generalPurposeValue1Description) {
         this.generalPurposeValue1Description = generalPurposeValue1Description;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_1_DESCRIPTION, oldValue, generalPurposeValue1Description);
     }
 
     @UsingKey(type=MarketPriceConstants.GEN_VAL2)
@@ -2598,13 +2296,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GEN_VAL2)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setGeneralPurposeValue2(BigDecimal generalPurposeValue2) {
-
-        BigDecimal oldValue = this.generalPurposeValue2;
-
+    public void setGeneralPurposeValue2(@Changeable(GENERAL_PURPOSE_VALUE_2) BigDecimal generalPurposeValue2) {
         this.generalPurposeValue2 = generalPurposeValue2;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_2, oldValue, generalPurposeValue2);
     }
 
     @UsingKey(type=MarketPriceConstants.GV2_TEXT)
@@ -2617,13 +2310,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.GV2_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue2Description(
-        String generalPurposeValue2Description) {
-
-        String oldValue = this.generalPurposeValue2Description;
-
+        @Changeable(GENERAL_PURPOSE_VALUE_2_DESCRIPTION) String generalPurposeValue2Description) {
         this.generalPurposeValue2Description = generalPurposeValue2Description;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_2_DESCRIPTION, oldValue, generalPurposeValue2Description);
     }
 
     @UsingKey(type=MarketPriceConstants.GEN_VAL3)
@@ -2635,13 +2323,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GEN_VAL3)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setGeneralPurposeValue3(BigDecimal generalPurposeValue3) {
-
-        BigDecimal oldValue = this.generalPurposeValue3;
-
+    public void setGeneralPurposeValue3(@Changeable(GENERAL_PURPOSE_VALUE_3) BigDecimal generalPurposeValue3) {
         this.generalPurposeValue3 = generalPurposeValue3;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_3, oldValue, generalPurposeValue3);
     }
 
     @UsingKey(type=MarketPriceConstants.GV3_TEXT)
@@ -2654,13 +2337,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.GV3_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue3Description(
-        String generalPurposeValue3Description) {
-
-        String oldValue = this.generalPurposeValue3Description;
-
+        @Changeable(GENERAL_PURPOSE_VALUE_3_DESCRIPTION) String generalPurposeValue3Description) {
         this.generalPurposeValue3Description = generalPurposeValue3Description;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_3_DESCRIPTION, oldValue, generalPurposeValue3Description);
     }
 
     @UsingKey(type=MarketPriceConstants.GEN_VAL4)
@@ -2672,13 +2350,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GEN_VAL4)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setGeneralPurposeValue4(BigDecimal generalPurposeValue4) {
-
-        BigDecimal oldValue = this.generalPurposeValue4;
-
+    public void setGeneralPurposeValue4(@Changeable(GENERAL_PURPOSE_VALUE_4) BigDecimal generalPurposeValue4) {
         this.generalPurposeValue4 = generalPurposeValue4;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_4, oldValue, generalPurposeValue4);
     }
 
     @UsingKey(type=MarketPriceConstants.GV4_TEXT)
@@ -2691,13 +2364,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.GV4_TEXT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setGeneralPurposeValue4Description(
-        String generalPurposeValue4Description) {
-
-        String oldValue = this.generalPurposeValue4Description;
-
+        @Changeable(GENERAL_PURPOSE_VALUE_4_DESCRIPTION) String generalPurposeValue4Description) {
         this.generalPurposeValue4Description = generalPurposeValue4Description;
-
-        firePropertyChange(GENERAL_PURPOSE_VALUE_4_DESCRIPTION, oldValue, generalPurposeValue4Description);
     }
 
     @UsingKey(type=MarketPriceConstants.SEQNUM)
@@ -2709,13 +2377,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SEQNUM)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setSequenceNumber(BigInteger sequenceNumber) {
-
-        BigInteger oldValue = this.sequenceNumber;
-
+    public void setSequenceNumber(@Changeable(SEQUENCE_NUMBER) BigInteger sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
-
-        firePropertyChange(SEQUENCE_NUMBER, oldValue, sequenceNumber);
     }
 
     @UsingKey(type=MarketPriceConstants.PRNTYP)
@@ -2727,13 +2390,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PRNTYP)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setPrintType(String printType) {
-
-        String oldValue = this.printType;
-
+    public void setPrintType(@Changeable(PRINT_TYPE) String printType) {
         this.printType = printType;
-
-        firePropertyChange(PRINT_TYPE, oldValue, printType);
     }
 
     @UsingKey(type=MarketPriceConstants.PRNTBCK)
@@ -2746,13 +2404,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.PRNTBCK)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAlteredTradeEventSequenceNumber(
-        BigInteger alteredTradeEventSequenceNumber) {
-
-        BigInteger oldValue = alteredTradeEventSequenceNumber;
-
+        @Changeable(ALTERED_TRADE_EVENTS_SEQUENCE_NUMBER) BigInteger alteredTradeEventSequenceNumber) {
         this.alteredTradeEventSequenceNumber = alteredTradeEventSequenceNumber;
-
-        firePropertyChange(ALTERED_TRADE_EVENTS_SEQUENCE_NUMBER, oldValue, alteredTradeEventSequenceNumber);
     }
 
     @UsingKey(type=MarketPriceConstants.QUOTIM)
@@ -2764,13 +2417,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.QUOTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setQuoteTimeSeconds(Long quoteTimeSeconds) {
-
-        Long oldValue = this.quoteTimeSeconds;
-
+    public void setQuoteTimeSeconds(@Changeable(QUOTE_TIME_SECONDS) Long quoteTimeSeconds) {
         this.quoteTimeSeconds = quoteTimeSeconds;
-
-        firePropertyChange(QUOTE_TIME_SECONDS, oldValue, quoteTimeSeconds);
     }
 
     @UsingKey(type=MarketPriceConstants.GV1_FLAG)
@@ -2782,13 +2430,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV1_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setGenericFlag1(String genericFlag1) {
-
-        String oldValue = this.genericFlag1;
-
+    public void setGenericFlag1(@Changeable(GENERIC_FLAG_1) String genericFlag1) {
         this.genericFlag1 = genericFlag1;
-
-        firePropertyChange(GENERIC_FLAG_1, oldValue, genericFlag1);
     }
 
     @UsingKey(type=MarketPriceConstants.GV2_FLAG)
@@ -2800,13 +2443,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV2_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setGenericFlag2(String genericFlag2) {
-
-        String oldValue = this.genericFlag2;
-
+    public void setGenericFlag2(@Changeable(GENERIC_FLAG_2) String genericFlag2) {
         this.genericFlag2 = genericFlag2;
-
-        firePropertyChange(GENERIC_FLAG_2, oldValue, genericFlag2);
     }
 
     @UsingKey(type=MarketPriceConstants.GV3_FLAG)
@@ -2818,13 +2456,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV3_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setGenericFlag3(String genericFlag3) {
-
-        String oldValue = this.genericFlag3;
-
+    public void setGenericFlag3(@Changeable(GENERIC_FLAG_3) String genericFlag3) {
         this.genericFlag3 = genericFlag3;
-
-        firePropertyChange(GENERIC_FLAG_3, oldValue, genericFlag3);
     }
 
     @UsingKey(type=MarketPriceConstants.GV4_FLAG)
@@ -2836,13 +2469,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV4_FLAG)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setGenericFlag4(String genericFlag4) {
-
-        String oldValue = this.genericFlag4;
-
+    public void setGenericFlag4(@Changeable(GENERIC_FLAG_4) String genericFlag4) {
         this.genericFlag4 = genericFlag4;
-
-        firePropertyChange(GENERIC_FLAG_4, oldValue, genericFlag4);
     }
 
     @UsingKey(type=MarketPriceConstants.OFF_CD_IN2)
@@ -2854,13 +2482,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OFF_CD_IN2)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setUniqueInstrumentId2Source(String uniqueInstrumentId2Source) {
-        
-        String oldValue = this.uniqueInstrumentId2Source;
-
+    public void setUniqueInstrumentId2Source(
+        @Changeable(UNIQUE_INSTRUMENT_ID_2_SOURCE) String uniqueInstrumentId2Source) {
         this.uniqueInstrumentId2Source = uniqueInstrumentId2Source;
-
-        firePropertyChange(UNIQUE_INSTRUMENT_ID_2_SOURCE, oldValue, uniqueInstrumentId2Source);
     }
 
     @UsingKey(type=MarketPriceConstants.OFFC_CODE2)
@@ -2872,13 +2496,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OFFC_CODE2)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setUniqueInstrumentId2(String uniqueInstrumentId2) {
-
-        String oldValue = this.uniqueInstrumentId2;
-
+    public void setUniqueInstrumentId2(@Changeable(UNIQUE_INSTRUMENT_ID_2) String uniqueInstrumentId2) {
         this.uniqueInstrumentId2 = uniqueInstrumentId2;
-
-        firePropertyChange(UNIQUE_INSTRUMENT_ID_2, oldValue, uniqueInstrumentId2);
     }
 
     @UsingKey(type=MarketPriceConstants.GV1_TIME)
@@ -2890,13 +2509,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV1_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setTimeInSeconds1(Long timeInSeconds1) {
-
-        Long oldValue = this.timeInSeconds1;
-
+    public void setTimeInSeconds1(@Changeable(TIME_IN_SECONDS_1) Long timeInSeconds1) {
         this.timeInSeconds1 = timeInSeconds1;
-
-        firePropertyChange(TIME_IN_SECONDS_1, oldValue, timeInSeconds1);
     }
 
     @UsingKey(type=MarketPriceConstants.GV2_TIME)
@@ -2908,13 +2522,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV2_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setTimeInSeconds2(Long timeInSeconds2) {
-
-        Long oldValue = this.timeInSeconds2;
-
+    public void setTimeInSeconds2(@Changeable(TIME_IN_SECONDS_2) Long timeInSeconds2) {
         this.timeInSeconds2 = timeInSeconds2;
-
-        firePropertyChange(TIME_IN_SECONDS_2, oldValue, timeInSeconds2);
     }
 
     @UsingKey(type=MarketPriceConstants.EXCHTIM)
@@ -2926,13 +2535,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.EXCHTIM)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setExchangeTime(Long exchangeTime) {
-
-        Long oldValue = this.exchangeTime;
-
+    public void setExchangeTime(@Changeable(EXCHANGE_TIME) Long exchangeTime) {
         this.exchangeTime = exchangeTime;
-
-        firePropertyChange(EXCHANGE_TIME, oldValue, exchangeTime);
     }
 
     @UsingKey(type=MarketPriceConstants.YRHI_IND)
@@ -2944,13 +2548,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YRHI_IND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setYearHighIndicator(String yearHighIndicator) {
-
-        String oldValue = this.yearHighIndicator;
-
+    public void setYearHighIndicator(@Changeable(YEAR_HIGH_INDICATOR) String yearHighIndicator) {
         this.yearHighIndicator = yearHighIndicator;
-
-        firePropertyChange(YEAR_HIGH_INDICATOR, oldValue, yearHighIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.YRLO_IND)
@@ -2962,13 +2561,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YRLO_IND)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setYearLowIndicator(String yearLowIndicator) {
-
-        String oldValue = this.yearLowIndicator;
-
+    public void setYearLowIndicator(@Changeable(YEAR_LOW_INDICATOR) String yearLowIndicator) {
         this.yearLowIndicator = yearLowIndicator;
-
-        firePropertyChange(YEAR_LOW_INDICATOR, oldValue, yearLowIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.BETA_VAL)
@@ -2980,13 +2574,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BETA_VAL)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBetaValue(BigDecimal betaValue) {
-
-        BigDecimal oldValue = this.betaValue;
-
+    public void setBetaValue(@Changeable(BETA_VALUE) BigDecimal betaValue) {
         this.betaValue = betaValue;
-
-        firePropertyChange(BETA_VALUE, oldValue, betaValue);
     }
 
     @UsingKey(type=MarketPriceConstants.PREF_DISP)
@@ -2999,13 +2588,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.PREF_DISP)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPreferredDisplayTemplateNumber(
-        Integer preferredDisplayTemplateNumber) {
-
-        Integer oldValue = this.preferredDisplayTemplateNumber;
-
+        @Changeable(PREFERRED_DISPLAY_TEMPLATE_NUMBER) Integer preferredDisplayTemplateNumber) {
         this.preferredDisplayTemplateNumber = preferredDisplayTemplateNumber;
-
-        firePropertyChange(PREFERRED_DISPLAY_TEMPLATE_NUMBER, oldValue, preferredDisplayTemplateNumber);
     }
 
     @UsingKey(type=MarketPriceConstants.DSPLY_NMLL)
@@ -3018,13 +2602,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.DSPLY_NMLL)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setLocalLanguageInstrumentName(
-        String localLanguageInstrumentName) {
-
-        String oldValue = this.localLanguageInstrumentName;
-
+        @Changeable(LOCAL_LANGUAGE_INSTRUMENT_NAME) String localLanguageInstrumentName) {
         this.localLanguageInstrumentName = localLanguageInstrumentName;
-
-        firePropertyChange(LOCAL_LANGUAGE_INSTRUMENT_NAME, oldValue, localLanguageInstrumentName);
     }
 
     @UsingKey(type=MarketPriceConstants.VOL_X_PRC1)
@@ -3037,13 +2616,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.VOL_X_PRC1)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLatestTradeOrTradeTurnoverValue(
-        BigDecimal latestTradeOrTradeTurnoverValue) {
-
-        BigDecimal oldValue = this.latestTradeOrTradeTurnoverValue;
-
+        @Changeable(LATEST_TRADE_OR_TRADE_TURNOVER_VALUE) BigDecimal latestTradeOrTradeTurnoverValue) {
         this.latestTradeOrTradeTurnoverValue = latestTradeOrTradeTurnoverValue;
-
-        firePropertyChange(LATEST_TRADE_OR_TRADE_TURNOVER_VALUE, oldValue, latestTradeOrTradeTurnoverValue);
     }
 
     @UsingKey(type=MarketPriceConstants.DSO_ID)
@@ -3055,13 +2629,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.DSO_ID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setDataSourceOwnerId(Integer dataSourceOwnerId) {
-
-        Integer oldValue = this.dataSourceOwnerId;
-
+    public void setDataSourceOwnerId(@Changeable(DATA_SOURCE_OWNER_ID) Integer dataSourceOwnerId) {
         this.dataSourceOwnerId = dataSourceOwnerId;
-
-        firePropertyChange(DATA_SOURCE_OWNER_ID, oldValue, dataSourceOwnerId);
     }
 
     @UsingKey(type=MarketPriceConstants.AVERG_PRC)
@@ -3073,13 +2642,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.AVERG_PRC)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAveragePrice(BigDecimal averagePrice) {
-
-        BigDecimal oldValue = this.averagePrice;
-
+    public void setAveragePrice(@Changeable(AVERAGE_PRICE) BigDecimal averagePrice) {
         this.averagePrice = averagePrice;
-
-        firePropertyChange(AVERAGE_PRICE, oldValue, averagePrice);
     }
 
     @UsingKey(type=MarketPriceConstants.UPC71_REST)
@@ -3091,13 +2655,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.UPC71_REST)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setUpc71RestrictedFlag(String upc71RestrictedFlag) {
-
-        String oldValue = this.upc71RestrictedFlag;
-
+    public void setUpc71RestrictedFlag(@Changeable(UPC_71_RESTRICTED_FLAG) String upc71RestrictedFlag) {
         this.upc71RestrictedFlag = upc71RestrictedFlag;
-
-        firePropertyChange(UPC_71_RESTRICTED_FLAG, oldValue, upc71RestrictedFlag);
     }
 
     @UsingKey(type=MarketPriceConstants.ADJUST_CLS)
@@ -3109,13 +2668,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ADJUST_CLS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAdjustedClose(BigDecimal adjustedClose) {
-
-        BigDecimal oldValue = this.adjustedClose;
-
+    public void setAdjustedClose(@Changeable(ADJUSTED_CLOSE) BigDecimal adjustedClose) {
         this.adjustedClose = adjustedClose;
-
-        firePropertyChange(ADJUSTED_CLOSE, oldValue, adjustedClose);
     }
 
     @UsingKey(type=MarketPriceConstants.WEIGHTING)
@@ -3127,13 +2681,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.WEIGHTING)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setWeighting(BigDecimal weighting) {
-
-        BigDecimal oldValue = this.weighting;
-
+    public void setWeighting(@Changeable(MarketPrice.WEIGHTING) BigDecimal weighting) {
         this.weighting = weighting;
-
-        firePropertyChange(MarketPrice.WEIGHTING, oldValue, weighting);
     }
 
     @UsingKey(type=MarketPriceConstants.STOCK_TYPE)
@@ -3145,13 +2694,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.STOCK_TYPE)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setStockType(String stockType) {
-
-        String oldValue = this.stockType;
-
+    public void setStockType(@Changeable(MarketPrice.STOCK_TYPE) String stockType) {
         this.stockType = stockType;
-
-        firePropertyChange(MarketPrice.STOCK_TYPE, oldValue, stockType);
     }
 
     @UsingKey(type=MarketPriceConstants.IMP_VOLT)
@@ -3163,13 +2707,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.IMP_VOLT)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setImpliedVolatility(BigDecimal impliedVolatility) {
-
-        BigDecimal oldValue = this.impliedVolatility;
-
+    public void setImpliedVolatility(@Changeable(MarketPrice.IMPLIED_VOLATILITY) BigDecimal impliedVolatility) {
         this.impliedVolatility = impliedVolatility;
-
-        firePropertyChange(MarketPrice.IMPLIED_VOLATILITY, oldValue, impliedVolatility);
     }
 
 //    @UsingKey(type=MarketPriceConstants.RDN_EXCHD2)
@@ -3192,13 +2731,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CP_ADJ_FCT)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setCapitalAdjustmentFactor(BigDecimal capitalAdjustmentFactor) {
-
-        BigDecimal oldValue = this.capitalAdjustmentFactor;
-
+    public void setCapitalAdjustmentFactor(
+        @Changeable(MarketPrice.CAPITAL_ADJUSTMENT_FACTOR) BigDecimal capitalAdjustmentFactor) {
         this.capitalAdjustmentFactor = capitalAdjustmentFactor;
-
-        firePropertyChange(MarketPrice.CAPITAL_ADJUSTMENT_FACTOR, oldValue, capitalAdjustmentFactor);
     }
 
     @UsingKey(type=MarketPriceConstants.CP_ADJ_DAT)
@@ -3210,13 +2745,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CP_ADJ_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setCapitalAdjustmentDate(Long capitalAdjustmentDate) {
-
-        Long oldValue = this.capitalAdjustmentDate;
-
+    public void setCapitalAdjustmentDate(@Changeable(MarketPrice.CAPITAL_ADJUSTMENT_DATE) Long capitalAdjustmentDate) {
         this.capitalAdjustmentDate = capitalAdjustmentDate;
-
-        firePropertyChange(MarketPrice.CAPITAL_ADJUSTMENT_DATE, oldValue, capitalAdjustmentDate);
     }
 
     @UsingKey(type=MarketPriceConstants.AMT_ISSUE)
@@ -3228,13 +2758,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.AMT_ISSUE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setSharesIssuedTotal(BigInteger sharesIssuedTotal) {
-
-        BigInteger oldValue = this.sharesIssuedTotal;
-
+    public void setSharesIssuedTotal(@Changeable(MarketPrice.SHARES_ISSUED_TOTAL) BigInteger sharesIssuedTotal) {
         this.sharesIssuedTotal = sharesIssuedTotal;
-
-        firePropertyChange(MarketPrice.SHARES_ISSUED_TOTAL, oldValue, sharesIssuedTotal);
     }
 
     @UsingKey(type=MarketPriceConstants.MKT_VALUE)
@@ -3246,13 +2771,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.MKT_VALUE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setMarketValue(BigDecimal marketValue) {
-
-        BigDecimal oldValue = this.marketValue;
-
+    public void setMarketValue(@Changeable(MarketPrice.MARKET_VALUE) BigDecimal marketValue) {
         this.marketValue = marketValue;
-
-        firePropertyChange(MarketPrice.MARKET_VALUE, oldValue, marketValue);
     }
 
     @UsingKey(type=MarketPriceConstants.SPEC_TRADE)
@@ -3264,13 +2784,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SPEC_TRADE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setSpecialTermsTradingFlag(Integer specialTermsTradingFlag) {
-
-        Integer oldValue = this.specialTermsTradingFlag;
-
+    public void setSpecialTermsTradingFlag(
+        @Changeable(MarketPrice.SPECIAL_TERMS_TRADING_FLAG) Integer specialTermsTradingFlag) {
         this.specialTermsTradingFlag = specialTermsTradingFlag;
-
-        firePropertyChange(MarketPrice.SPECIAL_TERMS_TRADING_FLAG, oldValue, specialTermsTradingFlag);
     }
 
     @UsingKey(type=MarketPriceConstants.FCAST_EARN)
@@ -3282,13 +2798,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.FCAST_EARN)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setForecastedEarnings(BigDecimal forecastedEarnings) {
-
-        BigDecimal oldValue = this.forecastedEarnings;
-
+    public void setForecastedEarnings(@Changeable(MarketPrice.FORECASTED_EARNINGS) BigDecimal forecastedEarnings) {
         this.forecastedEarnings = forecastedEarnings;
-
-        firePropertyChange(MarketPrice.FORECASTED_EARNINGS, oldValue, forecastedEarnings);
     }
 
     @UsingKey(type=MarketPriceConstants.EARANK_RAT)
@@ -3300,13 +2811,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.EARANK_RAT)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setEarningsRankRatio(BigDecimal earningsRankRatio) {
-
-        BigDecimal oldValue = this.earningsRankRatio;
-
+    public void setEarningsRankRatio(@Changeable(MarketPrice.EARNINGS_RANK_RATIO) BigDecimal earningsRankRatio) {
         this.earningsRankRatio = earningsRankRatio;
-
-        firePropertyChange(MarketPrice.EARNINGS_RANK_RATIO, oldValue, earningsRankRatio);
     }
 
     @UsingKey(type=MarketPriceConstants.FCAST_DATE)
@@ -3318,13 +2824,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.FCAST_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setForecastDate(Long forecastDate) {
-
-        Long oldValue = this.forecastDate;
-
+    public void setForecastDate(@Changeable(MarketPrice.FORECAST_DATE) Long forecastDate) {
         this.forecastDate = forecastDate;
-
-        firePropertyChange(MarketPrice.FORECAST_DATE, oldValue, forecastDate);
     }
 
     @UsingKey(type=MarketPriceConstants.YEAR_FCAST)
@@ -3336,13 +2837,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.YEAR_FCAST)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setForecastYear(String forecastYear) {
-
-        String oldValue = this.forecastYear;
-
+    public void setForecastYear(@Changeable(MarketPrice.FORECAST_YEAR) String forecastYear) {
         this.forecastYear = forecastYear;
-
-        firePropertyChange(MarketPrice.FORECAST_YEAR, oldValue, forecastYear);
     }
 
     @UsingKey(type=MarketPriceConstants.IRGMOD)
@@ -3354,13 +2850,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.IRGMOD)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setIrgPriceTypeModifier(String irgPriceTypeModifier) {
-
-        String oldValue = this.irgPriceTypeModifier;
-
+    public void setIrgPriceTypeModifier(@Changeable(MarketPrice.IRG_PRICE_TYPE_MODIFIER) String irgPriceTypeModifier) {
         this.irgPriceTypeModifier = irgPriceTypeModifier;
-
-        firePropertyChange(MarketPrice.IRG_PRICE_TYPE_MODIFIER, oldValue, irgPriceTypeModifier);
     }
 
     @UsingKey(type=MarketPriceConstants.INSMOD)
@@ -3372,13 +2863,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.INSMOD)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setInsertPriceTypeModifier(String insertPriceTypeModifier) {
-
-        String oldValue = this.insertPriceTypeModifier;
-
+    public void setInsertPriceTypeModifier(
+        @Changeable(MarketPrice.INSERT_PRICE_TYPE_MODIFIER) String insertPriceTypeModifier) {
         this.insertPriceTypeModifier = insertPriceTypeModifier;
-
-        firePropertyChange(MarketPrice.INSERT_PRICE_TYPE_MODIFIER, oldValue, insertPriceTypeModifier);
     }
 
     @UsingKey(type=MarketPriceConstants.A_NPLRS_1)
@@ -3390,13 +2877,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.A_NPLRS_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAskPlayersLevel1(BigInteger askPlayersLevel1) {
-
-        BigInteger oldValue = this.askPlayersLevel1;
-
+    public void setAskPlayersLevel1(@Changeable(MarketPrice.ASK_PLAYERS_LEVEL_1) BigInteger askPlayersLevel1) {
         this.askPlayersLevel1 = askPlayersLevel1;
-
-        firePropertyChange(MarketPrice.ASK_PLAYERS_LEVEL_1, oldValue, askPlayersLevel1);
     }
 
     @UsingKey(type=MarketPriceConstants.B_NPLRS_1)
@@ -3408,13 +2890,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.B_NPLRS_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBidPlayersLevel1(BigInteger bidPlayersLevel1) {
-
-        BigInteger oldValue = this.bidPlayersLevel1;
-
+    public void setBidPlayersLevel1(@Changeable(BID_PLAYERS_LEVEL_1) BigInteger bidPlayersLevel1) {
         this.bidPlayersLevel1 = bidPlayersLevel1;
-
-        firePropertyChange(BID_PLAYERS_LEVEL_1, oldValue, bidPlayersLevel1);
     }
 
     @UsingKey(type=MarketPriceConstants.GV3_TIME)
@@ -3426,13 +2903,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV3_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setGenericTime3(Long genericTime3) {
-
-        Long oldValue = this.genericTime3;
-
+    public void setGenericTime3(@Changeable(GENERIC_TIME_3) Long genericTime3) {
         this.genericTime3 = genericTime3;
-
-        firePropertyChange(GENERIC_TIME_3, oldValue, genericTime3);
     }
 
     @UsingKey(type=MarketPriceConstants.GV4_TIME)
@@ -3444,13 +2916,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.GV4_TIME)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setGenericTime4(Long genericTime4) {
-
-        Long oldValue = this.genericTime4;
-
+    public void setGenericTime4(@Changeable(GENERIC_TIME_4) Long genericTime4) {
         this.genericTime4 = genericTime4;
-
-        firePropertyChange(GENERIC_TIME_4, oldValue, genericTime4);
     }
 
     @UsingKey(type=MarketPriceConstants.MKT_CAP)
@@ -3462,13 +2929,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.MKT_CAP)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setMarketCapitalisation(BigInteger marketCapitalisation) {
-
-        BigInteger oldValue = this.marketCapitalisation;
-
+    public void setMarketCapitalisation(@Changeable(MARKET_CAPITALISATION) BigInteger marketCapitalisation) {
         this.marketCapitalisation = marketCapitalisation;
-
-        firePropertyChange(MARKET_CAPITALISATION, oldValue, marketCapitalisation);
     }
 
     @UsingKey(type=MarketPriceConstants.IRGFID)
@@ -3480,13 +2942,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.IRGFID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setIrgCorrectionValueFid(BigInteger irgCorrectionValueFid) {
-
-        BigInteger oldValue = this.irgCorrectionValueFid;
-
+    public void setIrgCorrectionValueFid(@Changeable(IRG_CORRECTION_VALUE_FID) BigInteger irgCorrectionValueFid) {
         this.irgCorrectionValueFid = irgCorrectionValueFid;
-
-        firePropertyChange(IRG_CORRECTION_VALUE_FID, oldValue, irgCorrectionValueFid);
     }
 
     @UsingKey(type=MarketPriceConstants.IRGVAL)
@@ -3498,13 +2955,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.IRGVAL)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setIrgCorrectionValue(BigInteger irgCorrectionValue) {
-
-        BigInteger oldValue = this.irgCorrectionValue;
-
+    public void setIrgCorrectionValue(@Changeable(IRG_CORRECTION_VALUE) BigInteger irgCorrectionValue) {
         this.irgCorrectionValue = irgCorrectionValue;
-
-        firePropertyChange(IRG_CORRECTION_VALUE, oldValue, irgCorrectionValue);
     }
 
     @UsingKey(type=MarketPriceConstants.PCT_ABNVOL)
@@ -3517,13 +2969,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.PCT_ABNVOL)
     @Adapt(using=OMMNumericAdapter.class)
     public void setAbnormalVolumeIncreasePercentage(
-        BigDecimal abnormalVolumeIncreasePercentage) {
-
-        BigDecimal oldValue = this.abnormalVolumeIncreasePercentage;
-
+        @Changeable(ABNORMAL_VOLUME_INCREASE_PERCENTAGE) BigDecimal abnormalVolumeIncreasePercentage) {
         this.abnormalVolumeIncreasePercentage = abnormalVolumeIncreasePercentage;
-
-        firePropertyChange(ABNORMAL_VOLUME_INCREASE_PERCENTAGE, oldValue, abnormalVolumeIncreasePercentage);
     }
 
     @UsingKey(type=MarketPriceConstants.BC_10_50K)
@@ -3536,18 +2983,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BC_10_50K)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBlockTransactionsBetween10KAnd50KShares(
+    public void setBlockTransactionsBetween10KAnd50KShares(@Changeable(BLOCK_TRANSACTION_BETWEEN_10K_AND_50K_SHARES)
         BigInteger blockTransactionsBetween10KAnd50KShares) {
-
-        BigInteger oldValue = this.blockTransactionsBetween10KAnd50KShares;
-
         this.blockTransactionsBetween10KAnd50KShares = blockTransactionsBetween10KAnd50KShares;
-
-        firePropertyChange(
-            BLOCK_TRANSACTION_BETWEEN_10K_AND_50K_SHARES,
-            oldValue,
-            blockTransactionsBetween10KAnd50KShares
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.BC_50_100K)
@@ -3560,18 +2998,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BC_50_100K)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBlockTransactionsBetween50KAnd100KShares(
+    public void setBlockTransactionsBetween50KAnd100KShares(@Changeable(BLOCK_TRANSACTION_BETWEEN_50K_AND_100K_SHARES)
         BigInteger blockTransactionsBetween50KAnd100KShares) {
-
-        BigInteger oldValue = this.blockTransactionsBetween50KAnd100KShares;
-
         this.blockTransactionsBetween50KAnd100KShares = blockTransactionsBetween50KAnd100KShares;
-
-        firePropertyChange(
-            BLOCK_TRANSACTION_BETWEEN_50K_AND_100K_SHARES,
-            oldValue,
-            blockTransactionsBetween50KAnd100KShares
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.BC_100K)
@@ -3583,18 +3012,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BC_100K)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setBlockTransactionsAbove100KShares(
+    public void setBlockTransactionsAbove100KShares(@Changeable(BLOCK_TRANSACTION_ABOVE_100K_SHARES)
         BigInteger blockTransactionsAbove100KShares) {
-
-        BigInteger oldValue = this.blockTransactionsAbove100KShares;
-
         this.blockTransactionsAbove100KShares = blockTransactionsAbove100KShares;
-
-        firePropertyChange(
-            BLOCK_TRANSACTION_ABOVE_100K_SHARES,
-            oldValue,
-            blockTransactionsAbove100KShares
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.PMA_50D)
@@ -3606,17 +3026,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PMA_50D)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPriceMovingAverages50D(BigDecimal priceMovingAverages50D) {
-
-        BigDecimal oldValue = this.priceMovingAverages50D;
-
+    public void setPriceMovingAverages50D(@Changeable(PRICE_MOVING_AVERAGE_50D) BigDecimal priceMovingAverages50D) {
         this.priceMovingAverages50D = priceMovingAverages50D;
-
-        firePropertyChange(
-            PRICE_MOVING_AVERAGE_50D,
-            oldValue,
-            priceMovingAverages50D
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.PMA_150D)
@@ -3628,17 +3039,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PMA_150D)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPriceMovingAverages150D(BigDecimal priceMovingAverages150D) {
-
-        BigDecimal oldValue = this.priceMovingAverages150D;
-
+    public void setPriceMovingAverages150D(@Changeable(PRICE_MOVING_AVERAGES_150D) BigDecimal priceMovingAverages150D) {
         this.priceMovingAverages150D = priceMovingAverages150D;
-
-        firePropertyChange(
-            PRICE_MOVING_AVERAGES_150D,
-            oldValue,
-            priceMovingAverages150D
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.PMA_200D)
@@ -3650,17 +3052,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PMA_200D)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPriceMovingAverages200D(BigDecimal priceMovingAverages200D) {
-
-        BigDecimal oldValue = this.priceMovingAverages200D;
-
+    public void setPriceMovingAverages200D(@Changeable(PRICE_MOVING_AVERAGES_200D) BigDecimal priceMovingAverages200D) {
         this.priceMovingAverages200D = priceMovingAverages200D;
-
-        firePropertyChange(
-            PRICE_MOVING_AVERAGES_200D,
-            oldValue,
-            priceMovingAverages200D
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.VMA_10D)
@@ -3672,17 +3065,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.VMA_10D)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setVolumeMovingAverages10D(BigInteger volumeMovingAverages10D) {
-
-        BigInteger oldValue = this.volumeMovingAverages10D;
-
+    public void setVolumeMovingAverages10D(@Changeable(VOLUME_MOVING_AVERAGES_10D) BigInteger volumeMovingAverages10D) {
         this.volumeMovingAverages10D = volumeMovingAverages10D;
-
-        firePropertyChange(
-            VOLUME_MOVING_AVERAGES_10D,
-            oldValue,
-            volumeMovingAverages10D
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.VMA_25D)
@@ -3694,17 +3078,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.VMA_25D)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setVolumeMovingAverages25D(BigInteger volumeMovingAverages25D) {
-
-        BigInteger oldValue = this.volumeMovingAverages25D;
-
+    public void setVolumeMovingAverages25D(@Changeable(VOLUME_MOVING_AVERAGES_25D) BigInteger volumeMovingAverages25D) {
         this.volumeMovingAverages25D = volumeMovingAverages25D;
-
-        firePropertyChange(
-            VOLUME_MOVING_AVERAGES_25D,
-            oldValue,
-            volumeMovingAverages25D
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.VMA_50D)
@@ -3716,17 +3091,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.VMA_50D)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setVolumeMovingAverages50D(BigInteger volumeMovingAverages50D) {
-
-        BigInteger oldValue = this.volumeMovingAverages50D;
-
+    public void setVolumeMovingAverages50D(@Changeable(VOLUME_MOVING_AVERAGES_50D) BigInteger volumeMovingAverages50D) {
         this.volumeMovingAverages50D = volumeMovingAverages50D;
-
-        firePropertyChange(
-            VOLUME_MOVING_AVERAGES_50D,
-            oldValue,
-            volumeMovingAverages50D
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.OPN_NETCH)
@@ -3738,17 +3104,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OPN_NETCH)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOpenPriceNetChange(BigDecimal openPriceNetChange) {
-
-        BigDecimal oldValue = this.openPriceNetChange;
-
+    public void setOpenPriceNetChange(@Changeable(OPEN_PRICE_NET_CHANGE) BigDecimal openPriceNetChange) {
         this.openPriceNetChange = openPriceNetChange;
-
-        firePropertyChange(
-            OPEN_PRICE_NET_CHANGE,
-            oldValue,
-            openPriceNetChange
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.CASH_EXDIV)
@@ -3760,17 +3117,10 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CASH_EXDIV)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setLatestReportedCashDividend(BigDecimal latestReportedCashDividend) {
-
-        BigDecimal oldValue = this.latestReportedCashDividend;
-
+    public void setLatestReportedCashDividend(
+        @Changeable(LATEST_REPORTED_CASH_DIVIDEND) BigDecimal latestReportedCashDividend
+    ) {
         this.latestReportedCashDividend = latestReportedCashDividend;
-
-        firePropertyChange(
-            LATEST_REPORTED_CASH_DIVIDEND,
-            oldValue,
-            latestReportedCashDividend
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.MKT_VAL_SC)
@@ -3782,17 +3132,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.MKT_VAL_SC)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setMarketValueScalingFactor(String marketValueScalingFactor) {
-
-        String oldValue = this.marketValueScalingFactor;
-
+    public void setMarketValueScalingFactor(@Changeable(MARKET_VALUE_SCALING_FACTOR) String marketValueScalingFactor) {
         this.marketValueScalingFactor = marketValueScalingFactor;
-
-        firePropertyChange(
-            MARKET_VALUE_SCALING_FACTOR,
-            oldValue,
-            marketValueScalingFactor
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.CASH_EXDAT)
@@ -3804,17 +3145,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CASH_EXDAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setExDividendTradeDate(Long exDividendTradeDate) {
-
-        Long oldValue = this.exDividendTradeDate;
-
+    public void setExDividendTradeDate(@Changeable(EX_DIVIDEND_TRADE_DATE) Long exDividendTradeDate) {
         this.exDividendTradeDate = exDividendTradeDate;
-
-        firePropertyChange(
-            EX_DIVIDEND_TRADE_DATE,
-            oldValue,
-            exDividendTradeDate
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.PREV_DISP)
@@ -3826,17 +3158,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PREV_DISP)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setPreviousDisplayTemplate(Integer previousDisplayTemplate) {
-
-        Integer oldValue = this.previousDisplayTemplate;
-
+    public void setPreviousDisplayTemplate(@Changeable(PREVIOUS_DISPLAY_TEMPLATE) Integer previousDisplayTemplate) {
         this.previousDisplayTemplate = previousDisplayTemplate;
-
-        firePropertyChange(
-            PREVIOUS_DISPLAY_TEMPLATE,
-            oldValue,
-            previousDisplayTemplate
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.PRC_QL3)
@@ -3848,17 +3171,10 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PRC_QL3)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setExtendedPriceQualifierFid(String extendedPriceQualifierFid) {
-
-        String oldValue = this.extendedPriceQualifierFid;
-
+    public void setExtendedPriceQualifierFid(
+        @Changeable(EXTENDED_PRICE_QUALIFIER_FID) String extendedPriceQualifierFid
+    ) {
         this.extendedPriceQualifierFid = extendedPriceQualifierFid;
-
-        firePropertyChange(
-            EXTENDED_PRICE_QUALIFIER_FID,
-            oldValue,
-            extendedPriceQualifierFid
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.MPV)
@@ -3870,17 +3186,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.MPV)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setMinimumPriceMovement(String minimumPriceMovement) {
-
-        String oldValue = this.minimumPriceMovement;
-
+    public void setMinimumPriceMovement(@Changeable(MINIMUM_PRICE_MOVEMENT) String minimumPriceMovement) {
         this.minimumPriceMovement = minimumPriceMovement;
-
-        firePropertyChange(
-            MINIMUM_PRICE_MOVEMENT,
-            oldValue,
-            minimumPriceMovement
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.OFF_CLOSE)
@@ -3892,17 +3199,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OFF_CLOSE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOfficialClosingPrice(BigDecimal officialClosingPrice) {
-
-        BigDecimal oldValue = this.officialClosingPrice;
-
+    public void setOfficialClosingPrice(@Changeable(OFFICIAL_CLOSING_PRICE) BigDecimal officialClosingPrice) {
         this.officialClosingPrice = officialClosingPrice;
-
-        firePropertyChange(
-            OFFICIAL_CLOSING_PRICE,
-            oldValue,
-            officialClosingPrice
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.QUOTE_DATE)
@@ -3914,17 +3212,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.QUOTE_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setQuoteDate(Long quoteDate) {
-
-        Long oldValue = this.quoteDate;
-
+    public void setQuoteDate(@Changeable(MarketPrice.QUOTE_DATE) Long quoteDate) {
         this.quoteDate = quoteDate;
-
-        firePropertyChange(
-            MarketPrice.QUOTE_DATE,
-            oldValue,
-            quoteDate
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.VWAP)
@@ -3937,17 +3226,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.VWAP)
     @Adapt(using=OMMNumericAdapter.class)
     public void setVolumeWeightedAveragePrice(
-        BigDecimal volumeWeightedAveragePrice) {
-
-        BigDecimal oldValue = this.volumeWeightedAveragePrice;
-
+        @Changeable(MarketPrice.VOLUME_WEIGHTED_AVERAGE_PRICE) BigDecimal volumeWeightedAveragePrice) {
         this.volumeWeightedAveragePrice = volumeWeightedAveragePrice;
-
-        firePropertyChange(
-            MarketPrice.VOLUME_WEIGHTED_AVERAGE_PRICE,
-            oldValue,
-            volumeWeightedAveragePrice
-        );
     }
 
 //    @UsingKey(type=MarketPriceConstants.PROV_SYMB)
@@ -3970,17 +3250,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.BID_ASK_DT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setBidAskDate(Long bidAskDate) {
-
-        Long oldValue = this.bidAskDate;
-
+    public void setBidAskDate(@Changeable(MarketPrice.BID_ASK_DATE) Long bidAskDate) {
         this.bidAskDate = bidAskDate;
-
-        firePropertyChange(
-            MarketPrice.BID_ASK_DATE,
-            oldValue,
-            bidAskDate
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.ISIN_CODE)
@@ -3992,17 +3263,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ISIN_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setIsinCode(String isinCode) {
-
-        String oldValue = this.isinCode;
-
+    public void setIsinCode(@Changeable(MarketPrice.ISIN_CODE) String isinCode) {
         this.isinCode = isinCode;
-
-        firePropertyChange(
-            MarketPrice.ISIN_CODE,
-            oldValue,
-            isinCode
-        );
     }
 
 //    @UsingKey(type=MarketPriceConstants.MNEMONIC)
@@ -4025,17 +3287,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.RTR_OPN_PR)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setRtrsOpeningPrice(BigDecimal rtrsOpeningPrice) {
-
-        BigDecimal oldValue = this.rtrsOpeningPrice;
-
+    public void setRtrsOpeningPrice(@Changeable(MarketPrice.RTRS_OPENING_PRICE) BigDecimal rtrsOpeningPrice) {
         this.rtrsOpeningPrice = rtrsOpeningPrice;
-
-        firePropertyChange(
-            MarketPrice.RTRS_OPENING_PRICE,
-            oldValue,
-            rtrsOpeningPrice
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.SEDOL)
@@ -4047,17 +3300,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SEDOL)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setSedolCode(String sedolCode) {
-
-        String oldValue = this.sedolCode;
-
+    public void setSedolCode(@Changeable(MarketPrice.SEDOL_CODE) String sedolCode) {
         this.sedolCode = sedolCode;
-
-        firePropertyChange(
-            MarketPrice.SEDOL_CODE,
-            oldValue,
-            sedolCode
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.MKT_SEGMNT)
@@ -4069,17 +3313,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.MKT_SEGMNT)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setMarketSegment(String marketSegment) {
-
-        String oldValue = this.marketSegment;
-
+    public void setMarketSegment(@Changeable(MarketPrice.MARKET_SEGMENT) String marketSegment) {
         this.marketSegment = marketSegment;
-
-        firePropertyChange(
-            MarketPrice.MARKET_SEGMENT,
-            oldValue,
-            marketSegment
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.TRDTIM_MS)
@@ -4091,17 +3326,10 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRDTIM_MS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setRegularTradesTimeMillis(Long regularTradesTimeMillis) {
-
-        Long oldValue = this.regularTradesTimeMillis;
-
+    public void setRegularTradesTimeMillis(
+        @Changeable(MarketPrice.REGULAR_TRADE_TIME_MILLIS) Long regularTradesTimeMillis
+    ) {
         this.regularTradesTimeMillis = regularTradesTimeMillis;
-
-        firePropertyChange(
-            MarketPrice.REGULAR_TRADE_TIME_MILLIS,
-            oldValue,
-            regularTradesTimeMillis
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.SALTIM_MS)
@@ -4113,17 +3341,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SALTIM_MS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setAllTradesTimeMillis(Long allTradesTimeMillis) {
-
-        Long oldValue = this.allTradesTimeMillis;
-
+    public void setAllTradesTimeMillis(@Changeable(MarketPrice.ALL_TRADES_TIME_MILLIS) Long allTradesTimeMillis) {
         this.allTradesTimeMillis = allTradesTimeMillis;
-
-        firePropertyChange(
-            MarketPrice.ALL_TRADES_TIME_MILLIS,
-            oldValue,
-            allTradesTimeMillis
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.QUOTIM_MS)
@@ -4135,17 +3354,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.QUOTIM_MS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setQuoteTimeMillis(Long quoteTimeMillis) {
-
-        Long oldValue = this.quoteTimeMillis;
-
+    public void setQuoteTimeMillis(@Changeable(QUOTE_TIME_MILLIS) Long quoteTimeMillis) {
         this.quoteTimeMillis = quoteTimeMillis;
-
-        firePropertyChange(
-            MarketPrice.QUOTE_TIME_MILLIS,
-            oldValue,
-            quoteTimeMillis
-        );
     }
 
     @UsingKey(type=MarketPriceConstants.TIMCOR_MS)
@@ -4157,13 +3367,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TIMCOR_MS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setCorrectionTimeMillis(BigInteger correctionTimeMillis) {
-
-        BigInteger oldValue = this.correctionTimeMillis;
-
+    public void setCorrectionTimeMillis(@Changeable(CORRECTION_TIME_MILLIS) BigInteger correctionTimeMillis) {
         this.correctionTimeMillis = correctionTimeMillis;
-
-        firePropertyChange(CORRECTION_TIME_MILLIS, oldValue, correctionTimeMillis);
     }
 
     @UsingKey(type=MarketPriceConstants.FIN_STATUS)
@@ -4175,13 +3380,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.FIN_STATUS)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setFinancialStatusIndicator(String financialStatusIndicator) {
-
-        String oldValue = this.financialStatusIndicator;
-
+    public void setFinancialStatusIndicator(@Changeable(FINANCIAL_STATUS_INDICATOR) String financialStatusIndicator) {
         this.financialStatusIndicator = financialStatusIndicator;
-
-        firePropertyChange(FINANCIAL_STATUS_INDICATOR, oldValue, financialStatusIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.LS_SUBIND)
@@ -4194,13 +3394,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.LS_SUBIND)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setLastTradeSubMarketIndicator(
-        String lastTradeSubMarketIndicator) {
-
-        String oldValue = this.lastTradeSubMarketIndicator;
-
+        @Changeable(LAST_TRADE_SUB_MARKET_INDICATOR) String lastTradeSubMarketIndicator) {
         this.lastTradeSubMarketIndicator = lastTradeSubMarketIndicator;
-
-        firePropertyChange(LAST_TRADE_SUB_MARKET_INDICATOR, oldValue, lastTradeSubMarketIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.IRG_SUBIND)
@@ -4213,13 +3408,8 @@ public class MarketPrice extends AbstractCommonProperties
     @RFAType(type=MarketPriceConstants.IRG_SUBIND)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setIrgPriceSubmarketIndicator(
-        String irgPriceSubmarketIndicator) {
-
-        String oldValue = this.irgPriceSubmarketIndicator;
-
+        @Changeable(IRG_PRICE_SUBMARKET_INDICATOR) String irgPriceSubmarketIndicator) {
         this.irgPriceSubmarketIndicator = irgPriceSubmarketIndicator;
-
-        firePropertyChange(IRG_PRICE_SUBMARKET_INDICATOR, oldValue, irgPriceSubmarketIndicator);
     }
 
     @UsingKey(type=MarketPriceConstants.ACVOL_SC)
@@ -4231,13 +3421,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ACVOL_SC)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setVolumeScaling(String volumeScaling) {
-
-        String oldValue = volumeScaling;
-
+    public void setVolumeScaling(@Changeable(VOLUME_SCALING) String volumeScaling) {
         this.volumeScaling = volumeScaling;
-
-        firePropertyChange(VOLUME_SCALING, oldValue, volumeScaling);
     }
 
     @UsingKey(type=MarketPriceConstants.EXCHCODE)
@@ -4249,13 +3434,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.EXCHCODE)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setExchangeCode(String exchangeCode) {
-
-        String oldValue = this.exchangeCode;
-
+    public void setExchangeCode(@Changeable(EXCHANGE_CODE) String exchangeCode) {
         this.exchangeCode = exchangeCode;
-
-        firePropertyChange(MarketPrice.EXCHANGE_CODE, oldValue, exchangeCode);
     }
 
     @UsingKey(type=MarketPriceConstants.ODD_ASK)
@@ -4267,13 +3447,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ODD_ASK)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOddBestAsk(BigDecimal oddBestAsk) {
-
-        BigDecimal oldValue = this.oddBestAsk;
-
+    public void setOddBestAsk(@Changeable(ODD_BEST_ASK) BigDecimal oddBestAsk) {
         this.oddBestAsk = oddBestAsk;
-
-        firePropertyChange(ODD_BEST_ASK, oldValue, oddBestAsk);
     }
 
     @UsingKey(type=MarketPriceConstants.ODD_ASKSIZ)
@@ -4285,13 +3460,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ODD_ASKSIZ)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOddBestAskSize(BigInteger oddBestAskSize) {
-
-        BigInteger oldValue = this.oddBestAskSize;
-
+    public void setOddBestAskSize(@Changeable(ODD_BEST_ASK_SIZE) BigInteger oddBestAskSize) {
         this.oddBestAskSize = oddBestAskSize;
-
-        firePropertyChange(ODD_BEST_ASK_SIZE, oldValue, oddBestAskSize);
     }
 
     @UsingKey(type=MarketPriceConstants.ODD_BID)
@@ -4303,13 +3473,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ODD_BID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOddBestBid(BigDecimal oddBestBid) {
-
-        BigDecimal oldValue = this.oddBestBid;
-
+    public void setOddBestBid(@Changeable(ODD_BEST_BID) BigDecimal oddBestBid) {
         this.oddBestBid = oddBestBid;
-
-        firePropertyChange(ODD_BEST_BID, oldValue, oddBestBid);
     }
 
     @UsingKey(type=MarketPriceConstants.ODD_BIDSIZ)
@@ -4321,13 +3486,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ODD_BIDSIZ)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOddBestBidSize(BigInteger oddBestBidSize) {
-
-        BigInteger oldValue = this.oddBestBidSize;
-
+    public void setOddBestBidSize(@Changeable(ODD_BEST_BID_SIZE) BigInteger oddBestBidSize) {
         this.oddBestBidSize = oddBestBidSize;
-
-        firePropertyChange(ODD_BEST_BID_SIZE, oldValue, oddBestBidSize);
     }
 
     @UsingKey(type=MarketPriceConstants.ROUND_VOL)
@@ -4339,13 +3499,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROUND_VOL)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setRoundVolume(BigInteger roundVolume) {
-
-        BigInteger oldValue = this.roundVolume;
-
+    public void setRoundVolume(@Changeable(ROUND_VOLUME) BigInteger roundVolume) {
         this.roundVolume = roundVolume;
-
-        firePropertyChange(ROUND_VOLUME, oldValue, roundVolume);
     }
 
     @UsingKey(type=MarketPriceConstants.ORGID)
@@ -4357,13 +3512,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ORGID)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOrganizationId(BigInteger organizationId) {
-
-        BigInteger oldValue = this.organizationId;
-
+    public void setOrganizationId(@Changeable(ORGANIZATION_ID) BigInteger organizationId) {
         this.organizationId = organizationId;
-
-        firePropertyChange(ORGANIZATION_ID, oldValue, organizationId);
     }
 
     @UsingKey(type=MarketPriceConstants.PR_FREQ)
@@ -4375,13 +3525,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.PR_FREQ)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setPriceUpdateFrequency(String priceUpdateFrequency) {
-
-        String oldValue = this.priceUpdateFrequency;
-
+    public void setPriceUpdateFrequency(@Changeable(PRICE_UPDATE_FREQUENCY) String priceUpdateFrequency) {
         this.priceUpdateFrequency = priceUpdateFrequency;
-
-        firePropertyChange(PRICE_UPDATE_FREQUENCY, oldValue, priceUpdateFrequency);
     }
 
     @UsingKey(type=MarketPriceConstants.RCS_AS_CLA)
@@ -4393,13 +3538,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.RCS_AS_CLA)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRcsAssetClassification(String rcsAssetClassification) {
-
-        String oldValue = this.rcsAssetClassification;
-
+    public void setRcsAssetClassification(@Changeable(RCS_ASSET_CLASSIFICATION) String rcsAssetClassification) {
         this.rcsAssetClassification = rcsAssetClassification;
-
-        firePropertyChange(RCS_ASSET_CLASSIFICATION, oldValue, rcsAssetClassification);
     }
 
     @UsingKey(type=MarketPriceConstants.UNDR_INDEX)
@@ -4411,13 +3551,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.UNDR_INDEX)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setUnderlyingIndex(String underlyingIndex) {
-
-        String oldValue = this.underlyingIndex;
-
+    public void setUnderlyingIndex(@Changeable(UNDERLYING_INDEX) String underlyingIndex) {
         this.underlyingIndex = underlyingIndex;
-
-        firePropertyChange(UNDERLYING_INDEX, oldValue, underlyingIndex);
     }
 
     @UsingKey(type=MarketPriceConstants.FUTURES)
@@ -4429,13 +3564,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.FUTURES)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setFuturesChainRic(String futuresChainRic) {
-
-        String oldValue = this.futuresChainRic;
-
+    public void setFuturesChainRic(@Changeable(FUTURES_CHAIN_RIC) String futuresChainRic) {
         this.futuresChainRic = futuresChainRic;
-
-        firePropertyChange(FUTURES_CHAIN_RIC, oldValue, futuresChainRic);
     }
 
     @UsingKey(type=MarketPriceConstants.OPTIONS)
@@ -4447,13 +3577,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OPTIONS)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setOptionsChainRic(String optionsChainRic) {
-
-        String oldValue = this.optionsChainRic;
-
+    public void setOptionsChainRic(@Changeable(OPTIONS_CHAIN_RIC) String optionsChainRic) {
         this.optionsChainRic = optionsChainRic;
-
-        firePropertyChange(OPTIONS_CHAIN_RIC, oldValue, optionsChainRic);
     }
 
     @UsingKey(type=MarketPriceConstants.STRIKES)
@@ -4465,13 +3590,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.STRIKES)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setStrikesCoverage(String strikesCoverage) {
-
-        String oldValue = this.strikesCoverage;
-
+    public void setStrikesCoverage(@Changeable(STRIKES_COVERAGE) String strikesCoverage) {
         this.strikesCoverage = strikesCoverage;
-
-        firePropertyChange(STRIKES_COVERAGE, oldValue, strikesCoverage);
     }
 
     @UsingKey(type=MarketPriceConstants.NEWSTM_MS)
@@ -4483,13 +3603,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.NEWSTM_MS)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setNewsTimeMillis(BigInteger newsTimeMillis) {
-
-        BigInteger oldValue = this.newsTimeMillis;
-
+    public void setNewsTimeMillis(@Changeable(NEWS_TIME_MILLIS) BigInteger newsTimeMillis) {
         this.newsTimeMillis = newsTimeMillis;
-
-        firePropertyChange(NEWS_TIME_MILLIS, oldValue, newsTimeMillis);
     }
 
     @UsingKey(type=MarketPriceConstants.TRD_THRU_X)
@@ -4501,13 +3616,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRD_THRU_X)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setTradeThroughExemptFlags(String tradeThroughExemptFlags) {
-
-        String oldValue = this.tradeThroughExemptFlags;
-
+    public void setTradeThroughExemptFlags(@Changeable(TRADE_THROUGH_EXEMPT_FLAGS) String tradeThroughExemptFlags) {
         this.tradeThroughExemptFlags = tradeThroughExemptFlags;
-
-        firePropertyChange(TRADE_THROUGH_EXEMPT_FLAGS, oldValue, tradeThroughExemptFlags);
     }
 
     @UsingKey(type=MarketPriceConstants.FIN_ST_IND)
@@ -4519,13 +3629,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.FIN_ST_IND)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setCompanyComplianceStatus(String companyComplianceStatus) {
-
-        String oldValue = this.companyComplianceStatus;
-
+    public void setCompanyComplianceStatus(@Changeable(COMPANY_COMPLIANCE_STATUS) String companyComplianceStatus) {
         this.companyComplianceStatus = companyComplianceStatus;
-
-        firePropertyChange(COMPANY_COMPLIANCE_STATUS, oldValue, companyComplianceStatus);
     }
 
     @UsingKey(type=MarketPriceConstants.IRG_SMKTID)
@@ -4537,13 +3642,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.IRG_SMKTID)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setIrgSubMarketCenterId(String irgSubMarketCenterId) {
-
-        String oldValue = this.irgSubMarketCenterId;
-
+    public void setIrgSubMarketCenterId(@Changeable(IRG_SUB_MARKET_CENTER_ID) String irgSubMarketCenterId) {
         this.irgSubMarketCenterId = irgSubMarketCenterId;
-
-        firePropertyChange(IRG_SUB_MARKET_CENTER_ID, oldValue, irgSubMarketCenterId);
     }
 
     @UsingKey(type=MarketPriceConstants.SUB_MKT_ID)
@@ -4555,13 +3655,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SUB_MKT_ID)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setSubMarketCenterId(String subMarketCenterId) {
-
-        String oldValue = this.subMarketCenterId;
-
+    public void setSubMarketCenterId(@Changeable(SUB_MARKET_CENTER_ID) String subMarketCenterId) {
         this.subMarketCenterId = subMarketCenterId;
-
-        firePropertyChange(SUB_MARKET_CENTER_ID, oldValue, subMarketCenterId);
     }
 
     @UsingKey(type=MarketPriceConstants.ACT_DOM_EX)
@@ -4573,13 +3668,9 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ACT_DOM_EX)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setActiveDomesticExchangeIds(String activeDomesticExchangeIds) {
-
-        String oldValue = this.activeDomesticExchangeIds;
-
+    public void setActiveDomesticExchangeIds(
+        @Changeable(ACTIVE_DOMESTIC_EXCHANGE_IDS) String activeDomesticExchangeIds) {
         this.activeDomesticExchangeIds = activeDomesticExchangeIds;
-
-        firePropertyChange(ACTIVE_DOMESTIC_EXCHANGE_IDS, oldValue, activeDomesticExchangeIds);
     }
 
     @UsingKey(type=MarketPriceConstants.ACT_OTH_EX)
@@ -4591,13 +3682,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ACT_OTH_EX)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setActiveOtherExchangeIds(String activeOtherExchangeIds) {
-
-        String oldValue = this.activeOtherExchangeIds;
-
+    public void setActiveOtherExchangeIds(@Changeable(ACTIVE_OTHER_EXCHANGE_IDS) String activeOtherExchangeIds) {
         this.activeOtherExchangeIds = activeOtherExchangeIds;
-
-        firePropertyChange(ACTIVE_OTHER_EXCHANGE_IDS, oldValue, activeOtherExchangeIds);
     }
 
     @UsingKey(type=MarketPriceConstants.TRD_QUAL_2)
@@ -4609,13 +3695,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.TRD_QUAL_2)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setTradePriceQualifier2(String tradePriceQualifier2) {
-
-        String oldValue = this.tradePriceQualifier2;
-
+    public void setTradePriceQualifier2(@Changeable(TRADE_PRICE_QUALIFIER2) String tradePriceQualifier2) {
         this.tradePriceQualifier2 = tradePriceQualifier2;
-
-        firePropertyChange(TRADE_PRICE_QUALIFIER2, oldValue, tradePriceQualifier2);
     }
 
     @UsingKey(type=MarketPriceConstants.CP_EFF_DAT)
@@ -4627,15 +3708,10 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CP_EFF_DAT)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setLatestCapitalChangeEffectiveDate(
+    public void setLatestCapitalChangeEffectiveDate(@Changeable(LATEST_CAPITAL_CHANGE_EFFECTIVE_DATE)
         Long latestCapitalChangeEffectiveDate) {
 
-        Long oldValue = this.latestCapitalChangeEffectiveDate;
-
-        this.latestCapitalChangeEffectiveDate =
-            latestCapitalChangeEffectiveDate;
-
-        firePropertyChange(LATEST_CAPITAL_CHANGE_EFFECTIVE_DATE, oldValue, latestCapitalChangeEffectiveDate);
+        this.latestCapitalChangeEffectiveDate = latestCapitalChangeEffectiveDate;
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_1)
@@ -4647,13 +3723,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_1)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_1(String row64_1) {
-
-        String oldValue = this.row64_1;
-
+    public void setRow64_1(@Changeable(MarketPrice.ROW64_1) String row64_1) {
         this.row64_1 = row64_1;
-
-        firePropertyChange(MarketPrice.ROW64_1, oldValue, row64_1);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_2)
@@ -4665,13 +3736,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_2)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_2(String row64_2) {
-
-        String oldValue = this.row64_2;
-
+    public void setRow64_2(@Changeable(MarketPrice.ROW64_2) String row64_2) {
         this.row64_2 = row64_2;
-
-        firePropertyChange(MarketPrice.ROW64_2, oldValue, row64_2);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_3)
@@ -4683,13 +3749,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_3)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_3(String row64_3) {
-
-        String oldValue = this.row64_3;
-
+    public void setRow64_3(@Changeable(MarketPrice.ROW64_3) String row64_3) {
         this.row64_3 = row64_3;
-
-        firePropertyChange(MarketPrice.ROW64_3, oldValue, row64_3);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_4)
@@ -4701,13 +3762,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_4)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_4(String row64_4) {
-
-        String oldValue = this.row64_4;
-
+    public void setRow64_4(@Changeable(MarketPrice.ROW64_4) String row64_4) {
         this.row64_4 = row64_4;
-
-        firePropertyChange(MarketPrice.ROW64_4, oldValue, row64_4);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_5)
@@ -4719,13 +3775,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_5)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_5(String row64_5) {
-
-        String oldValue = this.row64_5;
-
+    public void setRow64_5(@Changeable(MarketPrice.ROW64_5) String row64_5) {
         this.row64_5 = row64_5;
-
-        firePropertyChange(MarketPrice.ROW64_5, oldValue, row64_5);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_6)
@@ -4737,13 +3788,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_6)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_6(String row64_6) {
-
-        String oldValue = this.row64_6;
-
+    public void setRow64_6(@Changeable(MarketPrice.ROW64_6) String row64_6) {
         this.row64_6 = row64_6;
-
-        firePropertyChange(MarketPrice.ROW64_6, oldValue, row64_6);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_7)
@@ -4755,13 +3801,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_7)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_7(String row64_7) {
-
-        String oldValue = this.row64_7;
-
+    public void setRow64_7(@Changeable(MarketPrice.ROW64_7) String row64_7) {
         this.row64_7 = row64_7;
-
-        firePropertyChange(MarketPrice.ROW64_7, oldValue, row64_7);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_8)
@@ -4773,13 +3814,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_8)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_8(String row64_8) {
-
-        String oldValue = this.row64_8;
-
+    public void setRow64_8(@Changeable(MarketPrice.ROW64_8) String row64_8) {
         this.row64_8 = row64_8;
-
-        firePropertyChange(MarketPrice.ROW64_8, oldValue, row64_8);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_9)
@@ -4791,13 +3827,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_9)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_9(String row64_9) {
-
-        String oldValue = this.row64_9;
-
+    public void setRow64_9(@Changeable(MarketPrice.ROW64_9) String row64_9) {
         this.row64_9 = row64_9;
-
-        firePropertyChange(MarketPrice.ROW64_9, oldValue, row64_9);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_10)
@@ -4809,13 +3840,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_10)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_10(String row64_10) {
-
-        String oldValue = this.row64_10;
-
+    public void setRow64_10(@Changeable(MarketPrice.ROW64_10) String row64_10) {
         this.row64_10 = row64_10;
-
-        firePropertyChange(MarketPrice.ROW64_10, oldValue, row64_10);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_11)
@@ -4827,13 +3853,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_11)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_11(String row64_11) {
-
-        String oldValue = this.row64_11;
-
+    public void setRow64_11(@Changeable(MarketPrice.ROW64_11) String row64_11) {
         this.row64_11 = row64_11;
-
-        firePropertyChange(MarketPrice.ROW64_11, oldValue, row64_11);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_12)
@@ -4845,13 +3866,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_12)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_12(String row64_12) {
-
-        String oldValue = this.row64_12;
-
+    public void setRow64_12(@Changeable(MarketPrice.ROW64_12) String row64_12) {
         this.row64_12 = row64_12;
-
-        firePropertyChange(MarketPrice.ROW64_12, oldValue, row64_12);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_13)
@@ -4863,13 +3879,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_13)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_13(String row64_13) {
-
-        String oldValue = this.row64_13;
-
+    public void setRow64_13(@Changeable(MarketPrice.ROW64_13) String row64_13) {
         this.row64_13 = row64_13;
-
-        firePropertyChange(MarketPrice.ROW64_13, oldValue, row64_13);
     }
 
     @UsingKey(type=MarketPriceConstants.ROW64_14)
@@ -4881,13 +3892,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.ROW64_14)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setRow64_14(String row64_14) {
-
-        String oldValue = this.row64_14;
-
+    public void setRow64_14(@Changeable(MarketPrice.ROW64_14) String row64_14) {
         this.row64_14 = row64_14;
-
-        firePropertyChange(MarketPrice.ROW64_14, oldValue, row64_14);
     }
 
     /**
@@ -4906,13 +3912,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.PUT_CALL)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setPutCall(String putCall) {
-
-        String oldValue = this.putCall;
-
+    public void setPutCall(@Changeable(MarketPrice.PUT_CALL) String putCall) {
         this.putCall = putCall;
-
-        firePropertyChange(MarketPrice.PUT_CALL, oldValue, putCall);
     }
 
     /**
@@ -4930,14 +3931,10 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.IMP_VOLTA)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setImpliedVolatilitytOfAskPrice(
+    public void setImpliedVolatilitytOfAskPrice(@Changeable(MarketPrice.IMPLIED_VOLATILITY_OF_ASK_PRICE)
         BigDecimal impliedVolatilitytOfAskPrice
     ) {
-        BigDecimal oldValue = this.impliedVolatilitytOfAskPrice;
-
         this.impliedVolatilitytOfAskPrice = impliedVolatilitytOfAskPrice;
-
-        firePropertyChange(MarketPrice.IMPLIED_VOLATILITY_OF_ASK_PRICE, oldValue, impliedVolatilitytOfAskPrice);
     }
 
     /**
@@ -4955,15 +3952,10 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.IMP_VOLTB)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setImpliedVolatilitytOfBidPrice(
+    public void setImpliedVolatilitytOfBidPrice(@Changeable(MarketPrice.IMPLIED_VOLATILITY_OF_BID_PRICE)
         BigDecimal impliedVolatilitytOfBidPrice
     ) {
-
-        BigDecimal oldValue = this.impliedVolatilitytOfBidPrice;
-
         this.impliedVolatilitytOfBidPrice = impliedVolatilitytOfBidPrice;
-
-        firePropertyChange(MarketPrice.IMPLIED_VOLATILITY_OF_BID_PRICE, oldValue, impliedVolatilitytOfBidPrice);
     }
 
     /**
@@ -4981,13 +3973,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.OPINT_1)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOpenInterest(BigInteger openInterest) {
-
-        BigInteger oldValue = this.openInterest;
-
+    public void setOpenInterest(@Changeable(MarketPrice.OPEN_INTEREST) BigInteger openInterest) {
         this.openInterest = openInterest;
-
-        firePropertyChange(MarketPrice.OPEN_INTEREST, oldValue, openInterest);
     }
 
     /**
@@ -5005,13 +3992,8 @@ public class MarketPrice extends AbstractCommonProperties
      */
     @RFAType(type=MarketPriceConstants.OPINTNC)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOpenInterestNetChange(BigInteger openInterestNetChange) {
-
-        BigInteger oldValue = this.openInterestNetChange;
-
+    public void setOpenInterestNetChange(@Changeable(OPEN_INTEREST_NET_CHANGE) BigInteger openInterestNetChange) {
         this.openInterestNetChange = openInterestNetChange;
-
-        firePropertyChange(OPEN_INTEREST_NET_CHANGE, oldValue, openInterestNetChange);
     }
 
     /**
@@ -5026,13 +4008,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.STRIKE_PRC)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setStrikePrice(BigDecimal strikePrice) {
-
-        BigDecimal oldValue = this.strikePrice;
-
+    public void setStrikePrice(@Changeable(STRIKE_PRICE) BigDecimal strikePrice) {
         this.strikePrice = strikePrice;
-
-        firePropertyChange(STRIKE_PRICE, oldValue, strikePrice);
     }
 
     @UsingKey(type=MarketPriceConstants.CONTR_MNTH)
@@ -5044,13 +4021,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.CONTR_MNTH)
     @Adapt(using=OMMDataBufferAdapter.class)
-    public void setContractMonth(String contractMonth) {
-
-        String oldValue = this.contractMonth;
-
+    public void setContractMonth(@Changeable(CONTRACT_MONTH) String contractMonth) {
         this.contractMonth = contractMonth;
-
-        firePropertyChange(CONTRACT_MONTH, oldValue, contractMonth);
     }
 
     @UsingKey(type=MarketPriceConstants.LOTSZUNITS)
@@ -5062,13 +4034,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.LOTSZUNITS)
     @Adapt(using=OMMEnumAdapter.class)
-    public void setLotSizeUnits(String lotSizeUnits) {
-
-        String oldValue = this.lotSizeUnits;
-
+    public void setLotSizeUnits(@Changeable(LOT_SIZE_UNITS) String lotSizeUnits) {
         this.lotSizeUnits = lotSizeUnits;
-
-        firePropertyChange(LOT_SIZE_UNITS, oldValue, lotSizeUnits);
     }
 
     @UsingKey(type=MarketPriceConstants.OPEN_ASK)
@@ -5080,13 +4047,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.OPEN_ASK)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setOpenAskPrice(BigDecimal openAskPrice) {
-
-        BigDecimal oldValue = this.openAskPrice;
-
+    public void setOpenAskPrice(@Changeable(OPEN_ASK_PRICE) BigDecimal openAskPrice) {
         this.openAskPrice = openAskPrice;
-
-        firePropertyChange(OPEN_ASK_PRICE, oldValue, openAskPrice);
     }
 
     @UsingKey(type=MarketPriceConstants.EXPIR_DATE)
@@ -5098,13 +4060,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.EXPIR_DATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setExpiryDate(Long expiryDate) {
-
-        Long oldValue = this.expiryDate;
-
+    public void setExpiryDate(@Changeable(EXPIRY_DATE) Long expiryDate) {
         this.expiryDate = expiryDate;
-
-        firePropertyChange(EXPIRY_DATE, oldValue, expiryDate);
     }
 
     @UsingKey(type=MarketPriceConstants.SETTLE)
@@ -5116,13 +4073,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SETTLE)
     @Adapt(using=OMMNumericAdapter.class)
-    public void setSettlementPrice(BigDecimal settlementPrice) {
-
-        BigDecimal oldValue = this.settlementPrice;
-
+    public void setSettlementPrice(@Changeable(SETTLEMENT_PRICE) BigDecimal settlementPrice) {
         this.settlementPrice = settlementPrice;
-
-        firePropertyChange(SETTLEMENT_PRICE, oldValue, settlementPrice);
     }
 
     @UsingKey(type=MarketPriceConstants.SETTLEDATE)
@@ -5134,13 +4086,8 @@ public class MarketPrice extends AbstractCommonProperties
 
     @RFAType(type=MarketPriceConstants.SETTLEDATE)
     @Adapt(using=OMMDateTimeAdapter.class)
-    public void setSettleDate(Long settleDate) {
-
-        Long oldValue = this.settleDate;
-
+    public void setSettleDate(@Changeable(SETTLE_DATE) Long settleDate) {
         this.settleDate = settleDate;
-
-        firePropertyChange(SETTLE_DATE, oldValue, settleDate);
     }
 
     @Override
