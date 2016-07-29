@@ -1,17 +1,7 @@
 package com.coherentlogic.coherent.datafeed.services;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.coherentlogic.coherent.data.model.core.util.WelcomeMessage;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
@@ -44,7 +34,8 @@ import com.reuters.rfa.session.omm.OMMItemIntSpec;
  *  which has too many params at the moment; adding a sessionFactory would
  *  reduce the amount of params by ~ 5.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class AuthenticationService implements AuthenticationServiceSpecification {
 
@@ -71,11 +62,11 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "***                                                                                                       ***",
         "*** ----------------------------------------------------------------------------------------------------- ***",
         "***                                                                                                       ***",
-        "*** When running the example application, an RFA session entry with the name \"mySession\" must exist in    ***",
+        "*** When running the example application, an RFA session entry with the name \"mySession\" must exist in  ***",
         "*** your configuration OR you must override this value — see below for an example of the configuration we ***",
         "*** use. You may override this value using the following VM parameter:                                    ***",
         "***                                                                                                       ***",
-        "***     -DCDATAFEED_SESSION_NAME=\"[Add your session name here]\"                                           ***",
+        "***     -DCDATAFEED_SESSION_NAME=\"[Add your session name here]\"                                         ***",
         "***                                                                                                       ***",
         "*** See also:                                                                                             ***",
         "***                                                                                                       ***",
@@ -110,45 +101,6 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "***                                                                                                       ***",
         "*************************************************************************************************************"
     };
-
-//    static final String GOOGLE_ANALYTICS_TRACKING_KEY = "GOOGLE_ANALYTICS_TRACKING";
-//
-//    /**
-//     * @see <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide">Working with the
-//     * Measurement Protocol</a>
-//     *
-//     * @see <a href="https://ga-dev-tools.appspot.com/hit-builder/">Hit Builder</a>
-//     */
-//    static final void fireGAFrameworkUsageEvent () {
-//
-//        log.debug("fireGAFrameworkUsageEvent: method begins.");
-//
-//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://www.google-analytics.com/collect")
-//            .queryParam("v", "1")
-//            .queryParam("tid", "UA-1434183-1")
-//            .queryParam("cid", UUID.randomUUID().toString())
-//            .queryParam("t", "event")
-//            .queryParam("ec", "Framework Usage") // event category
-//            .queryParam("an", "CDTREP4J") // application name
-//            .queryParam("ea", "Framework Started") // event action
-//            .queryParam("av", "Version 1.0.7-RELEASE") // Application version.
-//            .queryParam("el", "Version 1.0.7-RELEASE");
-//
-//        HttpHeaders headers = new HttpHeaders();
-//
-//        HttpEntity<?> entity = new HttpEntity<>(headers);
-//
-//        RestTemplate restTemplate = new RestTemplate ();
-//
-//        HttpEntity<String> response = restTemplate.exchange(
-//            builder.build().encode().toUri(),
-//            HttpMethod.POST,
-//            entity,
-//            String.class
-//        );
-//
-//        log.debug("fireGAFrameworkUsageEvent: method ends; response: " + response);
-//    }
 
     static {
 
