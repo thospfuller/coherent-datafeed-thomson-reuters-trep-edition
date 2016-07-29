@@ -1,8 +1,19 @@
 package com.coherentlogic.coherent.datafeed.services;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.coherentlogic.coherent.data.model.core.util.WelcomeMessage;
 import com.coherentlogic.coherent.datafeed.builders.LoginMessageBuilder;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationIdException;
@@ -44,7 +55,7 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "***                                                                                                       ***",
         "***              Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version               ***",
         "***                                                                                                       ***",
-        "***                                         Version 1.0.6-RELEASE                                         ***",
+        "***                                         Version 1.0.7-RELEASE                                         ***",
         "***                                                                                                       ***",
         "***                              Please take a moment to follow us on Twitter:                            ***",
         "***                                                                                                       ***",
@@ -87,16 +98,60 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "*************************************************************************************************************"
     };
 
+    /**
+     * @see <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide">Working with the
+     * Measurement Protocol</a>
+     *
+     * @see <a href="https://ga-dev-tools.appspot.com/hit-builder/">Hit Builder</a>
+     */
+    static final void fireGAFrameworkUsageEvent () {
+
+        log.debug("fireGAFrameworkUsageEvent: method begins.");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://www.google-analytics.com/collect")
+            .queryParam("v", "1")
+            .queryParam("tid", "UA-1434183-1")
+            .queryParam("cid", UUID.randomUUID().toString())
+            .queryParam("t", "event")
+            .queryParam("ec", "Framework Usage") // event category
+            .queryParam("an", "CDTREP4J") // application name
+            .queryParam("ea", "Framework Started") // event action
+            .queryParam("av", "Version 1.0.7-RELEASE") // Application version.
+            .queryParam("el", "Version 1.0.7-RELEASE");
+
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate ();
+
+        HttpEntity<String> response = restTemplate.exchange(
+            builder.build().encode().toUri(),
+            HttpMethod.POST,
+            entity,
+            String.class
+        );
+
+        log.debug("fireGAFrameworkUsageEvent: method ends; response: " + response);
+    }
+
     static {
+
+        fireGAFrameworkUsageEvent ();
+
+        WelcomeMessage welcomeMessage = new WelcomeMessage();
+
         for (String next : WELCOME_MESSAGE) {
-            log.warn(next);
-            System.out.println(next);
+            welcomeMessage.addText(next);
         }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException interruptedException) {
-            interruptedException.printStackTrace(System.err);
-        }
+
+        welcomeMessage.display();
+
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException interruptedException) {
+//            interruptedException.printStackTrace(System.err);
+//        }
     }
 
     private final LoginMessageBuilder loginMessageBuilder;
