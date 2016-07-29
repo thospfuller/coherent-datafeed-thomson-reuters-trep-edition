@@ -6,6 +6,7 @@ import javax.persistence.Transient;
 
 /**
  * 
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
  * @param <T> The order event type (see MarketMaker or MarketByOrder).

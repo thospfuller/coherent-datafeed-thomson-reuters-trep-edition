@@ -28,6 +28,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @TODO: Should we keep the original values and convert to text in a different
  *  method? (ie. getStreamStateText)
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @Entity

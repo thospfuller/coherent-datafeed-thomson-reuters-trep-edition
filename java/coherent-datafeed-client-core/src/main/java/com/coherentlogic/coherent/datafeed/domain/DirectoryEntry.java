@@ -26,6 +26,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *  below may not be used and hence we can get rid of them (if this is the
  *  case).
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @XStreamAlias(DIRECTORY_ENTRY)

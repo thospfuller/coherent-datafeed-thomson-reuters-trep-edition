@@ -13,6 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 /**
  * @TODO: We need a better name for this class.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class AbstractCommonProperties extends StatusResponseBean {

@@ -23,6 +23,7 @@ import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 /**
  * A domain class representation of time series data.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @Entity

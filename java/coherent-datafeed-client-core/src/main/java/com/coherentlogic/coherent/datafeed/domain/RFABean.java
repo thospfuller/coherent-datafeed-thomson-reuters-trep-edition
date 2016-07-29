@@ -21,6 +21,7 @@ import com.reuters.rfa.common.Handle;
  * integer; also note that the id here is assigned from attribInfo -- it is not
  * a primary key.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
  * @deprecated Rename this to OMMBean.

@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 /**
  * Class represents an entry in the session that is associated with a handle to a dictionary.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @XStreamAlias(DICTIONARY_ENTRY)

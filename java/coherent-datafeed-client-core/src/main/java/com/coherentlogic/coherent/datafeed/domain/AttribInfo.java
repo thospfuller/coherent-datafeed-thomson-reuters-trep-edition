@@ -11,6 +11,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 /**
  *
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class AttribInfo extends SerializableBean implements IdentitySpecification<Integer>, Clearable {

@@ -66,6 +66,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * and use RIC ANZ.AX
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @Entity

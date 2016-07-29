@@ -9,6 +9,10 @@ import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+/**
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ */
 public abstract class AbstractAdvancedCommonProperties
     extends AbstractCommonProperties implements MarketPriceConstants {
 

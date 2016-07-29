@@ -4,6 +4,12 @@ import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ *
+ * @param <T>
+ */
 public class AggregatePropertyChangeEvent<T> implements Serializable {
 
     private static final long serialVersionUID = -4448205480412645059L;

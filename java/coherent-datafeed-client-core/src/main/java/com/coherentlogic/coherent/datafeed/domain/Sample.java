@@ -25,6 +25,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * 
  * @see ConsoleTSClient.java # 104
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 @Entity

@@ -3,6 +3,7 @@ package com.coherentlogic.coherent.datafeed.domain;
 /**
  * Constants that describe characteristics of market price.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface MarketPriceConstants {
