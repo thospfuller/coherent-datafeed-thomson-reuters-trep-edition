@@ -10,18 +10,18 @@ import com.reuters.rfa.common.Handle;
  * 
  *
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
- *
  */
 public class UpdateMarketPriceMessageProcessor extends AbstractUpdateRFABeanMessageProcessor<MarketPrice> { //extends AbstractMarketPriceMessageProcessor {
 
     public UpdateMarketPriceMessageProcessor (
-	    MarketPriceAdapter marketPriceAdapter,
-	    Map<Handle, String> ricCache,
-	    Map<String, MarketPrice> marketPriceCache
-	) {
-	    super(marketPriceAdapter, ricCache, marketPriceCache);
-	}
+        MarketPriceAdapter marketPriceAdapter,
+        Map<Handle, String> ricCache,
+        Map<String, MarketPrice> marketPriceCache
+    ) {
+        super(marketPriceAdapter, ricCache, marketPriceCache);
+    }
 
 //    private static final Logger log =
 //        LoggerFactory.getLogger(UpdateMarketPriceMessageProcessor.class);
