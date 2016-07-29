@@ -9,6 +9,7 @@ import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
  *
  * @deprecated This specification is no longer useful.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface StatusResponseServiceSpecification {

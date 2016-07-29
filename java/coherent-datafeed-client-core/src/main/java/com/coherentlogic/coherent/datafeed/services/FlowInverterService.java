@@ -12,6 +12,7 @@ import com.coherentlogic.coherent.datafeed.exceptions.TimeoutExpiredException;
  * A class that can be used to pause a workflow until something happens, at which point the resume method sends a signal
  * to waiting threads, allowing them to continue with their task.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class FlowInverterService {

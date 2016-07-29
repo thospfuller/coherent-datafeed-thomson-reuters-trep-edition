@@ -21,6 +21,7 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  *
  * @see RFAJ_ConfigLoggingGuide.pdf page 17 for configuration details.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class MarketByOrderService

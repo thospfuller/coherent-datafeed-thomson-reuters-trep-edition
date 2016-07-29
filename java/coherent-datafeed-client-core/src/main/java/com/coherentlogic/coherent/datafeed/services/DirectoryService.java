@@ -17,6 +17,7 @@ import com.reuters.rfa.rdm.RDMService;
 /**
  * Service that exposes logic for querying the directory service.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
  * @todo Unit test this class.

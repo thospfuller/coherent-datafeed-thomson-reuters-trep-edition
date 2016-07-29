@@ -15,6 +15,7 @@ import com.reuters.rfa.common.Client;
  *  we are associating a handle with a session and this happens at the service
  *  implementation level.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 //@Transactional

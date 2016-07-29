@@ -9,7 +9,8 @@ import com.reuters.rfa.common.Handle;
  * This interface represents the specification for implementations of the
  * FieldDictionaryHolder.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface DictionaryServiceSpecification {
 

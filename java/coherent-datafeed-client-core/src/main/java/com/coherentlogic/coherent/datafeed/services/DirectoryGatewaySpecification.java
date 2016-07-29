@@ -9,6 +9,7 @@ import com.coherentlogic.coherent.datafeed.domain.DirectoryEntries;
  *
  * @todo Combine this spec with the DictionaryGatewaySpecification.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface DirectoryGatewaySpecification {

@@ -16,6 +16,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * As this is being invoked by an RFA thread the Session should already be in
  * the message.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class LoadTimeSeriesEntriesMessageProcessor

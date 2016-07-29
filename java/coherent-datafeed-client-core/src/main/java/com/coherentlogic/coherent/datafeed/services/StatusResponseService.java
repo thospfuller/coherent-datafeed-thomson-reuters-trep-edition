@@ -13,6 +13,7 @@ import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
  *
  * @deprecated This class is no longer necessary (I think).
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
  * @param <T> The type of object that this class is expected to receive.

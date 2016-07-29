@@ -25,7 +25,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * @see Event
  * @see OMMItemEvent
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
  * @deprecated We will be doing content-based routing, so this is no longer
  *  needed and hence will be deleted.

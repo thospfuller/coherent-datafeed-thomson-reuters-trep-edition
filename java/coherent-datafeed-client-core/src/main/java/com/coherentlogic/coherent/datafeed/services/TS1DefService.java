@@ -21,7 +21,8 @@ import com.reuters.ts1.TS1DefDb;
  *
  * @todo Should this have it's own cache?
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TS1DefService extends QueryableService implements TS1DefServiceSpecification {
 

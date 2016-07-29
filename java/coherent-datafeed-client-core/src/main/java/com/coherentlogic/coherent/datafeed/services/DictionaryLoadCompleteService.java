@@ -20,7 +20,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * calls the {@link DictionaryService#setLoaded(boolean)} method when
  * the load process has completed.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class DictionaryLoadCompleteService {
 

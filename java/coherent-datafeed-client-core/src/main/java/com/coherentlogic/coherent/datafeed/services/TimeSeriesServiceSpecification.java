@@ -7,6 +7,7 @@ import com.reuters.rfa.common.Handle;
  * The specification that defines the methods that market price services must
  * provide.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface TimeSeriesServiceSpecification {

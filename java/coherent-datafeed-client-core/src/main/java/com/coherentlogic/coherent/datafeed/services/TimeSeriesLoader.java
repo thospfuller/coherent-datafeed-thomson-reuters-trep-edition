@@ -44,6 +44,7 @@ import com.reuters.ts1.TS1Series;
  *  here since when we load the time series data, no headers exist (though
  *  double-check this before just removing the logic).
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TimeSeriesLoader {

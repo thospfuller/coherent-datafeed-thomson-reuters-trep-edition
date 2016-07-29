@@ -9,6 +9,7 @@ import org.springframework.messaging.Message;
  * is used to indicate a graceful end and should not be called when, for example
  * and exception is thrown.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class WorkflowEndsService {

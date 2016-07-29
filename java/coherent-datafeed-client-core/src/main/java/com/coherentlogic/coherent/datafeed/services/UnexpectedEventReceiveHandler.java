@@ -9,6 +9,7 @@ import com.coherentlogic.coherent.datafeed.exceptions.UnexpectedEventReceivedExc
  * At the moment we're ignoring COMPLETION_EVENTS when authenticating so this
  * service will intercept these messages and log them.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class UnexpectedEventReceiveHandler {

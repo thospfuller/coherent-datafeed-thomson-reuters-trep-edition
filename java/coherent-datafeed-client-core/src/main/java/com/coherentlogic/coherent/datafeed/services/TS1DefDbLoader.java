@@ -20,7 +20,8 @@ import com.reuters.ts1.TS1DefDb;
  * NOTE: This class loads the header information, the actual time series data
  *       is loaded by the {@link TimeSeriesLoader} class.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TS1DefDbLoader extends BasicLoader<OMMItemEvent> {
 

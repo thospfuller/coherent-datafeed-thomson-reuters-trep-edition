@@ -41,7 +41,8 @@ import com.coherentlogic.coherent.datafeed.exceptions.
  *
  * @see RFA-DevGuide72.pdf section 10.2.6.3.3
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class LoggingService {
 

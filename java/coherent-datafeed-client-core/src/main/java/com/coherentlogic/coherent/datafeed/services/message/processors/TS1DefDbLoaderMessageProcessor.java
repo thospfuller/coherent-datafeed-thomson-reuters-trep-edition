@@ -15,6 +15,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * This class simply invokes the {@link #ts1DefDbLoader} <i>load</I> method and
  * then returns the same message that the <i>load</i> method was called with.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TS1DefDbLoaderMessageProcessor implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {

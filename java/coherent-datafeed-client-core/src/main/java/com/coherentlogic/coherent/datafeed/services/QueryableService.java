@@ -22,6 +22,7 @@ import com.reuters.rfa.common.Handle;
  *  should not have a return type that is a list. We could make this generic
  *  but on the flip-side that should really be unnecessary.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class QueryableService extends RequestService {

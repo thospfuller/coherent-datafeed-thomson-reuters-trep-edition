@@ -10,6 +10,7 @@ import com.reuters.rfa.common.Handle;
  *
  * @see TransformTimeSeriesMessageProcessor (IMPORTANT)
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TimeSeriesPromise extends CompletableFuture<TimeSeries> {

@@ -12,6 +12,7 @@ import com.coherentlogic.coherent.datafeed.domain.SessionBean;
  * was expected. Adding another interface is not ideal but the issue oes not appear if we use this interface when
  * calling into the integration workflow.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface MarketMakerServiceGatewaySpecification {

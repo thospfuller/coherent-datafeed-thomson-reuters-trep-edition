@@ -9,6 +9,7 @@ import com.reuters.rfa.common.Handle;
  * A specification that defines the methods available to classes that need to
  * query the TREP directories.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface DirectoryServiceSpecification {

@@ -15,6 +15,7 @@ import com.coherentlogic.coherent.datafeed.services.CacheableQueryableService;
  * of this class, which in turn invokes methods on the actual service
  * implementation.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class QueryMarketByOrderMessageProcessor extends AbstractQueryMessageProcessor<MarketByOrder> {

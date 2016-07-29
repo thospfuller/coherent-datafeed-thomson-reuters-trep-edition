@@ -56,7 +56,8 @@ import com.reuters.ts1.TS1Series;
  * @see {@link com.reuters.ts1.TS1Constants#MONTHLY_PERIOD}
  * @see {@link com.reuters.ts1.TS1Series} The period is set here.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TimeSeriesService extends QueryableService implements TimeSeriesServiceSpecification {
 

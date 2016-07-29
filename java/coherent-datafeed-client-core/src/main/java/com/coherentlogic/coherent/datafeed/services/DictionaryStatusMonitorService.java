@@ -15,7 +15,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class DictionaryStatusMonitorService
     implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {

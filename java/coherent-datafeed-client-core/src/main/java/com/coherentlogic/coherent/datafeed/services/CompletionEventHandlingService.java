@@ -10,7 +10,8 @@ import com.coherentlogic.coherent.datafeed.exceptions.SessionCreationFailedExcep
  *
  * @deprecated We may be able to get rid of this class.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class CompletionEventHandlingService {
 

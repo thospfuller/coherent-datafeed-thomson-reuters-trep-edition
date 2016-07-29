@@ -19,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @see <a href="https://ga-dev-tools.appspot.com/hit-builder/">Hit Builder</a>
  *
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class GoogleAnalyticsMeasurementService {
 

@@ -34,6 +34,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * A handle can be associated with multiple DSEs. The reason this is set up this way is that when we query for several
  * dictionaries, one handle is returned, so we associate the one handle with a set of DictionaryEntry objects.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class DictionaryMessageProcessor implements MessageProcessorSpecification<OMMItemEvent, OMMItemEvent> {

@@ -14,6 +14,7 @@ import com.reuters.rfa.common.Handle;
  *  ServiceName, short, String...)} can take both a String ric and String...
  *  rics and also returns either a Handle or a List<Handle>.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class RequestService {

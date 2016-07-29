@@ -13,6 +13,7 @@ import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecifi
  * Note that the logout method does not require any params, however we've left
  * the type set to String in both cases -- treat this as ignored. 
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class LogoutMessageProcessor

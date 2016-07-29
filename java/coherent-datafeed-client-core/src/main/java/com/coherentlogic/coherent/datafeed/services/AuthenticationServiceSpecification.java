@@ -11,6 +11,7 @@ import com.reuters.rfa.common.Handle;
  * proxies, which require a default ctor and all dependencies passed via setter
  * methods, or it will use JDK Dynamic Proxies, which require an interface. 
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface AuthenticationServiceSpecification {

@@ -23,7 +23,8 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  * @todo This service should not export data to the JMS queue -- it should put the time series entry into the map and
  *  return it.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class MarketPriceService extends CacheableQueryableService<MarketPrice>
     implements MarketPriceServiceSpecification {

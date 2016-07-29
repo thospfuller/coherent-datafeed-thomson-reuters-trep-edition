@@ -10,6 +10,7 @@ import com.coherentlogic.coherent.datafeed.domain.SessionBean;
  *  either inheriting from a base interface, or the interfaces are merged and
  *  only one is used.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface MarketByOrderServiceSpecification {

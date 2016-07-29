@@ -15,6 +15,7 @@ import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
  * work flow, which is represented by this interface, which will query the
  * Thomson Reuters time series service and return the results.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface TimeSeriesGatewaySpecification {

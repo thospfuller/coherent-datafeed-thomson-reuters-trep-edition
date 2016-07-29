@@ -7,6 +7,7 @@ import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecificatio
  * This class delegates calls to the {@link #authenticationService}'s login
  * method.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class AbstractAuthenticationMessageProcessor<S, T>

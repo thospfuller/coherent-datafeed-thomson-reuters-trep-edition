@@ -10,7 +10,8 @@ import com.reuters.ts1.TS1DefDb;
  * A specification for services that provide methods for querying the
  * Thomson Reuters TS1 service.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public interface TS1DefServiceSpecification {
 

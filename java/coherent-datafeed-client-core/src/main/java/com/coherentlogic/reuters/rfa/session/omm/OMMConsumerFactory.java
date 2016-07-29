@@ -8,7 +8,8 @@ import com.reuters.rfa.session.omm.OMMConsumer;
  * Factory bean used to create instances of
  * {@link com.reuters.rfa.session.omm.OMMConsumer OMMConsumer}.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class OMMConsumerFactory implements TypedFactory<OMMConsumer> {
 
