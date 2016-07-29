@@ -2,23 +2,15 @@
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-
-import com.coherentlogic.coherent.datafeed.adapters.MarketMakerAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.RFABeanAdapter;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.reuters.rfa.common.Handle;
-import com.reuters.rfa.omm.OMMMsg;
-import com.reuters.rfa.session.omm.OMMItemEvent;
 
 /**
  * Message processor that handles refresh messages from the Thomson Reuters
  * Enterprise Platform (TREP).
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class RefreshMarketMakerMessageProcessor extends AbstractRefreshRFABeanMessageProcessor<MarketMaker> {
