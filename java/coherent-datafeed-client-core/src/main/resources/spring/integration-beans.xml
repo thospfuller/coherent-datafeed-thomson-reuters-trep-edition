@@ -19,7 +19,12 @@
         http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.2.xsd">
 
     <import resource="session-construction-workflow-beans.xml"/>
-    <!-- DEPRECATED REMOVE import resource="statusresponse-workflow-beans.xml"/ -->
+    <!-- DEPRECATED REMOVE since this no longer does anything aside from end the workflow; also note that the status
+         response is incorporated into the given class (MarketPrice, for instance) and is handled as part of that
+         stream. The one exception to this at the moment is the dictionary workflow needs the status response so until
+         we change the way this has been implemented, we need to keep this here.
+      -->
+    <import resource="statusresponse-workflow-beans.xml"/>
     <import resource="authentication-workflow-beans.xml"/>
     <import resource="marketprice-workflow-beans.xml"/>
     <import resource="marketmaker-workflow-beans.xml"/>
