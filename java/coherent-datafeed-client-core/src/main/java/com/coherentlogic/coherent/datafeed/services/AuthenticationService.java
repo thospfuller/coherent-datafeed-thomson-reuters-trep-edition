@@ -88,6 +88,19 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "***                                                                                                       ***",
         "*** ----------------------------------------------------------------------------------------------------- ***",
         "***                                                                                                       ***",
+        "*** Be Advised:                                                                                           ***",
+        "***                                                                                                       ***",
+        "*** This framework uses the Google Analytics Measurement API to track that the framework is being used.   ***",
+        "*** At this time data sent to Google includes information indicating that the framework has been started, ***",
+        "*** the framework name, and version.                                                                      ***",
+        "***                                                                                                       ***",
+        "*** We do not recommend disabling this feature however we offer the option below, just add the following  ***",
+        "*** VM parameter:                                                                                         ***",
+        "***                                                                                                       ***",
+        "*** -DGOOGLE_ANALYTICS_TRACKING=false                                                                     ***",
+        "***                                                                                                       ***",
+        "*** ----------------------------------------------------------------------------------------------------- ***",
+        "***                                                                                                       ***",
         "*** We offer support and consulting services to businesses that utilize this framework or that have       ***",
         "*** custom projects that are based on the Reuters Foundation API for Java (RFA / RFAJ) and the Thomson    ***",
         "*** Reuters Elektron Platform. Inquiries can be directed to:                                              ***",
@@ -98,46 +111,56 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "*************************************************************************************************************"
     };
 
-    /**
-     * @see <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide">Working with the
-     * Measurement Protocol</a>
-     *
-     * @see <a href="https://ga-dev-tools.appspot.com/hit-builder/">Hit Builder</a>
-     */
-    static final void fireGAFrameworkUsageEvent () {
-
-        log.debug("fireGAFrameworkUsageEvent: method begins.");
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://www.google-analytics.com/collect")
-            .queryParam("v", "1")
-            .queryParam("tid", "UA-1434183-1")
-            .queryParam("cid", UUID.randomUUID().toString())
-            .queryParam("t", "event")
-            .queryParam("ec", "Framework Usage") // event category
-            .queryParam("an", "CDTREP4J") // application name
-            .queryParam("ea", "Framework Started") // event action
-            .queryParam("av", "Version 1.0.7-RELEASE") // Application version.
-            .queryParam("el", "Version 1.0.7-RELEASE");
-
-        HttpHeaders headers = new HttpHeaders();
-
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-
-        RestTemplate restTemplate = new RestTemplate ();
-
-        HttpEntity<String> response = restTemplate.exchange(
-            builder.build().encode().toUri(),
-            HttpMethod.POST,
-            entity,
-            String.class
-        );
-
-        log.debug("fireGAFrameworkUsageEvent: method ends; response: " + response);
-    }
+//    static final String GOOGLE_ANALYTICS_TRACKING_KEY = "GOOGLE_ANALYTICS_TRACKING";
+//
+//    /**
+//     * @see <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide">Working with the
+//     * Measurement Protocol</a>
+//     *
+//     * @see <a href="https://ga-dev-tools.appspot.com/hit-builder/">Hit Builder</a>
+//     */
+//    static final void fireGAFrameworkUsageEvent () {
+//
+//        log.debug("fireGAFrameworkUsageEvent: method begins.");
+//
+//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://www.google-analytics.com/collect")
+//            .queryParam("v", "1")
+//            .queryParam("tid", "UA-1434183-1")
+//            .queryParam("cid", UUID.randomUUID().toString())
+//            .queryParam("t", "event")
+//            .queryParam("ec", "Framework Usage") // event category
+//            .queryParam("an", "CDTREP4J") // application name
+//            .queryParam("ea", "Framework Started") // event action
+//            .queryParam("av", "Version 1.0.7-RELEASE") // Application version.
+//            .queryParam("el", "Version 1.0.7-RELEASE");
+//
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        HttpEntity<?> entity = new HttpEntity<>(headers);
+//
+//        RestTemplate restTemplate = new RestTemplate ();
+//
+//        HttpEntity<String> response = restTemplate.exchange(
+//            builder.build().encode().toUri(),
+//            HttpMethod.POST,
+//            entity,
+//            String.class
+//        );
+//
+//        log.debug("fireGAFrameworkUsageEvent: method ends; response: " + response);
+//    }
 
     static {
 
-        fireGAFrameworkUsageEvent ();
+        GoogleAnalyticsMeasurementService googleAnalyticsMeasurementService = new GoogleAnalyticsMeasurementService ();
+
+        if (googleAnalyticsMeasurementService.shouldTrack()) {
+            try {
+                googleAnalyticsMeasurementService.fireGAFrameworkUsageEvent ();
+            } catch (Throwable thrown) {
+                log.warn("fireGAFrameworkUsageEvent: method call failed.", thrown);
+            }
+        }
 
         WelcomeMessage welcomeMessage = new WelcomeMessage();
 
@@ -146,12 +169,6 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         }
 
         welcomeMessage.display();
-
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException interruptedException) {
-//            interruptedException.printStackTrace(System.err);
-//        }
     }
 
     private final LoginMessageBuilder loginMessageBuilder;
