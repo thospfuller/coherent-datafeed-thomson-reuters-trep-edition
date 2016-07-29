@@ -1,6 +1,5 @@
 package com.coherentlogic.coherent.datafeed.services.message.processors;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
 import static com.coherentlogic.coherent.datafeed.misc.Utils.assertNotNull;
 
 import java.util.Map;
@@ -11,7 +10,6 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
 import com.coherentlogic.coherent.datafeed.adapters.StatusResponseAdapter;
-import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponseBean;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
@@ -23,6 +21,7 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * Class is used to convert an {@link OMMItemEvent} into an instance of
  * {@link StatusResponse}.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class StatusResponseMessageProcessor
