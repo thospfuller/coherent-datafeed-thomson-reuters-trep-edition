@@ -7,6 +7,10 @@ import org.springframework.messaging.Message;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.reuters.rfa.common.Event;
 
+/**
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="support@coherentlogic.com">Support</a>
+ */
 public interface FrameworkEventListenerAdapterSpecification {
 
     void addInitialisationSuccessfulListeners(List<FrameworkEventListener> frameworkEventListeners);
