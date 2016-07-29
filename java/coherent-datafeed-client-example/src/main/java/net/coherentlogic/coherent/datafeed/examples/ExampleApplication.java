@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -53,25 +54,15 @@ import com.reuters.ts1.TS1Constants;
  * An example application that authenticates, executes a query, and gets the
  * data.
  *
- * WARNING: Application startup in Spring Boot (SB) is slow (~10 minutes) but all three services will be queried and
- *          will return data.
- *
- *          We need to figure the root cause for this slow startup but so far all we have to go on is that SB appears to
- *          proxy the instance of this class and that may have something to do with it as some of the classes provided
- *          by this framework are proxied as well.
- *
- *          Also note that JAMON performance time may show slower results when this example is executed as a SB
- *          application compared with running this as a simple application -- further investigation is necessary.
- *
- * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="support@coherentlogic.com">Support</a>
  */
 @SpringBootApplication
 //@EnableAutoConfiguration
 @ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 public class ExampleApplication implements CommandLineRunner, MarketPriceConstants {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(ExampleApplication.class);
+    private static final Logger log = LoggerFactory.getLogger(ExampleApplication.class);
 
     private final FlowInverterService flowInverterService = new FlowInverterService ();
 
@@ -169,7 +160,16 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         boolean result = flowInverterService.pause();
 
-        log.info("result: " + result);
+        /* NOTICE:
+         *
+         * On the 28th of July 2016 there was an issue which prevented the framework from starting properly however
+         * upon further investigation the problem turned out to be on the TR Integration Lab and not with this software.
+         *
+         * This is slightly problematic because this is not a normally functioning app if the IL is not functioning
+         * properly and coding to detect this isn't exactly straightforward.
+         */
+
+        log.info("flowInverterService.pause.result: " + result);
 
         queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "TRI.N");
         queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "MSFT.O");
@@ -297,8 +297,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
                     long currentCtr = ctr.incrementAndGet();
 
-                    System.out.println("[mbo.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
-                        event);
+//                    System.out.println("[mbo.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
+//                        event);
                 }
             );
 
@@ -323,8 +323,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
                                 long currentCtr = ctr.incrementAndGet();
 
-                                System.out.println ("[mbo.ric: "+ nextRic +"]; mbo.order updated[" + currentCtr +
-                                    "]; event: " + event);
+//                                System.out.println ("[mbo.ric: "+ nextRic +"]; mbo.order updated[" + currentCtr +
+//                                    "]; event: " + event);
                             }
                         );
                     }
@@ -378,8 +378,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
                     long currentCtr = ctr.incrementAndGet();
 
-                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
-                        event);
+//                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
+//                        event);
                 }
             );
 
@@ -388,8 +388,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
                     long currentCtr = ctr.incrementAndGet();
 
-                    System.out.println ("[mm.ric: "+ nextRic +"]; nextMarketMakerUpdate[" + currentCtr + "]." +
-                        "event: " + event);
+//                    System.out.println ("[mm.ric: "+ nextRic +"]; nextMarketMakerUpdate[" + currentCtr + "]." +
+//                        "event: " + event);
                 }
             );
 
@@ -403,8 +403,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
                                 long currentCtr = ctr.incrementAndGet();
 
-                                System.out.println ("[mm.ric: "+ nextRic +"]; mm.order updated[" + currentCtr +
-                                    "]; event: " + event);
+//                                System.out.println ("[mm.ric: "+ nextRic +"]; mm.order updated[" + currentCtr +
+//                                    "]; event: " + event);
                             }
                         );
                     }
@@ -431,7 +431,8 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
         List<MarketPrice> marketPriceList = new ArrayList<MarketPrice> (rics.length);
 
-        AtomicLong ctr = new AtomicLong (0);
+        AtomicLong statusCtr = new AtomicLong (0);
+        AtomicLong updateCtr = new AtomicLong (0);
 
         for (String nextRic : rics) {
 
@@ -451,22 +452,24 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
             StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
 
+            System.out.println("statusResponse: " + statusResponse);
+
             marketPrice.setStatusResponse(statusResponse);
 
-            statusResponse.addPropertyChangeListener(
-                event -> {
-
-                    long currentCtr = ctr.incrementAndGet();
-
-                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
-                        event);
-                }
-            );
+//            statusResponse.addPropertyChangeListener(
+//                event -> {
+//
+//                    long currentCtr = statusCtr.incrementAndGet();
+//
+//                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
+//                        event);
+//                }
+//            );
 
             marketPrice.addPropertyChangeListener(
                 event -> {
 
-                    long currentCtr = ctr.incrementAndGet();
+                    long currentCtr = updateCtr.incrementAndGet();
 
                     MarketPrice result = (MarketPrice) event.getSource ();
 
