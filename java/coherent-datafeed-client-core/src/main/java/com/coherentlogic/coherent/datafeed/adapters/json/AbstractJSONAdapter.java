@@ -11,7 +11,8 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
  *
  * @param T An instance of a domain class.
  *
- * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="support@coherentlogic.com">Support</a>
  *
  * @deprecated Deprecated in favor of GJSONGenerator and associated classes.
  */

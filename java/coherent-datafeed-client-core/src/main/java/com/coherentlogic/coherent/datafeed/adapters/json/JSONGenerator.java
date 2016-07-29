@@ -10,7 +10,9 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  * using a NestedAdapter which takes the domain object and converts it into a
  * Map<String, String> and then this map is converted into JSON.
  *
- * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="support@coherentlogic.com">Support</a>
+ *
  * @param <S>
  *
  * @deprecated Deprecated in favor of GJSONGenerator and associated classes.

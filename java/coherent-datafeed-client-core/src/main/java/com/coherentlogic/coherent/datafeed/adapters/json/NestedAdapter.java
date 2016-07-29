@@ -7,7 +7,8 @@ import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
  * and object of type U by passing it first through the {@link #firstAdapter}
  * and then through the {{@link #secondAdapter}.
  *
- * @author <a href="mailto:support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="support@coherentlogic.com">Support</a>
  *
  * @param <S> The source object type.
  * @param <X> The transitional object type.
