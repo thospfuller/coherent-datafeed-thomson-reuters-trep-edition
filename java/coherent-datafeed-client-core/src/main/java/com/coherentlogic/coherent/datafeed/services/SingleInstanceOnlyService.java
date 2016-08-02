@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.Stoppable;
+import com.coherentlogic.coherent.data.model.core.lifecycle.Stoppable;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationAlreadyRunningException;
 import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
 

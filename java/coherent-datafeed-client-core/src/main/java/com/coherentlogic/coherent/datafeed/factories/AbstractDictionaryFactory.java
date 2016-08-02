@@ -3,8 +3,8 @@ package com.coherentlogic.coherent.datafeed.factories;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.Startable;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.data.model.core.lifecycle.Startable;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
 import com.reuters.rfa.dictionary.DictionaryException;
 import com.reuters.rfa.dictionary.FieldDictionary;
