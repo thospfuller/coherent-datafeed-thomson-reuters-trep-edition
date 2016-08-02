@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
+import com.coherentlogic.coherent.datafeed.services.WorkflowInverterService;
 
 /**
  * Unit test for the {@link IntegrationEndpointAdapter} class.
@@ -15,8 +15,8 @@ import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
  */
 public class IntegrationEndpointAdapterTest {
 
-    private final FlowInverterService pauseResumeService =
-        new FlowInverterService ();
+    private final WorkflowInverterService pauseResumeService =
+        new WorkflowInverterService ();
 
     private IntegrationEndpointAdapter adapter = null;
 

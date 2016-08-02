@@ -285,7 +285,7 @@
         <constructor-arg name="directoryEntryFactory" ref="directoryEntryFactory"/>
     </bean>
 
-    <bean id="authenitcationFlowInverterService" class="com.coherentlogic.coherent.datafeed.services.FlowInverterService"/>
+    <bean id="authenitcationWorkflowInverterService" class="com.coherentlogic.coherent.datafeed.services.WorkflowInverterService"/>
 
     <bean id="frameworkEventListenerAdapter" class="com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapter"/>
 

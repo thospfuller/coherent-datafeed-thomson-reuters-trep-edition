@@ -41,7 +41,7 @@ import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceGatewaySpecification;
-import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
+import com.coherentlogic.coherent.datafeed.services.WorkflowInverterService;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceGatewaySpecification;
@@ -64,7 +64,7 @@ public class ExampleApplication implements CommandLineRunner, MarketPriceConstan
 
     private static final Logger log = LoggerFactory.getLogger(ExampleApplication.class);
 
-    private final FlowInverterService flowInverterService = new FlowInverterService ();
+    private final WorkflowInverterService flowInverterService = new WorkflowInverterService ();
 
     @Autowired
     private ApplicationContext applicationContext;
