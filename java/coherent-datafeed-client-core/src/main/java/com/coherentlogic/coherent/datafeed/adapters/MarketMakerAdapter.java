@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.adapters;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.EventType;
@@ -103,6 +106,18 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
         log.debug ("adapt: method begins; ommMsg: " + ommMsg + ", marketMaker: " + marketMaker);
 
+        Map<String, PropertyChangeEvent> propertyChangeEventMap = new HashMap<String, PropertyChangeEvent> ();
+
+        PropertyChangeListener propertyChangeListener = new PropertyChangeListener () {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                propertyChangeEventMap.put(propertyChangeEvent.getPropertyName(), propertyChangeEvent);
+            }
+        };
+
+        marketMaker.addPropertyChangeListener(propertyChangeListener);
+
         OMMData marketMakerData = ommMsg.getPayload();
 
         OMMMap marketMakerMap = (OMMMap) marketMakerData;
@@ -141,6 +156,10 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
 
             toRFABean (attribInfo, marketMaker);
         }
+
+        marketMaker.fireAggregatePropertyChangeEvent(new AggregatePropertyChangeEvent (propertyChangeEventMap));
+
+        marketMaker.removePropertyChangeListener(propertyChangeListener);
 
         log.debug ("adapt: method ends.");
     }
