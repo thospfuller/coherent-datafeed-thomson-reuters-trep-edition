@@ -26,7 +26,7 @@ import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.DictionaryGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.DirectoryGatewaySpecification;
-import com.coherentlogic.coherent.datafeed.services.FlowInverterService;
+import com.coherentlogic.coherent.datafeed.services.WorkflowInverterService;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.StatusResponseServiceSpecification;
 import com.coherentlogic.coherent.datafeed.services.TS1DefServiceSpecification;
@@ -50,8 +50,8 @@ public class Client {
 
     private AbstractApplicationContext applicationContext;
 
-    private final FlowInverterService pauseResumeService =
-        new FlowInverterService ();
+    private final WorkflowInverterService pauseResumeService =
+        new WorkflowInverterService ();
 
     private boolean started = false;
 
