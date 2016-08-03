@@ -2,14 +2,10 @@ package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
-import java.beans.PropertyChangeEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -38,76 +34,7 @@ import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
-import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
-import com.reuters.rfa.common.Handle;
 import com.reuters.ts1.TS1Constants;
-
-
-
-//final AuthenticationServiceGatewaySpecification authenticationServiceGateway =
-//(AuthenticationServiceGatewaySpecification) applicationContext.getBean(
-//  AUTHENTICATION_ENTRY_POINT);
-//
-//final FrameworkEventListenerAdapterSpecification frameworkEventListenerAdapter =
-//(FrameworkEventListenerAdapterSpecification)
-//  applicationContext.getBean(FRAMEWORK_EVENT_LISTENER_ADAPTER);
-//
-//final MarketByOrderServiceGatewaySpecification marketByOrderService =
-//applicationContext.getBean(MarketByOrderServiceGatewaySpecification.class);
-//
-//final MarketPriceServiceGatewaySpecification marketPriceService =
-//applicationContext.getBean(MarketPriceServiceGatewaySpecification.class);
-//
-//final MarketMakerServiceGatewaySpecification marketMakerService =
-//applicationContext.getBean(MarketMakerServiceGatewaySpecification.class);
-//
-//final TimeSeriesGatewaySpecification timeSeriesService =
-//applicationContext.getBean(TimeSeriesGatewaySpecification.class);
-//
-//frameworkEventListenerAdapter.addInitialisationSuccessfulListeners (
-//Arrays.asList(
-//  new FrameworkEventListener() {
-//      @Override
-//      public void onEventReceived(SessionBean session) {
-//          flowInverterService.resume(true);
-//      }
-//  }
-//)
-//);
-//
-//frameworkEventListenerAdapter.addInitialisationFailedListeners (
-//Arrays.asList(
-//  new FrameworkEventListener () {
-//      @Override
-//      public void onEventReceived(SessionBean session) {
-//          flowInverterService.resume(false);
-//      }
-//  }
-//)
-//);
-//
-//String dacsId = System.getenv(DACS_ID);
-//
-//SessionBean sessionBean = applicationContext.getBean(SessionBean.class);
-//
-//sessionBean.setDacsId(dacsId);
-//
-//StatusResponse statusResponse = applicationContext.getBean(StatusResponse.class);
-//
-//statusResponse.addPropertyChangeListener(
-//event -> {
-//  System.out.println("statusResponse.event: " + event);
-//}
-//);
-//
-//sessionBean.setStatusResponse(statusResponse);
-//
-//Handle loginHandle = authenticationServiceGateway.login(sessionBean);
-//
-//sessionBean.setHandle(loginHandle);
-//
-//boolean result = flowInverterService.pause();
-
 
 /**
  * An example application that authenticates, executes a query, and gets the
