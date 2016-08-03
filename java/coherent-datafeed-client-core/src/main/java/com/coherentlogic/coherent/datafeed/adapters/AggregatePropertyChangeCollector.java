@@ -34,7 +34,7 @@ public class AggregatePropertyChangeCollector<T extends RFABean> {
     public AggregatePropertyChangeCollector (T rfaBean) {
         this (new HashMap<String, PropertyChangeEvent> (), rfaBean);
     }
-    
+
     public AggregatePropertyChangeCollector (Map<String, PropertyChangeEvent> propertyChangeEventMap, T rfaBean) {
         this.propertyChangeEventMap = propertyChangeEventMap;
         this.rfaBean = rfaBean;
