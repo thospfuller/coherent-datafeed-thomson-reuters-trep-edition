@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeListener;
@@ -118,6 +119,7 @@ import com.reuters.ts1.TS1Constants;
 @SpringBootApplication
 //@EnableAutoConfiguration
 @ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+@ImportResource({"classpath*:spring/jmx-beans.xml"})
 public class ElektronQueryBuilderExampleApplication implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderExampleApplication.class);
@@ -169,15 +171,15 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
 
         elektronQueryBuilder.login(sessionBean);
 
-//        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "TRI.N");
-//        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "MSFT.O");
-//        queryTimeSeriesService(timeSeriesService, loginHandle, sessionBean, "BFb.N");
+        queryTimeSeriesService("TRI.N");
+        queryTimeSeriesService("MSFT.O");
+        queryTimeSeriesService("BFb.N");
 
-        queryMarketMakerService (sessionBean);
+        queryMarketMakerService ();
 
-        queryMarketPriceService (sessionBean);
+        queryMarketPriceService ();
 
-        queryMarketByOrderService (sessionBean);
+        queryMarketByOrderService ();
 
         log.info("...done!");
 
@@ -187,68 +189,49 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
         //       login.
     }
 
-    public void queryTimeSeriesService (
-        final TimeSeriesGatewaySpecification timeSeriesService,
-        final Handle loginHandle,
-        SessionBean sessionBean,
-        String ric
-    ) throws InterruptedException, ExecutionException, TimeoutException {
+    public void queryTimeSeriesService (String ric) throws InterruptedException, ExecutionException, TimeoutException {
 
-        CompletableFuture<TimeSeries> timeSeriesPromise = null;
+        TimeSeries timeSeries = elektronQueryBuilder.getTimeSeriesFor(
+            Constants.ELEKTRON_DD, ric, TS1Constants.WEEKLY_PERIOD);
 
-        timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
-            Constants.ELEKTRON_DD,
-            sessionBean,
-            ric,
-            TS1Constants.WEEKLY_PERIOD
-        );
+        AttribInfo attribInfo = timeSeries.getAttribInfo();
 
-        System.out.println ("timeSeriesPromise: " + timeSeriesPromise);
+        System.out.print("timeSeries: " + timeSeries + ", attribInfo: " + attribInfo + ", sampleSize: "
+            + timeSeries.getSamples().size() + "\n\n\n");
 
-        TimeSeries timeSeries = timeSeriesPromise.get(60, TimeUnit.SECONDS);
+        DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
 
-        if (timeSeries != null) {
+        String TABS = "\t\t\t\t\t";
 
-            AttribInfo attribInfo = timeSeries.getAttribInfo();
+        boolean closeAdded = false;
 
-            System.out.print("timeSeries: " + timeSeries + ", attribInfo: " + attribInfo + ", sampleSize: " + timeSeries.getSamples().size() + "\n\n\n");
-
-            DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
-
-            String TABS = "\t\t\t\t\t";
-
-            boolean closeAdded = false;
-
-            for (String nextHeader : timeSeries.getHeaders()) {
-                if (!closeAdded) {
-                    closeAdded = true;
-                    System.out.print(nextHeader + TABS);
-                } else {
-                    System.out.print(nextHeader + "\t\t\t");
-                }
+        for (String nextHeader : timeSeries.getHeaders()) {
+            if (!closeAdded) {
+                closeAdded = true;
+                System.out.print(nextHeader + TABS);
+            } else {
+                System.out.print(nextHeader + "\t\t\t");
             }
+        }
 
-            for (Sample sample : timeSeries.getSamples()) {
+        for (Sample sample : timeSeries.getSamples()) {
 
-                long timeMillis = sample.getDate();
+            long timeMillis = sample.getDate();
 
-                Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance();
 
-                calendar.setTimeInMillis(timeMillis);
+            calendar.setTimeInMillis(timeMillis);
 
-                String date = formatter.format(calendar.getTime());
+            String date = formatter.format(calendar.getTime());
 
-                System.out.print("\n" + date);
+            System.out.print("\n" + date);
 
-                for (String nextPoint : sample.getPoints())
-                    System.out.print ("\t\t\t" + nextPoint);
-            }
-        } else {
-            System.out.println("The timeSeries reference is null.");
+            for (String nextPoint : sample.getPoints())
+                System.out.print ("\t\t\t" + nextPoint);
         }
     }
 
-    public void queryMarketByOrderService (SessionBean sessionBean) {
+    public void queryMarketByOrderService () {
 
         AtomicLong ctr = new AtomicLong (0);
 
@@ -260,26 +243,26 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
              */
             MarketByOrder marketByOrder = elektronQueryBuilder.newMarketByOrder(nextRic);
 
-            marketByOrder.addAggregatePropertyChangeListener(
-                new AggregatePropertyChangeListener () {
-
-                    @Override
-                    public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
-
-                        System.out.println("aggregateUpdate begins for marketByOrder: " + marketByOrder);
-
-                        event
-                            .getPropertyChangeEventMap()
-                            .forEach((key, value) -> {
-                                System.out.println("- key: " + key + ", value: " + value);
-                            }
-                        );
-
-                        System.out.println("aggregateUpdate ends.");
-                        System.out.flush ();
-                    }
-                }
-            );
+//            marketByOrder.addAggregatePropertyChangeListener(
+//                new AggregatePropertyChangeListener () {
+//
+//                    @Override
+//                    public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
+//
+//                        System.out.println("aggregateUpdate begins for marketByOrder: " + marketByOrder);
+//
+//                        event
+//                            .getPropertyChangeEventMap()
+//                            .forEach((key, value) -> {
+//                                System.out.println("- key: " + key + ", value: " + value);
+//                            }
+//                        );
+//
+//                        System.out.println("aggregateUpdate ends.");
+//                        System.out.flush ();
+//                    }
+//                }
+//            );
 
             StatusResponse statusResponse = marketByOrder.getStatusResponse();
 
@@ -322,11 +305,11 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                 }
             );
 
-            elektronQueryBuilder.query(ServiceName.dELEKTRON_DD, sessionBean, marketByOrder);
+            elektronQueryBuilder.query(ServiceName.dELEKTRON_DD, marketByOrder);
         }
     }
 
-    public void queryMarketMakerService (SessionBean sessionBean) {
+    public void queryMarketMakerService () {
 
         AtomicLong ctr = new AtomicLong (0);
 
@@ -338,26 +321,26 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
              */
             MarketMaker marketMaker = elektronQueryBuilder.newMarketMaker(nextRic);
 
-            marketMaker.addAggregatePropertyChangeListener(
-                new AggregatePropertyChangeListener () {
-
-                    @Override
-                    public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
-
-                        System.out.println("aggregateUpdate begins for marketMaker: " + marketMaker);
-
-                        event
-                            .getPropertyChangeEventMap()
-                            .forEach((key, value) -> {
-                                System.out.println("- key: " + key + ", value: " + value);
-                            }
-                        );
-
-                        System.out.println("aggregateUpdate ends.");
-                        System.out.flush ();
-                    }
-                }
-            );
+//            marketMaker.addAggregatePropertyChangeListener(
+//                new AggregatePropertyChangeListener () {
+//
+//                    @Override
+//                    public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
+//
+//                        System.out.println("aggregateUpdate begins for marketMaker: " + marketMaker);
+//
+//                        event
+//                            .getPropertyChangeEventMap()
+//                            .forEach((key, value) -> {
+//                                System.out.println("- key: " + key + ", value: " + value);
+//                            }
+//                        );
+//
+//                        System.out.println("aggregateUpdate ends.");
+//                        System.out.flush ();
+//                    }
+//                }
+//            );
 
             StatusResponse statusResponse = marketMaker.getStatusResponse();
 
@@ -399,11 +382,11 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                 }
             );
 
-            elektronQueryBuilder.query(ServiceName.dELEKTRON_DD, sessionBean, marketMaker);
+            elektronQueryBuilder.query(ServiceName.dELEKTRON_DD, marketMaker);
         }
     }
 
-    public void queryMarketPriceService (SessionBean sessionBean) {
+    public void queryMarketPriceService () {
 
         AtomicLong aggregateUpdateCtr = new AtomicLong (0);
         AtomicLong statusCtr = new AtomicLong (0);
@@ -417,26 +400,26 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
              */
             MarketPrice marketPrice = elektronQueryBuilder.newMarketPrice(nextRic);
 
-            marketPrice.addAggregatePropertyChangeListener(
-                new AggregatePropertyChangeListener () {
-
-                    @Override
-                    public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
-
-                        System.out.println("aggregateUpdate begins for marketPrice: " + marketPrice);
-
-                        event
-                            .getPropertyChangeEventMap()
-                            .forEach((key, value) -> {
-                                System.out.println("- key: " + key + ", value: " + value);
-                            }
-                        );
-
-                        System.out.println("aggregateUpdate ends.");
-                        System.out.flush ();
-                    }
-                }
-            );
+//            marketPrice.addAggregatePropertyChangeListener(
+//                new AggregatePropertyChangeListener () {
+//
+//                    @Override
+//                    public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
+//
+//                        System.out.println("aggregateUpdate begins for marketPrice: " + marketPrice);
+//
+//                        event
+//                            .getPropertyChangeEventMap()
+//                            .forEach((key, value) -> {
+//                                System.out.println("- key: " + key + ", value: " + value);
+//                            }
+//                        );
+//
+//                        System.out.println("aggregateUpdate ends.");
+//                        System.out.flush ();
+//                    }
+//                }
+//            );
 
             marketPrice.setRic(nextRic);
 
@@ -463,7 +446,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                 }
             );
 
-            elektronQueryBuilder.query(ServiceName.dELEKTRON_DD, sessionBean, marketPrice);
+            elektronQueryBuilder.query(ServiceName.dELEKTRON_DD, marketPrice);
         }
     }
 
