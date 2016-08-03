@@ -1,7 +1,14 @@
 package com.coherentlogic.coherent.datafeed.builders;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
+import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
+
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.annotation.PostConstruct;
 
@@ -19,6 +26,10 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponseBean;
+import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
+import com.coherentlogic.coherent.datafeed.exceptions.InvalidApplicationSessionException;
+import com.coherentlogic.coherent.datafeed.exceptions.NullPointerRuntimeException;
+import com.coherentlogic.coherent.datafeed.exceptions.TimeSeriesRequestFailedException;
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewaySpecification;
@@ -28,10 +39,7 @@ import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.WorkflowInverterService;
 import com.reuters.rfa.common.Handle;
-
-import static com.coherentlogic.coherent.datafeed.misc.Constants.AUTHENTICATION_ENTRY_POINT;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
-import static com.coherentlogic.coherent.datafeed.misc.Constants.FRAMEWORK_EVENT_LISTENER_ADAPTER;
+import com.reuters.ts1.TS1Constants;
 
 /**
  * 
@@ -45,6 +53,8 @@ public class ElektronQueryBuilder {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    private SessionBean sessionBean;
 
     @Autowired
     @Qualifier(AUTHENTICATION_ENTRY_POINT)
@@ -127,26 +137,34 @@ public class ElektronQueryBuilder {
 
         log.info("login: method begins; sessionBean: " + sessionBean);
 
-        Handle handle = authenticationServiceGateway.login(sessionBean);
+        if (this.sessionBean == null) {
 
-        sessionBean.setHandle(handle);
+            Handle handle = authenticationServiceGateway.login(sessionBean);
 
-        boolean result = workflowInverterService.pause();
+            sessionBean.setHandle(handle);
+
+            boolean result = workflowInverterService.pause();
+
+            this.sessionBean = sessionBean;
+
+        }
 
         log.info("login: method ends.");
 
         return this;
     }
 
-    public ElektronQueryBuilder logout (SessionBean sessionBean) {
+    public ElektronQueryBuilder logout () {
 
         log.info("logout: method begins.");
 
-        if (sessionBean == null) {
-            // Either logout has already been called or we never logged in -- either way if the sessionBean is null
-            // we don't do anything.
+        if (this.sessionBean == null) {
+            throw new InvalidApplicationSessionException("The sessionBean is null which implies that either the "
+                + "login method was never called, login failed, or logout has already been called and returned "
+                + "successfully (hence the sessionBean would already be null).");
         } else {
-            throw new RuntimeException("MNYI");
+            this.sessionBean = null;
+            authenticationServiceGateway.logout();
         }
 
         log.info("logout: method ends.");
@@ -234,7 +252,70 @@ public class ElektronQueryBuilder {
         return result;
     }
 
-    public ElektronQueryBuilder query (ServiceName serviceName, SessionBean sessionBean, MarketByOrder... marketByOrders) {
+    /**
+     * Returns the time series for the given service name, ric, and period with a default timeout of 60 seconds.
+     * 
+     * @param serviceName For example, Constants.ELEKTRON_DD
+     * @param ric The Reuters 
+     * @param TS1Constants.
+     * @return
+     */
+    public TimeSeries getTimeSeriesFor(String serviceName, String ric, int ts1ConstantsPeriod) {
+        return getTimeSeriesFor(serviceName, ric, ts1ConstantsPeriod, 60, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 
+     * @param serviceName For example, Constants.ELEKTRON_DD
+     * @param ric The Reuters 
+     * @param ts1ConstantsPeriod
+     * @return
+     */
+    public TimeSeries getTimeSeriesFor(
+        String serviceName,
+        String ric,
+        int ts1ConstantsPeriod,
+        long timeout,
+        TimeUnit timeUnit
+    ) {
+        CompletableFuture<TimeSeries> timeSeriesPromise = timeSeriesService.getTimeSeriesFor(
+            serviceName,
+            sessionBean,
+            ric,
+            ts1ConstantsPeriod
+        );
+
+        TimeSeries timeSeries;
+
+        try {
+            timeSeries = timeSeriesPromise.get(timeout, timeUnit);
+        } catch (InterruptedException | ExecutionException | TimeoutException exception) {
+            TimeSeriesRequestFailedException timeSeriesRequestFailedException = new TimeSeriesRequestFailedException (
+                "An exception was thrown while getting the timeSeries from the timeSeriesPromise; serviceName: "
+                + serviceName + ", ric: " + ric + ", ts1ConstantsPeriod: " + ts1ConstantsPeriod + ", timeout: "
+                + timeout + ", timeUnit: " + timeUnit, exception);
+
+            log.error("The request for the timeSeries with ric " + ric + " has failed.",
+                timeSeriesRequestFailedException);
+
+            throw timeSeriesRequestFailedException;
+        }
+
+        if (timeSeries == null) {
+            NullPointerRuntimeException exception = new NullPointerRuntimeException (
+                "The timeSeries returned is null; serviceName: " + serviceName + ", ric: " + ric
+                + ", ts1ConstantsPeriod: " + ts1ConstantsPeriod + ", timeout: " + timeout + ", timeUnit: "
+                + timeUnit);
+
+                log.error("The timeSeries with ric " + ric + " was null.", exception);
+
+                throw exception;
+        }
+
+        return timeSeries;
+    }
+
+    public ElektronQueryBuilder query (ServiceName serviceName, MarketByOrder... marketByOrders) {
 
         log.info("query: method begins; serviceName: " + serviceName + ", sessionBean: " + sessionBean +
             ", marketByOrders: " + marketByOrders);
@@ -246,7 +327,7 @@ public class ElektronQueryBuilder {
         return this;
     }
 
-    public ElektronQueryBuilder query (ServiceName serviceName, SessionBean sessionBean, MarketPrice... marketPrices) {
+    public ElektronQueryBuilder query (ServiceName serviceName, MarketPrice... marketPrices) {
 
         log.info("query: method begins; serviceName: " + serviceName + ", sessionBean: " + sessionBean +
             ", marketPrices: " + marketPrices);
@@ -258,7 +339,7 @@ public class ElektronQueryBuilder {
         return this;
     }
 
-    public ElektronQueryBuilder query (ServiceName serviceName, SessionBean sessionBean, MarketMaker... marketMakers) {
+    public ElektronQueryBuilder query (ServiceName serviceName, MarketMaker... marketMakers) {
 
         log.info("query: method begins; serviceName: " + serviceName + ", sessionBean: " + sessionBean +
             ", marketMakers: " + marketMakers);
