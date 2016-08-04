@@ -22,14 +22,6 @@
             <artifactId>rfa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-misc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-config</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-core</artifactId>
         </dependency>

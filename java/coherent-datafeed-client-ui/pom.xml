@@ -27,14 +27,6 @@
         <!-- dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-client-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-misc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-config</artifactId>
         </dependency -->
         <dependency>
             <groupId>org.slf4j</groupId>

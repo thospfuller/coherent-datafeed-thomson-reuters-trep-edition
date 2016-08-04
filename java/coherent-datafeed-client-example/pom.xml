@@ -38,10 +38,6 @@
             <artifactId>coherent-datafeed-client-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-misc</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>

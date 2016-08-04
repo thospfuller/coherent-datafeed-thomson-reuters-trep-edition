@@ -22,14 +22,6 @@
     <dependencies>
         <dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-            <artifactId>coherent-datafeed-misc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-client-core</artifactId>
         </dependency>
     </dependencies>
@@ -171,14 +163,6 @@
                         <exclusion>
                             <groupId>${parent.groupId}.${parent.artifactId}</groupId>
                             <artifactId>coherent-datafeed-assembly</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>${parent.groupId}.${parent.artifactId}</groupId>
-                            <artifactId>coherent-datafeed-config</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>${parent.groupId}.${parent.artifactId}</groupId>
-                            <artifactId>coherent-datafeed-misc</artifactId>
                         </exclusion>
                         <exclusion>
                             <groupId>${parent.groupId}.${parent.artifactId}</groupId>
