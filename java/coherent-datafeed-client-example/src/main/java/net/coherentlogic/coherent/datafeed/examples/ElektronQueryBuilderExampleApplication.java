@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeListener;
@@ -46,7 +45,8 @@ import com.reuters.ts1.TS1Constants;
 @SpringBootApplication
 //@EnableAutoConfiguration
 @ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
-@ImportResource({"classpath*:spring/jmx-beans.xml"})
+//@ImportResource({"classpath*:spring/jmx-beans.xml"}) // When disabled see also
+// GlobalConfig.getPerformanceMonitorService
 public class ElektronQueryBuilderExampleApplication implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderExampleApplication.class);
