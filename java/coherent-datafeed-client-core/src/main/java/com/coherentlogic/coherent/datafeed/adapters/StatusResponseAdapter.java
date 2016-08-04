@@ -1,19 +1,12 @@
 package com.coherentlogic.coherent.datafeed.adapters;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coherentlogic.coherent.data.model.core.adapters.*;
+import com.coherentlogic.coherent.data.model.core.adapters.InOutAdapterSpecification;
+import com.coherentlogic.coherent.data.model.core.adapters.InReturnAdapterSpecification;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
-import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
-import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
-import com.reuters.rfa.dictionary.FieldDictionary;
-import com.reuters.rfa.omm.OMMData;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMState;
 
@@ -58,6 +51,9 @@ public class StatusResponseAdapter
 
         log.debug("adapt: method begins; msg: " + msg + ", statusResponse: " + statusResponse);
 
+        AggregatePropertyChangeCollector<StatusResponse> collector
+            = new AggregatePropertyChangeCollector<StatusResponse> (statusResponse);
+
         if (msg.has(OMMMsg.HAS_STATE)) {
 
             OMMState state = msg.getState();
@@ -81,6 +77,8 @@ public class StatusResponseAdapter
             statusResponse.setStreamState(streamState);
             statusResponse.setText(text);
         }
+
+        collector.done();
 
         log.debug("adapt: method ends; statusResponse: " + statusResponse);
     }
