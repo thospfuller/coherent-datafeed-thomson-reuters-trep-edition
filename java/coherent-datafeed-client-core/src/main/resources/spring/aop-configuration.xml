@@ -79,6 +79,18 @@
             advice-ref="marketByOrderSetterInterceptor" />
     </aop:config>
 
+    <bean id="marketByOrderOrderSetterInterceptor"
+     class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
+        <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="marketByOrderOrderSetterPointcut"
+         expression="execution(public void com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order.set*(..))"/>
+        <aop:advisor pointcut-ref="marketByOrderOrderSetterPointcut"
+            advice-ref="marketByOrderOrderSetterInterceptor" />
+    </aop:config>
+
     <bean id="marketMakerSetterInterceptor"
      class="com.coherentlogic.coherent.data.model.core.domain.PropertyChangeEventGeneratorAspect">
         <constructor-arg value="com.coherentlogic.coherent.datafeed.domain.MarketMaker"/>

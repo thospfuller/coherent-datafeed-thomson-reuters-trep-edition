@@ -1,8 +1,11 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
-import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
+import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 
 /**
  * Factory class for creating {@link MarketPrice} objects with a unique id and
@@ -11,8 +14,7 @@ import com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class DefaultMarketByOrderFactory
-    extends AbstractRFABeanFactory<MarketByOrder> {
+public class DefaultMarketByOrderFactory extends AbstractRFABeanFactory<MarketByOrder> {
 
     public static final String BEAN_NAME = "marketByOrderFactory";
 
@@ -24,15 +26,17 @@ public class DefaultMarketByOrderFactory
     /**
      * @todo Extract this class.
      */
-    public static class DefaultOrderFactory
-        extends AbstractRFABeanFactory<Order> {
+    public static class DefaultOrderFactory extends AbstractRFABeanFactory<Order> {
 
         public static final String BEAN_NAME = "marketByOrderOrderFactory";
+
+        @Autowired
+        private ApplicationContext applicationContext;
 
         @Override
         public Order getInstance() {
 
-            MarketByOrder.Order order = new MarketByOrder.Order ();
+            MarketByOrder.Order order = applicationContext.getBean (MarketByOrder.Order.class);
 
             return configure(order);
         }

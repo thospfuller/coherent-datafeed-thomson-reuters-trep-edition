@@ -227,8 +227,7 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
      */
     public static class OrderAdapter extends RFABeanAdapter<MarketMaker.Order> {
 
-        private static final Logger log =
-            LoggerFactory.getLogger(OrderAdapter.class);
+        private static final Logger log = LoggerFactory.getLogger(OrderAdapter.class);
 
         public OrderAdapter (
             TypedFactory<MarketMaker.Order> orderFactory,
@@ -264,6 +263,17 @@ public class MarketMakerAdapter extends RFABeanAdapter<MarketMaker> {
                 fieldEntryAdapters,
                 rfaBeanClass
             );
+        }
+
+        @Override
+        void toRFABean(OMMFieldList fieldList, MarketMaker.Order order) {
+
+            AggregatePropertyChangeCollector<MarketMaker.Order> collector
+                = new AggregatePropertyChangeCollector<MarketMaker.Order> (order);
+
+            super.toRFABean(fieldList, order);
+
+            collector.done();
         }
     }
 }

@@ -258,5 +258,16 @@ public class MarketByOrderAdapter
                 rfaBeanClass
             );
         }
+
+        @Override
+        void toRFABean(OMMFieldList fieldList, Order t) {
+
+            AggregatePropertyChangeCollector<MarketByOrder.Order> collector
+                = new AggregatePropertyChangeCollector<MarketByOrder.Order> (t);
+
+            super.toRFABean(fieldList, t);
+
+            collector.done();
+        }
     }
 }
