@@ -20,7 +20,7 @@
     </appender>
 
     <logger name="org.springframework.aop.interceptor">
-        <level value="trace"/>
+        <level value="info"/>
         <appender-ref ref="fileAppender"/>
     </logger>
 
@@ -35,7 +35,7 @@
     </logger>
 
     <logger name="com.coherentlogic.coherent.datafeed.integration.endpoints">
-        <level value="trace"/>
+        <level value="info"/>
         <appender-ref ref="fileAppender"/>
     </logger>
 
@@ -51,6 +51,6 @@
 
     <root>
         <priority value ="info" />
-        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="fileAppender"/>
     </root>
 </log4j:configuration>
