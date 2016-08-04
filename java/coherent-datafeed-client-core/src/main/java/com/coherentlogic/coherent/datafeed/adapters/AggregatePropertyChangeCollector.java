@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
@@ -17,7 +18,7 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  *
  * @param <T> The {@link com.coherentlogic.coherent.datafeed.domain.RFABean} type.
  */
-public class AggregatePropertyChangeCollector<T extends RFABean> {
+public class AggregatePropertyChangeCollector<T extends SerializableBean> {
 
     private final Map<String, PropertyChangeEvent> propertyChangeEventMap;
 
