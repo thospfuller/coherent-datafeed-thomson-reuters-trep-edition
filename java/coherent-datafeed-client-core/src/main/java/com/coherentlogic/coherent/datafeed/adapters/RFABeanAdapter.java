@@ -2,8 +2,6 @@ package com.coherentlogic.coherent.datafeed.adapters;
 
 import static com.coherentlogic.coherent.datafeed.factories.MethodMapFactory.analyze;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
-import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
