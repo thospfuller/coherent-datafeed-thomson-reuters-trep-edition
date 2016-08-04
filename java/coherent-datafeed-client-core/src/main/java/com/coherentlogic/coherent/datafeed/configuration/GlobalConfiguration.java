@@ -34,6 +34,7 @@ import com.coherentlogic.coherent.datafeed.integration.transformers.OMMStateTran
 import com.coherentlogic.coherent.datafeed.misc.TS1DefDbHelper;
 import com.coherentlogic.coherent.datafeed.services.DictionaryLoadCompleteService;
 import com.coherentlogic.coherent.datafeed.services.LoggingService;
+import com.coherentlogic.coherent.datafeed.services.PerformanceMonitorService;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesHelper;
 import com.coherentlogic.coherent.datafeed.services.WorkflowEndsService;
 import com.coherentlogic.coherent.datafeed.services.message.processors.TransformTimeSeriesMessageProcessor;
@@ -318,6 +319,39 @@ public class GlobalConfiguration {
     public MarketMakerFactory getMarketMakerFactory () {
         return new MarketMakerFactory ();
     }
+
+    public static final String PERFORMANCE_MONITOR_SERVICE = "performanceMonitorService";
+//        MARKET_PRICE_PERFORMANCE_MONITOR_SERVICE = "marketPricePerformanceMonitorService",
+//        MARKET_BY_ORDER_PERFORMANCE_MONITOR_SERVICE = "marketByOrderPerformanceMonitorService",
+//        MARKET_MAKER_PERFORMANCE_MONITOR_SERVICE = "marketMakerPerformanceMonitorService";
+
+    @Bean(name=PERFORMANCE_MONITOR_SERVICE)
+    public PerformanceMonitorService getPerformanceMonitorService () {
+
+        PerformanceMonitorService performanceMonitorService =
+            new PerformanceMonitorService (PERFORMANCE_MONITOR_SERVICE);
+
+        performanceMonitorService.setEnabled(false);
+
+        return performanceMonitorService;
+    }
+
+//    @Bean(name=MARKET_PRICE_PERFORMANCE_MONITOR_SERVICE)
+//    public PerformanceMonitorService getMarketPricePerformanceMonitorService () {
+//        return new PerformanceMonitorService (MARKET_PRICE_PERFORMANCE_MONITOR_SERVICE);
+//    }
+//
+//    @Bean(name=MARKET_BY_ORDER_PERFORMANCE_MONITOR_SERVICE)
+//    public PerformanceMonitorService getMarketByOrderPerformanceMonitorService () {
+//        return new PerformanceMonitorService (MARKET_BY_ORDER_PERFORMANCE_MONITOR_SERVICE);
+//    }
+//
+//    @Bean(name=MARKET_MAKER_PERFORMANCE_MONITOR_SERVICE)
+//    public PerformanceMonitorService getMarketMakerPerformanceMonitorService () {
+//        return new PerformanceMonitorService (MARKET_MAKER_PERFORMANCE_MONITOR_SERVICE);
+//    }
+
+    // --------------------------------------------
 
 //    <bean id="marketPriceEventDrivenEndpoint"
 //     class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
