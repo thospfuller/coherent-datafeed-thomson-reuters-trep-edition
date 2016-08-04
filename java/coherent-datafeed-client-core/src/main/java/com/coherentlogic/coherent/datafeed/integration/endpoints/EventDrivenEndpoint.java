@@ -1,5 +1,7 @@
 package com.coherentlogic.coherent.datafeed.integration.endpoints;
 
+import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -14,8 +16,6 @@ import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.reuters.rfa.common.Client;
 import com.reuters.rfa.common.Event;
 
-import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
-
 /**
  * An endpoint which receives messages from an RFA client, converts them to
  * Spring Integration Messages, and then starts the integration workflow.
@@ -26,10 +26,10 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.SESSION;
  *
  * @see org.springframework.integration.jms.JmsMessageDrivenEndpoint
  *
- @todo Combine this class with the other EDE so that there is a common base
- *  class.
+ * @todo Combine this class with the other EDE so that there is a common base class.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class EventDrivenEndpoint extends AbstractEndpoint
     implements Client, TrackableComponent {
@@ -44,6 +44,10 @@ public class EventDrivenEndpoint extends AbstractEndpoint
     static final String
         RFA_EVENT_DRIVEN_ENDPOINT = "rfa:event-driven-endpoint",
         SEND_FAILED_MESSAGE = "Send failed -- see exception details.";
+
+//    @Autowired
+//    @Qualifier(GlobalConfiguration.PERFORMANCE_MONITOR_SERVICE)
+//    private PerformanceMonitorService performanceMonitorService;
 
     /**
      * Used to send the message.
@@ -80,6 +84,8 @@ public class EventDrivenEndpoint extends AbstractEndpoint
             .setHeader(SESSION, sessionBean)
             .build();
 
+//        performanceMonitorService.start();
+
         try {
             gatewayDelegate.send(message);
             // We'll eventually remove this catch and just let the exception go
@@ -88,6 +94,8 @@ public class EventDrivenEndpoint extends AbstractEndpoint
             String text = "Unable to send the message " + message;
             log.error(text, runtimeException);
             throw runtimeException;
+        } finally {
+//            performanceMonitorService.stopAndLog();
         }
     }
 
