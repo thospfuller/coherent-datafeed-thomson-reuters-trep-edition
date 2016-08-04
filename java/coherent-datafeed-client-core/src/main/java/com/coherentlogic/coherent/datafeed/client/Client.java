@@ -34,14 +34,14 @@ import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecificati
 import com.reuters.rfa.common.Handle;
 
 /**
- * An instance of this class is called from R and exposes several methods that
- * can be called in order to establish a session with Thomson Reuters, query
- * data, get updates, and terminate the session.
+ * An instance of this class is called from R and exposes several methods that can be called in order to establish a
+ * session with Thomson Reuters, query data, get updates, and terminate the session.
  *
- * @todo Harmonize the names of the specification which are returned to the user
- *  so that they're uniform (ie. *ServiceGateway).
+ * @todo Harmonize the names of the specification which are returned to the user so that they're uniform (ie.
+ * *ServiceGateway).
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class Client {
 

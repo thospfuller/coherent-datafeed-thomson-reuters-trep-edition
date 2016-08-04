@@ -5,12 +5,12 @@ import java.io.Serializable;
 import com.reuters.ts1.TS1Def;
 
 /**
- * An entry that helps track requests for
- * {@link TS1Def} information.
+ * An entry that helps track requests for {@link TS1Def} information.
  *
  * @todo This class replaces the TimeSeriesEntries.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TS1DefEntry implements Serializable {
 

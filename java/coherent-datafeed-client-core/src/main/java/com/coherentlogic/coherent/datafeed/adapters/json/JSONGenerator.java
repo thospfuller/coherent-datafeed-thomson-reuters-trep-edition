@@ -6,14 +6,13 @@ import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
 /**
- * This class converts a domain object S into a String. This is accomplished by
- * using a NestedAdapter which takes the domain object and converts it into a
- * Map<String, String> and then this map is converted into JSON.
+ * This class converts a domain object S into a String. This is accomplished by using a NestedAdapter which takes the
+ * domain object and converts it into a Map<String, String> and then this map is converted into JSON.
  *
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
- * @param <S>
+ * @param <S> The type of {@link RFABean}.
  *
  * @deprecated Deprecated in favor of GJSONGenerator and associated classes.
  */

@@ -62,7 +62,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @see http://www.sec.gov/answers/mktord.htm
  * @see RFA Java OMM Viewer
  *
- * java -cp ..\Examples;..\Libs\rfa.jar com.reuters.rfa.example.omm.gui.viewer.Viewer -serviceName dELEKTRON_DD -session mySession
+ * java -cp ..\Examples;..\Libs\rfa.jar com.reuters.rfa.example.omm.gui.viewer.Viewer -serviceName dELEKTRON_DD
+ * -session mySession
  *
  * and use RIC ANZ.AX
  *
@@ -504,9 +505,8 @@ public class MarketByOrder extends StatusResponseBean
      * has different properties and hence reuse is limited and if we're not
      * careful with the names this can get confusing.
      *
-     *
-     * @author <a href="mailto:support@coherentlogic.com">Support</a>
-     *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
      */
     @XStreamAlias(MarketPriceConstants.ORDER)
     public static class Order extends RFABean

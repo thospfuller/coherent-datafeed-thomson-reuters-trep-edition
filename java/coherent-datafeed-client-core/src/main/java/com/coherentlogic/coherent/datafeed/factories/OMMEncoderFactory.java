@@ -5,13 +5,12 @@ import com.reuters.rfa.omm.OMMEncoder;
 import com.reuters.rfa.omm.OMMPool;
 
 /**
- * Factory class for creating instances of {@link com.reuters.rfa.omm.OMMEncoder
- * OMMEncoder}
+ * Factory class for creating instances of {@link com.reuters.rfa.omm.OMMEncoder OMMEncoder}
  *
- * @todo This may need to be converted into a Spring bean with a custom
- * namespace.
+ * @todo This may need to be converted into a Spring bean with a custom namespace.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class OMMEncoderFactory implements TypedFactory<OMMEncoder> {
 
