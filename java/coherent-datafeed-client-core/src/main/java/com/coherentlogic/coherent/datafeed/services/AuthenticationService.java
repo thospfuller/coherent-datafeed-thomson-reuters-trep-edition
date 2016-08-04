@@ -111,7 +111,8 @@ public class AuthenticationService implements AuthenticationServiceSpecification
             try {
                 googleAnalyticsMeasurementService.fireGAFrameworkUsageEvent ();
             } catch (Throwable thrown) {
-                log.warn("fireGAFrameworkUsageEvent: method call failed.", thrown);
+                log.warn("fireGAFrameworkUsageEvent: method call failed. This exception can be ignored, and the "
+                    + "framework will function without issue.", thrown);
             }
         }
 
