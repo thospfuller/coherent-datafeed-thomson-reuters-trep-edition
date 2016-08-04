@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
 import com.coherentlogic.coherent.datafeed.adapters.TimeSeriesAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataAdapter;
@@ -321,92 +322,20 @@ public class GlobalConfiguration {
     }
 
     public static final String PERFORMANCE_MONITOR_SERVICE = "performanceMonitorService";
-//        MARKET_PRICE_PERFORMANCE_MONITOR_SERVICE = "marketPricePerformanceMonitorService",
-//        MARKET_BY_ORDER_PERFORMANCE_MONITOR_SERVICE = "marketByOrderPerformanceMonitorService",
-//        MARKET_MAKER_PERFORMANCE_MONITOR_SERVICE = "marketMakerPerformanceMonitorService";
 
-    @Bean(name=PERFORMANCE_MONITOR_SERVICE)
-    public PerformanceMonitorService getPerformanceMonitorService () {
-
-        PerformanceMonitorService performanceMonitorService =
-            new PerformanceMonitorService (PERFORMANCE_MONITOR_SERVICE);
-
-        performanceMonitorService.setEnabled(false);
-
-        return performanceMonitorService;
-    }
-
-//    @Bean(name=MARKET_PRICE_PERFORMANCE_MONITOR_SERVICE)
-//    public PerformanceMonitorService getMarketPricePerformanceMonitorService () {
-//        return new PerformanceMonitorService (MARKET_PRICE_PERFORMANCE_MONITOR_SERVICE);
-//    }
-//
-//    @Bean(name=MARKET_BY_ORDER_PERFORMANCE_MONITOR_SERVICE)
-//    public PerformanceMonitorService getMarketByOrderPerformanceMonitorService () {
-//        return new PerformanceMonitorService (MARKET_BY_ORDER_PERFORMANCE_MONITOR_SERVICE);
-//    }
-//
-//    @Bean(name=MARKET_MAKER_PERFORMANCE_MONITOR_SERVICE)
-//    public PerformanceMonitorService getMarketMakerPerformanceMonitorService () {
-//        return new PerformanceMonitorService (MARKET_MAKER_PERFORMANCE_MONITOR_SERVICE);
-//    }
-
-    // --------------------------------------------
-
-//    <bean id="marketPriceEventDrivenEndpoint"
-//     class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
-//        <property name="requestChannel" ref="onMarketPriceAddSessionToHeadersChannel"/>
-//    </bean>
-//    @Bean(name=MARKET_MAKER_MESSAGE_CONSUMER)
-//    public MessageConsumer getMarketMakerMessageConsumer () {
-//        return new MessageConsumer ();
-//    }
-
-//    <bean id="marketPriceService" class="com.coherentlogic.coherent.datafeed.services.MarketPriceService"
-//     depends-on="loggingService">
-//        <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
-//        <constructor-arg name="client" ref="marketPriceEventDrivenEndpoint"/>
-//        <constructor-arg name="messageConsumer" ref="marketPriceConsumer"/>
-//        <constructor-arg name="jsonGenerator" ref="jsonAdapter"/>
-//    </bean>
-//
-//    @Bean(name=MarketMakerService.BEAN_NAME)
-//    public MarketMakerService getMarketMakerService (
-//        @Qualifier(RequestMessageBuilderFactory.BEAN_NAME) RequestMessageBuilderFactory
-//            defaultRequestMessageBuilderFactory,
-//        Client client,
-//        @Qualifier("onMarketMakerAddSessionToHeadersChannel") MessageConsumer messageConsumer,
-//        BasicAdapter<MarketMaker, String> jsonGenerator
-//    ) {
-//        return new MarketMakerService (
-//            defaultRequestMessageBuilderFactory,
-//            client,
-//            messageConsumer,
-//            jsonGenerator
-//        );
-//    }
-
-
-    /*
-         <bean id="ts1DefMessageProcessor"
-     class="com.coherentlogic.coherent.datafeed.services.message.processors.TS1DefMessageProcessor">
-        <constructor-arg name="sessionCache" ref="sessionCache"/>
-        <constructor-arg name="ts1DefCache" ref="ts1DefCache"/>
-        <constructor-arg name="ts1DefService" ref="ts1DefService"/>
-    </bean>
+    /**
+     * @see jmx-beans.xml : You must add this to the ElektronQueryBuilderExampleApplication application as follows:
+     *
+     *     @ImportResource({"classpath*:spring/jmx-beans.xml"})
      */
-//    @Bean(name=TS1DefMessageProcessor.BEAN_NAME)
-//    public TS1DefMessageProcessor getTS1DefMessageProcessor (
-//        @Qualifier(SESSION_CACHE) Map<Handle, Session> sessionCache,
-//        @Qualifier(TS1_DEF_CACHE) Map<Handle, Session> ts1DefCache,
-//        @Qualifier(TS1DefService.BEAN_NAME) TS1DefService ts1DefService
-//    ) {
-//        return new TS1DefMessageProcessor (sessionCache, ts1DefCache, ts1DefService);
-//    }
-
+//    @Bean(name=PERFORMANCE_MONITOR_SERVICE)
+//    public PerformanceMonitorService getPerformanceMonitorService () {
 //
-//    @Bean(name="authentication")
-//    public Authentication getAuthentication () {
-//        return new Authentication ();
+//        PerformanceMonitorService performanceMonitorService =
+//            new PerformanceMonitorService (PERFORMANCE_MONITOR_SERVICE);
+//
+//        performanceMonitorService.setEnabled(false);
+//
+//        return performanceMonitorService;
 //    }
 }
