@@ -111,6 +111,9 @@ public class MarketByOrderAdapter
 
         log.debug ("adapt: method begins; ommMsg: " + ommMsg + ", marketByOrder: " + marketByOrder);
 
+        AggregatePropertyChangeCollector<MarketByOrder> collector
+            = new AggregatePropertyChangeCollector<MarketByOrder> (marketByOrder);
+
         OMMData marketByOrderData = ommMsg.getPayload();
 
         OMMMap marketByOrderMap = (OMMMap) marketByOrderData;
@@ -144,6 +147,9 @@ public class MarketByOrderAdapter
                 updateOrder (marketByOrder, key, mapEntry);
             }
         }
+
+        collector.done();
+
         log.debug ("adapt: method ends.");
     }
 
