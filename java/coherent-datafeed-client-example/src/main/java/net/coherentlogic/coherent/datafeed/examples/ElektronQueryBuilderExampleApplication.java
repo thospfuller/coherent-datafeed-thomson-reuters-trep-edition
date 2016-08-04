@@ -264,8 +264,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                     @Override
                     public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
 
-                        System.out.println("marketMaker.aggregateUpdate [" + aggregateUpdateCtr.incrementAndGet() + "] begins for "
-                            + "marketMaker: " + marketMaker);
+                        System.out.println("marketMaker.aggregateUpdate [" + aggregateUpdateCtr.incrementAndGet()
+                            + "] begins for marketMaker: " + marketMaker);
 
                         event
                             .getPropertyChangeEventMap()
@@ -308,7 +308,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                                 @Override
                                 public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
 
-                                    System.out.println("marketMaker.order.aggregateUpdate begins for marketMaker: " + marketMaker);
+                                    System.out.println("marketMaker.order.aggregateUpdate begins for marketMaker: "
+                                        + marketMaker);
 
                                     event
                                         .getPropertyChangeEventMap()
