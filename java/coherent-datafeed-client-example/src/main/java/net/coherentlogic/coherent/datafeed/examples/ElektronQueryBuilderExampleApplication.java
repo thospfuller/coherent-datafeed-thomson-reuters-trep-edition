@@ -160,7 +160,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
 
     public void queryMarketByOrderService () {
 
-        AtomicLong ctr = new AtomicLong (0);
+        AtomicLong aggregateUpdateCtr = new AtomicLong (0);
+        AtomicLong statusUpdateCtr = new AtomicLong (0);
 
         for (String nextRic : rics) {
 
@@ -176,7 +177,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                     @Override
                     public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
 
-                        System.out.println("aggregateUpdate begins for marketByOrder: " + marketByOrder);
+                        System.out.println("marketByOrder.aggregateUpdate [" + aggregateUpdateCtr.incrementAndGet()
+                            + "] begins for marketByOrder: " + marketByOrder);
 
                         event
                             .getPropertyChangeEventMap()
@@ -186,46 +188,53 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                         );
 
                         System.out.println("aggregateUpdate ends.");
-                        System.out.flush ();
                     }
                 }
             );
 
             StatusResponse statusResponse = marketByOrder.getStatusResponse();
 
-            statusResponse.addPropertyChangeListener(
+            statusResponse.addAggregatePropertyChangeListener(
                 event -> {
 
-                    long currentCtr = ctr.incrementAndGet();
+                    System.out.println("marketByOrder.statusResponse.aggregateUpdate [" +
+                        statusUpdateCtr.incrementAndGet() + "] begins for marketByOrder: " + marketByOrder);
 
-                    System.out.println("[mbo.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
-                        event);
-                }
-            );
+                    event
+                        .getPropertyChangeEventMap()
+                        .forEach((key, value) -> {
+                            System.out.println("- key: " + key + ", value: " + value);
+                        }
+                    );
 
-            marketByOrder.addPropertyChangeListener(
-                event -> {
-
-                    long currentCtr = ctr.incrementAndGet();
-
-                    System.out.println ("[mbo.ric: "+ nextRic +"]; nextMarketByOrderUpdate[" + currentCtr + "]." +
-                        "event: " + event);
+                    System.out.println("aggregateUpdate ends.");
                 }
             );
 
             marketByOrder.addOrderEventListener(
                 orderEvent -> {
-
                     if (orderEvent.getEventType() == EventType.instantiated) {
-                        orderEvent
-                        .getOrder()
-                        .addPropertyChangeListener(
-                            event -> {
 
-                                long currentCtr = ctr.incrementAndGet();
+                        System.out.println("Adding an order due to orderEvent: " + orderEvent);
 
-                                System.out.println ("[mbo.ric: "+ nextRic +"]; mbo.order updated[" + currentCtr +
-                                    "]; event: " + event);
+                        MarketByOrder.Order order = orderEvent.getOrder();
+
+                        order.addAggregatePropertyChangeListener(
+                            new AggregatePropertyChangeListener () {
+                                @Override
+                                public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
+
+                                    System.out.println("marketByOrder.order.aggregateUpdate begins: " + marketByOrder);
+
+                                    event
+                                        .getPropertyChangeEventMap()
+                                        .forEach((key, value) -> {
+                                            System.out.println("- key: " + key + ", value: " + value);
+                                        }
+                                    );
+
+                                    System.out.println("aggregateUpdate ends.");
+                                }
                             }
                         );
                     }
@@ -238,7 +247,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
 
     public void queryMarketMakerService () {
 
-        AtomicLong ctr = new AtomicLong (0);
+        AtomicLong aggregateUpdateCtr = new AtomicLong (0);
+        AtomicLong statusUpdateCtr = new AtomicLong (0);
 
         for (String nextRic : rics) {
 
@@ -254,7 +264,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                     @Override
                     public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
 
-                        System.out.println("aggregateUpdate begins for marketMaker: " + marketMaker);
+                        System.out.println("marketMaker.aggregateUpdate [" + aggregateUpdateCtr.incrementAndGet() + "] begins for "
+                            + "marketMaker: " + marketMaker);
 
                         event
                             .getPropertyChangeEventMap()
@@ -264,30 +275,26 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                         );
 
                         System.out.println("aggregateUpdate ends.");
-                        System.out.flush ();
                     }
                 }
             );
 
             StatusResponse statusResponse = marketMaker.getStatusResponse();
 
-            statusResponse.addPropertyChangeListener(
+            statusResponse.addAggregatePropertyChangeListener(
                 event -> {
 
-                    long currentCtr = ctr.incrementAndGet();
+                    System.out.println("statusResponse.aggregateUpdate ["+ statusUpdateCtr.incrementAndGet() +"] "
+                        + "begins for " + "marketMaker: " + marketMaker);
 
-                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
-                        event);
-                }
-            );
+                    event
+                        .getPropertyChangeEventMap()
+                        .forEach((key, value) -> {
+                            System.out.println("- key: " + key + ", value: " + value);
+                        }
+                    );
 
-            marketMaker.addPropertyChangeListener(
-                event -> {
-
-                    long currentCtr = ctr.incrementAndGet();
-
-                    System.out.println ("[mm.ric: "+ nextRic +"]; nextMarketMakerUpdate[" + currentCtr + "]." +
-                        "event: " + event);
+                    System.out.println("aggregateUpdate ends.");
                 }
             );
 
@@ -296,13 +303,22 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                     if (orderEvent.getEventType() == EventType.instantiated) {
                         orderEvent
                         .getOrder()
-                        .addPropertyChangeListener(
-                            event -> {
+                        .addAggregatePropertyChangeListener(
+                            new AggregatePropertyChangeListener () {
+                                @Override
+                                public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
 
-                                long currentCtr = ctr.incrementAndGet();
+                                    System.out.println("marketMaker.order.aggregateUpdate begins for marketMaker: " + marketMaker);
 
-                                System.out.println ("[mm.ric: "+ nextRic +"]; mm.order updated[" + currentCtr +
-                                    "]; event: " + event);
+                                    event
+                                        .getPropertyChangeEventMap()
+                                        .forEach((key, value) -> {
+                                            System.out.println("- key: " + key + ", value: " + value);
+                                        }
+                                    );
+
+                                    System.out.println("aggregateUpdate ends.");
+                                }
                             }
                         );
                     }
@@ -316,8 +332,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
     public void queryMarketPriceService () {
 
         AtomicLong aggregateUpdateCtr = new AtomicLong (0);
-        AtomicLong statusCtr = new AtomicLong (0);
-        AtomicLong updateCtr = new AtomicLong (0);
+        AtomicLong statusUpdateCtr = new AtomicLong (0);
 
         for (String nextRic : rics) {
 
@@ -333,7 +348,8 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                     @Override
                     public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
 
-                        System.out.println("aggregateUpdate begins for marketPrice: " + marketPrice);
+                        System.out.println("marketPrice.aggregateUpdate [" + aggregateUpdateCtr.incrementAndGet() +
+                            "] begins for: " + marketPrice);
 
                         event
                             .getPropertyChangeEventMap()
@@ -343,33 +359,26 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                         );
 
                         System.out.println("aggregateUpdate ends.");
-                        System.out.flush ();
                     }
                 }
             );
 
-            marketPrice.setRic(nextRic);
+            StatusResponse statusResponse = marketPrice.getStatusResponse();
 
-            marketPrice.getStatusResponse().addPropertyChangeListener(
+            statusResponse.addAggregatePropertyChangeListener(
                 event -> {
 
-                    long currentCtr = statusCtr.incrementAndGet();
+                    System.out.println("marketPrice.statusResponse.aggregateUpdate ["+ statusUpdateCtr.incrementAndGet()
+                        + "] begins for " + marketPrice);
 
-                    System.out.println("[mm.ric: " + nextRic + "] statusResponseUpdate[" + currentCtr + "].event: " +
-                        event);
-                }
-            );
+                    event
+                        .getPropertyChangeEventMap()
+                        .forEach((key, value) -> {
+                            System.out.println("- key: " + key + ", value: " + value);
+                        }
+                    );
 
-            marketPrice.addPropertyChangeListener(
-                event -> {
-
-                    long currentCtr = updateCtr.incrementAndGet();
-
-                    MarketPrice result = (MarketPrice) event.getSource ();
-
-                    if (currentCtr % 1000 == 0)
-                        System.out.println ("[ric: "+ nextRic +"]; nextMarketPriceUpdate[" + currentCtr + "]." +
-                            "event: " + event);
+                    System.out.println("aggregateUpdate ends.");
                 }
             );
 
