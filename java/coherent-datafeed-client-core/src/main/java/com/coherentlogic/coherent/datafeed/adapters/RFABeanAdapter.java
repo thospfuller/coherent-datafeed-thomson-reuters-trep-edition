@@ -37,6 +37,7 @@ import com.reuters.rfa.rdm.RDMUser;
 /**
  * An adapter that converts the OMMMsg into an instance of {@link RFABean}.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class RFABeanAdapter<T extends RFABean> {
@@ -120,17 +121,7 @@ public class RFABeanAdapter<T extends RFABean> {
      */
     public void adapt (OMMMsg ommMsg, T rfaBean) {
 
-        Map<String, PropertyChangeEvent> propertyChangeEventMap = new HashMap<String, PropertyChangeEvent> ();
-
-        PropertyChangeListener propertyChangeListener = new PropertyChangeListener () {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                propertyChangeEventMap.put(propertyChangeEvent.getPropertyName(), propertyChangeEvent);
-            }
-        };
-
-        rfaBean.addPropertyChangeListener(propertyChangeListener);
+        AggregatePropertyChangeCollector<RFABean> collector = new AggregatePropertyChangeCollector<RFABean> (rfaBean);
 
         if (ommMsg.has(OMMMsg.HAS_ATTRIB_INFO)) {
             OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
@@ -143,9 +134,7 @@ public class RFABeanAdapter<T extends RFABean> {
 
         toRFABean (data, rfaBean);
 
-        rfaBean.fireAggregatePropertyChangeEvent(new AggregatePropertyChangeEvent (propertyChangeEventMap));
-
-        rfaBean.removePropertyChangeListener(propertyChangeListener);
+        collector.done();
     }
 
     void toRFABean (OMMAttribInfo ommAttribInfo, T rfaBean) {
