@@ -16,7 +16,8 @@ import com.reuters.rfa.omm.OMMMsg;
  * the workflow to route to the error channel, otherwise the workflow can
  * continue on the success channel.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class RouteOMMMsgByFinalFlag extends AbstractMessageRouter {
 

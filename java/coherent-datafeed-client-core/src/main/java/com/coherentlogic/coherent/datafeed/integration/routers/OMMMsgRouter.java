@@ -18,7 +18,8 @@ import com.reuters.rfa.omm.OMMState;
  *  or something like this, as we need to check the message to determine if the
  *  login succeeded.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class OMMMsgRouter extends AbstractMessageRouter {
 

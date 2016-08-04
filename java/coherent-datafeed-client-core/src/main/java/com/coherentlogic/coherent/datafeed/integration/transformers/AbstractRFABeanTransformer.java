@@ -15,7 +15,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * @param <T> The type of CachedEntry.
  * @param <O> the type of object contained in the CachedEntry.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 //@Transactional
 public abstract class AbstractRFABeanTransformer

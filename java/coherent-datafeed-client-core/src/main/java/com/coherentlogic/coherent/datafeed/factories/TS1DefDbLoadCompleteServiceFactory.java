@@ -13,7 +13,8 @@ import com.reuters.ts1.TS1DefDb;
  * TS1DefDbLoadCompleteService} so as to keep the dependency on the
  * {@link TS1DefDb} isolated.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class TS1DefDbLoadCompleteServiceFactory
     implements TypedFactory<TS1DefDbLoadCompleteService> {

@@ -12,7 +12,8 @@ import org.springframework.integration.gateway.MessagingGatewaySupport;
  *  -- the GatewayDelegate is implemented in this class (as well as others --
  *  for example, the MarshallingWebServiceInboundGateway has this as well.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class GatewayDelegate extends MessagingGatewaySupport {
 

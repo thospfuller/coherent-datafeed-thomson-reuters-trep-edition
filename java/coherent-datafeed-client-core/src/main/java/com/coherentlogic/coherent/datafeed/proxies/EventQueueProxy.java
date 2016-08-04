@@ -14,7 +14,8 @@ import com.reuters.rfa.common.EventQueue;
  * Proxy class for the {@link com.reuters.rfa.common.EventQueue EventQueue} that
  * converts all checked exceptions into runtime exceptions.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class EventQueueProxy {
 

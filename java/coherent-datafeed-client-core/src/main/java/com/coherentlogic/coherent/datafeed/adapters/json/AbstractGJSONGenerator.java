@@ -8,7 +8,7 @@ import com.google.gson.Gson;
  * object of type S into a JSON String.
  *
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  *
  * @param <S> The source object which will be converted into a result of type String.
  */

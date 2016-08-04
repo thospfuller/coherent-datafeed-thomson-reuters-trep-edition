@@ -14,7 +14,8 @@ import com.reuters.rfa.common.EventQueue;
 /**
  * 
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class DispatchableNotificationClientImpl implements DispatchableNotificationClient {
 

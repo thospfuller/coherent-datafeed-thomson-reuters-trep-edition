@@ -30,6 +30,7 @@ import com.reuters.rfa.omm.OMMMsg;
 /**
  * An adapter that converts the OMMMsg into an instance of MarketPrice.
  *
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class MarketByOrderAdapter

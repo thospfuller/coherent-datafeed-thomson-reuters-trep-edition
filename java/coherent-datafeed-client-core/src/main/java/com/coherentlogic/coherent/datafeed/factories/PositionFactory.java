@@ -15,7 +15,8 @@ import com.coherentlogic.coherent.datafeed.exceptions.FatalRuntimeException;
  * 
  *     192.168.0.4/GODZILLA
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class PositionFactory implements TypedFactory<String> {
 

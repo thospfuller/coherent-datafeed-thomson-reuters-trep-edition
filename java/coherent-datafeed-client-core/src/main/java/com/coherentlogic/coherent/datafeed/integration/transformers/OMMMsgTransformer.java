@@ -11,7 +11,8 @@ import com.reuters.rfa.session.omm.OMMItemEvent;
  * @deprecated We are no longer converting messages to OMMMsg as we lose the
  *  handle, so this class has been deprecated as a result.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class OMMMsgTransformer
     extends AbstractPayloadTransformer<OMMItemEvent, OMMMsg> {

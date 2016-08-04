@@ -15,7 +15,8 @@ import com.reuters.rfa.session.Session;
  * 
  * -- if neither of these are set the sessionName will default to the sessionName property -- ie. "mySession".
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class RFASessionFactory implements TypedFactory<Session> {
 

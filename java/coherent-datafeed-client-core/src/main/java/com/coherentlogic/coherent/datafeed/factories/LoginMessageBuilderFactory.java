@@ -12,7 +12,8 @@ import com.reuters.rfa.omm.OMMPool;
  * maintained in each instance of this class, which explains why we use a
  * factory to create this class.
  *
- * @author <a href="support@coherentlogic.com">Support</a>
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public class LoginMessageBuilderFactory
     implements TypedFactory<LoginMessageBuilder> {
