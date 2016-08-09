@@ -74,12 +74,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Table(name=MARKET_BY_ORDER)
 @XStreamAlias(MARKET_BY_ORDER)
 public class MarketByOrder extends StatusResponseBean
-    implements
-        RICBeanSpecification,
-        OrderEventGenerator<MarketByOrder.Order>,
-        AggregatePropertyChangeGeneratorSpecification<MarketByOrder> {
+    implements RICBeanSpecification, OrderEventGenerator<MarketByOrder.Order> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5047595610465925838L;
 
 //    static final String
 //        DSPLY_NAME = "DSPLY_NAME",
@@ -476,18 +473,6 @@ public class MarketByOrder extends StatusResponseBean
     }
 
     @Override
-    public void addAggregatePropertyChangeListener(
-        AggregatePropertyChangeListener<MarketByOrder> aggregatePropertyChangeListener) {
-        throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
-    }
-
-    @Override
-    public void removeAggregatePropertyChangeListener(
-        AggregatePropertyChangeListener<MarketByOrder> aggregatePropertyChangeListener) {
-        throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
-    }
-
-    @Override
     public String toString() {
         return "MarketByOrder [ric=" + ric + ", permission=" + permission + ", displayName=" + displayName
             + ", tradingUnits=" + tradingUnits + ", recordType=" + recordType + ", currency=" + currency
@@ -509,8 +494,9 @@ public class MarketByOrder extends StatusResponseBean
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
      */
     @XStreamAlias(MarketPriceConstants.ORDER)
-    public static class Order extends RFABean
-        implements AggregatePropertyChangeGeneratorSpecification<MarketByOrder.Order> {
+    public static class Order extends RFABean {
+
+        private static final long serialVersionUID = 3061616938490422985L;
 
         // RMTES_STRING
         @XStreamAlias(MarketPriceConstants.ORDER_ID)
@@ -632,18 +618,6 @@ public class MarketByOrder extends StatusResponseBean
         @Adapt(using=OMMNumericAdapter.class)
         public void setPriorityTimeMillis(@Changeable(PRIORITY_TIME_MILLIS) Long priorityTimeMillis) {
             this.priorityTimeMillis = priorityTimeMillis;
-        }
-
-        @Override
-        public void addAggregatePropertyChangeListener(
-            AggregatePropertyChangeListener<MarketByOrder.Order> aggregatePropertyChangeListener) {
-            throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
-        }
-
-        @Override
-        public void removeAggregatePropertyChangeListener(
-            AggregatePropertyChangeListener<MarketByOrder.Order> aggregatePropertyChangeListener) {
-            throw new AggregatePropertyChangeGeneratorSpecification.MethodNotImplementedException();
         }
 
         @Override
