@@ -29,7 +29,6 @@
 
     <cache:annotation-driven cache-manager="springCacheManager"/>
 
-    <!-- import resource="hornetq-beans.xml"/ -->
     <import resource="jpa-beans.xml"/>
     <import resource="aop-configuration.xml"/>
     <import resource="integration-beans.xml"/>
