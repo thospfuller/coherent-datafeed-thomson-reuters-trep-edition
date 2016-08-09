@@ -63,7 +63,7 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "*** ----------------------------------------------------------------------------------------------------- ***",
         "***                                                                                                       ***",
         "*** When running the example application, an RFA session entry with the name \"mySession\" must exist  in  ***",
-        "*** your configuration OR you must override this value — see below for an example of the configuration we ***",
+        "*** your configuration OR you must override this value - see below for an example of the configuration we ***",
         "*** use. You may override this value using the following VM parameter:                                    ***",
         "***                                                                                                       ***",
         "***     -DCDATAFEED_SESSION_NAME=\"[Add your session name here]\"                                          ***",
