@@ -32,7 +32,6 @@
         <spring.integration.version>4.2.1.RELEASE</spring.integration.version>
         <spring.boot.version>1.3.3.RELEASE</spring.boot.version>
         <infinispan.version>8.0.1.Final</infinispan.version>
-        <hornetq.version>2.2.21.Final</hornetq.version>
         <java.version>1.8</java.version>
         <start-class>com.coherentlogic.coherent.datafeed.examples.TimeSeriesExample</start-class>
     </properties>
@@ -116,10 +115,10 @@
         <!-- module>coherent-datafeed-assembly</module -->
         <module>coherent-datafeed-client-core</module>
         <module>coherent-datafeed-client-example</module>
+        <module>coherent-datafeed-jms-int</module>
         <!-- Connection to TREP required to run tests in core-it. -->
         <!-- module>coherent-datafeed-client-core-it</module -->
         <!-- module>coherent-datafeed-db-int</module>
-        <module>coherent-datafeed-jms-int</module>
         <module>coherent-datafeed-flink-int</module>
         <module>coherent-datafeed-redis-int</module>
         <module>coherent-datafeed-storm-int</module -->
@@ -161,7 +160,7 @@
             <dependency>
                 <groupId>com.coherentlogic.coherent.data-model</groupId>
                 <artifactId>bom</artifactId>
-                <version>1.0.22-RELEASE</version>
+                <version>1.0.23-RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -335,63 +334,6 @@
                 <artifactId>mockito-all</artifactId>
                 <version>1.9.5</version>
                 <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-core</artifactId>
-                <version>${hornetq.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-jms</artifactId>
-                <version>${hornetq.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-logging</artifactId>
-                <version>${hornetq.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-transports</artifactId>
-                <version>2.0.0.GA</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty</artifactId>
-                <version>3.10.5.Final</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.javaee</groupId>
-                <artifactId>jboss-jms-api</artifactId>
-                <version>1.1.0.GA</version>
-                <scope>compile</scope>
-            </dependency>
-            <!-- mvn install:install-file -Dfile=./jboss-logging-spi.jar -DgroupId=org.jboss.logging 
-                -DartifactId=jboss-logging -Dversion=2.1.0.GA -Dpackaging=jar -->
-            <!-- PREVIOUSLY USING 2.1.0.GA AND I'M NOT SURE WHY THE VERSION NUMBER 
-                WAS SO LOW; UPGRADING DUE TO THE DB-INT MODULE'S USE OF HIBERNATE. -->
-            <dependency>
-                <groupId>org.jboss.logging</groupId>
-                <artifactId>jboss-logging</artifactId>
-                <version>3.3.0.Final</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jnpserver</artifactId>
-                <version>4.2.2.GA</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.jms</groupId>
-                <artifactId>jms</artifactId>
-                <version>1.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
