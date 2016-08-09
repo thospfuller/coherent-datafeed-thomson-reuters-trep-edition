@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.coherentlogic.coherent.datafeed</groupId>
         <artifactId>client</artifactId>
-        <version>1.0.3-RELEASE</version>
+        <version>1.0.7-RELEASE</version>
     </parent>
 
     <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
@@ -16,6 +16,10 @@
     <name>coherent-datafeed-jms-int</name>
     <description>Integration of the Coherent Datafeed with HornetQ JMS.</description>
     <url>www.coherentlogic.com</url>
+
+    <properties>
+        <hornetq.version>2.2.21.Final</hornetq.version>
+    </properties>
 
     <developers>
         <developer>
@@ -102,34 +106,62 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.hornetq</groupId>
-            <artifactId>hornetq-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hornetq</groupId>
-            <artifactId>hornetq-logging</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hornetq</groupId>
-            <artifactId>hornetq-transports</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hornetq</groupId>
-            <artifactId>hornetq-jms</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.jms</groupId>
-            <artifactId>jms</artifactId>
-            <scope>provided</scope>
-        </dependency>
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-core</artifactId>
+                <version>${hornetq.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-jms</artifactId>
+                <version>${hornetq.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-logging</artifactId>
+                <version>${hornetq.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hornetq</groupId>
+                <artifactId>hornetq-transports</artifactId>
+                <version>2.0.0.GA</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty</artifactId>
+                <version>3.10.5.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.javaee</groupId>
+                <artifactId>jboss-jms-api</artifactId>
+                <version>1.1.0.GA</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- mvn install:install-file -Dfile=./jboss-logging-spi.jar -DgroupId=org.jboss.logging 
+                -DartifactId=jboss-logging -Dversion=2.1.0.GA -Dpackaging=jar -->
+            <!-- PREVIOUSLY USING 2.1.0.GA AND I'M NOT SURE WHY THE VERSION NUMBER 
+                WAS SO LOW; UPGRADING DUE TO THE DB-INT MODULE'S USE OF HIBERNATE. -->
+            <dependency>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging</artifactId>
+                <version>3.3.0.Final</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jnpserver</artifactId>
+                <version>4.2.2.GA</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.jms</groupId>
+                <artifactId>jms</artifactId>
+                <version>1.1</version>
+            </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
