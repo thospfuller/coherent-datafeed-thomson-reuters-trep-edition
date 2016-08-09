@@ -34,7 +34,6 @@
 
     <root>
         <priority value ="info" />
-        <!-- appender-ref ref="consoleAppender" / -->
         <appender-ref ref="fileAppender" />
     </root>
 
