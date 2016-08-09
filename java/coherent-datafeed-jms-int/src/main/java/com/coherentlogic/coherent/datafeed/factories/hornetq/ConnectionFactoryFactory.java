@@ -8,15 +8,13 @@ import org.hornetq.jms.client.HornetQConnectionFactory;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 
 /**
- * A factory class for creating instances of {@link javax.jms.ConnectionFactory}
- * via the {@link org.hornetq.api.jms.HornetQJMSClient} class.
+ * A factory class for creating instances of {@link javax.jms.ConnectionFactory} via the
+ * {@link org.hornetq.api.jms.HornetQJMSClient} class.
  *
- * Note that currently we're using this for topic-based queues only (see line
- * 109 in the hornetq-beans.xml file.
+ * Note that currently we're using this for topic-based queues only (see line 109 in the hornetq-beans.xml file).
  *
- * @deprecated This class may be removed as with the upgrade to HornetQ version
- *  2.2.21.Final HornetQ no longer has support for an implementation of
- *  javax.jms.ConnectionFactory that appears to be available.
+ * @deprecated This class may be removed as with the upgrade to HornetQ version 2.2.21.Final HornetQ no longer has
+ * support for an implementation of javax.jms.ConnectionFactory that appears to be available.
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
@@ -24,25 +22,16 @@ public class ConnectionFactoryFactory implements TypedFactory<HornetQConnectionF
 
     private final HornetQConnectionFactory connectionFactory;
 
-    /**
-     * 
-     */
-    public ConnectionFactoryFactory (
-        JMSFactoryType factoryType,
-        TransportConfiguration transportConfiguration) {
+    public ConnectionFactoryFactory (JMSFactoryType factoryType, TransportConfiguration transportConfiguration) {
 
-            HornetQConnectionFactory hornetQConnectionFactory
-                = HornetQJMSClient.createConnectionFactoryWithoutHA(
-                    factoryType, transportConfiguration);
+        HornetQConnectionFactory hornetQConnectionFactory = HornetQJMSClient.createConnectionFactoryWithoutHA(
+            factoryType, transportConfiguration);
 
-//            HornetQJMSClient.createConnectionFactory(transportConfiguration);
-//
-            this.connectionFactory = hornetQConnectionFactory;
+        this.connectionFactory = hornetQConnectionFactory;
     }
 
     @Override
     public HornetQConnectionFactory getInstance() {
-//        throw new RuntimeException ("FEEBAR!");
         return connectionFactory;
     }
 }
