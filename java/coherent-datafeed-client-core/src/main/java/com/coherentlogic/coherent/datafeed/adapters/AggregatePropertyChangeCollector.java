@@ -49,7 +49,9 @@ public class AggregatePropertyChangeCollector<T extends SerializableBean> {
     public void done () {
 
         if (!propertyChangeEventMap.isEmpty())
-            rfaBean.fireAggregatePropertyChangeEvent(new AggregatePropertyChangeEvent (propertyChangeEventMap));
+            rfaBean.fireAggregatePropertyChangeEvent(
+                new AggregatePropertyChangeEvent (rfaBean, propertyChangeEventMap)
+            );
 
         rfaBean.removePropertyChangeListener(propertyChangeListener);
     }
