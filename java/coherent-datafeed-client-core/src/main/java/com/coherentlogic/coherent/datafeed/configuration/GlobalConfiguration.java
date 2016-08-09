@@ -328,14 +328,14 @@ public class GlobalConfiguration {
      *
      *     @ImportResource({"classpath*:spring/jmx-beans.xml"})
      */
-//    @Bean(name=PERFORMANCE_MONITOR_SERVICE)
-//    public PerformanceMonitorService getPerformanceMonitorService () {
-//
-//        PerformanceMonitorService performanceMonitorService =
-//            new PerformanceMonitorService (PERFORMANCE_MONITOR_SERVICE);
-//
-//        performanceMonitorService.setEnabled(false);
-//
-//        return performanceMonitorService;
-//    }
+    @Bean(name=PERFORMANCE_MONITOR_SERVICE)
+    public PerformanceMonitorService getPerformanceMonitorService () {
+
+        PerformanceMonitorService performanceMonitorService =
+            new PerformanceMonitorService (PERFORMANCE_MONITOR_SERVICE);
+
+        performanceMonitorService.setEnabled(false);
+
+        return performanceMonitorService;
+    }
 }
