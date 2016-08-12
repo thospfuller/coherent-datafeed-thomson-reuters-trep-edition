@@ -37,7 +37,7 @@ cdatafeedtrep.env <- new.env()
                 "The CDATAFEED_JARS option is NULL and this means that, absent the rfa.jar, this package will not ",
                 "work (expect to see ClassNotFoundException(s)). The RFA dependency can be added as follows: ",
                 "options(CDATAFEED_JARS=list(\"C:/Temp/rfa.jar\")) prior to using this package (that means *before* ",
-                "executing library (\"cdatafreedtre\"). Specifically RFA version 7.6.0.L1 is required by this package ",
+                "executing library (\"cdatafreedtre\"). Specifically RFA version 8.0.1.E3 is required by this package ",
                 "and can be downloaded direct from Thomson Reuters by visiting the following link: ",
                 "https://customers.reuters.com/a/support/technical/softwaredownload/", sep="\n"))
     } else {
