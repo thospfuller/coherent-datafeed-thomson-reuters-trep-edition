@@ -66,7 +66,7 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "*** your configuration OR you must override this value - see below for an example of the configuration we ***",
         "*** use. You may override this value using the following VM parameter:                                    ***",
         "***                                                                                                       ***",
-        "***     -DCDATAFEED_SESSION_NAME=\"[Add your session name here]\"                                          ***",
+        "***     -DCDATAFEED_SESSION_NAME=\"[Add your session name here]\"                                           ***",
         "***                                                                                                       ***",
         "*** See also:                                                                                             ***",
         "***                                                                                                       ***",
