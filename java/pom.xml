@@ -112,7 +112,7 @@
     </pluginRepositories>
 
     <modules>
-        <!-- module>coherent-datafeed-assembly</module -->
+        <module>coherent-datafeed-assembly</module>
         <module>coherent-datafeed-client-core</module>
         <module>coherent-datafeed-client-example</module>
         <module>coherent-datafeed-jms-int</module>
@@ -135,7 +135,7 @@
                 contract) or directly from Thomson Reuters (TR).
 
                 You will still need to have access to the Thomson Reuters
-                Enterprise Platform (TREP) in order to use this software and
+                Elektron Platform (TREP) in order to use this software and
                 this will require you to have a contract in place between your
                 business and Thomson Reuters.
 
