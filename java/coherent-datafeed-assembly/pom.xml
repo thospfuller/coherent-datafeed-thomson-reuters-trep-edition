@@ -24,6 +24,10 @@
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-client-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-jms-int</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
