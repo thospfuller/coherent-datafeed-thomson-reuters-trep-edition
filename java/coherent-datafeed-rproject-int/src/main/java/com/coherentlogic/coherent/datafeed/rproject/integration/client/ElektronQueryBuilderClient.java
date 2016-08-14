@@ -26,6 +26,7 @@ import com.coherentlogic.coherent.data.model.core.lifecycle.Startable;
 import com.coherentlogic.coherent.data.model.core.lifecycle.Stoppable;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeListener;
+import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.builders.ElektronQueryBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
@@ -48,11 +49,15 @@ import net.coherentlogic.coherent.datafeed.examples.ExampleRICS;
 @ImportResource({
     "classpath*:spring/jmx-beans.xml",
     "classpath*:spring/hornetq-beans.xml",
-    "classpath*:spring/marketprice-jms-workflow-beans.xml"
+    "classpath*:spring/marketprice-jms-workflow-beans.xml",
+    "classpath*:spring/rproject-beans.xml",
 })
 public class ElektronQueryBuilderClient implements MarketPriceConstants, Startable, Stoppable {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderClient.class);
+
+    public static final String ADD_MARKET_PRICE_TO_QUEUE_CHANNEL = "addMarketPriceToQueueChannel",
+        MARKET_PRICE_CONSUMER = "marketPriceConsumer", JSON_ADAPTER = "jsonAdapter";
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;
@@ -60,15 +65,26 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
     private ElektronQueryBuilder elektronQueryBuilder;
 
     @Autowired
-    @Qualifier("addMarketPriceToQueueChannel")
+    @Qualifier(ADD_MARKET_PRICE_TO_QUEUE_CHANNEL)
     private MessageChannel addMarketPriceToQueueChannel;
 
-    public ElektronQueryBuilderClient () {
-    }
+    /* If you see this:
+     *
+     * HornetQException[errorCode=2 message=Cannot connect to server(s). Tried with all available servers.]
+     *
+     * -- then the solution is to not autowire the bean but get it directly from the application context once everything
+     * has been started.
+     */
+    private MessageConsumer marketPriceMessageConsumer;
+
+    @Autowired
+    @Qualifier(JSON_ADAPTER)
+    private BasicAdapter<MarketPrice, String> jsonAdapter;
 
     @Override
     public void start() {
         elektronQueryBuilder = applicationContext.getBean(ElektronQueryBuilder.class);
+        marketPriceMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_PRICE_CONSUMER);
     }
 
     @Override
@@ -87,7 +103,7 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
 
             applicationContext = builder
                 .web(false)
-                .headless(false)
+                .headless(true)
                 .registerShutdownHook(true)
                 .run(new String[] {});
 
@@ -203,46 +219,14 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
         return this;
     }
 
-    public static void main (String[] unused) throws InterruptedException {
+    public MarketPrice getNextMarketPriceUpdate (Long timeout) {
 
-        String dacsId = System.getenv(DACS_ID);
-
-        ElektronQueryBuilderClient client = ElektronQueryBuilderClient.initialize(); //new ElektronQueryBuilderClient ();
-
-        client.start();
-
-        AtomicLong nextUpdateCtr = new AtomicLong (0);
-
-        final MessageConsumer messageConsumer = 
-            (MessageConsumer) client.getApplicationContext().getBean("marketPriceConsumer");
-
-        new Thread (
-            () -> {
-                while (true) {
-                    MarketPrice next = getNextUpdate (messageConsumer, 5000L);
-                    System.out.println("next["+ nextUpdateCtr.incrementAndGet() +"]: " + next);
-                }
-            }
-        ).start ();
-
-        client.login (dacsId);
-
-        for (String nextRic : ExampleRICS.rics)
-            client.query(nextRic);
-
-        Thread.sleep(Long.MAX_VALUE);
-
-        System.exit(-9999);
-    }
-
-    public static MarketPrice getNextUpdate (MessageConsumer messageConsumer, Long timeout) {
-
-        log.info("getNextUpdate: method begins; timeout: " + timeout);
+        log.info("getNextMarketPriceUpdate: method begins; timeout: " + timeout);
 
         Message nextMessage;
 
         try {
-            nextMessage = messageConsumer.receive(timeout);
+            nextMessage = marketPriceMessageConsumer.receive(timeout);
         } catch (JMSException jmsException) {
             throw new UpdateFailedException ("The next update was not received due to an exception being "
                 + "thrown while waiting to receive the next message.", jmsException);
@@ -263,8 +247,50 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
             }
         }
 
-        log.info("getNextUpdate: method ends; result: " + result);
+        log.info("getNextMarketPriceUpdate: method ends; result: " + result);
 
         return result;
+    }
+
+    public String getNextMarketPriceUpdateAsJson (Long timeout) {
+
+        log.info("getNextMarketPriceUpdateAsJson: method begins; timeout: " + timeout);
+
+        MarketPrice nextUpdate = getNextMarketPriceUpdate(timeout);
+
+        String result = jsonAdapter.adapt(nextUpdate);
+
+        log.info("getNextMarketPriceUpdateAsJson: method ends; result: " + result);
+
+        return result;
+    }
+
+    public static void main (String[] unused) throws InterruptedException {
+
+        String dacsId = System.getenv(DACS_ID);
+
+        ElektronQueryBuilderClient client = ElektronQueryBuilderClient.initialize();
+
+        client.start();
+
+        AtomicLong nextUpdateCtr = new AtomicLong (0);
+
+        new Thread (
+            () -> {
+                while (true) {
+                    String next = client.getNextMarketPriceUpdateAsJson(5000L);
+                    System.out.println("next["+ nextUpdateCtr.incrementAndGet() +"]: " + next);
+                }
+            }
+        ).start ();
+
+        client.login (dacsId);
+
+        for (String nextRic : ExampleRICS.rics)
+            client.query(nextRic);
+
+        Thread.sleep(Long.MAX_VALUE);
+
+        System.exit(-9999);
     }
 }
