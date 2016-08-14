@@ -2,15 +2,15 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
-    <artifactId>coherent-datafeed-assembly</artifactId>
-    <packaging>jar</packaging>
-
     <parent>
         <groupId>com.coherentlogic.coherent.datafeed</groupId>
         <artifactId>client</artifactId>
         <version>1.0.7-RELEASE</version>
     </parent>
+
+    <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+    <artifactId>coherent-datafeed-assembly</artifactId>
+    <packaging>jar</packaging>
 
     <name>assembly</name>
     <url>http://www.coherentlogic.com</url>
@@ -27,6 +27,10 @@
         <dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-jms-int</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-rproject-int</artifactId>
         </dependency>
     </dependencies>
 
