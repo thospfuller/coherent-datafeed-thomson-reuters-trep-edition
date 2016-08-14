@@ -116,10 +116,11 @@
         <module>coherent-datafeed-client-core</module>
         <module>coherent-datafeed-client-example</module>
         <module>coherent-datafeed-jms-int</module>
+        <module>coherent-datafeed-rproject-int</module>
+        <module>coherent-datafeed-db-int</module>
         <!-- Connection to TREP required to run tests in core-it. -->
         <!-- module>coherent-datafeed-client-core-it</module -->
-        <!-- module>coherent-datafeed-db-int</module>
-        <module>coherent-datafeed-flink-int</module>
+        <!-- module>coherent-datafeed-flink-int</module>
         <module>coherent-datafeed-redis-int</module>
         <module>coherent-datafeed-storm-int</module -->
         <!-- module>coherent-datafeed-suanshu-int</module -->
@@ -189,6 +190,16 @@
                 <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
                 <artifactId>coherent-datafeed-db-int</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+                <artifactId>coherent-datafeed-jms-int</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coherentlogic.coherent.data-model</groupId>
+                <artifactId>coherent-datafeed-rproject-int</artifactId>
+                <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
