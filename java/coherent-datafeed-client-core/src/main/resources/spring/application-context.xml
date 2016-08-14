@@ -180,12 +180,12 @@
         <constructor-arg name="client" ref="authenticationEventDrivenEndpoint"/>
     </bean>
 
-    <bean id="jsonAdapter" class="com.coherentlogic.coherent.datafeed.adapters.json.RFABeanToJSONAdapter">
+    <!-- bean id="jsonAdapter" class="com.coherentlogic.coherent.datafeed.adapters.json.RFABeanToJSONAdapter">
         <constructor-arg name="targets" index="0" type="Class[]">
             <array value-type="java.lang.Class">
                 <value>com.coherentlogic.coherent.datafeed.domain.AbstractCommonProperties</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.AbstractAdvancedCommonProperties</value>
-                <!-- value>com.coherentlogic.coherent.datafeed.domain.SessionBean</value -->
+                <!== value>com.coherentlogic.coherent.datafeed.domain.SessionBean</value ==>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker</value>
@@ -197,7 +197,7 @@
                 <value>com.coherentlogic.coherent.datafeed.domain.DictionaryEntries</value>
             </array>
         </constructor-arg>
-    </bean>
+    </bean -->
 
     <bean id="ts1DefEventDrivenEndpoint"
      class="com.coherentlogic.coherent.datafeed.integration.endpoints.EventDrivenEndpoint">
