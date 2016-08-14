@@ -197,9 +197,9 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.coherentlogic.coherent.data-model</groupId>
+                <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
                 <artifactId>coherent-datafeed-rproject-int</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
