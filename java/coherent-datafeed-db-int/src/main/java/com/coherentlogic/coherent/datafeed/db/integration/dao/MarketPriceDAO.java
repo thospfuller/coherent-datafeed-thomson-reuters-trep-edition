@@ -5,7 +5,7 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_PRICE_DA
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coherentlogic.coherent.data.model.db.integration.dao.SerializableDAO;
+import com.coherentlogic.coherent.data.model.core.db.integration.dao.SerializableDAO;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 
 /**
