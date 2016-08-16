@@ -37,9 +37,11 @@ import com.coherentlogic.coherent.datafeed.services.ServiceName;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-@SpringBootApplication
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
-@ImportResource({"classpath*:spring/hornetq-beans.xml", "classpath*:spring/marketprice-jms-workflow-beans.xml"})
+// DISABLED BECAUSE THIS CLASS WILL BE PICKED UP BY SPRING BOOT AND WE ONLY WANT ONE TO BE RUNNING (IN PARTICULAR IN
+// THE R PACKAGE.
+//@SpringBootApplication
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@ImportResource({"classpath*:spring/hornetq-beans.xml", "classpath*:spring/marketprice-jms-workflow-beans.xml"})
 public class MarketPriceJMSExample implements CommandLineRunner, MarketPriceConstants {
 
     private static final Logger log = LoggerFactory.getLogger(MarketPriceJMSExample.class);
@@ -55,53 +57,53 @@ public class MarketPriceJMSExample implements CommandLineRunner, MarketPriceCons
 
     public static void main (String[] unused) {
 
-        SpringApplicationBuilder builder = new SpringApplicationBuilder (MarketPriceJMSExample.class);
-
-        builder
-            .web(false)
-            .headless(false)
-            .registerShutdownHook(true)
-            .run(unused);
+//        SpringApplicationBuilder builder = new SpringApplicationBuilder (MarketPriceJMSExample.class);
+//
+//        builder
+//            .web(false)
+//            .headless(false)
+//            .registerShutdownHook(true)
+//            .run(unused);
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        String dacsId = System.getenv(DACS_ID);
-
-        elektronQueryBuilder = applicationContext.getBean(ElektronQueryBuilder.class);
-
-        SessionBean sessionBean = elektronQueryBuilder.newSessionBean(dacsId);
-
-        sessionBean.getStatusResponse().addPropertyChangeListener(
-            event -> {
-                System.out.println("statusResponse.event: " + event);
-            }
-        );
-
-        elektronQueryBuilder.login(sessionBean);
-
-        AtomicLong nextUpdateCtr = new AtomicLong (0);
-
-        final MessageConsumer messageConsumer = (MessageConsumer) applicationContext.getBean("marketPriceConsumer");
-
-        new Thread (
-            () -> {
-                while (true) {
-                    MarketPrice next = getNextUpdate (messageConsumer, 5000L);
-                    System.out.println("next["+ nextUpdateCtr.incrementAndGet() +"]: " + next);
-                }
-            }
-        ).start ();
-
-        queryMarketPriceService ();
-
-        log.info("...done!");
-
-        // NOTE: If we end too soon this may be part of the reason why we're
-        //       seeing an ommMsg with the final flag set -- one way of proving
-        //       this would be to wait and then see if we consistently can
-        //       login.
+//        String dacsId = System.getenv(DACS_ID);
+//
+//        elektronQueryBuilder = applicationContext.getBean(ElektronQueryBuilder.class);
+//
+//        SessionBean sessionBean = elektronQueryBuilder.newSessionBean(dacsId);
+//
+//        sessionBean.getStatusResponse().addPropertyChangeListener(
+//            event -> {
+//                System.out.println("statusResponse.event: " + event);
+//            }
+//        );
+//
+//        elektronQueryBuilder.login(sessionBean);
+//
+//        AtomicLong nextUpdateCtr = new AtomicLong (0);
+//
+//        final MessageConsumer messageConsumer = (MessageConsumer) applicationContext.getBean("marketPriceConsumer");
+//
+//        new Thread (
+//            () -> {
+//                while (true) {
+//                    MarketPrice next = getNextUpdate (messageConsumer, 5000L);
+//                    System.out.println("mpjmse.next["+ nextUpdateCtr.incrementAndGet() +"]: " + next);
+//                }
+//            }
+//        ).start ();
+//
+//        queryMarketPriceService ();
+//
+//        log.info("...done!");
+//
+//        // NOTE: If we end too soon this may be part of the reason why we're
+//        //       seeing an ommMsg with the final flag set -- one way of proving
+//        //       this would be to wait and then see if we consistently can
+//        //       login.
     }
 
     public void queryMarketPriceService () {
