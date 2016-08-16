@@ -138,6 +138,15 @@ public class TimeSeries extends StatusResponseBean implements MarketPriceConstan
         return samples;
     }
 
+    /**
+     * Method returns all values for the column specified by the header name.
+     *
+     * @param header The column header name -- ie. DATE, HIGH, LOW.
+     *
+     * @return All values for the specified column.
+     *
+     * @TODO Unit test this method.
+     */
     @Transient
     public List<String> getValuesForHeader (String header) {
 
@@ -156,9 +165,9 @@ public class TimeSeries extends StatusResponseBean implements MarketPriceConstan
                 List<String> points = sample.getPoints();
 
                 if (!points.isEmpty()) {
-    
+
                     String value = points.get(index);
-    
+
                     if (value == null)
                         value = Constants.NA;
 
