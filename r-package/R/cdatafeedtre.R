@@ -1,5 +1,8 @@
 #'
-#' @title The Coherent Datafeed Thomson Reuters Edition.
+#' @title The Coherent Datafeed Thomson Reuters Elektron Edition.
+#'
+#' @description Provides real-time market price updates and time series data direct from the Thomson Reuters Elektron
+#' Platform.
 #'
 #' @import RJSONIO
 #' @import rJava
@@ -47,7 +50,7 @@ cdatafeedtrep.env <- new.env()
     .jpackage(pkgname, lib.loc = libname, morePaths=cdatafeedJars)
 
     client <- NULL
-    client <<- .jnew("com.coherentlogic.coherent.datafeed.client.Client")
+    client <<- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")$initialize()
 }
 
 .onUnload <- function (libpath) {
@@ -76,25 +79,10 @@ Initialize <- function () {
 #' @export
 #'
 Login <- function (dacsId) {
-
-    authenticationService <- client$getAuthenticationService()
-
     tryCatch(
-        loginHandle <<- client$login(dacsId), Throwable = function (e) {
+        client$login(dacsId), Throwable = function (e) {
             stop(
-                paste ("Unable to login using the dacsId '", dacsId,
-                    "' -- details follow. ", e$getMessage(), sep="")
-            )
-        }
-    )
-
-    tryCatch(
-        client$waitForInitialisationToComplete(), Throwable = function (e) {
-            stop(
-                paste ("The application login has succeeded but the ",
-                    "application initialisation has failed. Try again or ",
-                    "inspect the log file for details pertaining to what ",
-                    "the problem is.", e$getMessage(), sep="")
+                paste ("Unable to login using the dacsId '", dacsId, "' -- details follow. ", e$getMessage(), sep="")
             )
         }
     )
@@ -105,32 +93,32 @@ Login <- function (dacsId) {
 #' @export
 #'
 Logout <- function () {
-
-    authenticationService <- client$getAuthenticationService()
-
     tryCatch(
-        authenticationService$logout(), Throwable = function (e) {
-            stop(
-                paste ("Unable to logout -- details follow. ", e$getMessage(),
-                    sep="")
-            )
+        client$logout(), Throwable = function (e) {
+            stop(paste ("Unable to logout -- details follow. ", e$getMessage(), sep=""))
         }
     )
 }
 
-#' Sends a request to Thomson Reuters to receive market price updates for the
-#' specified symbols.
+#' Sends a request to Thomson Reuters to receive market price updates for the specified symbols.
 #'
-#' @param serviceName For example "dIDN_RDF" (defaults to "IDN_RDF").
+#' Note that querying a large amount of symbols can lead to an OutOfMemoryException due to the number of inbound
+#' messages not being processed fast enough by R and hence memory is slowly eaten up until the VM limit is reached. If
+#' this issue is encountered then you need to reduce the number of symbols until you find a number that works for the
+#' machine this package is running on.
+#'
+#' @param serviceName For example "dELEKTRON_DD" (defaults to "dELEKTRON_DD").
 #' @param symbols One or more symbols, for example "GOOG.O".
 #'
 #' @export
 #'
-Query <- function (serviceName="IDN_RDF", symbols) {
+Query <- function (serviceName="dELEKTRON_DD", symbols) {
 
-    marketPriceService <- client$getMarketPriceService()
+    jServiceName <- J("com.coherentlogic.coherent.datafeed.services.ServiceName")
 
-    tryCatch(marketPriceService$query(serviceName, loginHandle, symbols),
+    actualServiceName <- jServiceName$valueOf(serviceName)
+
+    tryCatch(client$queryMarketPrice(actualServiceName, symbols),
         Throwable = function (e) {
             stop(
                 paste ("Unable to query the following symbols [", symbols,
@@ -140,64 +128,61 @@ Query <- function (serviceName="IDN_RDF", symbols) {
     )
 }
 
-#' Allows the user to inspect the dictionaries that have been loaded by this
-#' package.
-#'
-#' @return The dictionaries that have been loaded.
-#'
-#' @export
-#'
-GetDictionaries <- function () {
+# Allows the user to inspect the dictionaries that have been loaded by this
+# package.
+#
+# @return The dictionaries that have been loaded.
+#
+# @export
+#
+#GetDictionaries <- function () {
+#
+#    dictionaryService <- client$getDictionaryService()
+#
+#    tryCatch(result <- dictionaryService$getDictionaryEntriesAsJSON(),
+#        Throwable = function (e) {
+#            stop(
+#                paste ("Unable to get the dictionaries",
+#                    " -- details follow. ", e$getMessage(), sep="")
+#            )
+#        }
+#    )
+#
+#    resultantObject <- RJSONIO::fromJSON(result)
+#    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
+#    return(resultantFrame)
+#}
 
-    dictionaryService <- client$getDictionaryService()
+# Allows the user to inspect the directories that have been loaded by this
+# package.
+#
+# @return The directories that have been loaded.
+#
+# @export
+#
+#GetDirectories <- function () {
+#
+#    directoryService <- client$getDirectoryService()
+#
+#    tryCatch(result <- directoryService$getDirectoryEntriesAsJSON(),
+#        Throwable = function (e) {
+#            stop(
+#                paste ("Unable to get the directories",
+#                    " -- details follow. ", e$getMessage(), sep="")
+#            )
+#        }
+#    )
+#
+#    resultantObject <- RJSONIO::fromJSON(result)
+#    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
+#    return(resultantFrame)
+#}
 
-    tryCatch(result <- dictionaryService$getDictionaryEntriesAsJSON(),
-        Throwable = function (e) {
-            stop(
-                paste ("Unable to get the dictionaries",
-                    " -- details follow. ", e$getMessage(), sep="")
-            )
-        }
-    )
-
-    resultantObject <- RJSONIO::fromJSON(result)
-    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
-    return(resultantFrame)
-}
-
-#' Allows the user to inspect the directories that have been loaded by this
-#' package.
-#'
-#' @return The directories that have been loaded.
-#'
-#' @export
-#'
-GetDirectories <- function () {
-
-    directoryService <- client$getDirectoryService()
-
-    tryCatch(result <- directoryService$getDirectoryEntriesAsJSON(),
-        Throwable = function (e) {
-            stop(
-                paste ("Unable to get the directories",
-                    " -- details follow. ", e$getMessage(), sep="")
-            )
-        }
-    )
-
-    resultantObject <- RJSONIO::fromJSON(result)
-    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
-    return(resultantFrame)
-}
-
-#' Returns either NULL if result is equal to "null" or the
-#' result as a data frame.
+#' Returns either NULL if result is equal to "null" or the result as a data frame.
 #'
 #' @param result Result will be converted into a data frame.
 #'
 #' @return The result as a data frame.
-#'
-#' TODO Improve this documentation.
 #'
 .AsDataFrame <- function (result) {
 
@@ -207,7 +192,7 @@ GetDirectories <- function () {
     resultantObject <- if (result == "null") NULL else RJSONIO::fromJSON(result)
 
     if (!is.null (resultantObject)) {
-        resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
+        resultantFrame <- as.data.frame(do.call("rbind", resultantObject))
     }
 
     return(resultantFrame)
@@ -215,58 +200,84 @@ GetDirectories <- function () {
 
 #' Retrieves the next update from Thomson Reuters.
 #'
-#' @param timeout Wait for timeout millis and then return null -- defaults to
-#'  zero (forever).
+#' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
+#'  to zero will cause the thread to wait forever.
 #'
-#' @return The market price as a data frame.
+#' @return A reference to the market price [Java] object.
 #'
 #' @export
 #'
-GetNextUpdate <- function (timeout="0") {
+GetNextUpdateAsJavaObject <- function (timeout = "10000") {
 
-    marketPriceService <- client$getMarketPriceService()
+    #bigLong <- J("java.lang.Long")
+    # actualTimeoutValue <- bigLong$valueOf (timeout)
 
      tryCatch(
-        result <- marketPriceService$getNextUpdateAsJSON(timeout),
-        Throwable = function (e) {
+        result <- client$getNextMarketPriceUpdateAsJavaObject(timeout), Throwable = function (e) {
             stop(
                  paste ("Unable to get the next update -- details follow. ",
                     e$getMessage(), sep="")
             )
         }
     )
+    return (result)
+}
+
+#' Retrieves the next update from Thomson Reuters.
+#'
+#' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
+#'  to zero will cause the thread to wait forever.
+#'
+#' @return The updated market price as a data frame.
+#'
+#' @export
+#'
+GetNextUpdate <- function (timeout = "10000") {
+
+    tryCatch(
+        result <- client$getNextMarketPriceUpdateAsJson(timeout), Throwable = function (e) {
+            stop(
+                paste ("Unable to get the next update -- details follow. ",
+                       e$getMessage(), sep="")
+            )
+        }
+    )
+
     return (.AsDataFrame (result))
 }
 
-#' Sends a request to Thomson Reuters to receive time series data for the
-#' specified symbols.
+#' Sends a request to Thomson Reuters to receive time series data for the specified symbols.
 #'
-#' @param serviceName The service can be, for example, dIDN_RDF -- the default
-#' is IDN_RDF.
+#' @param serviceName The service can be, for example, dELEKTRON_DD -- the default is ELEKTRON_DD.
 #'
 #' @param symbol A single simbol -- for example "GOOG.O".
 #'
 #' @param period One of daily, weekly, or monthly -- the default is "daily".
 #'
-#' @param timeout The milliseconds to wait for a response to be returned. If
-#' nothing is returned when the timeout has elapsed this function will return
-#' NULL. Defaults to zero (forever).
+#' @param timeout The milliseconds to wait for a response to be returned. If nothing is returned when the timeout has
+#' elapsed this function will return NULL. Defaults to 30 seconds.
 #'
-#' @return A data frame containing the time series data for the specified
-#' symbol.
+#' @return A data frame containing the time series data for the specified symbol.
+#'
+#' @examples {
+#'  result <- GetTimeSeriesDataFor(symbol = "MSFT.O")
+#'  tempDF <- data.frame(DATE=unlist(result$DATE),HIGH=unlist(result$HIGH))
+#'  tempDF$DATE <- as.POSIXct(as.numeric(as.character(tempDF$DATE)),origin="1970-01-01",tz="GMT")
+#'  tempDF$HIGH <- as.numeric(as.character(tempDF$HIGH))
+#'  plot(tempDF)
+#' }
 #'
 #' @export
 #'
-GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period = "daily", timeout="0") {
+GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "daily", timeout="30000") {
 
     if (!(period == "daily" || period == "weekly" || period == "monthly")) {
         stop (paste ("The '", period,"' period is invalid -- use on of daily, weekly, or monthly.", sep=""))
     }
 
-    timeSeriesService <- client$getTimeSeriesService()
-
-    tryCatch(timeSeriesService$queryTimeSeriesFor(serviceName, loginHandle, symbol, period),
+    tryCatch(result <- client$getTimeSeriesAsJson(serviceName, symbol, period),
         Throwable = function (e) {
+            e$printStackTrace()
             stop(
                 paste ("Unable to query the following symbols [", symbol,
                     "] -- details follow. ", e$getMessage(), sep="")
@@ -274,51 +285,40 @@ GetTimeSeriesDataFor <- function (serviceName="IDN_RDF", symbol, period = "daily
         }
     )
 
-    tryCatch(result <- timeSeriesService$getNextUpdateAsJSON(timeout),
-        Throwable = function (e) {
-            stop(
-                paste ("Unable to get the next update for the following symbol",
-                    "[", symbol, "] -- details follow. ", e$getMessage(), sep="")
-            )
-        }
-    )
+    resultDF <- RJSONIO::fromJSON(result)
 
-    convertedResult <- RJSONIO::fromJSON(result)
+    uncoercedResultDF <- as.data.frame(do.call("rbind", resultDF))
 
-    return (convertedResult)
+    coercedResultDF <- t(uncoercedResultDF)
 
-    #resultT <- t (result)
-
-    #resultTDf <- as.data.frame (resultT)
-
-    # return (resultTDf)
+    return (as.data.frame(coercedResultDF))
 }
 
-#' Function retrieves the next status response update from Thomson Reuters.
-#'
-#' @param timeout The milliseconds to wait for a response to be returned. If
-#'  nothing is returned when the timeout has elapsed this function will return
-#'  NULL. Defaults to zero (forever).
-#'
-#' @return status response as a data frame or NULL if the timeout has elapsed.
-#'
-#' @export
-#'
-GetNextStatusResponse <- function (timeout="0") {
-
-    statusResponseService <- client$getStatusResponseService()
-
-     tryCatch(
-        result <- statusResponseService$getNextUpdateAsJSON(timeout),
-        Throwable = function (e) {
-            stop(
-                 paste ("Unable to get the next status response update ",
-                    "-- details follow. ", e$getMessage(), sep="")
-            )
-        }
-    )
-    return (.AsDataFrame (result))
-}
+# Function retrieves the next status response update from Thomson Reuters.
+#
+# @param timeout The milliseconds to wait for a response to be returned. If
+#  nothing is returned when the timeout has elapsed this function will return
+#  NULL. Defaults to zero (forever).
+#
+# @return status response as a data frame or NULL if the timeout has elapsed.
+#
+# @export
+#
+#GetNextStatusResponse <- function (timeout="0") {
+#
+#    statusResponseService <- client$getStatusResponseService()
+#
+#     tryCatch(
+#        result <- statusResponseService$getNextUpdateAsJSON(timeout),
+#        Throwable = function (e) {
+#            stop(
+#                 paste ("Unable to get the next status response update ",
+#                    "-- details follow. ", e$getMessage(), sep="")
+#            )
+#        }
+#    )
+#    return (.AsDataFrame (result))
+#}
 
 #' Function prints some information about this package.
 #'
@@ -331,19 +331,19 @@ GetNextStatusResponse <- function (timeout="0") {
 #'
 About <- function () {
     cat (
-        " ***********************************************************\n",
-        "***                                                     ***\n",
-        "***  Coherent Datafeed: Thomson Reuters Edition Package ***\n",
-        "***                                                     ***\n",
-        "***                   version 1.0.1.                    ***\n",
-        "***                                                     ***\n",
-        "***                Follow us on LinkedIn:               ***\n",
-        "***                                                     ***\n",
-        "***       https://www.linkedin.com/company/229316       ***\n",
-        "***                                                     ***\n",
-        "***                Follow us on Twitter:                ***\n",
-        "***                                                     ***\n",
-        "***        https://twitter.com/CoherentLogicCo          ***\n",
-        "***                                                     ***\n",
-        "***********************************************************\n")
+        " ***********************************************************************************\n",
+        "***                                                                               ***\n",
+        "*** Coherent Datafeed: Thomson Reuters Elektron Edition Package For the R Project ***\n",
+        "***                                                                               ***\n",
+        "***                                 version 1.0.7.                                ***\n",
+        "***                                                                               ***\n",
+        "***                            Follow us on LinkedIn:                             ***\n",
+        "***                                                                               ***\n",
+        "***                   https://www.linkedin.com/company/229316                     ***\n",
+        "***                                                                               ***\n",
+        "***                            Follow us on Twitter:                              ***\n",
+        "***                                                                               ***\n",
+        "***                    https://twitter.com/CoherentLogicCo                        ***\n",
+        "***                                                                               ***\n",
+        "*************************************************************************************\n")
 }
