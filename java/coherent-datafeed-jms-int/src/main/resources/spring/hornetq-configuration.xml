@@ -8,7 +8,7 @@
     <clustered>false</clustered>
     <cluster-user>cdatafeed</cluster-user>
     <cluster-password>not-used</cluster-password>
-    <jmx-management-enabled>false</jmx-management-enabled>
+    <jmx-management-enabled>true</jmx-management-enabled>
 
     <acceptors>
          <acceptor name="invm-acceptor">
