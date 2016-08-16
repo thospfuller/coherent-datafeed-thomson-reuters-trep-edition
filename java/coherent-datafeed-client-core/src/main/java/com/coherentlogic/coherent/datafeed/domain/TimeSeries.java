@@ -13,12 +13,14 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.sound.sampled.Line;
 
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
+import com.coherentlogic.coherent.datafeed.misc.Constants;
 
 /**
  * A domain class representation of time series data.
@@ -134,6 +136,42 @@ public class TimeSeries extends StatusResponseBean implements MarketPriceConstan
     @OneToMany(cascade=CascadeType.ALL)
     public List<Sample> getSamples() {
         return samples;
+    }
+
+    @Transient
+    public List<String> getValuesForHeader (String header) {
+
+        List<String> values = new ArrayList<String> ();
+
+        if (Constants.BIG_DATE.equals(header)) {
+            for (Sample sample : samples)
+                values.add(sample.getDate().toString());
+        } else {
+
+            // Remove one as there is no date in this list and the headers will be pushed rightward by one.
+            int index = (headers.indexOf(header) - 1);
+
+            for (Sample sample : samples) {
+
+                List<String> points = sample.getPoints();
+
+                if (!points.isEmpty()) {
+    
+                    String value = points.get(index);
+    
+                    if (value == null)
+                        value = Constants.NA;
+
+                    values.add(value);
+
+                } else {
+                    // TODO: Is this valid? If the points list is empty then we may need to throw an exception.
+                    values.add(Constants.NA);
+                }
+            }
+        }
+
+        return values;
     }
 
     public void setSamples(List<Sample> samples) {
