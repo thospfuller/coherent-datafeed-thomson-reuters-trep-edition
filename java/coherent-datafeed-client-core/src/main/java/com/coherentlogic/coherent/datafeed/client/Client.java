@@ -40,6 +40,8 @@ import com.reuters.rfa.common.Handle;
  * @todo Harmonize the names of the specification which are returned to the user so that they're uniform (ie.
  * *ServiceGateway).
  *
+ * @deprecated This class is no longer being used.
+ *
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
