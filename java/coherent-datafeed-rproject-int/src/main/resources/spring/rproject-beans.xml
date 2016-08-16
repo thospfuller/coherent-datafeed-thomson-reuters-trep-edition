@@ -21,4 +21,6 @@
             </array>
         </constructor-arg>
     </bean>
+
+    <bean id="timeSeriesJSONGenerator" class="com.coherentlogic.coherent.datafeed.adapters.json.TimeSeriesJSONGenerator"/>
 </beans>
