@@ -236,11 +236,6 @@
         <constructor-arg ref="mapToJSONAdapter"/>
     </bean>
 
-    <bean id="timeSeriesJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.json.JSONGenerator">
-        <constructor-arg type="Class" value="com.coherentlogic.coherent.datafeed.domain.TimeSeries"/>
-        <constructor-arg ref="mapToJSONAdapter"/>
-    </bean>
-
     <bean id="statusResponseJsonGenerator" class="com.coherentlogic.coherent.datafeed.adapters.json.JSONGenerator">
         <constructor-arg type="Class" value="com.coherentlogic.coherent.datafeed.domain.StatusResponse"/>
         <constructor-arg ref="mapToJSONAdapter"/>
@@ -275,8 +270,6 @@
      depends-on="loggingService">
         <constructor-arg name="factory" ref="defaultRequestMessageBuilderFactory"/>
         <constructor-arg name="client" ref="timeSeriesEventDrivenEndpoint"/>
-        <constructor-arg name="messageConsumer" ref="timeSeriesConsumer"/>
-        <constructor-arg name="jsonGenerator" ref="timeSeriesJsonGenerator"/>
         <constructor-arg name="commonRequestExecutor" ref="timeSeriesRequestExecutor"/>
     </bean>
 
