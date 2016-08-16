@@ -60,6 +60,11 @@
             <artifactId>coherent-datafeed-jms-int</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.coherentlogic.rproject.integration</groupId>
+            <artifactId>jdataframe-core</artifactId>
+            <version>0.8.5-RELEASE</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <scope>provided</scope>
