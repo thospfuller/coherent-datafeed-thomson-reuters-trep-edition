@@ -20,8 +20,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * An implementation of a container to hold sample data, which consists of a
- * date and some data points.
+ * An implementation of a container to hold sample data, which consists of a date and some data points.
  * 
  * @see ConsoleTSClient.java # 104
  *
