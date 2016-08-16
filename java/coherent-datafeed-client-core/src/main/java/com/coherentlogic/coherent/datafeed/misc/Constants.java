@@ -41,6 +41,8 @@ public interface Constants {
 
     static final String CACHE_BEAN_ID = "cache";
 
+    static final String NA = "NA";
+
     /**
      * @todo Some of these constants should be changed.
      */
