@@ -16,7 +16,7 @@ NULL
 #' An environment which is used by this package when managing package-scope
 #' variables.
 #'
-cdatafeedtrep.env <- new.env()
+.cdatafeedtrep.env <- new.env()
 
 #' Function instantiates the client which is used to bridge the gap between the
 #' R script and the underlying API.
@@ -48,12 +48,12 @@ cdatafeedtrep.env <- new.env()
     }
 
     .jpackage(pkgname, lib.loc = libname, morePaths=cdatafeedJars)
-
-    client <- NULL
-    client <<- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")$initialize()
 }
 
 .onUnload <- function (libpath) {
+
+    client<- .cdatafeedtrep.env$client
+
     tryCatch(client$stop(), Throwable = function (e) {
         stop (paste ("An exception was thrown when stopping the client -- ",
             "details follow.", e$getMessage(), sep=""))
@@ -65,10 +65,15 @@ cdatafeedtrep.env <- new.env()
 #' @export
 #'
 Initialize <- function () {
-    tryCatch(client$start(), Throwable = function (e) {
 
-        stop (paste ("An exception was thrown when starting the client -- ",
-            "details follow.", e$getMessage(), sep=""))
+    ElektronQueryBuilderClient <- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")
+
+    client <- ElektronQueryBuilderClient$initialize()
+
+    assign("client", client, envir = .cdatafeedtrep.env)
+
+    tryCatch(client$start(), Throwable = function (e) {
+        stop (paste ("An exception was thrown when starting the client -- details follow.", e$getMessage(), sep=""))
     })
 }
 
@@ -79,6 +84,9 @@ Initialize <- function () {
 #' @export
 #'
 Login <- function (dacsId) {
+
+    client <- .cdatafeedtrep.env$client
+
     tryCatch(
         client$login(dacsId), Throwable = function (e) {
             stop(
@@ -93,6 +101,9 @@ Login <- function (dacsId) {
 #' @export
 #'
 Logout <- function () {
+
+    client <- .cdatafeedtrep.env$client
+
     tryCatch(
         client$logout(), Throwable = function (e) {
             stop(paste ("Unable to logout -- details follow. ", e$getMessage(), sep=""))
@@ -113,6 +124,8 @@ Logout <- function () {
 #' @export
 #'
 Query <- function (serviceName="dELEKTRON_DD", symbols) {
+
+    client <- .cdatafeedtrep.env$client
 
     jServiceName <- J("com.coherentlogic.coherent.datafeed.services.ServiceName")
 
@@ -212,7 +225,9 @@ GetNextUpdateAsJavaObject <- function (timeout = "10000") {
     #bigLong <- J("java.lang.Long")
     # actualTimeoutValue <- bigLong$valueOf (timeout)
 
-     tryCatch(
+    client <- .cdatafeedtrep.env$client
+
+    tryCatch(
         result <- client$getNextMarketPriceUpdateAsJavaObject(timeout), Throwable = function (e) {
             stop(
                  paste ("Unable to get the next update -- details follow. ",
@@ -233,6 +248,8 @@ GetNextUpdateAsJavaObject <- function (timeout = "10000") {
 #' @export
 #'
 GetNextUpdate <- function (timeout = "10000") {
+
+    client <- .cdatafeedtrep.env$client
 
     tryCatch(
         result <- client$getNextMarketPriceUpdateAsJson(timeout), Throwable = function (e) {
@@ -260,16 +277,19 @@ GetNextUpdate <- function (timeout = "10000") {
 #' @return A data frame containing the time series data for the specified symbol.
 #'
 #' @examples {
-#'  result <- GetTimeSeriesDataFor(symbol = "MSFT.O")
-#'  tempDF <- data.frame(DATE=unlist(result$DATE),HIGH=unlist(result$HIGH))
-#'  tempDF$DATE <- as.POSIXct(as.numeric(as.character(tempDF$DATE)),origin="1970-01-01",tz="GMT")
-#'  tempDF$HIGH <- as.numeric(as.character(tempDF$HIGH))
-#'  plot(tempDF)
+#' result <- GetTimeSeriesDataFor(symbol = "MSFT.O", period="monthly")
+#' tempDF <- data.frame(DATE=unlist(result$DATE),OPEN=unlist(result$OPEN))
+#' tempDF <- tempDF[order(tempDF$DATE),]
+#' tempDF$DATE <- as.POSIXct(as.numeric(substr(x = as.character(tempDF$DATE), start=1, stop=10)), origin="1970-01-01", tz="GMT")
+#' tempDF$OPEN <- as.numeric(as.character(tempDF$OPEN))
+#' plot(tempDF, type="l")
 #' }
 #'
 #' @export
 #'
 GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "daily", timeout="30000") {
+
+    client <- .cdatafeedtrep.env$client
 
     if (!(period == "daily" || period == "weekly" || period == "monthly")) {
         stop (paste ("The '", period,"' period is invalid -- use on of daily, weekly, or monthly.", sep=""))
@@ -335,7 +355,7 @@ About <- function () {
         "***                                                                               ***\n",
         "*** Coherent Datafeed: Thomson Reuters Elektron Edition Package For the R Project ***\n",
         "***                                                                               ***\n",
-        "***                                 version 1.0.7.                                ***\n",
+        "***                                 version 1.0.8.                                ***\n",
         "***                                                                               ***\n",
         "***                            Follow us on LinkedIn:                             ***\n",
         "***                                                                               ***\n",
