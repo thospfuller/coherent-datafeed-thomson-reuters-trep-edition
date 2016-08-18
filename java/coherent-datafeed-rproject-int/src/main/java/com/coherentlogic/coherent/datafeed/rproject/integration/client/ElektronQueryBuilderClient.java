@@ -30,6 +30,7 @@ import com.coherentlogic.coherent.data.model.core.lifecycle.Stoppable;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeListener;
 import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
+import com.coherentlogic.coherent.datafeed.adapters.json.TimeSeriesJSONGenerator;
 import com.coherentlogic.coherent.datafeed.builders.ElektronQueryBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
@@ -116,10 +117,17 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
     @Override
     public void start() {
 
-        verifyRFADependencyIsPresent ();
+        try {
 
-        elektronQueryBuilder = applicationContext.getBean(ElektronQueryBuilder.class);
-        marketPriceMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_PRICE_CONSUMER);
+            verifyRFADependencyIsPresent ();
+
+            elektronQueryBuilder = applicationContext.getBean(ElektronQueryBuilder.class);
+            marketPriceMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_PRICE_CONSUMER);
+        } catch (Throwable t) {
+            t.printStackTrace(System.err);
+            log.error("start: method threw an exception.", t);
+            throw t;
+        }
     }
 
     void verifyRFADependencyIsPresent () {
@@ -146,6 +154,8 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
 
     public static ElektronQueryBuilderClient initialize () {
 
+        log.info("initialize: method begins.");
+
         ConfigurableApplicationContext applicationContext = null;
 
         try {
@@ -167,7 +177,12 @@ public class ElektronQueryBuilderClient implements MarketPriceConstants, Startab
                 + "for further assistance.", thrown);
         }
 
-        return applicationContext.getBean(ElektronQueryBuilderClient.class);
+        ElektronQueryBuilderClient result =
+            (ElektronQueryBuilderClient) applicationContext.getBean(ElektronQueryBuilderClient.class);
+
+        log.info("initialize: method ends: " + result);
+
+        return result;
     }
 
     public ApplicationContext getApplicationContext() {
