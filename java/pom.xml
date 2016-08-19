@@ -118,6 +118,7 @@
         <module>coherent-datafeed-jms-int</module>
         <module>coherent-datafeed-rproject-int</module>
         <module>coherent-datafeed-db-int</module>
+        <module>coherent-datafeed-spark-int</module>
         <!-- Connection to TREP required to run tests in core-it. -->
         <!-- module>coherent-datafeed-client-core-it</module -->
         <!-- module>coherent-datafeed-flink-int</module>
@@ -194,6 +195,11 @@
             <dependency>
                 <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
                 <artifactId>coherent-datafeed-jms-int</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+                <artifactId>coherent-datafeed-spark-int</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

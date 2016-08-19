@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.coherentlogic.coherent.datafeed</groupId>
+        <artifactId>client</artifactId>
+        <version>1.0.8-RELEASE</version>
+    </parent>
+
+    <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+    <artifactId>coherent-datafeed-spark-int</artifactId>
+    <version>${project.parent.version}</version>
+    <packaging>jar</packaging>
+    <name>coherent-datafeed-storm-int</name>
+    <description>Integration of the Coherent Datafeed with Apache Storm.</description>
+    <url>www.coherentlogic.com</url>
+
+    <properties>
+        <scala.version>2.11.8</scala.version>
+    </properties>
+
+    <developers>
+        <developer>
+            <name>Support</name>
+            <email>support@coherentlogic.com</email>
+            <id>support</id>
+            <organization>Coherent Logic Limited</organization>
+            <organizationUrl>www.coherentlogic.com</organizationUrl>
+            <url>www.coherentlogic.com</url>
+            <timezone>+1</timezone>
+            <roles>
+                <role>Support</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- repositories>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </pluginRepository>
+    </pluginRepositories -->
+
+    <dependencies>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-client-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <!-- executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions -->
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
