@@ -13,12 +13,13 @@
     <artifactId>coherent-datafeed-spark-int</artifactId>
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
-    <name>coherent-datafeed-storm-int</name>
-    <description>Integration of the Coherent Datafeed with Apache Storm.</description>
+    <name>coherent-datafeed-spark-int</name>
+    <description>Integration of the Coherent Datafeed with Apache Spark.</description>
     <url>www.coherentlogic.com</url>
 
     <properties>
         <scala.version>2.11.8</scala.version>
+        <spark.version>2.0.0</spark.version>
     </properties>
 
     <developers>
@@ -36,47 +37,112 @@
         </developer>
     </developers>
 
-    <!-- repositories>
-        <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories -->
-
     <dependencies>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.data-model</groupId>
+            <artifactId>data-model-core</artifactId>
+            <exclusions>
+                <exclusion> 
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion> 
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-client-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-jms-int</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.11</artifactId>
+            <version>${spark.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId><!-- We want slf4j-jdk14 and don't want slf4j-log4j12 -->
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jul-to-slf4j</artifactId><!-- We want slf4j-jdk14 and don't want slf4j-log4j12 -->
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.11</artifactId>
+            <version>${spark.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId><!-- We want slf4j-jdk14 and don't want slf4j-log4j12 -->
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jul-to-slf4j</artifactId><!-- We want slf4j-jdk14 and don't want slf4j-log4j12 -->
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-remote-shell</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-stream</artifactId>
+            <artifactId>spring-integration-jms</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <type>jar</type>
-        </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
+        </dependency -->
+        <!-- This wasn't required until we added the Scala module and I suspect the @EnableAutoConfiguration has to do
+             with this as this annotation isn't being used elsewhere.
+        -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
@@ -96,14 +162,6 @@
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
                 <version>2.15.2</version>
-                <!-- executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions -->
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
                 </configuration>
