@@ -44,6 +44,12 @@
         <appender-ref ref="fileAppender"/>
     </logger>
 
+    <logger name="com.coherentlogic.coherent.data.model.core.util">
+        <level value="info"/>
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="fileAppender"/>
+    </logger>
+
     <logger name="com.coherentlogic.coherent.data.model.core.domain">
         <level value="info"/>
         <appender-ref ref="fileAppender"/>
