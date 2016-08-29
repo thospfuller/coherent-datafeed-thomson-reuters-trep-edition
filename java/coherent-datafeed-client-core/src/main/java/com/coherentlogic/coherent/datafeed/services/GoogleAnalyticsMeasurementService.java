@@ -35,7 +35,7 @@ public class GoogleAnalyticsMeasurementService {
     }
 
     /**
-     
+     *
      */
     public void fireGAFrameworkUsageEvent () {
 
@@ -49,8 +49,8 @@ public class GoogleAnalyticsMeasurementService {
             .queryParam("ec", "Framework Usage") // event category
             .queryParam("an", "CDTREP4J") // application name
             .queryParam("ea", "Framework Started") // event action
-            .queryParam("av", "Version 1.0.7-RELEASE") // Application version.
-            .queryParam("el", "Version 1.0.7-RELEASE");
+            .queryParam("av", "Version 1.0.8-RELEASE") // Application version.
+            .queryParam("el", "Version 1.0.8-RELEASE");
 
         HttpHeaders headers = new HttpHeaders();
 
