@@ -199,13 +199,15 @@
     <bean id="idGenerator"
      class="com.coherentlogic.coherent.datafeed.generators.IdGenerator"/>
 
-    <bean id="sessionFactory" class="com.coherentlogic.coherent.datafeed.factories.SessionFactory">
+    <!-- TPF: Deprecated as probably not needed any longer and causing problems when running example apps (this
+              bean should not be discovered so this raises another question). -->
+    <!-- bean id="sessionFactory" class="com.coherentlogic.coherent.datafeed.factories.SessionFactory">
         <constructor-arg name="directoryEntryCache" ref="directoryEntryCache"/>
         <constructor-arg name="dictionaryEntryCache" ref="dictionaryEntryCache"/>
         <constructor-arg name="marketPriceEntryCache" ref="marketPriceEntryCache"/>
         <constructor-arg name="ts1DefEntryCache" ref="ts1DefEntryCache"/>
         <constructor-arg name="timeSeriesEntryCache" ref="timeSeriesEntryCache"/>
-    </bean>
+    </bean -->
 
     <bean id="authenticationService" class="com.coherentlogic.coherent.datafeed.services.AuthenticationService"
      depends-on="loggingService">
