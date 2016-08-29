@@ -1,6 +1,9 @@
 #'
 #' @title The Coherent Datafeed Thomson Reuters Elektron Edition.
 #'
+#' @details Provides real-time market price updates and time series data direct from the Thomson Reuters Elektron
+#' Platform.
+#'
 #' @description Provides real-time market price updates and time series data direct from the Thomson Reuters Elektron
 #' Platform.
 #'
@@ -9,7 +12,7 @@
 #'
 #' @docType package
 #'
-#' @name cdatafeedtre
+#' @name cdatafeedtrep
 #'
 NULL
 
@@ -29,7 +32,7 @@ NULL
 
     targetDir = paste ("-Djava.util.logging.config.file=", tempdir (), sep="")
 
-    packageDir = paste ("-DrpackagePath=", system.file(package="cdatafeedtre"), sep="")
+    packageDir = paste ("-DrpackagePath=", system.file(package="cdatafeedtrep"), sep="")
 
     cdatafeedJars = getOption ("CDATAFEED_JARS")
 
@@ -44,7 +47,7 @@ NULL
                 "and can be downloaded direct from Thomson Reuters by visiting the following link: ",
                 "https://customers.reuters.com/a/support/technical/softwaredownload/", sep="\n"))
     } else {
-        print(paste("cdatafeedJars: ", cdatafeedJars, sep=""))
+        packageStartupMessage("cdatafeedJars: ", cdatafeedJars, sep="")
     }
 
     .jpackage(pkgname, lib.loc = libname, morePaths=cdatafeedJars)
@@ -54,10 +57,13 @@ NULL
 
     client<- .cdatafeedtrep.env$client
 
-    tryCatch(client$stop(), Throwable = function (e) {
-        stop (paste ("An exception was thrown when stopping the client -- ",
-            "details follow.", e$getMessage(), sep=""))
-    })
+    if (!is.null(client)) {
+        tryCatch(client$stop(), Throwable = function (e) {
+            e$printStackTrace()
+            stop (paste ("An exception was thrown when stopping the client -- ",
+                "details follow.", e$getMessage(), sep=""))
+        })
+    }
 }
 
 #' This function must be called exactly one time before the package can be used.
@@ -66,9 +72,11 @@ NULL
 #'
 Initialize <- function () {
 
-    ElektronQueryBuilderClient <- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")
+    .PrintWelcomeMessage()
 
-    client <- ElektronQueryBuilderClient$initialize()
+    elektronQueryBuilderClient <- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")
+
+    client <- elektronQueryBuilderClient$initialize()
 
     assign("client", client, envir = .cdatafeedtrep.env)
 
@@ -277,12 +285,25 @@ GetNextUpdate <- function (timeout = "10000") {
 #' @return A data frame containing the time series data for the specified symbol.
 #'
 #' @examples {
-#' result <- GetTimeSeriesDataFor(symbol = "MSFT.O", period="monthly")
-#' tempDF <- data.frame(DATE=unlist(result$DATE),OPEN=unlist(result$OPEN))
-#' tempDF <- tempDF[order(tempDF$DATE),]
-#' tempDF$DATE <- as.POSIXct(as.numeric(substr(x = as.character(tempDF$DATE), start=1, stop=10)), origin="1970-01-01", tz="GMT")
-#' tempDF$OPEN <- as.numeric(as.character(tempDF$OPEN))
-#' plot(tempDF, type="l")
+#'  \dontrun{
+#'  options(
+#'      CDATAFEED_JARS=list(
+#'          "C:/Temp/CDTREP-108Dependencies/rfa-8.0.1.E3.jar"
+#'      )
+#'  )
+#'
+#'  library(cdatafeedtrep)
+#'
+#'  Initialize()
+#'  dacsId <- Sys.getenv("DACS_ID")
+#'  cdatafeedtrep::Login(dacsId)
+#'  result <- GetTimeSeriesDataFor(symbol = "AMZN.O", period="monthly", timeout = "120000")
+#'  tempDF <- data.frame(DATE=unlist(result$DATE),OPEN=unlist(result$OPEN))
+#'  tempDF <- tempDF[order(tempDF$DATE),]
+#'  tempDF$DATE <- as.POSIXct(as.numeric(substr(x = as.character(tempDF$DATE), start=1, stop=10)), origin="1970-01-01", tz="GMT")
+#'  tempDF$OPEN <- as.numeric(as.character(tempDF$OPEN))
+#'  plot(tempDF, type="l")
+#'  }
 #' }
 #'
 #' @export
@@ -339,6 +360,69 @@ GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "d
 #    )
 #    return (.AsDataFrame (result))
 #}
+
+.PrintWelcomeMessage <- function () {
+    cat (
+        "*************************************************************************************************************\n",
+        "***                                                                                                       ***\n",
+        "***              Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version               ***\n",
+        "***                                                                                                       ***\n",
+        "***                                         Version 1.0.8-RELEASE                                         ***\n",
+        "***                                                                                                       ***\n",
+        "***                              Please take a moment to follow us on Twitter:                            ***\n",
+        "***                                                                                                       ***\n",
+        "***                                    www.twitter.com/CoherentMktData                                    ***\n",
+        "***                                                                                                       ***\n",
+        "***                                          or on LinkedIn:                                              ***\n",
+        "***                                                                                                       ***\n",
+        "***                            www.linkedin.com/company/coherent-logic-limited                            ***\n",
+        "***                                                                                                       ***\n",
+        "***                            The project and issue tracker can be found here:                           ***\n",
+        "***                                                                                                       ***\n",
+        "***           https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition          ***\n",
+        "***                                                                                                       ***\n",
+        "*** ----------------------------------------------------------------------------------------------------- ***\n",
+        "***                                                                                                       ***\n",
+        "*** When running the example application, an RFA session entry with the name \"mySession\" must exist  in  ***\n",
+        "*** your configuration OR you must override this value - see below for an example of the configuration we ***\n",
+        "*** use. You may override this value using the following VM parameter:                                    ***\n",
+        "***                                                                                                       ***\n",
+        "***     -DCDATAFEED_SESSION_NAME=\"[Add your session name here]\"                                           ***\n",
+        "***                                                                                                       ***\n",
+        "*** See also:                                                                                             ***\n",
+        "***                                                                                                       ***\n",
+        "***     http://bit.ly/1Oc0HTn                                                                             ***\n",
+        "***                                                                                                       ***\n",
+        "*** The logging properties will be read from the /logging.properties included in this jar file. This can  ***\n",
+        "*** be overridden by setting the CDATAFEED_LOGGING_CONFIGURATION_FILE VM parameter -- for example:        ***\n",
+        "***                                                                                                       ***\n",
+        "***     -DCDATAFEED_LOGGING_CONFIGURATION_FILE=C:/Temp/logging.properties                                 ***\n",
+        "***                                                                                                       ***\n",
+        "*** ----------------------------------------------------------------------------------------------------- ***\n",
+        "***                                                                                                       ***\n",
+        "*** BE ADVISED:                                                                                           ***\n",
+        "***                                                                                                       ***\n",
+        "*** This framework uses the Google Analytics Measurement API (GAM) to track framework usage  information. ***\n",
+        "*** As this software is open-source, you are welcomed to review our use of GAM -- please  see  the  class ***\n",
+        "*** named  com.coherentlogic.coherent.datafeed.services.GoogleAnalyticsMeasurementService  and  feel free ***\n",
+        "*** to send us an email if you have further questions.                                                    ***\n",
+        "***                                                                                                       ***\n",
+        "*** We do NOT recommend disabling this feature however we offer the option below, just add the following  ***\n",
+        "*** VM parameter and tracking will be disabled:                                                           ***\n",
+        "***                                                                                                       ***\n",
+        "*** -DGOOGLE_ANALYTICS_TRACKING=false                                                                     ***\n",
+        "***                                                                                                       ***\n",
+        "*** ----------------------------------------------------------------------------------------------------- ***\n",
+        "***                                                                                                       ***\n",
+        "*** We offer support and consulting services to businesses that  utilize  this  framework  or  that  have ***\n",
+        "*** custom projects that are based on the Reuters Foundation API for Java (RFA / RFAJ)  and  the  Thomson ***\n",
+        "*** Reuters Elektron Platform -- inquiries can be directed to:                                            ***\n",
+        "***                                                                                                       ***\n",
+        "*** [M] sales@coherentlogic.com                                                                           ***\n",
+        "*** [T] +1.571.306.3403 (GMT-5)                                                                           ***\n",
+        "***                                                                                                       ***\n",
+        "*************************************************************************************************************\n")
+}
 
 #' Function prints some information about this package.
 #'
