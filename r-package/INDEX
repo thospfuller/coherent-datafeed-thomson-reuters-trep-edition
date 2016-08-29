@@ -1,9 +1,5 @@
 Initialize        A function which initializes the package; this must be called
                   first otherwise the other functions will not work.
-InstallLicense    Installs the license file, for example
-                  "InstallLicense('path/to/license/file.license')".
-UninstallLicense  Uninstalls the license file, for example
-                  "UninstallLicense()".
 Login             Establishes a session with Thomson Reuters, for instance; for
                   example, "Login('YouCos_DACSID')".
 Logout            Terminates the session with Thomson Reuters; for example
@@ -15,3 +11,4 @@ GetNextUpdate     Function returns the next market price update as a
                   data.frame; for example "next <- GetNextUpdate()".
 GetTimeSeriesDataFor     Function returns the time series data for the given
                          RIC; for example "timeSeries <- cdatafeedtre::GetTimeSeriesDataFor("ILMN.O", "daily")"
+About             Function prints some information about this package.
