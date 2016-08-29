@@ -149,56 +149,6 @@ Query <- function (serviceName="dELEKTRON_DD", symbols) {
     )
 }
 
-# Allows the user to inspect the dictionaries that have been loaded by this
-# package.
-#
-# @return The dictionaries that have been loaded.
-#
-# @export
-#
-#GetDictionaries <- function () {
-#
-#    dictionaryService <- client$getDictionaryService()
-#
-#    tryCatch(result <- dictionaryService$getDictionaryEntriesAsJSON(),
-#        Throwable = function (e) {
-#            stop(
-#                paste ("Unable to get the dictionaries",
-#                    " -- details follow. ", e$getMessage(), sep="")
-#            )
-#        }
-#    )
-#
-#    resultantObject <- RJSONIO::fromJSON(result)
-#    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
-#    return(resultantFrame)
-#}
-
-# Allows the user to inspect the directories that have been loaded by this
-# package.
-#
-# @return The directories that have been loaded.
-#
-# @export
-#
-#GetDirectories <- function () {
-#
-#    directoryService <- client$getDirectoryService()
-#
-#    tryCatch(result <- directoryService$getDirectoryEntriesAsJSON(),
-#        Throwable = function (e) {
-#            stop(
-#                paste ("Unable to get the directories",
-#                    " -- details follow. ", e$getMessage(), sep="")
-#            )
-#        }
-#    )
-#
-#    resultantObject <- RJSONIO::fromJSON(result)
-#    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
-#    return(resultantFrame)
-#}
-
 #' Returns either NULL if result is equal to "null" or the result as a data frame.
 #'
 #' @param result Result will be converted into a data frame.
@@ -343,7 +293,7 @@ GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "d
 #
 # @return status response as a data frame or NULL if the timeout has elapsed.
 #
-# @export
+# export
 #
 #GetNextStatusResponse <- function (timeout="0") {
 #
@@ -434,20 +384,5 @@ GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "d
 #' @export
 #'
 About <- function () {
-    cat (
-        " ***********************************************************************************\n",
-        "***                                                                               ***\n",
-        "*** Coherent Datafeed: Thomson Reuters Elektron Edition Package For the R Project ***\n",
-        "***                                                                               ***\n",
-        "***                                 version 1.0.8.                                ***\n",
-        "***                                                                               ***\n",
-        "***                            Follow us on LinkedIn:                             ***\n",
-        "***                                                                               ***\n",
-        "***                   https://www.linkedin.com/company/229316                     ***\n",
-        "***                                                                               ***\n",
-        "***                            Follow us on Twitter:                              ***\n",
-        "***                                                                               ***\n",
-        "***                    https://twitter.com/CoherentLogicCo                        ***\n",
-        "***                                                                               ***\n",
-        "*************************************************************************************\n")
+    .PrintWelcomeMessage ()
 }
