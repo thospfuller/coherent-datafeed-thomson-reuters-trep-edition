@@ -20,6 +20,7 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
+import com.coherentlogic.coherent.datafeed.exceptions.TimeSeriesConversionFailedException;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 
 /**
@@ -156,8 +157,8 @@ public class TimeSeries extends StatusResponseBean implements MarketPriceConstan
             for (Sample sample : samples)
                 values.add(sample.getDate().toString());
         } else {
-
-            // Remove one as there is no date in this list and the headers will be pushed rightward by one.
+            // Remove one as there is no date in this list (see sample.date) and so the headers will be pushed rightward
+            // by one.
             int index = (headers.indexOf(header) - 1);
 
             for (Sample sample : samples) {
@@ -174,8 +175,7 @@ public class TimeSeries extends StatusResponseBean implements MarketPriceConstan
                     values.add(value);
 
                 } else {
-                    // TODO: Is this valid? If the points list is empty then we may need to throw an exception.
-                    values.add(Constants.NA);
+                    throw new TimeSeriesConversionFailedException("The sample points is empty.");
                 }
             }
         }
