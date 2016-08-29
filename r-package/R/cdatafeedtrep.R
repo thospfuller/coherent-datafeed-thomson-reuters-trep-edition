@@ -1,6 +1,9 @@
 #'
 #' @title The Coherent Datafeed Thomson Reuters Elektron Edition.
 #'
+#' @details Provides real-time market price updates and time series data direct from the Thomson Reuters Elektron
+#' Platform.
+#'
 #' @description Provides real-time market price updates and time series data direct from the Thomson Reuters Elektron
 #' Platform.
 #'
@@ -9,7 +12,7 @@
 #'
 #' @docType package
 #'
-#' @name cdatafeedtre
+#' @name cdatafeedtrep
 #'
 NULL
 
@@ -29,7 +32,7 @@ NULL
 
     targetDir = paste ("-Djava.util.logging.config.file=", tempdir (), sep="")
 
-    packageDir = paste ("-DrpackagePath=", system.file(package="cdatafeedtre"), sep="")
+    packageDir = paste ("-DrpackagePath=", system.file(package="cdatafeedtrep"), sep="")
 
     cdatafeedJars = getOption ("CDATAFEED_JARS")
 
@@ -44,7 +47,7 @@ NULL
                 "and can be downloaded direct from Thomson Reuters by visiting the following link: ",
                 "https://customers.reuters.com/a/support/technical/softwaredownload/", sep="\n"))
     } else {
-        print(paste("cdatafeedJars: ", cdatafeedJars, sep=""))
+        packageStartupMessage("cdatafeedJars: ", cdatafeedJars, sep="")
     }
 
     .jpackage(pkgname, lib.loc = libname, morePaths=cdatafeedJars)
@@ -54,10 +57,13 @@ NULL
 
     client<- .cdatafeedtrep.env$client
 
-    tryCatch(client$stop(), Throwable = function (e) {
-        stop (paste ("An exception was thrown when stopping the client -- ",
-            "details follow.", e$getMessage(), sep=""))
-    })
+    if (!is.null(client)) {
+        tryCatch(client$stop(), Throwable = function (e) {
+            e$printStackTrace()
+            stop (paste ("An exception was thrown when stopping the client -- ",
+                "details follow.", e$getMessage(), sep=""))
+        })
+    }
 }
 
 #' This function must be called exactly one time before the package can be used.
@@ -68,9 +74,9 @@ Initialize <- function () {
 
     .PrintWelcomeMessage()
 
-    ElektronQueryBuilderClient <- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")
+    elektronQueryBuilderClient <- J("com.coherentlogic.coherent.datafeed.rproject.integration.client.ElektronQueryBuilderClient")
 
-    client <- ElektronQueryBuilderClient$initialize()
+    client <- elektronQueryBuilderClient$initialize()
 
     assign("client", client, envir = .cdatafeedtrep.env)
 
@@ -142,56 +148,6 @@ Query <- function (serviceName="dELEKTRON_DD", symbols) {
         }
     )
 }
-
-# Allows the user to inspect the dictionaries that have been loaded by this
-# package.
-#
-# @return The dictionaries that have been loaded.
-#
-# @export
-#
-#GetDictionaries <- function () {
-#
-#    dictionaryService <- client$getDictionaryService()
-#
-#    tryCatch(result <- dictionaryService$getDictionaryEntriesAsJSON(),
-#        Throwable = function (e) {
-#            stop(
-#                paste ("Unable to get the dictionaries",
-#                    " -- details follow. ", e$getMessage(), sep="")
-#            )
-#        }
-#    )
-#
-#    resultantObject <- RJSONIO::fromJSON(result)
-#    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
-#    return(resultantFrame)
-#}
-
-# Allows the user to inspect the directories that have been loaded by this
-# package.
-#
-# @return The directories that have been loaded.
-#
-# @export
-#
-#GetDirectories <- function () {
-#
-#    directoryService <- client$getDirectoryService()
-#
-#    tryCatch(result <- directoryService$getDirectoryEntriesAsJSON(),
-#        Throwable = function (e) {
-#            stop(
-#                paste ("Unable to get the directories",
-#                    " -- details follow. ", e$getMessage(), sep="")
-#            )
-#        }
-#    )
-#
-#    resultantObject <- RJSONIO::fromJSON(result)
-#    resultantFrame <- as.data.frame(do.call("rbind" , resultantObject))
-#    return(resultantFrame)
-#}
 
 #' Returns either NULL if result is equal to "null" or the result as a data frame.
 #'
@@ -279,12 +235,25 @@ GetNextUpdate <- function (timeout = "10000") {
 #' @return A data frame containing the time series data for the specified symbol.
 #'
 #' @examples {
-#' result <- GetTimeSeriesDataFor(symbol = "MSFT.O", period="monthly")
-#' tempDF <- data.frame(DATE=unlist(result$DATE),OPEN=unlist(result$OPEN))
-#' tempDF <- tempDF[order(tempDF$DATE),]
-#' tempDF$DATE <- as.POSIXct(as.numeric(substr(x = as.character(tempDF$DATE), start=1, stop=10)), origin="1970-01-01", tz="GMT")
-#' tempDF$OPEN <- as.numeric(as.character(tempDF$OPEN))
-#' plot(tempDF, type="l")
+#'  \dontrun{
+#'  options(
+#'      CDATAFEED_JARS=list(
+#'          "C:/Temp/CDTREP-108Dependencies/rfa-8.0.1.E3.jar"
+#'      )
+#'  )
+#'
+#'  library(cdatafeedtrep)
+#'
+#'  Initialize()
+#'  dacsId <- Sys.getenv("DACS_ID")
+#'  cdatafeedtrep::Login(dacsId)
+#'  result <- GetTimeSeriesDataFor(symbol = "AMZN.O", period="monthly", timeout = "120000")
+#'  tempDF <- data.frame(DATE=unlist(result$DATE),OPEN=unlist(result$OPEN))
+#'  tempDF <- tempDF[order(tempDF$DATE),]
+#'  tempDF$DATE <- as.POSIXct(as.numeric(substr(x = as.character(tempDF$DATE), start=1, stop=10)), origin="1970-01-01", tz="GMT")
+#'  tempDF$OPEN <- as.numeric(as.character(tempDF$OPEN))
+#'  plot(tempDF, type="l")
+#'  }
 #' }
 #'
 #' @export
@@ -324,7 +293,7 @@ GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "d
 #
 # @return status response as a data frame or NULL if the timeout has elapsed.
 #
-# @export
+# export
 #
 #GetNextStatusResponse <- function (timeout="0") {
 #
@@ -415,20 +384,5 @@ GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "d
 #' @export
 #'
 About <- function () {
-    cat (
-        " ***********************************************************************************\n",
-        "***                                                                               ***\n",
-        "*** Coherent Datafeed: Thomson Reuters Elektron Edition Package For the R Project ***\n",
-        "***                                                                               ***\n",
-        "***                                 version 1.0.8.                                ***\n",
-        "***                                                                               ***\n",
-        "***                            Follow us on LinkedIn:                             ***\n",
-        "***                                                                               ***\n",
-        "***                   https://www.linkedin.com/company/229316                     ***\n",
-        "***                                                                               ***\n",
-        "***                            Follow us on Twitter:                              ***\n",
-        "***                                                                               ***\n",
-        "***                    https://twitter.com/CoherentLogicCo                        ***\n",
-        "***                                                                               ***\n",
-        "*************************************************************************************\n")
+    .PrintWelcomeMessage ()
 }
