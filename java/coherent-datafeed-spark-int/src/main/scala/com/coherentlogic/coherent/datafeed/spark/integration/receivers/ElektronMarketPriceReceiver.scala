@@ -54,6 +54,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
  *     file://C:/development/projects/release-18.Aug.2016/cdtrep/java/coherent-datafeed-assembly/target/coherent-datafeed-assembly-1.0.8-RELEASE.jar
  *     --class com.coherentlogic.coherent.datafeed.spark.integration.receivers.ElektronMarketPriceReceiver
  *
+ * or
+ * 
+ * .\bin\spark-submit.cmd
+ *     --master local[*]
+ *     file://C:/development/projects/release-29.Aug.2016/project/java/coherent-datafeed-assembly/target/coherent-datafeed-assembly-1.0.8-RELEASE.jar
+ *     --class com.coherentlogic.coherent.datafeed.spark.integration.receivers.ElektronMarketPriceReceiver
+ * 
  * @see <a href="http://nishutayaltech.blogspot.com/2015/04/how-to-run-apache-spark-on-windows7-in.html">How to run
  * Apache Spark on Windows7 in standalone mode</a>
  * 
@@ -87,13 +94,11 @@ object ElektronMarketPriceReceiver extends scala.App {
     )
   )
 
-  stream.print()
+  // Required by the saveAsTextFiles operation.
+  // System.setProperty("hadoop.home.dir", "C:/development/software/winutils/")
+  // stream.saveAsTextFiles("C:/Temp/spark-dump/spark-market-price-dump", "txt")
 
-// Required by the saveAsTextFiles operation.
-//
-//  System.setProperty("hadoop.home.dir", "C:/development/software/winutils/")
-//
-//  stream.saveAsTextFiles("C:/Temp/spark-dump/spark-market-price-dump", "txt")
+  stream.print()
 
   streamingContext.start()
 
