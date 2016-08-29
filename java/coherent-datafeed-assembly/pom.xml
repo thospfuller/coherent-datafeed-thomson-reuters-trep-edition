@@ -30,6 +30,10 @@
         </dependency>
         <dependency>
             <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
+            <artifactId>coherent-datafeed-spark-int</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
             <artifactId>coherent-datafeed-rproject-int</artifactId>
         </dependency>
     </dependencies>
@@ -106,7 +110,7 @@
                             <transformers>
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.coherentlogic.coherent.datafeed.client.Main</mainClass>
+                                    <mainClass>com.coherentlogic.coherent.datafeed.spark.integration.receivers.ElektronMarketPriceReceiver</mainClass>
                                 </transformer>
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
@@ -125,6 +129,9 @@
                             </relocations>
                             <artifactSet>
                                 <excludes>
+                                    <exclude>org.apache.spark:spark-core_2.11</exclude>
+                                    <exclude>org.apache.spark:spark-streaming_2.11</exclude>
+                                    <exclude>org.apache.spark:spark-sql_2.11</exclude>
                                     <exclude>junit:junit</exclude>
                                     <exclude>org.mockito:mockito-all</exclude>
                                     <exclude>com.reuters:rfa</exclude>
