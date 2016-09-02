@@ -6,6 +6,7 @@ import static com.coherentlogic.coherent.datafeed.misc.Constants.TIME_SERIES;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -20,6 +21,7 @@ import com.coherentlogic.coherent.datafeed.adapters.omm.OMMNumericAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.annotations.RFAType;
 import com.coherentlogic.coherent.datafeed.annotations.UsingKey;
+import com.coherentlogic.coherent.datafeed.exceptions.MissingDataException;
 import com.coherentlogic.coherent.datafeed.exceptions.TimeSeriesConversionFailedException;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 
@@ -215,5 +217,23 @@ public class TimeSeries extends StatusResponseBean implements MarketPriceConstan
         }
 
         return result;
+    }
+
+    public void sortSamplesBy (Comparator<Sample> byComparator) {
+        samples.sort(byComparator);
+    }
+
+    public void sortSamplesByDate () {
+
+        Comparator<Sample> byDate = (Sample lhs, Sample rhs) -> {
+
+            if (lhs == null || rhs == null)
+                throw new MissingDataException ("Unable to compare the lhs vs. rhs because one of these references "
+                    + "is null; lhs: " + lhs + ", rhs: " + rhs);
+
+            return lhs.getDate().compareTo(rhs.getDate ());
+        };
+
+        samples.sort(byDate);
     }
 }
