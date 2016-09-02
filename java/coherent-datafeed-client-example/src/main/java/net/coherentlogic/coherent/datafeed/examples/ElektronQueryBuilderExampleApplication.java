@@ -2,9 +2,14 @@ package net.coherentlogic.coherent.datafeed.examples;
 
 import static com.coherentlogic.coherent.datafeed.misc.Constants.DACS_ID;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.beans.PropertyChangeEvent;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,13 +32,15 @@ import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
-import com.coherentlogic.coherent.datafeed.domain.Sample;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.misc.Constants;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.reuters.ts1.TS1Constants;
+
+import joinery.DataFrame;
+import joinery.DataFrame.PlotType;
 
 /**
  * An example application that authenticates, executes a query, and gets the
@@ -98,15 +105,30 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
 
         elektronQueryBuilder.login(sessionBean);
 
-        queryTimeSeriesService("TRI.N");
-        queryTimeSeriesService("MSFT.O");
-        queryTimeSeriesService("BFb.N");
+        final TimeSeriesJFrame timeSeriesJFrame = new TimeSeriesJFrame ();
 
-        queryMarketMakerService ();
+        timeSeriesJFrame
+            .getGoButton()
+            .addActionListener(
+                event -> {
 
-        queryMarketPriceService ();
+                    String ric = timeSeriesJFrame.getRicTextField().getText();
 
-        queryMarketByOrderService ();
+                    System.out.println("ric: " + ric);
+
+                    try {
+                        queryTimeSeriesService(ric);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            );
+
+        timeSeriesJFrame.setVisible(true);
+
+//        queryMarketByOrderService ();
+//        queryMarketMakerService ();
+//        queryMarketPriceService ();
 
         log.info("...done!");
 
@@ -116,46 +138,140 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
         //       login.
     }
 
-    public void queryTimeSeriesService (String ric) throws InterruptedException, ExecutionException, TimeoutException {
+    /**
+     * TRI.N, MSFT.O, GOOG.O, AMZN.O, BFb.N
+     */
+    public void queryTimeSeriesService (String ric)
+        throws InterruptedException, ExecutionException, TimeoutException, ParseException {
 
         TimeSeries timeSeries = elektronQueryBuilder.getTimeSeriesFor(
-            Constants.ELEKTRON_DD, ric, TS1Constants.WEEKLY_PERIOD);
+            Constants.ELEKTRON_DD,
+            ric,
+            TS1Constants.MONTHLY_PERIOD
+        );
+
+        timeSeries.sortSamplesByDate();
 
         AttribInfo attribInfo = timeSeries.getAttribInfo();
 
         System.out.print("timeSeries: " + timeSeries + ", attribInfo: " + attribInfo + ", sampleSize: "
             + timeSeries.getSamples().size() + "\n\n\n");
 
-        DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
+        List<String> headers = timeSeries.getHeaders();
 
-        String TABS = "\t\t\t\t\t";
+        DataFrame<Object> dataFrame = new DataFrame<Object> ();
 
-        boolean closeAdded = false;
+        for (String nextHeader : headers) {
 
-        for (String nextHeader : timeSeries.getHeaders()) {
-            if (!closeAdded) {
-                closeAdded = true;
-                System.out.print(nextHeader + TABS);
-            } else {
-                System.out.print(nextHeader + "\t\t\t");
+            if (!nextHeader.equals(Constants.BIG_VOLUME)
+                && !nextHeader.equals(Constants.BIG_DATE)
+                && !nextHeader.equals(MarketPriceConstants.BID) // Bid format is not correct so we're ignoring it.
+            ) {
+                List<? extends Object> nextValues = toBigDecimalList (timeSeries.getValuesForHeader(nextHeader));
+
+                // JOINERY NOTE:
+                // If we don't cast then we end up with a data frame that has only column names.
+                dataFrame.add((Object)nextHeader, (List<Object>)nextValues);
+
+            } else if (Constants.BIG_DATE.equals(nextHeader)) {
+
+                List<? extends Object> dates = toDateList (timeSeries.getValuesForHeader(Constants.BIG_DATE));
+
+                dataFrame.add((Object) Constants.BIG_DATE, (List<Object>) dates);
             }
         }
 
-        for (Sample sample : timeSeries.getSamples()) {
+        dataFrame.plot(PlotType.LINE);
+        dataFrame.show();
+    }
 
-            long timeMillis = sample.getDate();
+    static List<Long> toLongList (List<String> values) {
 
-            Calendar calendar = Calendar.getInstance();
+        List<Long> results = new ArrayList<Long> (values.size());
 
-            calendar.setTimeInMillis(timeMillis);
-
-            String date = formatter.format(calendar.getTime());
-
-            System.out.print("\n" + date);
-
-            for (String nextPoint : sample.getPoints())
-                System.out.print ("\t\t\t" + nextPoint);
+        try {
+            for (String next : values) {
+                results.add(Long.valueOf(next));
+            }
+        } catch (Throwable thrown) {
+            System.out.println ("Exception thrown for values: " + values);
+            thrown.printStackTrace(System.err);
         }
+
+        return results;
+    }
+
+    static List<BigDecimal> toBigDecimalList (List<String> values) throws ParseException {
+
+        List<BigDecimal> results = new ArrayList<BigDecimal> (values.size());
+
+        for (String next : values) {
+
+            if (next == null)
+                results.add(null);
+            else {
+                next = NumberFormat.getNumberInstance(java.util.Locale.US).parse(next).toString();
+                results.add(new BigDecimal (next));
+            }
+        }
+
+        return results;
+    }
+
+//  DateFormat formatter = new SimpleDateFormat("yyyy MMM dd   HH:mm");
+//
+//  String TABS = "\t\t\t\t\t";
+//
+//  boolean closeAdded = false;
+//
+//  for (String nextHeader : timeSeries.getHeaders()) {
+//      if (!closeAdded) {
+//          closeAdded = true;
+//          System.out.print(nextHeader + TABS);
+//      } else {
+//          System.out.print(nextHeader + "\t\t\t");
+//      }
+//  }
+//
+//  for (Sample sample : timeSeries.getSamples()) {
+//
+//      long timeMillis = sample.getDate();
+//
+//      Calendar calendar = Calendar.getInstance();
+//
+//      calendar.setTimeInMillis(timeMillis);
+//
+//      String date = formatter.format(calendar.getTime());
+//
+//      System.out.print("\n" + date);
+//
+//      for (String nextPoint : sample.getPoints())
+//          System.out.print ("\t\t\t" + nextPoint);
+//  }
+
+    static List<Date> toDateList (List<String> values) {
+
+        List<Date> results = new ArrayList<Date> (values.size());
+
+        try {
+
+            for (String next : values) {
+
+                long timeMillis = Long.valueOf(next);
+
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.setTimeInMillis(timeMillis);
+
+                results.add(calendar.getTime());
+            }
+        } catch (Throwable thrown) {
+            System.out.println ("Exception thrown for values: " + values);
+            thrown.printStackTrace(System.err);
+            throw (thrown);
+        }
+
+        return results;
     }
 
     public void queryMarketByOrderService () {
@@ -163,7 +279,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
         AtomicLong aggregateUpdateCtr = new AtomicLong (0);
         AtomicLong statusUpdateCtr = new AtomicLong (0);
 
-        for (String nextRic : rics) {
+        for (String nextRic : new String[] {"AOO.BR"}) {
 
             /* We *MUST* acquire the MarketByOrder instance from the Spring container because we are using AOP and if we
              * simply create the class directly by calling the ctor, none of the property change events will fire when
@@ -183,7 +299,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                         event
                             .getPropertyChangeEventMap()
                             .forEach((key, value) -> {
-                                System.out.println("- key: " + key + ", value: " + value);
+                                System.out.println("- key: " + key + ", value: " + ((PropertyChangeEvent)value).getNewValue());
                             }
                         );
 
@@ -203,7 +319,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                     event
                         .getPropertyChangeEventMap()
                         .forEach((key, value) -> {
-                            System.out.println("- key: " + key + ", value: " + value);
+                            System.out.println("- key: " + key + ", value: " + ((PropertyChangeEvent)value).getNewValue());
                         }
                     );
 
@@ -229,7 +345,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                                     event
                                         .getPropertyChangeEventMap()
                                         .forEach((key, value) -> {
-                                            System.out.println("- key: " + key + ", value: " + value);
+                                            System.out.println("- key: " + key + ", value: " + ((PropertyChangeEvent)value).getNewValue());
                                         }
                                     );
 
