@@ -403,4 +403,10 @@ public interface MarketPriceConstants {
         MKT_STATUS = "MKT_STATUS",
         LIST_MKT   = "LIST_MKT",
         CLASS_CODE = "CLASS_CODE";
+
+    static final String
+        NO_ORD = "NO_ORD",
+        ACC_SIZE = "ACC_SIZE",
+        LV_TIM_MS = "LV_TIM_MS",
+        LV_DATE = "LV_DATE";
 }
