@@ -129,6 +129,7 @@ public interface Constants {
 
     static final String DATE = "date",
         BIG_DATE = "DATE",
+        BIG_VOLUME = "VOLUME",
         POINTS = "points",
         POINT = "point",
         SAMPLE = "sample",
