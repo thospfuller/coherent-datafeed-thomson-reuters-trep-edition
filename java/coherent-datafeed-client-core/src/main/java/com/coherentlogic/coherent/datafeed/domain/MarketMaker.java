@@ -50,6 +50,8 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
 
     /**
      * REAL64
+     *
+     * @TODO Should this be an Integer?
      */
     @XStreamAlias(LOT_SIZE_A)
     private BigDecimal lotSize;

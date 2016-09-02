@@ -52,6 +52,9 @@ public class RFABean extends SerializableBean
     @GeneratedValue(strategy=GenerationType.TABLE)
     private Long uniqueId = null;
 
+    /**
+     * @see com.reuters.rfa.omm.OMMAttribInfo
+     */
     private AttribInfo attribInfo;
 
     private transient Handle handle = null;
