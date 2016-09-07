@@ -52,6 +52,9 @@ public class ElektronQueryBuilder {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilder.class);
 
+    public static final String MARKET_BY_PRICE_CACHE = "marketByPriceCache",
+        MARKET_BY_ORDER_CACHE = "marketByOrderCache";
+
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -84,14 +87,6 @@ public class ElektronQueryBuilder {
 
     @Autowired
     private Map<String, MarketMaker> marketMakerCache;
-
-//    @Autowired
-//    @Qualifier(value="marketByPriceCache")
-//    private Map<String, MarketByPrice> marketByPriceCache;
-
-//    @Autowired
-//    @Qualifier(value="marketByOrderCache")
-//    private Map<String, MarketByOrder> marketByOrderCache;
 
     @Autowired
     private Map<String, MarketPrice> marketPriceCache;
@@ -205,11 +200,8 @@ public class ElektronQueryBuilder {
 
         log.info("newMarketByPrice: method begins; ric: " + ric);
 
-//        System.out.println("marketByPriceCache: " + marketByPriceCache);
-//        
-//        if (true == true) System.exit(9999);
-
-        Map<String, MarketByPrice> marketByPriceCache = (Map<String, MarketByPrice>) applicationContext.getBean("marketByPriceCache");
+        Map<String, MarketByPrice> marketByPriceCache =
+            (Map<String, MarketByPrice>) applicationContext.getBean(MARKET_BY_PRICE_CACHE);
 
         MarketByPrice result = marketByPriceCache.get(ric);
 
@@ -231,7 +223,8 @@ public class ElektronQueryBuilder {
 
         log.info("newMarketByOrder: method begins; ric: " + ric);
 
-        Map<String, MarketByOrder> marketByOrderCache = (Map<String, MarketByOrder>) applicationContext.getBean("marketByOrderCache");
+        Map<String, MarketByOrder> marketByOrderCache =
+            (Map<String, MarketByOrder>) applicationContext.getBean(MARKET_BY_ORDER_CACHE);
 
         MarketByOrder result = marketByOrderCache.get(ric);
 
