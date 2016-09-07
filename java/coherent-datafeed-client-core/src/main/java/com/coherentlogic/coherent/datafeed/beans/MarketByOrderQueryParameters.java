@@ -2,7 +2,6 @@ package com.coherentlogic.coherent.datafeed.beans;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
-import com.reuters.rfa.common.Handle;
 
 /**
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
