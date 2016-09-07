@@ -33,7 +33,7 @@ import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.json.TimeSeriesJSONGenerator;
 import com.coherentlogic.coherent.datafeed.builders.ElektronQueryBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
@@ -64,7 +64,7 @@ import net.coherentlogic.coherent.datafeed.examples.ExampleRICS;
     "classpath*:spring/marketprice-jms-workflow-beans.xml",
     "classpath*:spring/rproject-beans.xml",
 })
-public class ElektronQueryBuilderClient implements MarketPriceConstants, Startable, Stoppable {
+public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, Startable, Stoppable {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderClient.class);
 

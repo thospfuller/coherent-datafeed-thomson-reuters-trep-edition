@@ -35,7 +35,7 @@ import com.coherentlogic.coherent.datafeed.misc.Constants;
 @Table(name=TIME_SERIES)
 //@XStreamAlias(TIME_SERIES)
 //@XStreamConverter(TimeSeriesConverter.class)
-public class TimeSeries extends StatusResponseBean implements MarketPriceConstants {
+public class TimeSeries extends StatusResponseBean implements RDMFieldDictionaryConstants {
 
     private static final long serialVersionUID = -3354510584636604673L;
 

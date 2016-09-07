@@ -37,7 +37,7 @@ import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 import com.coherentlogic.coherent.datafeed.domain.Sample;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
@@ -58,7 +58,7 @@ import net.coherentlogic.coherent.datafeed.examples.ExampleRICS;
 @SpringBootApplication
 @ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 @ImportResource({"classpath*:spring/jpa-beans.xml"})
-public class ElektronQueryBuilderDBExampleApplication implements CommandLineRunner, MarketPriceConstants {
+public class ElektronQueryBuilderDBExampleApplication implements CommandLineRunner, RDMFieldDictionaryConstants {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderDBExampleApplication.class);
 

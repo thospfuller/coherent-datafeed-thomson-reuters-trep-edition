@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
 /**
@@ -20,7 +20,7 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class MapAdapterTest implements MarketPriceConstants {
+public class MapAdapterTest implements RDMFieldDictionaryConstants {
 
     static final String DEF_HIGH_FOR_TODAY = "123.45";
 

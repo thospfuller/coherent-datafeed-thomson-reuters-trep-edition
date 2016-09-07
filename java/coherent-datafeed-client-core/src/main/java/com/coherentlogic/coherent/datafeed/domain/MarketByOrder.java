@@ -110,19 +110,19 @@ public class MarketByOrder extends StatusResponseBean
      *
      * @deprecated See comments.
      */
-    @XStreamAlias(MarketPriceConstants.PROD_PERM)
+    @XStreamAlias(RDMFieldDictionaryConstants.PROD_PERM)
     private BigInteger permission = null;
 
-    @XStreamAlias(MarketPriceConstants.DSPLY_NAME)
+    @XStreamAlias(RDMFieldDictionaryConstants.DSPLY_NAME)
     private String displayName;
 
 //    @XStreamAlias(ACTIV_DATE_KEY)
 //    private Date activeDate;
 
-    @XStreamAlias(MarketPriceConstants.TRD_UNITS)
+    @XStreamAlias(RDMFieldDictionaryConstants.TRD_UNITS)
     private Integer tradingUnits; // enum
 
-    @XStreamAlias(MarketPriceConstants.RECORDTYPE)
+    @XStreamAlias(RDMFieldDictionaryConstants.RECORDTYPE)
     private Integer recordType; // uint32
 
     @XStreamAlias(CURRENCY)
@@ -131,13 +131,13 @@ public class MarketByOrder extends StatusResponseBean
     /**
      * @see Appears in MarketPrice as well.
      */
-    @XStreamAlias(MarketPriceConstants.RDN_EXCHD2)
+    @XStreamAlias(RDMFieldDictionaryConstants.RDN_EXCHD2)
     private String exchangeId2 = null;
 
     /**
      * @TODO: Appears in MarketPrice as well and MarketMaker.
      */
-    @XStreamAlias(MarketPriceConstants.PROV_SYMB)
+    @XStreamAlias(RDMFieldDictionaryConstants.PROV_SYMB)
     private String providerSymbol = null;
 
 //    @XStreamAlias(PR_RNK_RUL)
@@ -149,34 +149,34 @@ public class MarketByOrder extends StatusResponseBean
     /**
      * @see Appears in MarketPrice as well.
      */
-    @XStreamAlias(MarketPriceConstants.MNEMONIC)
+    @XStreamAlias(RDMFieldDictionaryConstants.MNEMONIC)
     private String exchangeId = null;
 
-    @XStreamAlias(MarketPriceConstants.TIMACT_MS)
+    @XStreamAlias(RDMFieldDictionaryConstants.TIMACT_MS)
     private Long lastActivityTimeMillis;
 
-    @XStreamAlias(MarketPriceConstants.CONTEXT_ID_KEY)
+    @XStreamAlias(RDMFieldDictionaryConstants.CONTEXT_ID_KEY)
     private Integer contextId;
 
-    @XStreamAlias(MarketPriceConstants.DDS_DSO_ID)
+    @XStreamAlias(RDMFieldDictionaryConstants.DDS_DSO_ID)
     private Integer elektronDataSourceOwnerId = null;
 
-    @XStreamAlias(MarketPriceConstants.SPS_SP_RIC)
+    @XStreamAlias(RDMFieldDictionaryConstants.SPS_SP_RIC)
     private String spsSubProviderLevelRic;
 
-    @XStreamAlias(MarketPriceConstants.BOOK_STATE)
+    @XStreamAlias(RDMFieldDictionaryConstants.BOOK_STATE)
     private String orderBookState;
 
-    @XStreamAlias(MarketPriceConstants.HALT_REASN)
+    @XStreamAlias(RDMFieldDictionaryConstants.HALT_REASN)
     private String haltReason;
 
-    @XStreamAlias(MarketPriceConstants.TRD_STATUS)
+    @XStreamAlias(RDMFieldDictionaryConstants.TRD_STATUS)
     private String tradingStatus;
 
-    @XStreamAlias(MarketPriceConstants.HALT_RSN)
+    @XStreamAlias(RDMFieldDictionaryConstants.HALT_RSN)
     private String haltReasonCode;
 
-    @XStreamAlias(MarketPriceConstants.ORDERS)
+    @XStreamAlias(RDMFieldDictionaryConstants.ORDERS)
     private Map<String, Order> orders;
 
     // Probably RMTES_STRING -- same as orderId so probably not needed.
@@ -211,7 +211,7 @@ public class MarketByOrder extends StatusResponseBean
     /**
      *
      */
-    @RFAType(type=MarketPriceConstants.PROD_PERM)
+    @RFAType(type=RDMFieldDictionaryConstants.PROD_PERM)
     @Adapt(using=OMMNumericAdapter.class)
     public void setPermission(@Changeable(PERMISSION) BigInteger permission) {
         this.permission = permission;
@@ -223,33 +223,33 @@ public class MarketByOrder extends StatusResponseBean
 
     public static final String DISPLAY_NAME = "displayName";
 
-    @RFAType(type=MarketPriceConstants.DSPLY_NAME)
+    @RFAType(type=RDMFieldDictionaryConstants.DSPLY_NAME)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setDisplayName(@Changeable(DISPLAY_NAME) String displayName) {
         this.displayName = displayName;
     }
 
-    @UsingKey(type=MarketPriceConstants.TRD_UNITS)
+    @UsingKey(type=RDMFieldDictionaryConstants.TRD_UNITS)
     public Integer getTradingUnits() {
         return tradingUnits;
     }
 
     public static final String TRADING_UNITS = "tradingUnits";
 
-    @RFAType(type=MarketPriceConstants.TRD_UNITS)
+    @RFAType(type=RDMFieldDictionaryConstants.TRD_UNITS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradingUnits(@Changeable(TRADING_UNITS) Integer tradingUnits) {
         this.tradingUnits = tradingUnits;
     }
 
-    @UsingKey(type=MarketPriceConstants.RECORDTYPE)
+    @UsingKey(type=RDMFieldDictionaryConstants.RECORDTYPE)
     public Integer getRecordType() {
         return recordType;
     }
 
     public static final String RECORD_TYPE = "recordType";
 
-    @RFAType(type=MarketPriceConstants.RECORDTYPE)
+    @RFAType(type=RDMFieldDictionaryConstants.RECORDTYPE)
     @Adapt(using=OMMNumericAdapter.class)
     public void setRecordType(@Changeable(RECORD_TYPE) Integer recordType) {
         this.recordType = recordType;
@@ -268,14 +268,14 @@ public class MarketByOrder extends StatusResponseBean
         this.currency = currency;
     }
 
-    @UsingKey(type=MarketPriceConstants.PROV_SYMB)
+    @UsingKey(type=RDMFieldDictionaryConstants.PROV_SYMB)
     public String getProviderSymbol() {
         return providerSymbol;
     }
 
     public static final String PROVIDER_SYMBOL = "providerSymbol";
 
-    @RFAType(type=MarketPriceConstants.PROV_SYMB)
+    @RFAType(type=RDMFieldDictionaryConstants.PROV_SYMB)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setProviderSymbol(@Changeable(PROVIDER_SYMBOL) String providerSymbol) {
         this.providerSymbol = providerSymbol;
@@ -303,40 +303,40 @@ public class MarketByOrder extends StatusResponseBean
 //        this.orderRankRule = orderRankRule;
 //    }
     
-    @UsingKey(type=MarketPriceConstants.MNEMONIC)
+    @UsingKey(type=RDMFieldDictionaryConstants.MNEMONIC)
     public String getExchangeId() {
         return exchangeId;
     }
 
     public static final String EXCHANGE_ID = "exchangeId";
 
-    @RFAType(type=MarketPriceConstants.MNEMONIC)
+    @RFAType(type=RDMFieldDictionaryConstants.MNEMONIC)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setExchangeId(@Changeable(EXCHANGE_ID) String exchangeId) {
         this.exchangeId = exchangeId;
     }
 
-    @UsingKey(type=MarketPriceConstants.TIMACT_MS)
+    @UsingKey(type=RDMFieldDictionaryConstants.TIMACT_MS)
     public Long getLastActivityTimeMillis() {
         return lastActivityTimeMillis;
     }
 
     public static final String LAST_ACTIVITY_TIME_MILLIS = "lastActivityTimeMillis";
 
-    @RFAType(type=MarketPriceConstants.TIMACT_MS)
+    @RFAType(type=RDMFieldDictionaryConstants.TIMACT_MS)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLastActivityTimeMillis(@Changeable(LAST_ACTIVITY_TIME_MILLIS) Long lastActivityTimeMillis) {
         this.lastActivityTimeMillis = lastActivityTimeMillis;
     }
 
-    @UsingKey(type=MarketPriceConstants.CONTEXT_ID_KEY)
+    @UsingKey(type=RDMFieldDictionaryConstants.CONTEXT_ID_KEY)
     public Integer getContextId() {
         return contextId;
     }
 
     public static final String CONTEXT_ID = "contextId";
 
-    @RFAType(type=MarketPriceConstants.CONTEXT_ID_KEY)
+    @RFAType(type=RDMFieldDictionaryConstants.CONTEXT_ID_KEY)
     @Adapt(using=OMMNumericAdapter.class)
     public void setContextId(@Changeable(CONTEXT_ID) Integer contextId) {
         this.contextId = contextId;
@@ -345,94 +345,94 @@ public class MarketByOrder extends StatusResponseBean
     /**
      * @TODO: Consider renaming this method.
      */
-    @UsingKey(type=MarketPriceConstants.DDS_DSO_ID)
+    @UsingKey(type=RDMFieldDictionaryConstants.DDS_DSO_ID)
     public Integer getElektronDataSourceOwnerId() {
         return elektronDataSourceOwnerId;
     }
 
     public static final String ELEKTRON_DATA_SOURCE_OWNER_ID = "elektronDataSourceOwnerId";
 
-    @RFAType(type=MarketPriceConstants.DDS_DSO_ID)
+    @RFAType(type=RDMFieldDictionaryConstants.DDS_DSO_ID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setElektronDataSourceOwnerId(@Changeable(ELEKTRON_DATA_SOURCE_OWNER_ID)
         Integer elektronDataSourceOwnerId) {
         this.elektronDataSourceOwnerId = elektronDataSourceOwnerId;
     }
 
-    @UsingKey(type=MarketPriceConstants.RDN_EXCHD2)
+    @UsingKey(type=RDMFieldDictionaryConstants.RDN_EXCHD2)
     public String getExchangeId2() {
         return exchangeId2;
     }
 
     public static final String EXCHANGE_ID_2 = "exchangeId2";
 
-    @RFAType(type=MarketPriceConstants.RDN_EXCHD2)
+    @RFAType(type=RDMFieldDictionaryConstants.RDN_EXCHD2)
     @Adapt(using=OMMEnumAdapter.class)
     public void setExchangeId2(@Changeable(EXCHANGE_ID_2) String exchangeId2) {
         this.exchangeId2 = exchangeId2;
     }
 
-    @UsingKey(type=MarketPriceConstants.SPS_SP_RIC)
+    @UsingKey(type=RDMFieldDictionaryConstants.SPS_SP_RIC)
     public String getSpsSubProviderLevelRic() {
         return spsSubProviderLevelRic;
     }
 
     public static final String SPS_SUB_PROVIDER_LEVEL_RIC = "spsSubProviderLevelRic";
 
-    @RFAType(type=MarketPriceConstants.SPS_SP_RIC)
+    @RFAType(type=RDMFieldDictionaryConstants.SPS_SP_RIC)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setSpsSubProviderLevelRic(@Changeable(SPS_SUB_PROVIDER_LEVEL_RIC) String spsSubProviderLevelRic) {
         this.spsSubProviderLevelRic = spsSubProviderLevelRic;
     }
 
-    @UsingKey(type=MarketPriceConstants.BOOK_STATE)
+    @UsingKey(type=RDMFieldDictionaryConstants.BOOK_STATE)
     public String getOrderBookState() {
         return orderBookState;
     }
 
     public static final String ORDER_BOOK_STATE = "orderBookState";
 
-    @RFAType(type=MarketPriceConstants.BOOK_STATE)
+    @RFAType(type=RDMFieldDictionaryConstants.BOOK_STATE)
     @Adapt(using=OMMEnumAdapter.class)
     public void setOrderBookState(@Changeable(ORDER_BOOK_STATE) String orderBookState) {
         this.orderBookState = orderBookState;
     }
 
     
-    @UsingKey(type=MarketPriceConstants.HALT_REASN)
+    @UsingKey(type=RDMFieldDictionaryConstants.HALT_REASN)
     public String getHaltReason() {
         return haltReason;
     }
 
     public static final String HALT_REASON = "haltReason";
 
-    @RFAType(type=MarketPriceConstants.HALT_REASN)
+    @RFAType(type=RDMFieldDictionaryConstants.HALT_REASN)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setHaltReason(@Changeable(HALT_REASON) String haltReason) {
         this.haltReason = haltReason;
     }
 
-    @UsingKey(type=MarketPriceConstants.TRD_STATUS)
+    @UsingKey(type=RDMFieldDictionaryConstants.TRD_STATUS)
     public String getTradingStatus() {
         return tradingStatus;
     }
 
     public static final String TRADING_STATUS = "tradingStatus";
 
-    @RFAType(type=MarketPriceConstants.TRD_STATUS)
+    @RFAType(type=RDMFieldDictionaryConstants.TRD_STATUS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradingStatus(@Changeable(TRADING_STATUS) String tradingStatus) {
         this.tradingStatus = tradingStatus;
     }
 
-    @UsingKey(type=MarketPriceConstants.HALT_RSN)
+    @UsingKey(type=RDMFieldDictionaryConstants.HALT_RSN)
     public String getHaltReasonCode() {
         return haltReasonCode;
     }
 
     public static final String HALT_REASON_CODE = "haltReasonCode";
 
-    @RFAType(type=MarketPriceConstants.HALT_RSN)
+    @RFAType(type=RDMFieldDictionaryConstants.HALT_RSN)
     @Adapt(using=OMMEnumAdapter.class)
     public void setHaltReasonCode(@Changeable(HALT_REASON_CODE) String haltReasonCode) {
         this.haltReasonCode = haltReasonCode;
@@ -493,128 +493,128 @@ public class MarketByOrder extends StatusResponseBean
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
      */
-    @XStreamAlias(MarketPriceConstants.ORDER)
+    @XStreamAlias(RDMFieldDictionaryConstants.ORDER)
     public static class Order extends RFABean {
 
         private static final long serialVersionUID = 3061616938490422985L;
 
         // RMTES_STRING
-        @XStreamAlias(MarketPriceConstants.ORDER_ID)
+        @XStreamAlias(RDMFieldDictionaryConstants.ORDER_ID)
         private String orderId;
 
         // REAL64
-        @XStreamAlias(MarketPriceConstants.ORDER_PRC)
+        @XStreamAlias(RDMFieldDictionaryConstants.ORDER_PRC)
         private BigDecimal orderPrice;
 
         // ENUM
-        @XStreamAlias(MarketPriceConstants.ORDER_SIDE)
+        @XStreamAlias(RDMFieldDictionaryConstants.ORDER_SIDE)
         private String orderSide;
 
         // REAL64
-        @XStreamAlias(MarketPriceConstants.ORDER_SIZE)
+        @XStreamAlias(RDMFieldDictionaryConstants.ORDER_SIZE)
         private Long orderSize;
 
         // UINT64
         // QUOTIM_MS
-        @XStreamAlias(MarketPriceConstants.QUOTIM_MS)
+        @XStreamAlias(RDMFieldDictionaryConstants.QUOTIM_MS)
         private Long quoteTimeMillis;
 
         // RMTES_STRING
-        @XStreamAlias(MarketPriceConstants.ORDER_TONE)
+        @XStreamAlias(RDMFieldDictionaryConstants.ORDER_TONE)
         private String orderTone;
 
-        @XStreamAlias(MarketPriceConstants.PR_TIM_MS)
+        @XStreamAlias(RDMFieldDictionaryConstants.PR_TIM_MS)
         private Long priorityTimeMillis;
 
         public Order() {
         }
 
-        @UsingKey(type=MarketPriceConstants.ORDER_ID)
+        @UsingKey(type=RDMFieldDictionaryConstants.ORDER_ID)
         public String getOrderId() {
             return orderId;
         }
 
         public static final String ORDER_ID = "orderId";
 
-        @RFAType(type=MarketPriceConstants.ORDER_ID)
+        @RFAType(type=RDMFieldDictionaryConstants.ORDER_ID)
         @Adapt(using=OMMDataBufferAdapter.class)
         public void setOrderId(@Changeable(ORDER_ID) String orderId) {
             this.orderId = orderId;
         }
 
-        @UsingKey(type=MarketPriceConstants.ORDER_PRC)
+        @UsingKey(type=RDMFieldDictionaryConstants.ORDER_PRC)
         public BigDecimal getOrderPrice() {
             return orderPrice;
         }
 
         public static final String ORDER_PRICE = "orderPrice";
 
-        @RFAType(type=MarketPriceConstants.ORDER_PRC)
+        @RFAType(type=RDMFieldDictionaryConstants.ORDER_PRC)
         @Adapt(using=OMMNumericAdapter.class)
         public void setOrderPrice(@Changeable(ORDER_PRICE) BigDecimal orderPrice) {
             this.orderPrice = orderPrice;
         }
 
-        @UsingKey(type=MarketPriceConstants.ORDER_SIDE)
+        @UsingKey(type=RDMFieldDictionaryConstants.ORDER_SIDE)
         public String getOrderSide() {
             return orderSide;
         }
 
         public static final String ORDER_SIDE = "orderSide";
 
-        @RFAType(type=MarketPriceConstants.ORDER_SIDE)
+        @RFAType(type=RDMFieldDictionaryConstants.ORDER_SIDE)
         @Adapt(using=OMMEnumAdapter.class)
         public void setOrderSide(@Changeable(ORDER_SIDE) String orderSide) {
             this.orderSide = orderSide;
         }
 
-        @UsingKey(type=MarketPriceConstants.ORDER_SIZE)
+        @UsingKey(type=RDMFieldDictionaryConstants.ORDER_SIZE)
         public Long getOrderSize() {
             return orderSize;
         }
 
         public static final String ORDER_SIZE = "orderSize";
 
-        @RFAType(type=MarketPriceConstants.ORDER_SIZE)
+        @RFAType(type=RDMFieldDictionaryConstants.ORDER_SIZE)
         @Adapt(using=OMMNumericAdapter.class)
         public void setOrderSize(@Changeable(ORDER_SIZE) Long orderSize) {
             this.orderSize = orderSize;
         }
 
-        @UsingKey(type=MarketPriceConstants.QUOTIM_MS)
+        @UsingKey(type=RDMFieldDictionaryConstants.QUOTIM_MS)
         public Long getQuoteTimeMillis() {
             return quoteTimeMillis;
         }
 
         public static final String QUOTE_TIME_MILLIS = "quoteTimeMillis";
 
-        @RFAType(type=MarketPriceConstants.QUOTIM_MS)
+        @RFAType(type=RDMFieldDictionaryConstants.QUOTIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
         public void setQuoteTimeMillis(@Changeable(QUOTE_TIME_MILLIS) Long quoteTimeMillis) {
             this.quoteTimeMillis = quoteTimeMillis;
         }
 
-        @UsingKey(type=MarketPriceConstants.ORDER_TONE)
+        @UsingKey(type=RDMFieldDictionaryConstants.ORDER_TONE)
         public String getOrderTone() {
             return orderTone;
         }
 
         public static final String ORDER_TONE = "orderTone";
 
-        @RFAType(type=MarketPriceConstants.ORDER_TONE)
+        @RFAType(type=RDMFieldDictionaryConstants.ORDER_TONE)
         @Adapt(using=OMMDataBufferAdapter.class)
         public void setOrderTone(@Changeable(ORDER_TONE) String orderTone) {
             this.orderTone = orderTone;
         }
 
-        @UsingKey(type=MarketPriceConstants.PR_TIM_MS)
+        @UsingKey(type=RDMFieldDictionaryConstants.PR_TIM_MS)
         public Long getPriorityTimeMillis() {
             return priorityTimeMillis;
         }
 
         public static final String PRIORITY_TIME_MILLIS = "priorityTimeMillis";
 
-        @RFAType(type=MarketPriceConstants.PR_TIM_MS)
+        @RFAType(type=RDMFieldDictionaryConstants.PR_TIM_MS)
         @Adapt(using=OMMNumericAdapter.class)
         public void setPriorityTimeMillis(@Changeable(PRIORITY_TIME_MILLIS) Long priorityTimeMillis) {
             this.priorityTimeMillis = priorityTimeMillis;

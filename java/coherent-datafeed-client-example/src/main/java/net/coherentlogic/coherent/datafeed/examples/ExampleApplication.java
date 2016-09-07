@@ -33,7 +33,7 @@ import com.coherentlogic.coherent.datafeed.domain.EventType;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 import com.coherentlogic.coherent.datafeed.domain.Sample;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
@@ -60,7 +60,7 @@ import com.reuters.ts1.TS1Constants;
 @SpringBootApplication
 //@EnableAutoConfiguration
 @ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
-public class ExampleApplication implements CommandLineRunner, MarketPriceConstants {
+public class ExampleApplication implements CommandLineRunner, RDMFieldDictionaryConstants {
 
     private static final Logger log = LoggerFactory.getLogger(ExampleApplication.class);
 

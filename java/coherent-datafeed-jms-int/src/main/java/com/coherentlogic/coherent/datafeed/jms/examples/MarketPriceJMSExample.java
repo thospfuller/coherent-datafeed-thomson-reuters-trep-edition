@@ -26,7 +26,7 @@ import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyCha
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeListener;
 import com.coherentlogic.coherent.datafeed.builders.ElektronQueryBuilder;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.coherentlogic.coherent.datafeed.exceptions.UpdateFailedException;
@@ -42,7 +42,7 @@ import com.coherentlogic.coherent.datafeed.services.ServiceName;
 //@SpringBootApplication
 //@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
 //@ImportResource({"classpath*:spring/hornetq-beans.xml", "classpath*:spring/marketprice-jms-workflow-beans.xml"})
-public class MarketPriceJMSExample implements CommandLineRunner, MarketPriceConstants {
+public class MarketPriceJMSExample implements CommandLineRunner, RDMFieldDictionaryConstants {
 
     private static final Logger log = LoggerFactory.getLogger(MarketPriceJMSExample.class);
 

@@ -1,6 +1,6 @@
 package com.coherentlogic.coherent.datafeed.factories;
 
-import static com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants.BID;
+import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.BID;
 import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Method;

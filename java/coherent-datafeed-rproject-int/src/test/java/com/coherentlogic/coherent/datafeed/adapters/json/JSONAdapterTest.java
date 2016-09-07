@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 
 /**
  * Unit test for the {@link RFABeanToJSONAdapter} class.
@@ -28,7 +28,7 @@ import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
  *
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
-public class JSONAdapterTest implements MarketPriceConstants {
+public class JSONAdapterTest implements RDMFieldDictionaryConstants {
 
     private static final String DEFAULT_BIG_INTEGER_TEXT = "456";
 

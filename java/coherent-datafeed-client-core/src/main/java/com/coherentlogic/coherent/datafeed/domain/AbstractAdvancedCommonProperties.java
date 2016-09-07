@@ -14,7 +14,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
 public abstract class AbstractAdvancedCommonProperties
-    extends AbstractCommonProperties implements MarketPriceConstants {
+    extends AbstractCommonProperties implements RDMFieldDictionaryConstants {
 
     @XStreamAlias(ACTIV_DATE_KEY)
     private Date activeDate;

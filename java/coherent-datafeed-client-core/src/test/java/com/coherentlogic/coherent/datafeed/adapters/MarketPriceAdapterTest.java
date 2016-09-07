@@ -17,7 +17,7 @@ import org.junit.Test;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants;
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
 import com.coherentlogic.coherent.datafeed.factories.NullMarketPriceFactory;
 import com.reuters.rfa.omm.OMMDataBuffer;
 import com.reuters.rfa.omm.OMMDateTime;
@@ -413,7 +413,7 @@ public class MarketPriceAdapterTest extends AdapterUnitTestHelper {
 
         short call = 0;
 
-        String expectedResult = MarketPriceConstants.NOT_ALLOCATED;
+        String expectedResult = RDMFieldDictionaryConstants.NOT_ALLOCATED;
 
         reviewEnumConversion(fieldId, call, "getPutCall", expectedResult);
     }

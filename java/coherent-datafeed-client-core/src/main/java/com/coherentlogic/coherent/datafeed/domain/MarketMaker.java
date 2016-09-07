@@ -35,7 +35,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
     implements
         RICBeanSpecification,
         OrderEventGenerator<MarketMaker.Order>,
-        MarketPriceConstants {
+        RDMFieldDictionaryConstants {
 
     private String ric;
 
@@ -109,33 +109,33 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
         this.ric = ric;
     }
 
-    @UsingKey(type=MarketPriceConstants.OFFCL_CODE)
+    @UsingKey(type=RDMFieldDictionaryConstants.OFFCL_CODE)
     public String getOfficialCode() {
         return officialCode;
     }
 
     public static final String OFFICIAL_CODE = "officialCode";
 
-    @RFAType(type=MarketPriceConstants.OFFCL_CODE)
+    @RFAType(type=RDMFieldDictionaryConstants.OFFCL_CODE)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setOfficialCode(@Changeable(OFFICIAL_CODE) String officialCode) {
         this.officialCode = officialCode;
     }
 
-    @UsingKey(type=MarketPriceConstants.NASDSTATUS)
+    @UsingKey(type=RDMFieldDictionaryConstants.NASDSTATUS)
     public String getNasdStatus() {
         return nasdStatus;
     }
 
     public static final String NASD_STATUS = "nasdStatus";
 
-    @RFAType(type=MarketPriceConstants.NASDSTATUS)
+    @RFAType(type=RDMFieldDictionaryConstants.NASDSTATUS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setNasdStatus(@Changeable(NASD_STATUS) String nasdStatus) {
         this.nasdStatus = nasdStatus;
     }
 
-    @UsingKey(type=MarketPriceConstants.LOT_SIZE_A)
+    @UsingKey(type=RDMFieldDictionaryConstants.LOT_SIZE_A)
     public BigDecimal getLotSize() {
         return lotSize;
     }
@@ -146,33 +146,33 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
      * todo: According to the TR example this is, in fact LOT_SIZE_A, so check that other methods that we have use
      *       the name setLotSize and NOT setLotSizeA.
      */
-    @RFAType(type=MarketPriceConstants.LOT_SIZE_A)
+    @RFAType(type=RDMFieldDictionaryConstants.LOT_SIZE_A)
     @Adapt(using=OMMNumericAdapter.class)
     public void setLotSize(@Changeable(LOT_SIZE) BigDecimal lotSize) {
         this.lotSize = lotSize;
     }
 
-    @UsingKey(type=MarketPriceConstants.OFF_CD_IND)
+    @UsingKey(type=RDMFieldDictionaryConstants.OFF_CD_IND)
     public String getOfficialCodeIndicator() {
         return officialCodeIndicator;
     }
 
     public static final String OFFICIAL_CODE_INDICATOR = "officialCodeIndicator";
 
-    @RFAType(type=MarketPriceConstants.OFF_CD_IND)
+    @RFAType(type=RDMFieldDictionaryConstants.OFF_CD_IND)
     @Adapt(using=OMMEnumAdapter.class)
     public void setOfficialCodeIndicator(@Changeable(OFFICIAL_CODE_INDICATOR) String officialCodeIndicator) {
         this.officialCodeIndicator = officialCodeIndicator;
     }
 
-    @UsingKey(type=MarketPriceConstants.LIST_MKT)
+    @UsingKey(type=RDMFieldDictionaryConstants.LIST_MKT)
     public String getListingMarket() {
         return listingMarket;
     }
 
     public static final String LISTING_MARKET = "listingMarket";
 
-    @RFAType(type=MarketPriceConstants.LIST_MKT)
+    @RFAType(type=RDMFieldDictionaryConstants.LIST_MKT)
     @Adapt(using=OMMDataBufferAdapter.class)
     public void setListingMarket(@Changeable(LISTING_MARKET) String listingMarket) {
         this.listingMarket = listingMarket;
@@ -324,7 +324,7 @@ public class MarketMaker extends AbstractAdvancedCommonProperties
             return bid;
         }
 
-        @RFAType(type=MarketPriceConstants.BID)
+        @RFAType(type=RDMFieldDictionaryConstants.BID)
         @Adapt(using=OMMNumericAdapter.class)
         public void setBid(@Changeable(MarketPrice.BID) BigDecimal bid) {
             this.bid = bid;

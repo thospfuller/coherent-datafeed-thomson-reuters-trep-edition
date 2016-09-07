@@ -25,13 +25,13 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
 
     private Integer filter = null;
 
-    @XStreamAlias(MarketPriceConstants.SVC_NAME)
+    @XStreamAlias(RDMFieldDictionaryConstants.SVC_NAME)
     private String serviceName = null;
 
-    @XStreamAlias(MarketPriceConstants.NAME)
+    @XStreamAlias(RDMFieldDictionaryConstants.NAME)
     private String name = null;
 
-    @XStreamAlias(MarketPriceConstants.SVC_ID)
+    @XStreamAlias(RDMFieldDictionaryConstants.SVC_ID)
     private Integer serviceId = null;
 
     /**
@@ -39,10 +39,10 @@ public class AttribInfo extends SerializableBean implements IdentitySpecificatio
      *
      * RDMUser.NameType.toString(nameType)
      */
-    @XStreamAlias(MarketPriceConstants.NAME_TYPE)
+    @XStreamAlias(RDMFieldDictionaryConstants.NAME_TYPE)
     private String nameType = null;
 
-    @XStreamAlias(MarketPriceConstants.ELEMENTS)
+    @XStreamAlias(RDMFieldDictionaryConstants.ELEMENTS)
     private Map<String, String> elements;
 
     public AttribInfo() {
