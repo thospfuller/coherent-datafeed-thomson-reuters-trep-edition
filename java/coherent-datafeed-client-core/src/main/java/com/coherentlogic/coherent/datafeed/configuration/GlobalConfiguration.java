@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 
 import com.coherentlogic.coherent.datafeed.adapters.TimeSeriesAdapter;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMDataAdapter;
@@ -19,7 +18,7 @@ import com.coherentlogic.coherent.datafeed.caches.DirectoryEntryCache;
 import com.coherentlogic.coherent.datafeed.caches.TS1DefEntryCache;
 import com.coherentlogic.coherent.datafeed.caches.TimeSeriesEntriesCache;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory;
-import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByOrderFactory.DefaultOrderFactory;
+import com.coherentlogic.coherent.datafeed.factories.DefaultMarketByPriceFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultMarketMakerFactory;
 import com.coherentlogic.coherent.datafeed.factories.DefaultStatusResponseFactory;
 import com.coherentlogic.coherent.datafeed.factories.LoginMessageBuilderFactory;
@@ -244,14 +243,24 @@ public class GlobalConfiguration {
 //        return new DefaultMarketPriceFactory ();
 //    }
 
-    @Bean(name=DefaultOrderFactory.BEAN_NAME)
+    @Bean(name=DefaultMarketByPriceFactory.DefaultOrderFactory.BEAN_NAME)
+    public DefaultMarketByPriceFactory.DefaultOrderFactory getMarketByPriceOrderFactory () {
+        return new DefaultMarketByPriceFactory.DefaultOrderFactory ();
+    }
+
+    @Bean(name=DefaultMarketByOrderFactory.DefaultOrderFactory.BEAN_NAME)
     public DefaultMarketByOrderFactory.DefaultOrderFactory getMarketByOrderOrderFactory () {
         return new DefaultMarketByOrderFactory.DefaultOrderFactory ();
     }
 
     @Bean(name=DefaultMarketMakerFactory.DefaultOrderFactory.BEAN_NAME)
-    public DefaultOrderFactory getDefaulMarketMakertOrderFactory () {
-        return new DefaultOrderFactory ();
+    public DefaultMarketMakerFactory.DefaultOrderFactory getDefaulMarketMakerOrderFactory () {
+        return new DefaultMarketMakerFactory.DefaultOrderFactory ();
+    }
+
+    @Bean(name=DefaultMarketByPriceFactory.BEAN_NAME)
+    public DefaultMarketByPriceFactory getDefaultMarketByPriceFactory () {
+        return new DefaultMarketByPriceFactory ();
     }
 
     @Bean(name=DefaultMarketByOrderFactory.BEAN_NAME)
