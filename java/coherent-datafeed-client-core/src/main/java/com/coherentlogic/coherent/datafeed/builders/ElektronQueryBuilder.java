@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.coherentlogic.coherent.datafeed.adapters.FrameworkEventListenerAdapterSpecification;
 import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.MarketByPrice;
 import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
@@ -33,13 +34,13 @@ import com.coherentlogic.coherent.datafeed.exceptions.TimeSeriesRequestFailedExc
 import com.coherentlogic.coherent.datafeed.listeners.FrameworkEventListener;
 import com.coherentlogic.coherent.datafeed.services.AuthenticationServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketByOrderServiceGatewaySpecification;
+import com.coherentlogic.coherent.datafeed.services.MarketByPriceServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketMakerServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.MarketPriceServiceGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.ServiceName;
 import com.coherentlogic.coherent.datafeed.services.TimeSeriesGatewaySpecification;
 import com.coherentlogic.coherent.datafeed.services.WorkflowInverterService;
 import com.reuters.rfa.common.Handle;
-import com.reuters.ts1.TS1Constants;
 
 /**
  * 
@@ -63,6 +64,9 @@ public class ElektronQueryBuilder {
     private final WorkflowInverterService workflowInverterService = new WorkflowInverterService ();
 
     @Autowired
+    private MarketByPriceServiceGatewaySpecification marketByPriceService;
+
+    @Autowired
     private MarketByOrderServiceGatewaySpecification marketByOrderService;
 
     @Autowired
@@ -81,8 +85,13 @@ public class ElektronQueryBuilder {
     @Autowired
     private Map<String, MarketMaker> marketMakerCache;
 
-    @Autowired
-    private Map<String, MarketByOrder> marketByOrderCache;
+//    @Autowired
+//    @Qualifier(value="marketByPriceCache")
+//    private Map<String, MarketByPrice> marketByPriceCache;
+
+//    @Autowired
+//    @Qualifier(value="marketByOrderCache")
+//    private Map<String, MarketByOrder> marketByOrderCache;
 
     @Autowired
     private Map<String, MarketPrice> marketPriceCache;
@@ -192,9 +201,37 @@ public class ElektronQueryBuilder {
         return result;
     }
 
+    public MarketByPrice newMarketByPrice (String ric) {
+
+        log.info("newMarketByPrice: method begins; ric: " + ric);
+
+//        System.out.println("marketByPriceCache: " + marketByPriceCache);
+//        
+//        if (true == true) System.exit(9999);
+
+        Map<String, MarketByPrice> marketByPriceCache = (Map<String, MarketByPrice>) applicationContext.getBean("marketByPriceCache");
+
+        MarketByPrice result = marketByPriceCache.get(ric);
+
+        if (result == null) {
+
+            result = applicationContext.getBean(MarketByPrice.class);
+
+            result.setRic(ric);
+
+            newStatusResponse(result);
+        }
+
+        log.info("newMarketByPrice: method ends; result: " + result);
+
+        return result;
+    }
+
     public MarketByOrder newMarketByOrder (String ric) {
 
         log.info("newMarketByOrder: method begins; ric: " + ric);
+
+        Map<String, MarketByOrder> marketByOrderCache = (Map<String, MarketByOrder>) applicationContext.getBean("marketByOrderCache");
 
         MarketByOrder result = marketByOrderCache.get(ric);
 
@@ -313,6 +350,18 @@ public class ElektronQueryBuilder {
         }
 
         return timeSeries;
+    }
+
+    public ElektronQueryBuilder query (ServiceName serviceName, MarketByPrice... marketByPrices) {
+
+        log.info("query: method begins; serviceName: " + serviceName + ", sessionBean: " + sessionBean +
+            ", marketByPrices: " + marketByPrices);
+
+        marketByPriceService.query(serviceName, sessionBean, marketByPrices);
+
+        log.info("query: method ends.");
+
+        return this;
     }
 
     public ElektronQueryBuilder query (ServiceName serviceName, MarketByOrder... marketByOrders) {
