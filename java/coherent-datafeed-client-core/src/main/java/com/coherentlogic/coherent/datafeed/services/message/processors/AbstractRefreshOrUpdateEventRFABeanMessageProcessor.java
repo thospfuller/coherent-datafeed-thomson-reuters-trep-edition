@@ -12,11 +12,19 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.coherentlogic.coherent.datafeed.adapters.RFABeanAdapter;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
+import com.coherentlogic.coherent.datafeed.exceptions.AdaptFailedException;
 import com.coherentlogic.coherent.datafeed.services.MessageProcessorSpecification;
 import com.reuters.rfa.common.Handle;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.session.omm.OMMItemEvent;
 
+/**
+ * 
+ * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
+ * @author <a href="support@coherentlogic.com">Support</a>
+ *
+ * @param <T>
+ */
 public abstract class AbstractRefreshOrUpdateEventRFABeanMessageProcessor <T extends RFABean> implements
     MessageProcessorSpecification<OMMItemEvent, T> {
 
@@ -58,15 +66,23 @@ public abstract class AbstractRefreshOrUpdateEventRFABeanMessageProcessor <T ext
 
         T rfaBean = objectCache.get(ric);
 
-        log.debug("A refresh OR update begins for the itemEvent with the handle " + handle);
-
         OMMMsg ommMsg = itemEvent.getMsg();
+
+        log.debug("A refresh (6) OR update (8) (ommMsg.msgType: " + ommMsg.getMsgType() + ") begins for the "
+            + "itemEvent with the handle " + handle + ", ric: " + ric);
 
         assertNotNull("rfaBean", rfaBean);
 
         beforeUpdate(rfaBean);
 
-        objectAdapter.adapt(ommMsg, rfaBean);
+        try {
+            objectAdapter.adapt(ommMsg, rfaBean);
+        } catch (NullPointerException npe) {
+            // See Issue #22 as this only seems to happen with select rics and it's not clear why.
+            // https://bitbucket.org/CoherentLogic/coherent-datafeed-thomson-reuters-trep-edition/issues/22/investigate-mbp-for-the-bricmi-ric
+            throw new AdaptFailedException ("Unable to adapt the ommMsg of type " + ommMsg.getMsgType() + " (refresh "
+                + "(6) OR update (8)) for the ric: " + ric, npe);
+        }
 
         afterUpdate(rfaBean);
 
