@@ -209,6 +209,31 @@
 
     <!-- /////////////////////////////////////////////////////////////////// -->
 
+    <int:gateway id="queryMarketByPriceUpdates"
+        service-interface="com.coherentlogic.coherent.datafeed.services.MarketByPriceServiceGatewaySpecification">
+        <int:method name="query"
+         request-channel="queryMarketByPriceUpdatesChannel"
+         reply-channel="queryMarketByPriceUpdatesReplyChannel"
+         payload-expression="new com.coherentlogic.coherent.datafeed.beans.MarketByPriceQueryParameters (#args[0], #args[1], #args[2])"/>
+    </int:gateway>
+
+    <int:channel id="queryMarketByPriceUpdatesChannel"/>
+    <int:channel id="queryMarketByPriceUpdatesReplyChannel"/>
+
+    <bean id="queryMarketByPriceUpdatesMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.QueryMarketByPriceMessageProcessor">
+        <constructor-arg name="queryableService" ref="marketByPriceService"/>
+        <constructor-arg name="objectCache" ref="marketByPriceCache"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="queryMarketByPriceUpdatesChannel"
+     output-channel="queryMarketByPriceUpdatesReplyChannel"
+     ref="queryMarketByPriceUpdatesMessageProcessor"
+     method="process"/>
+
+    <!-- /////////////////////////////////////////////////////////////////// -->
+
     <int:channel id="getNextTimeSeriesUpdateAsJSONRequestChannel"/>
     <int:channel id="getNextTimeSeriesUpdateAsJSONReplyChannel"/>
 
