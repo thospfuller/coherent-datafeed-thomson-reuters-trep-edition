@@ -21,6 +21,8 @@ import com.reuters.rfa.rdm.RDMMsgTypes;
  *
  * @see RFAJ_ConfigLoggingGuide.pdf page 17 for configuration details.
  *
+ * @TODO Combine this with the MarketByPrice and MarketMaker and possibly MarketPrice services.
+ *
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
  */
