@@ -1,0 +1,122 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+    <int:channel id="onMarketByPriceAddSessionToHeadersChannel"/>
+
+    <int:service-activator
+     input-channel="onMarketByPriceAddSessionToHeadersChannel"
+     output-channel="routeByMarketByPriceEventTypeChannel"
+     ref="marketByPriceMessageEnricher"
+     method="enrich"/>
+
+    <int:channel id="routeByMarketByPriceEventTypeChannel"/>
+
+    <int:router input-channel="routeByMarketByPriceEventTypeChannel"
+     default-output-channel="errorChannel"
+     expression="payload.type">
+        <int:mapping channel="marketByPriceCompletionEventChannel"
+         value="#{T(com.reuters.rfa.common.Event).COMPLETION_EVENT}"/>
+        <int:mapping channel="ommItemEventToMarketByPriceChannel"
+         value="#{T(com.reuters.rfa.common.Event).OMM_ITEM_EVENT}"/>
+    </int:router>
+
+    <!-- @deprecated This is not being used and hence should be removed. -->
+    <!-- int:transformer ref="ommItemEventTransformer" input-channel="ommItemEvent"
+     output-channel="ommItemEventToMarketByPriceChannel"/ -->
+
+    <int:channel id="marketByPriceCompletionEventChannel"/>
+    <int:channel id="marketByPriceItemEventChannel"/>
+    <int:channel id="ommItemEventToMarketByPriceChannel"/>
+
+    <!-- @TODO Remove this and add a workflow that eventually adds a message to
+               a queue. This will be called if the dacsId is incorrect, for
+               example, and the user should be alerted of the problem with
+               their dacs id.
+      -->
+    <int:service-activator
+     input-channel="marketByPriceCompletionEventChannel"
+     output-channel="marketByPriceWorkflowEndsChannel"
+     ref="completionEventHandler"
+     method="onCompletionEventReceived"/>
+
+    <!-- See rfa.example.framework.OMMSubAppContext.java
+      -->
+    <int:router input-channel="ommItemEventToMarketByPriceChannel"
+     default-output-channel="marketByPriceWorkflowEndsChannel"
+     expression="payload.msg.msgModelType">
+        <int:mapping channel="processMarketByPriceChannel"
+         value="#{T(com.reuters.rfa.rdm.RDMMsgTypes).MARKET_BY_PRICE}"/>
+    </int:router>
+
+    <int:channel id="marketByPriceChannel"/>
+
+    <int:channel id="processMarketByPriceChannel"/>
+
+    <int:router input-channel="processMarketByPriceChannel"
+     default-output-channel="errorChannel"
+     resolution-required="true"
+     expression="payload.msg.msgType">
+        <int:mapping channel="refreshMarketByPriceChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).REFRESH_RESP}"/>
+        <int:mapping channel="updateMarketByPriceChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).UPDATE_RESP}"/>
+        <int:mapping channel="processMarketByPriceStatusResponseChannel"
+         value="#{T(com.reuters.rfa.omm.OMMMsg$MsgType).STATUS_RESP}"/>
+    </int:router>
+
+    <int:channel id="refreshMarketByPriceChannel"/>
+
+    <int:service-activator
+     input-channel="refreshMarketByPriceChannel"
+     output-channel="marketByPriceWorkflowEndsChannel"
+     ref="refreshMarketByPriceMessageProcessor"
+     method="process"/>
+
+    <int:channel id="updateMarketByPriceChannel"/>
+
+    <int:service-activator
+     input-channel="updateMarketByPriceChannel"
+     output-channel="marketByPriceWorkflowEndsChannel"
+     ref="updateMarketByPriceMessageProcessor"
+     method="process"/>
+
+    <int:channel id="processMarketByPriceStatusResponseChannel"/>
+
+    <bean id="marketByPriceStatusResponseMessageProcessor"
+     class="com.coherentlogic.coherent.datafeed.services.message.processors.StatusResponseMessageProcessor">
+        <constructor-arg ref="statusResponseAdapter"/>
+        <constructor-arg ref="marketByPriceRICCache"/>
+        <constructor-arg ref="marketByPriceCache"/>
+    </bean>
+
+    <int:service-activator
+     input-channel="processMarketByPriceStatusResponseChannel"
+     output-channel="marketByPriceWorkflowEndsChannel"
+     ref="marketByPriceStatusResponseMessageProcessor"
+     method="process"/>
+
+    <int:channel id="marketByPriceWorkflowEndsChannel"/>
+
+    <bean id="marketByPriceWorkflowEndsService" class="com.coherentlogic.coherent.datafeed.services.WorkflowEndsService">
+        <constructor-arg value="The marketByPrice workflow ends."/>
+    </bean>
+
+    <int:service-activator
+     input-channel="marketByPriceWorkflowEndsChannel"
+     ref="marketByPriceWorkflowEndsService"
+     method="end"/>
+</beans>
