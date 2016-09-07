@@ -60,6 +60,7 @@ public interface Constants {
         INTEGRATION_ENDPOINT_ADAPTER = "integrationEndpointAdapter";
 
     static final String MARKET_PRICE = "marketPrice",
+        MARKET_BY_PRICE = "marketByPrice",
         MARKET_BY_ORDER = "marketByOrder",
         MARKET_MAKER = "marketMaker",
         TIME_SERIES = "timeSeries",
