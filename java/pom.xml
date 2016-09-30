@@ -28,10 +28,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.framework.version>4.2.5.RELEASE</spring.framework.version>
-        <spring.integration.version>4.2.1.RELEASE</spring.integration.version>
-        <spring.boot.version>1.3.3.RELEASE</spring.boot.version>
-        <infinispan.version>8.0.1.Final</infinispan.version>
+        <spring.framework.version>4.3.3.RELEASE</spring.framework.version>
+        <spring.integration.version>4.3.2.RELEASE</spring.integration.version>
+        <spring.boot.version>1.4.0.RELEASE</spring.boot.version>
+        <infinispan.version>8.2.4.Final</infinispan.version>
         <java.version>1.8</java.version>
         <start-class>com.coherentlogic.coherent.datafeed.examples.TimeSeriesExample</start-class>
     </properties>
@@ -112,13 +112,15 @@
     </pluginRepositories>
 
     <modules>
-        <module>coherent-datafeed-assembly</module>
+        <!-- module>coherent-datafeed-assembly</module -->
         <module>coherent-datafeed-client-core</module>
+        <module>coherent-datafeed-client-core-it</module>
         <module>coherent-datafeed-client-example</module>
         <module>coherent-datafeed-jms-int</module>
         <module>coherent-datafeed-rproject-int</module>
         <module>coherent-datafeed-db-int</module>
         <module>coherent-datafeed-spark-int</module>
+
         <!-- Connection to TREP required to run tests in core-it. -->
         <!-- module>coherent-datafeed-client-core-it</module -->
         <!-- module>coherent-datafeed-flink-int</module>
@@ -162,7 +164,7 @@
             <dependency>
                 <groupId>com.coherentlogic.coherent.data-model</groupId>
                 <artifactId>bom</artifactId>
-                <version>1.0.23-RELEASE</version>
+                <version>1.0.24-RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -400,7 +402,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <!-- TODO: Update this to 3.1 but see the notes in the bom re
                            the potential problem this can cause. -->
-                <version>2.3.2</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
