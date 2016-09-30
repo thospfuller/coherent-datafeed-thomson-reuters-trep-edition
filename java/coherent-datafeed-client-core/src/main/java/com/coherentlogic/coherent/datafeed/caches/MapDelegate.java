@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.search.test.util.impl.ReflectionHelperTest.K;
-
 /**
  * 
  * @author <a href="mailto:support@coherentlogic.com">Support</a>
