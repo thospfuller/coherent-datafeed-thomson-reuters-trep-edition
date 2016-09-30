@@ -155,7 +155,7 @@ public class MarketByOrder extends StatusResponseBean
     @XStreamAlias(RDMFieldDictionaryConstants.TIMACT_MS)
     private Long lastActivityTimeMillis;
 
-    @XStreamAlias(RDMFieldDictionaryConstants.CONTEXT_ID_KEY)
+    @XStreamAlias(RDMFieldDictionaryConstants.CONTEXT_ID)
     private Integer contextId;
 
     @XStreamAlias(RDMFieldDictionaryConstants.DDS_DSO_ID)
@@ -236,6 +236,10 @@ public class MarketByOrder extends StatusResponseBean
 
     public static final String TRADING_UNITS = "tradingUnits";
 
+    /**
+     * @todo Add methods or enum so we can see the String value.
+     * @see enumtype.def
+     */
     @RFAType(type=RDMFieldDictionaryConstants.TRD_UNITS)
     @Adapt(using=OMMEnumAdapter.class)
     public void setTradingUnits(@Changeable(TRADING_UNITS) Integer tradingUnits) {
@@ -302,7 +306,7 @@ public class MarketByOrder extends StatusResponseBean
 //    public void setOrderRankRule(String orderRankRule) {
 //        this.orderRankRule = orderRankRule;
 //    }
-    
+
     @UsingKey(type=RDMFieldDictionaryConstants.MNEMONIC)
     public String getExchangeId() {
         return exchangeId;
@@ -329,14 +333,14 @@ public class MarketByOrder extends StatusResponseBean
         this.lastActivityTimeMillis = lastActivityTimeMillis;
     }
 
-    @UsingKey(type=RDMFieldDictionaryConstants.CONTEXT_ID_KEY)
+    @UsingKey(type=RDMFieldDictionaryConstants.CONTEXT_ID)
     public Integer getContextId() {
         return contextId;
     }
 
     public static final String CONTEXT_ID = "contextId";
 
-    @RFAType(type=RDMFieldDictionaryConstants.CONTEXT_ID_KEY)
+    @RFAType(type=RDMFieldDictionaryConstants.CONTEXT_ID)
     @Adapt(using=OMMNumericAdapter.class)
     public void setContextId(@Changeable(CONTEXT_ID) Integer contextId) {
         this.contextId = contextId;
