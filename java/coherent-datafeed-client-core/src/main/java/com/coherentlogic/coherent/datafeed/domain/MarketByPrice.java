@@ -1,8 +1,12 @@
 package com.coherentlogic.coherent.datafeed.domain;
 
+import static com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order.LAST_ACTIVITY_TIME_MILLIS;
 import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.ACTIV_DATE_KEY;
+import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.MKT_STATUS;
+import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.MNEMONIC;
 import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.OR_RNK_RUL;
 import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.PR_RNK_RUL;
+import static com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants.TIMACT_MS;
 import static com.coherentlogic.coherent.datafeed.misc.Constants.MARKET_BY_PRICE;
 
 import java.math.BigDecimal;
@@ -73,6 +77,46 @@ public class MarketByPrice extends StatusResponseBean
 
     @XStreamAlias(OR_RNK_RUL)
     private String orderRankRule = null;
+
+    /**
+     * @see Appears in MarketPrice as well.
+     */
+    @XStreamAlias(MNEMONIC)
+    private String exchangeId = null;
+
+    @XStreamAlias(MKT_STATUS)
+    private String marketStatusIndicator = null;
+
+    @XStreamAlias(TIMACT_MS)
+    private Long lastActivityTimeMillis = null;
+
+    @XStreamAlias(RDMFieldDictionaryConstants.CONTEXT_ID)
+    private Integer contextId;
+
+    @XStreamAlias(RDMFieldDictionaryConstants.DDS_DSO_ID)
+    private Integer elektronDataSourceOwnerId = null;
+
+    @XStreamAlias(RDMFieldDictionaryConstants.SPS_SP_RIC)
+    private String spsSubProviderLevelRic;
+
+    @XStreamAlias(RDMFieldDictionaryConstants.BOOK_STATE)
+    private String orderBookState;
+
+    /* Numerical value indicating whether Market Orders should be combined with priced orders in the top row of a
+     * ranked MBP book.
+     *
+     * VALUE      DISPLAY   MEANING
+     * 0          " "       Undefined
+     * 1          "I"       Market Orders Included in Top Row
+     * 2          "E"       Market Orders Excluded From Top Row
+     * 3          "D"       Market Orders aggregated volume and number of orders is presented as a discrete, blank price
+     *                      point at the top row of the order book.
+     */
+    @XStreamAlias(RDMFieldDictionaryConstants.MKT_OR_RUL)
+    private Integer combineMarketOrdersWithPriceOrders;
+
+    @XStreamAlias(RDMFieldDictionaryConstants.TRD_STATUS)
+    private String tradingStatus;
 
     public MarketByPrice() {
         this (new HashMap<String, Order> (), new ArrayList<OrderEventListener<MarketByPrice.Order>> ());
@@ -167,6 +211,115 @@ public class MarketByPrice extends StatusResponseBean
     @Adapt(using=OMMEnumAdapter.class)
     public void setOrderRankRule(String orderRankRule) {
         this.orderRankRule = orderRankRule;
+    }
+
+    @UsingKey(type=RDMFieldDictionaryConstants.MNEMONIC)
+    public String getExchangeId() {
+        return exchangeId;
+    }
+
+    @RFAType(type=RDMFieldDictionaryConstants.MNEMONIC)
+    @Adapt(using=OMMDataBufferAdapter.class)
+    public void setExchangeId(@Changeable(MarketByOrder.EXCHANGE_ID) String exchangeId) {
+        this.exchangeId = exchangeId;
+    }
+
+    public String getMarketStatusIndicator() {
+        return marketStatusIndicator;
+    }
+
+    public void setMarketStatusIndicator(
+        @Changeable(MarketMaker.MARKET_STATUS_INDICATOR) String marketStatusIndicator) {
+        this.marketStatusIndicator = marketStatusIndicator;
+    }
+
+    @UsingKey(type=TIMACT_MS)
+    public Long getLastActivityTimeMillis() {
+        return lastActivityTimeMillis;
+    }
+
+    @RFAType(type=TIMACT_MS)
+    @Adapt(using=OMMNumericAdapter.class)
+    public void setLastActivityTimeMillis(
+        @Changeable(LAST_ACTIVITY_TIME_MILLIS) Long lastActivityTimeMillis) {
+        this.lastActivityTimeMillis = lastActivityTimeMillis;
+    }
+
+    @UsingKey(type=RDMFieldDictionaryConstants.CONTEXT_ID)
+    public Integer getContextId() {
+        return contextId;
+    }
+
+    @RFAType(type=RDMFieldDictionaryConstants.CONTEXT_ID)
+    @Adapt(using=OMMNumericAdapter.class)
+    public void setContextId(@Changeable(MarketByOrder.CONTEXT_ID) Integer contextId) {
+        this.contextId = contextId;
+    }
+
+    /**
+     * @TODO: Consider renaming this method.
+     */
+    @UsingKey(type=RDMFieldDictionaryConstants.DDS_DSO_ID)
+    public Integer getElektronDataSourceOwnerId() {
+        return elektronDataSourceOwnerId;
+    }
+
+    @RFAType(type=RDMFieldDictionaryConstants.DDS_DSO_ID)
+    @Adapt(using=OMMNumericAdapter.class)
+    public void setElektronDataSourceOwnerId(@Changeable(MarketByOrder.ELEKTRON_DATA_SOURCE_OWNER_ID)
+        Integer elektronDataSourceOwnerId
+    ) {
+        this.elektronDataSourceOwnerId = elektronDataSourceOwnerId;
+    }
+
+    @UsingKey(type=RDMFieldDictionaryConstants.SPS_SP_RIC)
+    public String getSpsSubProviderLevelRic() {
+        return spsSubProviderLevelRic;
+    }
+
+    @RFAType(type=RDMFieldDictionaryConstants.SPS_SP_RIC)
+    @Adapt(using=OMMDataBufferAdapter.class)
+    public void setSpsSubProviderLevelRic(
+        @Changeable(MarketByOrder.SPS_SUB_PROVIDER_LEVEL_RIC) String spsSubProviderLevelRic
+    ) {
+        this.spsSubProviderLevelRic = spsSubProviderLevelRic;
+    }
+
+    @UsingKey(type=RDMFieldDictionaryConstants.BOOK_STATE)
+    public String getOrderBookState() {
+        return orderBookState;
+    }
+
+    @RFAType(type=RDMFieldDictionaryConstants.BOOK_STATE)
+    @Adapt(using=OMMEnumAdapter.class)
+    public void setOrderBookState(@Changeable(MarketByOrder.ORDER_BOOK_STATE) String orderBookState) {
+        this.orderBookState = orderBookState;
+    }
+
+    @UsingKey(type=RDMFieldDictionaryConstants.MKT_OR_RUL)
+    public Integer getCombineMarketOrdersWithPriceOrders() {
+        return combineMarketOrdersWithPriceOrders;
+    }
+
+    public static final String COMBINE_MARKET_ORDERS_WITH_PRICE_ORDERS = "combineMarketOrdersWithPriceOrders";
+
+    @RFAType(type=RDMFieldDictionaryConstants.MKT_OR_RUL)
+    @Adapt(using=OMMEnumAdapter.class)
+    public void setCombineMarketOrdersWithPriceOrders(
+        @Changeable(COMBINE_MARKET_ORDERS_WITH_PRICE_ORDERS) Integer combineMarketOrdersWithPriceOrders
+    ) {
+        this.combineMarketOrdersWithPriceOrders = combineMarketOrdersWithPriceOrders;
+    }
+
+    @UsingKey(type=RDMFieldDictionaryConstants.TRD_STATUS)
+    public String getTradingStatus() {
+        return tradingStatus;
+    }
+
+    @RFAType(type=RDMFieldDictionaryConstants.TRD_STATUS)
+    @Adapt(using=OMMEnumAdapter.class)
+    public void setTradingStatus(@Changeable(MarketByOrder.TRADING_STATUS) String tradingStatus) {
+        this.tradingStatus = tradingStatus;
     }
 
     @Transient
