@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
+import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent.UpdateType;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
 /**
@@ -24,6 +25,8 @@ public class AggregatePropertyChangeCollector<T extends SerializableBean> {
 
     private final T rfaBean;
 
+    private final UpdateType updateType;
+
     private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener () {
 
         @Override
@@ -32,13 +35,18 @@ public class AggregatePropertyChangeCollector<T extends SerializableBean> {
         }
     };
 
-    public AggregatePropertyChangeCollector (T rfaBean) {
-        this (new HashMap<String, PropertyChangeEvent> (), rfaBean);
+    public AggregatePropertyChangeCollector (T rfaBean, UpdateType updateType) {
+        this (new HashMap<String, PropertyChangeEvent> (), rfaBean, updateType);
     }
 
-    public AggregatePropertyChangeCollector (Map<String, PropertyChangeEvent> propertyChangeEventMap, T rfaBean) {
+    public AggregatePropertyChangeCollector (
+        Map<String, PropertyChangeEvent> propertyChangeEventMap,
+        T rfaBean,
+        UpdateType updateType
+    ) {
         this.propertyChangeEventMap = propertyChangeEventMap;
         this.rfaBean = rfaBean;
+        this.updateType = updateType;
         rfaBean.addPropertyChangeListener(propertyChangeListener);
     }
 
@@ -50,7 +58,7 @@ public class AggregatePropertyChangeCollector<T extends SerializableBean> {
 
         if (!propertyChangeEventMap.isEmpty())
             rfaBean.fireAggregatePropertyChangeEvent(
-                new AggregatePropertyChangeEvent<T> (rfaBean, propertyChangeEventMap)
+                new AggregatePropertyChangeEvent<T> (rfaBean, UpdateType.partial, propertyChangeEventMap)
             );
 
         rfaBean.removePropertyChangeListener(propertyChangeListener);

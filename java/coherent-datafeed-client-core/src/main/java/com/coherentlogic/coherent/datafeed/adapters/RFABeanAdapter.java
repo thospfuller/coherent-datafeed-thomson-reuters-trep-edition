@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent.UpdateType;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.annotations.Adapt;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
@@ -118,7 +119,9 @@ public class RFABeanAdapter<T extends RFABean> {
      */
     public void adapt (OMMMsg ommMsg, T rfaBean) {
 
-        AggregatePropertyChangeCollector<RFABean> collector = new AggregatePropertyChangeCollector<RFABean> (rfaBean);
+        // See Issue #25 -- the update type needs to be set properly.
+        AggregatePropertyChangeCollector<RFABean> collector =
+            new AggregatePropertyChangeCollector<RFABean> (rfaBean, UpdateType.full);
 
         if (ommMsg.has(OMMMsg.HAS_ATTRIB_INFO)) {
             OMMAttribInfo attribInfo = ommMsg.getAttribInfo();

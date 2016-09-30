@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent.UpdateType;
 import com.coherentlogic.coherent.datafeed.adapters.omm.OMMFieldEntryAdapter;
 import com.coherentlogic.coherent.datafeed.domain.AttribInfo;
 import com.coherentlogic.coherent.datafeed.domain.EventType;
@@ -111,8 +112,9 @@ public class MarketByOrderAdapter
 
         log.debug ("adapt: method begins; ommMsg: " + ommMsg + ", marketByOrder: " + marketByOrder);
 
+        // See Issue #25 -- the update type needs to be set properly.
         AggregatePropertyChangeCollector<MarketByOrder> collector
-            = new AggregatePropertyChangeCollector<MarketByOrder> (marketByOrder);
+            = new AggregatePropertyChangeCollector<MarketByOrder> (marketByOrder, UpdateType.full);
 
         OMMData marketByOrderData = ommMsg.getPayload();
 
@@ -268,8 +270,9 @@ public class MarketByOrderAdapter
         @Override
         void toRFABean(OMMFieldList fieldList, Order t) {
 
+            // See Issue #25 -- the update type needs to be set properly.
             AggregatePropertyChangeCollector<MarketByOrder.Order> collector
-                = new AggregatePropertyChangeCollector<MarketByOrder.Order> (t);
+                = new AggregatePropertyChangeCollector<MarketByOrder.Order> (t, UpdateType.full);
 
             super.toRFABean(fieldList, t);
 

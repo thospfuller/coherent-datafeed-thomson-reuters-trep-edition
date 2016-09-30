@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent.UpdateType;
 import com.coherentlogic.coherent.datafeed.domain.RFABean;
 
 /**
@@ -18,14 +19,17 @@ import com.coherentlogic.coherent.datafeed.domain.RFABean;
  */
 public class AggregatePropertyChangeCollectorTest {
 
-    private AggregatePropertyChangeCollector aggregatePropertyChangeCollector = null;
+    private AggregatePropertyChangeCollector<TestRFABean> aggregatePropertyChangeCollector = null;
 
     private TestRFABean testRFABean = null;
 
     @Before
     public void setUp() throws Exception {
         testRFABean = new TestRFABean ();
-        aggregatePropertyChangeCollector = new AggregatePropertyChangeCollector<TestRFABean> (testRFABean);
+
+        // See Issue #25 -- the update type needs to be set properly.
+        aggregatePropertyChangeCollector =
+            new AggregatePropertyChangeCollector<TestRFABean> (testRFABean, UpdateType.full);
     }
 
     @After

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.coherentlogic.coherent.data.model.core.adapters.InOutAdapterSpecification;
 import com.coherentlogic.coherent.data.model.core.adapters.InReturnAdapterSpecification;
 import com.coherentlogic.coherent.data.model.core.factories.TypedFactory;
+import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent.UpdateType;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
 import com.reuters.rfa.omm.OMMMsg;
 import com.reuters.rfa.omm.OMMState;
@@ -51,8 +52,9 @@ public class StatusResponseAdapter
 
         log.debug("adapt: method begins; msg: " + msg + ", statusResponse: " + statusResponse);
 
+        // See Issue #25 -- the update type needs to be set properly.
         AggregatePropertyChangeCollector<StatusResponse> collector
-            = new AggregatePropertyChangeCollector<StatusResponse> (statusResponse);
+            = new AggregatePropertyChangeCollector<StatusResponse> (statusResponse, UpdateType.full);
 
         if (msg.has(OMMMsg.HAS_STATE)) {
 
