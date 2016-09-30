@@ -389,10 +389,11 @@ public interface RDMFieldDictionaryConstants {
 
     static final String
         ACTIV_DATE_KEY = "ACTIV_DATE_KEY",
-        CONTEXT_ID_KEY = "CONTEXT_ID_KEY",
+        CONTEXT_ID = "CONTEXT_ID",
         DDS_DSO_ID = "DDS_DSO_ID",
         SPS_SP_RIC = "SPS_SP_RIC",
         BOOK_STATE = "BOOK_STATE",
+        MKT_OR_RUL = "MKT_OR_RUL",
         HALT_REASN = "HALT_REASN",
         TRD_STATUS = "TRD_STATUS",
         HALT_RSN   = "HALT_RSN",
