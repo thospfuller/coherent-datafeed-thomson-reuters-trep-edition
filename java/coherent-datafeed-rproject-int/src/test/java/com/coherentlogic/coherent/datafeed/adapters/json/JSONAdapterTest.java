@@ -53,8 +53,8 @@ public class JSONAdapterTest implements RDMFieldDictionaryConstants {
      * don't do this the string won't be parsed properly.
      */
     private static final String QUOTED_PATTERN =
-        "'{'\"marketPrice\":'{'\"version\":0,\"{0}\":\"{1}\"'}}'",
-        UNQUOTED_PATTERN = "'{'\"marketPrice\":'{\"version\":0,'\"{0}\":{1}'}}'";
+        "'{'\"marketPrice\":'{'\"{0}\":\"{1}\"'}}'",
+        UNQUOTED_PATTERN = "'{'\"marketPrice\":'{'\"{0}\":{1}'}}'";
 
     private Map<String, Method> methodMap = analyze (MarketPrice.class);
 
