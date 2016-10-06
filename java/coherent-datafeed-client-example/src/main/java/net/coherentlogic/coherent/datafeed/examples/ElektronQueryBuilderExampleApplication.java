@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -370,7 +371,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
         AtomicLong statusUpdateCtr = new AtomicLong (0);
 
         // BRIC.MI causes an NPE.
-        for (String nextRic : new String[] {"DBSM.SI"}) { //new String[] {"DBSM.SI"}) { // ExampleRICS.rics // BRIC.MI
+        for (String nextRic : ExampleRICS.rics) { //new String[] {"DBSM.SI"})
 
             /* We *MUST* acquire the MarketByPrice instance from the Spring container because we are using AOP and if we
              * simply create the class directly by calling the ctor, none of the property change events will fire when
@@ -422,7 +423,7 @@ public class ElektronQueryBuilderExampleApplication implements CommandLineRunner
                 orderEvent -> {
                     if (orderEvent.getEventType() == EventType.instantiated) {
 
-                        System.out.println("Adding an order due to orderEvent: " + orderEvent);
+                        System.out.println("[" + nextRic + "] : Adding an order due to orderEvent: " + orderEvent);
 
                         MarketByPrice.Order order = orderEvent.getOrder ();
 
