@@ -55,9 +55,9 @@ import net.coherentlogic.coherent.datafeed.examples.ExampleRICS;
  * @author <a href="https://www.linkedin.com/in/thomasfuller">Thomas P. Fuller</a>
  * @author <a href="support@coherentlogic.com">Support</a>
  */
-@SpringBootApplication
-@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
-@ImportResource({"classpath*:spring/jpa-beans.xml"})
+//@SpringBootApplication
+//@ComponentScan(basePackages="com.coherentlogic.coherent.datafeed")
+//@ImportResource({"classpath*:spring/jpa-beans.xml"})
 public class ElektronQueryBuilderDBExampleApplication implements CommandLineRunner, RDMFieldDictionaryConstants {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderDBExampleApplication.class);
