@@ -141,6 +141,9 @@ public class MarketByOrderAdapter
 
             byte action = mapEntry.getAction();
 
+            log.debug("action: " + action + " (add: " + OMMMapEntry.Action.ADD + ", delete: "
+                + OMMMapEntry.Action.DELETE + ", update: " + OMMMapEntry.Action.UPDATE + ")");
+
             if (action == OMMMapEntry.Action.ADD) {
                 addOrder (marketByOrder, key, mapEntry);
             } else if (action == OMMMapEntry.Action.DELETE) {
