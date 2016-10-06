@@ -39,7 +39,6 @@
      output-channel="ommItemEventToMarketByPriceChannel"/ -->
 
     <int:channel id="marketByPriceCompletionEventChannel"/>
-    <int:channel id="marketByPriceItemEventChannel"/>
     <int:channel id="ommItemEventToMarketByPriceChannel"/>
 
     <!-- @TODO Remove this and add a workflow that eventually adds a message to

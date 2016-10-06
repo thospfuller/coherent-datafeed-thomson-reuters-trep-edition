@@ -39,7 +39,7 @@
      output-channel="ommItemEventToMarketByOrderChannel"/ -->
 
     <int:channel id="marketByOrderCompletionEventChannel"/>
-    <int:channel id="marketByOrderItemEventChannel"/>
+    <!-- int:channel id="marketByOrderItemEventChannel"/ -->
     <int:channel id="ommItemEventToMarketByOrderChannel"/>
 
     <!-- @TODO Remove this and add a workflow that eventually adds a message to
