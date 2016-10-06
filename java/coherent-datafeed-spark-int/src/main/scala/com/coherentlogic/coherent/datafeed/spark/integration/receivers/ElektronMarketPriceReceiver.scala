@@ -6,7 +6,7 @@ import com.coherentlogic.coherent.datafeed.exceptions.UpdateFailedException
 import org.apache.spark.SparkConf
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import com.coherentlogic.coherent.datafeed.domain.MarketPriceConstants
+import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants
 import org.springframework.boot.CommandLineRunner
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.ComponentScan
