@@ -25,17 +25,23 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.MessageChannel;
 
+import com.coherentlogic.coherent.data.model.core.domain.SerializableBean;
 import com.coherentlogic.coherent.data.model.core.lifecycle.Startable;
 import com.coherentlogic.coherent.data.model.core.lifecycle.Stoppable;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeEvent;
 import com.coherentlogic.coherent.data.model.core.listeners.AggregatePropertyChangeListener;
 import com.coherentlogic.coherent.datafeed.adapters.BasicAdapter;
-import com.coherentlogic.coherent.datafeed.adapters.json.TimeSeriesJSONGenerator;
 import com.coherentlogic.coherent.datafeed.builders.ElektronQueryBuilder;
+import com.coherentlogic.coherent.datafeed.domain.EventType;
+import com.coherentlogic.coherent.datafeed.domain.MarketByOrder;
+import com.coherentlogic.coherent.datafeed.domain.MarketByPrice;
+import com.coherentlogic.coherent.datafeed.domain.MarketMaker;
 import com.coherentlogic.coherent.datafeed.domain.MarketPrice;
 import com.coherentlogic.coherent.datafeed.domain.RDMFieldDictionaryConstants;
+import com.coherentlogic.coherent.datafeed.domain.RICBeanSpecification;
 import com.coherentlogic.coherent.datafeed.domain.SessionBean;
 import com.coherentlogic.coherent.datafeed.domain.StatusResponse;
+import com.coherentlogic.coherent.datafeed.domain.StatusResponseBean;
 import com.coherentlogic.coherent.datafeed.domain.TimeSeries;
 import com.coherentlogic.coherent.datafeed.exceptions.ApplicationInitializationFailedException;
 import com.coherentlogic.coherent.datafeed.exceptions.UnknownPeriodException;
@@ -62,14 +68,25 @@ import net.coherentlogic.coherent.datafeed.examples.ExampleRICS;
     "classpath*:spring/jmx-beans.xml",
     "classpath*:spring/hornetq-beans.xml",
     "classpath*:spring/marketprice-jms-workflow-beans.xml",
+    "classpath*:spring/marketbyprice-jms-workflow-beans.xml",
+    "classpath*:spring/marketbyorder-jms-workflow-beans.xml",
+    "classpath*:spring/marketmaker-jms-workflow-beans.xml",
     "classpath*:spring/rproject-beans.xml",
 })
+//@EnableAutoConfiguration
 public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, Startable, Stoppable {
 
     private static final Logger log = LoggerFactory.getLogger(ElektronQueryBuilderClient.class);
 
     public static final String ADD_MARKET_PRICE_TO_QUEUE_CHANNEL = "addMarketPriceToQueueChannel",
-        MARKET_PRICE_CONSUMER = "marketPriceConsumer", JSON_ADAPTER = "jsonAdapter",
+        ADD_MARKET_BY_PRICE_TO_QUEUE_CHANNEL = "addMarketByPriceToQueueChannel",
+        ADD_MARKET_BY_ORDER_TO_QUEUE_CHANNEL = "addMarketByOrderToQueueChannel",
+        ADD_MARKET_MAKER_TO_QUEUE_CHANNEL = "addMarketMakerToQueueChannel",
+        MARKET_PRICE_CONSUMER = "marketPriceConsumer",
+        MARKET_BY_PRICE_CONSUMER = "marketByPriceConsumer",
+        MARKET_BY_ORDER_CONSUMER = "marketByOrderConsumer",
+        MARKET_MAKER_CONSUMER = "marketMakerConsumer",
+        JSON_ADAPTER = "jsonAdapter",
         TIME_SERIES_JSON_GENERATOR = "timeSeriesJSONGenerator", RFA_CLIENT = "com.reuters.rfa.common.Client",
         DAILY = "daily", WEEKLY = "weekly", MONTHLY = "monthly";
 
@@ -82,6 +99,18 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
     @Qualifier(ADD_MARKET_PRICE_TO_QUEUE_CHANNEL)
     private MessageChannel addMarketPriceToQueueChannel;
 
+    @Autowired
+    @Qualifier(ADD_MARKET_BY_PRICE_TO_QUEUE_CHANNEL)
+    private MessageChannel addMarketByPriceToQueueChannel;
+
+    @Autowired
+    @Qualifier(ADD_MARKET_BY_ORDER_TO_QUEUE_CHANNEL)
+    private MessageChannel addMarketByOrderToQueueChannel;
+
+    @Autowired
+    @Qualifier(ADD_MARKET_MAKER_TO_QUEUE_CHANNEL)
+    private MessageChannel addMarketMakerToQueueChannel;
+
     private final Map<String, Integer> periodMap;
 
     /* If you see this:
@@ -91,11 +120,15 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
      * -- then the solution is to not autowire the bean but get it directly from the application context once everything
      * has been started.
      */
-    private MessageConsumer marketPriceMessageConsumer;
+    private MessageConsumer
+        marketPriceMessageConsumer,
+        marketByPriceMessageConsumer,
+        marketMakerMessageConsumer,
+        marketByOrderMessageConsumer;
 
     @Autowired
     @Qualifier(JSON_ADAPTER)
-    private BasicAdapter<MarketPrice, String> jsonAdapter;
+    private BasicAdapter<SerializableBean<?>, String> jsonAdapter;
 
     @Autowired
     @Qualifier(JSON_ADAPTER)
@@ -123,6 +156,9 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
 
             elektronQueryBuilder = applicationContext.getBean(ElektronQueryBuilder.class);
             marketPriceMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_PRICE_CONSUMER);
+            marketByPriceMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_BY_PRICE_CONSUMER);
+            marketByOrderMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_BY_ORDER_CONSUMER);
+            marketMakerMessageConsumer = (MessageConsumer) applicationContext.getBean(MARKET_MAKER_CONSUMER);
         } catch (Throwable t) {
             t.printStackTrace(System.err);
             log.error("start: method threw an exception.", t);
@@ -232,9 +268,79 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
         log.info("logout: method ends.");
     }
 
+    ElektronQueryBuilderClient attachTopLevelStatusResponseListeners (
+        StatusResponseBean statusResponseBean,
+        String typeName,
+        String ric
+    ) {
+        log.info("attachListeners: method begins; statusResponseBean: " + statusResponseBean + ", typeName: " + typeName
+            + ", ric: " + ric);
+
+        StatusResponse statusResponse = statusResponseBean.getStatusResponse();
+
+        statusResponse.addAggregatePropertyChangeListener(
+            event -> {
+
+                String beginText = typeName + "[ric: " + ric + "].statusResponse.aggregateUpdate begins.";
+                String endText   = typeName + "[ric: " + ric + "].statusResponse.aggregateUpdate ends.";
+
+                System.out.println(beginText);
+                log.info(beginText);
+
+                event
+                    .getPropertyChangeEventMap()
+                    .forEach((key, value) -> {
+
+                        String kvp = "- key: " + key + ", value: " + value;
+
+                        System.out.println(kvp);
+                        log.info(kvp);
+                    }
+                );
+
+                System.out.println(endText);
+                log.info(endText);
+            }
+        );
+
+        log.info("attachListeners[" + ric + " / " +typeName + "]: method ends.");
+
+        return this;
+    }
+
+    ElektronQueryBuilderClient addOrderListener (
+        String ric,
+        SerializableBean parent,
+        SerializableBean order,
+        MessageChannel targetChannel
+    ) {
+
+        order.addAggregatePropertyChangeListener(
+            new AggregatePropertyChangeListener () {
+                @Override
+                public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent event) {
+
+                    try {
+                        SerializableBean clonedParent = (SerializableBean) parent;
+    
+                        targetChannel.send(
+                            MessageBuilder.withPayload(clonedParent).build()
+                        );
+                    } catch (Throwable t) {
+                        log.error("ric: " + ric + " some problem occurred.", t);
+                        t.printStackTrace(System.err);
+                        System.exit(-9999);
+                    }
+                }
+            }
+        );
+
+        return this;
+    }
+
     public ElektronQueryBuilderClient queryMarketPrice (ServiceName serviceName, String ric) {
 
-        log.info("query: method begins; ric: " + ric);
+        log.info("queryMarketPrice: method begins; ric: " + ric);
 
         MarketPrice marketPrice = elektronQueryBuilder.newMarketPrice(ric);
 
@@ -255,30 +361,8 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
             }
         );
 
-        StatusResponse statusResponse = marketPrice.getStatusResponse();
-
-        statusResponse.addAggregatePropertyChangeListener(
-            event -> {
-
-                String beginText = "marketPrice[ric: " + ric + "].statusResponse.aggregateUpdate begins.";
-                String endText   = "marketPrice[ric: " + ric + "].statusResponse.aggregateUpdate ends.";
-
-                System.out.println(beginText);
-                log.info(beginText);
-
-                event
-                    .getPropertyChangeEventMap()
-                    .forEach((key, value) -> {
-                        System.out.println("- key: " + key + ", value: " + value);
-                    }
-                );
-
-                System.out.println(endText);
-                log.info(endText);
-            }
-        );
-
-        elektronQueryBuilder.query(serviceName, marketPrice);
+        attachTopLevelStatusResponseListeners(marketPrice, MarketPrice.class.getName(), marketPrice.getRic())
+            .elektronQueryBuilder.query(serviceName, marketPrice);
 
         log.info("query[" + ric + "]: method ends.");
 
@@ -289,6 +373,196 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
 
         for (String nextRic : rics)
             queryMarketPrice (serviceName, nextRic);
+
+        return this;
+    }
+
+    public ElektronQueryBuilderClient queryMarketByPrice (ServiceName serviceName, String ric) {
+
+        log.info("queryMarketByPrice: method begins; ric: " + ric);
+
+        MarketByPrice marketByPrice = elektronQueryBuilder.newMarketByPrice(ric);
+
+        marketByPrice.addAggregatePropertyChangeListener(
+            new AggregatePropertyChangeListener<MarketByPrice> () {
+
+                @Override
+                public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent<MarketByPrice> event) {
+
+                    MarketByPrice marketByPrice = event.getSource ();
+
+                    MarketByPrice clone = (MarketByPrice) marketByPrice.clone();
+
+                    addMarketByPriceToQueueChannel.send(
+                        MessageBuilder.withPayload(clone).build()
+                    );
+                }
+            }
+        );
+
+        marketByPrice.addOrderEventListener(
+            orderEvent -> {
+                if (orderEvent.getEventType() == EventType.instantiated) {
+
+                    MarketByPrice.Order order = orderEvent.getOrder ();
+
+                    addOrderListener(ric, marketByPrice, order, addMarketByPriceToQueueChannel);
+                } else {
+                    log.info("The mbp order with key: " + orderEvent.getKey() + " was " + orderEvent.getEventType() +
+                        " (orderEvent: " + orderEvent + ")");
+                }
+            }
+        );
+
+        attachTopLevelStatusResponseListeners(marketByPrice, MarketByPrice.class.getName(), ric)
+            .elektronQueryBuilder
+            .query(serviceName, marketByPrice);
+
+//        marketByPrice.addOrderEventListener(
+//            orderEvent -> {
+//                if (orderEvent.getEventType() == EventType.instantiated) {
+//
+//                    System.out.println("[" + ric + "] : Adding an order due to orderEvent: " + orderEvent);
+//
+//                    MarketByPrice.Order order = orderEvent.getOrder ();
+//
+//                    order.addAggregatePropertyChangeListener(
+//                        new AggregatePropertyChangeListener<MarketByPrice.Order> () {
+//                            @Override
+//                            public void onAggregatePropertyChangeEvent(
+//                                AggregatePropertyChangeEvent<MarketByPrice.Order> event) {
+//
+//                                MarketByPrice.Order marketByPriceOrder = event.getSource ();
+//
+//                                MarketByPrice.Order clone = (MarketByPrice.Order) marketByPrice.clone();
+//
+//                                addMarketByPriceToQueueChannel.send(
+//                                    MessageBuilder.withPayload(clone).build()
+//                                );
+//                            }
+//                        }
+//                    );
+//                }
+//            }
+//        );
+
+        log.info("queryMarketByPrice[" + ric + "]: method ends.");
+
+        return this;
+    }
+
+    public ElektronQueryBuilderClient queryMarketByPrice (ServiceName serviceName, String... rics) {
+
+        for (String nextRic : rics)
+            queryMarketByPrice (serviceName, nextRic);
+
+        return this;
+    }
+
+    public ElektronQueryBuilderClient queryMarketByOrder (ServiceName serviceName, String ric) {
+
+        log.info("queryMarketByOrder: method begins; serviceName " + serviceName + ", ric: " + ric);
+
+        MarketByOrder marketByOrder = elektronQueryBuilder.newMarketByOrder(ric);
+
+        marketByOrder.addAggregatePropertyChangeListener(
+            new AggregatePropertyChangeListener<MarketByOrder> () {
+
+                @Override
+                public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent<MarketByOrder> event) {
+
+                    MarketByOrder marketByOrder = event.getSource ();
+
+                    MarketByOrder clone = (MarketByOrder) marketByOrder.clone();
+
+                    addMarketByOrderToQueueChannel.send(
+                        MessageBuilder.withPayload(clone).build()
+                    );
+                }
+            }
+        );
+
+        marketByOrder.addOrderEventListener(
+            orderEvent -> {
+                if (orderEvent.getEventType() == EventType.instantiated) {
+
+                    MarketByOrder.Order order = orderEvent.getOrder ();
+
+                    addOrderListener(ric, marketByOrder, order, addMarketByOrderToQueueChannel);
+                } else {
+                    log.info("The mbo order with key: " + orderEvent.getKey() + " was " + orderEvent.getEventType() +
+                        " (orderEvent: " + orderEvent + ")");
+                }
+            }
+        );
+
+        attachTopLevelStatusResponseListeners(marketByOrder, MarketByOrder.class.getName(), marketByOrder.getRic())
+            .elektronQueryBuilder
+            .query(serviceName, marketByOrder);
+
+        log.info("queryMarketByOrder[" + ric + "]: method ends.");
+
+        return this;
+    }
+
+    public ElektronQueryBuilderClient queryMarketByOrder (ServiceName serviceName, String... rics) {
+
+        for (String nextRic : rics)
+            queryMarketByOrder (serviceName, nextRic);
+
+        return this;
+    }
+
+    public ElektronQueryBuilderClient queryMarketMaker (ServiceName serviceName, String ric) {
+
+        log.info("queryMarketMaker: method begins; ric: " + ric);
+
+        MarketMaker marketMaker = elektronQueryBuilder.newMarketMaker(ric);
+
+        marketMaker.addAggregatePropertyChangeListener(
+            new AggregatePropertyChangeListener<MarketMaker> () {
+
+                @Override
+                public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent<MarketMaker> event) {
+
+                    MarketMaker marketMaker = event.getSource ();
+
+                    MarketMaker clone = (MarketMaker) marketMaker.clone();
+
+                    addMarketMakerToQueueChannel.send(
+                        MessageBuilder.withPayload(clone).build()
+                    );
+                }
+            }
+        );
+
+        marketMaker.addOrderEventListener(
+            orderEvent -> {
+                if (orderEvent.getEventType() == EventType.instantiated) {
+
+                    MarketMaker.Order order = orderEvent.getOrder ();
+
+                    addOrderListener(ric, marketMaker, order, addMarketMakerToQueueChannel);
+                } else {
+                    log.info("The mm order with key: " + orderEvent.getKey() + " was " + orderEvent.getEventType() +
+                        " (orderEvent: " + orderEvent + ")");
+                }
+            }
+        );
+
+        attachTopLevelStatusResponseListeners(marketMaker, MarketMaker.class.getName(), marketMaker.getRic())
+            .elektronQueryBuilder
+            .query(serviceName, marketMaker);
+
+        log.info("queryMarketMaker[" + ric + "]: method ends.");
+
+        return this;
+    }
+
+    public ElektronQueryBuilderClient queryMarketMaker (ServiceName serviceName, String... rics) {
+
+        for (String nextRic : rics)
+            queryMarketMaker (serviceName, nextRic);
 
         return this;
     }
@@ -343,6 +617,134 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
         String result = jsonAdapter.adapt(nextUpdate);
 
         log.info("getNextMarketPriceUpdateAsJson: method ends; result: " + result);
+
+        return result;
+    }
+
+    public MarketMaker getNextMarketMakerUpdateAsJavaObject (String timeout) {
+        return getNextMarketMakerUpdateAsJavaObject(Long.valueOf(timeout));
+    }
+
+    public MarketMaker getNextMarketMakerUpdateAsJavaObject (Long timeout) {
+
+        log.info("getNextMarketMakerUpdate: method begins; timeout: " + timeout);
+
+        Message nextMessage;
+
+        try {
+            nextMessage = marketMakerMessageConsumer.receive(timeout);
+        } catch (JMSException jmsException) {
+            throw new UpdateFailedException ("The next update was not received due to an exception being "
+                + "thrown while waiting to receive the next message.", jmsException);
+        }
+
+        MarketMaker result = null;
+
+        if (nextMessage != null) {
+
+            ObjectMessage nextObjectMessage = (ObjectMessage) nextMessage;
+
+            try {
+                result = (MarketMaker) nextObjectMessage.getObject();
+                nextMessage.acknowledge();
+            } catch (JMSException jmsException) {
+                throw new UpdateFailedException ("The next object could not be converted to a market price.",
+                    jmsException);
+            }
+        }
+
+        log.info("getNextMarketMakerUpdate: method ends; result: " + result);
+
+        return result;
+    }
+
+    public MarketByOrder getNextMarketByOrderUpdateAsJavaObject (String timeout) {
+        return getNextMarketByOrderUpdateAsJavaObject(Long.valueOf(timeout));
+    }
+
+    public MarketByOrder getNextMarketByOrderUpdateAsJavaObject (Long timeout) {
+
+        log.info("getNextMarketByOrderUpdate: method begins; timeout: " + timeout);
+
+        Message nextMessage;
+
+        try {
+            nextMessage = marketByOrderMessageConsumer.receive(timeout);
+        } catch (JMSException jmsException) {
+            throw new UpdateFailedException ("The next update was not received due to an exception being "
+                + "thrown while waiting to receive the next message.", jmsException);
+        }
+
+        MarketByOrder result = null;
+
+        if (nextMessage != null) {
+
+            ObjectMessage nextObjectMessage = (ObjectMessage) nextMessage;
+
+            try {
+                result = (MarketByOrder) nextObjectMessage.getObject();
+                nextMessage.acknowledge();
+            } catch (JMSException jmsException) {
+                throw new UpdateFailedException ("The next object could not be converted to a market price.",
+                    jmsException);
+            }
+        }
+
+        log.info("getNextMarketByOrderUpdate: method ends; result: " + result);
+
+        return result;
+    }
+
+    public MarketByPrice getNextMarketByPriceUpdateAsJavaObject (String timeout) {
+        return getNextMarketByPriceUpdateAsJavaObject(Long.valueOf(timeout));
+    }
+
+    public MarketByPrice getNextMarketByPriceUpdateAsJavaObject (Long timeout) {
+
+        log.info("getNextMarketByPriceUpdate: method begins; timeout: " + timeout);
+
+        Message nextMessage;
+
+        try {
+            nextMessage = marketByPriceMessageConsumer.receive(timeout);
+        } catch (JMSException jmsException) {
+            throw new UpdateFailedException ("The next update was not received due to an exception being "
+                + "thrown while waiting to receive the next message.", jmsException);
+        }
+
+        MarketByPrice result = null;
+
+        if (nextMessage != null) {
+
+            ObjectMessage nextObjectMessage = (ObjectMessage) nextMessage;
+
+            try {
+                result = (MarketByPrice) nextObjectMessage.getObject();
+                nextMessage.acknowledge();
+            } catch (JMSException jmsException) {
+                throw new UpdateFailedException ("The next object could not be converted to a market price.",
+                    jmsException);
+            }
+        }
+
+        log.info("getNextMarketByPriceUpdate: method ends; result: " + result);
+
+        return result;
+    }
+
+    public String getNextMarketByPriceUpdateAsJson (String timeout) {
+        return getNextMarketByPriceUpdateAsJson(Long.valueOf(timeout));
+    }
+
+    public String getNextMarketByPriceUpdateAsJson (Long timeout) {
+
+        log.info("getNextMarketByPriceUpdateAsJson: method begins; timeout: " + timeout);
+
+        MarketByPrice nextUpdate = getNextMarketByPriceUpdateAsJavaObject(timeout);
+
+        String result = jsonAdapter.adapt(nextUpdate);
+
+        log.info("getNextMarketByPriceUpdateAsJson: method ends; result: " + result);
 
         return result;
     }
@@ -422,6 +824,21 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
         return result;
     }
 
+    private static final AtomicLong nextUpdateCtr = new AtomicLong (0);
+
+    static void logUpdate (String type, RICBeanSpecification next) {
+
+        if (next != null) {
+            String message =
+                "next." + type + "[" + next.getRic() + "]["+ nextUpdateCtr.incrementAndGet() +"]: " + next;
+
+            System.out.println(message);
+            // log.info(message);
+        } else {
+            System.out.println("next." + type + "["+ nextUpdateCtr.incrementAndGet() +"]: null");
+        }
+    }
+
     public static void main (String[] unused) throws InterruptedException {
 
         String dacsId = System.getenv(DACS_ID);
@@ -430,21 +847,63 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
 
         client.start();
 
-        AtomicLong nextUpdateCtr = new AtomicLong (0);
+        new Thread (
+            () -> {
+                while (true) {
+
+                    MarketByPrice next = client.getNextMarketByPriceUpdateAsJavaObject(5000L);
+
+                    logUpdate("mbp", next);
+                }
+            }
+        ).start ();
 
         new Thread (
             () -> {
                 while (true) {
+
+                    MarketByOrder next = client.getNextMarketByOrderUpdateAsJavaObject(5000L);
+
+                    logUpdate("mbo", next);
+                }
+            }
+        ).start ();
+
+        new Thread (
+            () -> {
+                while (true) {
+
                     MarketPrice next = client.getNextMarketPriceUpdateAsJavaObject(5000L);
-                    System.out.println("next["+ nextUpdateCtr.incrementAndGet() +"]: " + next);
+
+                    logUpdate("mp", next);
+                }
+            }
+        ).start ();
+
+        new Thread (
+            () -> {
+                while (true) {
+
+                    MarketMaker next = client.getNextMarketMakerUpdateAsJavaObject(5000L);
+
+                    logUpdate("mm", next);
                 }
             }
         ).start ();
 
         client.login (dacsId);
 
-        for (String nextRic : ExampleRICS.rics)
-            client.queryMarketPrice(ServiceName.ELEKTRON_DD, nextRic);
+//        String nextRic = "MTI.MI"; // MTI.MI is causing an NPE for mbp.
+
+        for (String nextRic : ExampleRICS.rics) {
+            client
+//                .queryMarketPrice(ServiceName.dELEKTRON_DD, nextRic)
+                .queryMarketByPrice(ServiceName.dELEKTRON_DD, nextRic) // NW
+                .queryMarketByOrder(ServiceName.dELEKTRON_DD, nextRic) // Works
+                .queryMarketMaker(ServiceName.dELEKTRON_DD, nextRic); // Works
+        }
+
+//        client.queryMarketByPrice(ServiceName.ELEKTRON_DD, nextRic);
 
 //        TimeSeries timeSeries = client.getTimeSeriesAsJavaObject(ServiceName.ELEKTRON_DD.toString(), "TRI.N", "monthly");
 //
@@ -459,3 +918,45 @@ public class ElektronQueryBuilderClient implements RDMFieldDictionaryConstants, 
         System.exit(-9999);
     }
 }
+
+//statusResponseBean.addAggregatePropertyChangeListener(
+//new AggregatePropertyChangeListener<MarketPrice> () {
+//
+//  @Override
+//  public void onAggregatePropertyChangeEvent(AggregatePropertyChangeEvent<MarketPrice> event) {
+//
+//      MarketPrice marketPrice = event.getSource ();
+//
+//      MarketPrice clone = (MarketPrice) marketPrice.clone();
+//
+//      addMarketPriceToQueueChannel.send(
+//          MessageBuilder.withPayload(clone).build()
+//      );
+//  }
+//}
+//);
+
+// ---------------------
+
+//StatusResponse statusResponse = marketPrice.getStatusResponse();
+//
+//statusResponse.addAggregatePropertyChangeListener(
+//  event -> {
+//
+//      String beginText = "marketPrice[ric: " + ric + "].statusResponse.aggregateUpdate begins.";
+//      String endText   = "marketPrice[ric: " + ric + "].statusResponse.aggregateUpdate ends.";
+//
+//      System.out.println(beginText);
+//      log.info(beginText);
+//
+//      event
+//          .getPropertyChangeEventMap()
+//          .forEach((key, value) -> {
+//              System.out.println("- key: " + key + ", value: " + value);
+//          }
+//      );
+//
+//      System.out.println(endText);
+//      log.info(endText);
+//  }
+//);
