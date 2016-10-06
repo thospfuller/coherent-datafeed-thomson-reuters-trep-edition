@@ -1,6 +1,7 @@
 library(cdatafeedtre)
 Initialize()
-cdatafeedtre::Login("CLL_thomas.fuller")
+dacsId <- Sys.getenv("DACS_ID")
+cdatafeedtrep::Login(dacsId)
 result <- GetTimeSeriesDataFor(symbol = "MSFT.O", period="monthly")
 tempDF <- data.frame(DATE=unlist(result$DATE),HIGH=unlist(result$HIGH))
 tempDF$DATE <- as.POSIXct(as.numeric(as.character(tempDF$DATE)),origin="1970-01-01",tz="GMT")

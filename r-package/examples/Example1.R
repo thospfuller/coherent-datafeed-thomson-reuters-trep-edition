@@ -10,7 +10,8 @@
 
 library("cdatafeedtre")
 cdatafeedtre::Initialize()
-cdatafeedtre::Login("CoherentLogic_Fuller")
+dacsId <- Sys.getenv("DACS_ID")
+cdatafeedtrep::Login(dacsId)
 rics <- c("GOOG.O", "MSFT.O", "ODFL.OQ", "LKQ.OQ", "MDVN.OQ", "BFb.N", "KO.N", "OIBR.K", "SWM.N", "ERICb.F", "ERICb.DE", "ERICb.D", "ERICb.BE", "ERICa.ST", "ERICa.F", "ERICa.DE", "ERICa.BE", "ERIC.W", "ERIC.PH", "ERIC.P", "ERIC.OQ", "ERIC.MW", "ERIC.DF", "ERIC.C", "ERIC.A", "DRICqf.BO", "BRICUSDNAV.DE", "BRICGBPNAV.DE", "BRICDX.MI", "BRIC.S", "BRIC.MI", "BRIC.AS", "ARICqf.BO", "ARIC.F", "ALRIC.PA1", ".VBRICUTR", "ERIC.O", "RIC.A", "ALRIC.PA", "ARIC.BO", "BRIC.L", "DRIC.BO", "AAT.N", "ABV.N", "ABVc.N", "ABX.N", "ACAS.O", "ACC.N", "ADGE.A", "AEL.N", "AEO.N", "AEP.N", "AEP_pa.N", "AFA.N", "AFE.N", "AFF.N", "AFG.N", "AFQ.N", "AFW.N", "AGM.N", "AGMa.N", "AGNC.O", "AGNCP.O", "AIG.N", "ALN.A", "AM.N", "AMID.N", "AMNB.O", "AMOV.O", "AMRB.O", "AMS.A", "AMSC.O", "AMSWA.O", "AMT.N", "AMWD.O", "AMX.N", "ANAT.O", "APEI.O", "APP.A", "AQQ.A", "ARC.N", "ARCT.O", "ARII.O", "ANAT.O", "APEI.O", "APP.A", "AQQ.A", "ARC.N", "ARCT.O", "ARII.O", "ARL.N", "ARSD.N", "ASEI.O", "ASI.N", "ASP.N", "ATAX.O", "AUQ.N", "AVD.N", "AVF.N", ".DAXBRIC", ".DAXBRICGB", ".DAXBRICGBN", ".DAXBRICGBP")
 #
 # Below are equity rics -- for more examples see here: http://thomsonreuters.com/content/financial/318731/global_equity_master_list.xls

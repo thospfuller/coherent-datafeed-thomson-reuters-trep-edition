@@ -10,7 +10,8 @@
 
 library("cdatafeedtre")
 cdatafeedtre::Initialize()
-cdatafeedtre::Login("CoherentLogic_Fuller")
+dacsId <- Sys.getenv("DACS_ID")
+cdatafeedtrep::Login(dacsId)
 rics <- c("GOOG.O")
 
 ricsLength <- length (rics)
