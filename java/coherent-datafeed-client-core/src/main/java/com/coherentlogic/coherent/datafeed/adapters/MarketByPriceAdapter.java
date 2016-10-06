@@ -119,8 +119,6 @@ public class MarketByPriceAdapter extends RFABeanAdapter<MarketByPrice> {
 
         OMMMap marketByPriceMap = (OMMMap) marketByPriceData;
 
-        toRFABean(((OMMMap)marketByPriceMap), marketByPrice);
-
         if (ommMsg.has(OMMMsg.HAS_ATTRIB_INFO)) {
 
             OMMAttribInfo attribInfo = ommMsg.getAttribInfo();
@@ -128,25 +126,40 @@ public class MarketByPriceAdapter extends RFABeanAdapter<MarketByPrice> {
             toRFABean (attribInfo, marketByPrice);
         }
 
-        Iterator<OMMMapEntry> iterator = marketByPriceMap.iterator();
+        /* Note that this implementation below differs slightly from the implementation for MBO and MM and the changes
+         * are due to an NPE which was thrown when the *marketByPriceMap* was null. This only occurred once and it was
+         * at exactly the time when we resumed working on this after not being connected to the TRE platform.
+         */
+        if (marketByPriceMap != null) {
 
-        while (iterator.hasNext()) {
+            toRFABean(((OMMMap)marketByPriceMap), marketByPrice);
 
-            OMMMapEntry mapEntry = iterator.next();
+            Iterator<OMMMapEntry> iterator = marketByPriceMap.iterator();
 
-            OMMData ommKey = (OMMData) mapEntry.getKey();
+            while (iterator.hasNext()) {
 
-            String key = ommKey.toString();
+                OMMMapEntry mapEntry = iterator.next();
 
-            byte action = mapEntry.getAction();
+                OMMData ommKey = (OMMData) mapEntry.getKey();
 
-            if (action == OMMMapEntry.Action.ADD) {
-                addOrder (marketByPrice, key, mapEntry);
-            } else if (action == OMMMapEntry.Action.DELETE) {
-                deleteOrder (marketByPrice, key, mapEntry);
-            } else if (action == OMMMapEntry.Action.UPDATE) {
-                updateOrder (marketByPrice, key, mapEntry);
+                String key = ommKey.toString();
+
+                byte action = mapEntry.getAction();
+
+                log.debug("action: " + action + " (add: " + OMMMapEntry.Action.ADD + ", delete: " +
+                    OMMMapEntry.Action.DELETE + ", update: " + OMMMapEntry.Action.UPDATE + ")");
+
+                if (action == OMMMapEntry.Action.ADD) {
+                    addOrder (marketByPrice, key, mapEntry);
+                } else if (action == OMMMapEntry.Action.DELETE) {
+                    deleteOrder (marketByPrice, key, mapEntry);
+                } else if (action == OMMMapEntry.Action.UPDATE) {
+                    updateOrder (marketByPrice, key, mapEntry);
+                }
             }
+        } else {
+            // This should probably be an exception.
+            log.warn ("The marketByPriceMap is null for the marketByPrice.ric: " + marketByPrice.getRic());
         }
 
         collector.done();
@@ -156,8 +169,7 @@ public class MarketByPriceAdapter extends RFABeanAdapter<MarketByPrice> {
 
     void addOrder (MarketByPrice marketByPrice, String key, OMMMapEntry mapEntry) {
 
-        log.debug("addOrder: method begins; marketByPrice: " + marketByPrice + ", key: " + key + ", mapEntry: " +
-            mapEntry);
+        log.debug("addOrder: method begins; marketByPrice: " + marketByPrice + ", key: " + key + ", mapEntry: " + mapEntry);
 
         Map<String, Order> orders = marketByPrice.getOrders();
 
@@ -190,11 +202,11 @@ public class MarketByPriceAdapter extends RFABeanAdapter<MarketByPrice> {
 
          Order order = orders.remove(key);
 
+         if (order == null)
+             throw new DeleteFailedException("An order did not already exist under the key: " + key + ".");
+
          marketByPrice.fireOrderEvent(new OrderEvent<MarketByPrice.Order> (order, key, EventType.deleted));
 
-         if (order == null) {
-             throw new DeleteFailedException("An order did not already exist under the key: " + key + ".");
-         }
          log.debug("deleteOrder: method ends; order: " + order);
     }
 
