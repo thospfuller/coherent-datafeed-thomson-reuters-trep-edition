@@ -209,11 +209,11 @@
                 <artifactId>coherent-datafeed-rproject-int</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!-- dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.0-api</artifactId>
                 <version>1.0.1.Final</version>
-            </dependency>
+            </dependency -->
             <dependency>
                 <groupId>com.coherentlogic.coherent.datafeed.client</groupId>
                 <artifactId>spring-integration-rfa</artifactId>
