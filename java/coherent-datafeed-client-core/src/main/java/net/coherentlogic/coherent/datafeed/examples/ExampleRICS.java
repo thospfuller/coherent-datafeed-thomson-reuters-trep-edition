@@ -3,6 +3,7 @@ package net.coherentlogic.coherent.datafeed.examples;
 public interface ExampleRICS {
 
     public static final String[] rics = {
+        "DBSM.SI",
         "LCOc1",
         "GOOG.O",
         "MSFT.O",
