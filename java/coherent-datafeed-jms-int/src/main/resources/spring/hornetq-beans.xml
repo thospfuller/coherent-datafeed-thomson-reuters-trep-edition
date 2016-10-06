@@ -41,6 +41,10 @@
         <constructor-arg name="name" value="marketPriceUpdates" type="String"/>
         <constructor-arg name="bindings" value="/tr/marketPriceUpdates" type="String[]"/> 
     </bean>
+    <bean id="marketByPriceTopicConfig" class="org.hornetq.jms.server.config.impl.TopicConfigurationImpl">
+        <constructor-arg name="name" value="marketByPriceUpdates" type="String"/>
+        <constructor-arg name="bindings" value="/tr/marketByPriceUpdates" type="String[]"/> 
+    </bean>
     <bean id="marketMakerTopicConfig" class="org.hornetq.jms.server.config.impl.TopicConfigurationImpl">
         <constructor-arg name="name" value="marketMakerUpdates" type="String"/>
         <constructor-arg name="bindings" value="/tr/marketMakerUpdates" type="String[]"/> 
@@ -59,6 +63,7 @@
             <util:list>
                 <ref bean="statusResponseTopicConfig"/>
                 <ref bean="marketPriceTopicConfig"/>
+                <ref bean="marketByPriceTopicConfig"/>
                 <ref bean="marketMakerTopicConfig"/>
                 <ref bean="marketByOrderTopicConfig"/>
                 <ref bean="timeSeriesTopicConfig"/>
@@ -81,6 +86,9 @@
     <bean id="marketPriceTopicFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.JMSTopicFactory">
         <constructor-arg name="topicName" value="marketPriceUpdates"/>
     </bean>
+    <bean id="marketByPriceTopicFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.JMSTopicFactory">
+        <constructor-arg name="topicName" value="marketByPriceUpdates"/>
+    </bean>
     <bean id="marketMakerTopicFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.JMSTopicFactory">
         <constructor-arg name="topicName" value="marketMakerUpdates"/>
     </bean>
@@ -95,6 +103,7 @@
     <bean id="marketPriceUpdatesTopic" class="javax.jms.Topic" factory-bean="marketPriceTopicFactory" factory-method="getInstance"/>
     <bean id="marketMakerUpdatesTopic" class="javax.jms.Topic" factory-bean="marketMakerTopicFactory" factory-method="getInstance"/>
     <bean id="marketByOrderUpdatesTopic" class="javax.jms.Topic" factory-bean="marketByOrderTopicFactory" factory-method="getInstance"/>
+    <bean id="marketByPriceUpdatesTopic" class="javax.jms.Topic" factory-bean="marketByPriceTopicFactory" factory-method="getInstance"/>
     <bean id="timeSeriesUpdatesTopic" class="javax.jms.Topic" factory-bean="timeSeriesTopicFactory" factory-method="getInstance"/>
 
     <bean id="transportConfiguration" class="org.hornetq.api.core.TransportConfiguration">
@@ -133,6 +142,14 @@
         <constructor-arg name="session" ref="jmsSession"/>
         <constructor-arg name="destination" ref="marketPriceUpdatesTopic"/>
     </bean>
+    <bean id="marketByPriceConsumerFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.ConsumerFactory">
+        <constructor-arg name="session" ref="jmsSession"/>
+        <constructor-arg name="destination" ref="marketByPriceUpdatesTopic"/>
+    </bean>
+    <bean id="marketByOrderConsumerFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.ConsumerFactory">
+        <constructor-arg name="session" ref="jmsSession"/>
+        <constructor-arg name="destination" ref="marketByOrderUpdatesTopic"/>
+    </bean>
     <bean id="marketMakerConsumerFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.ConsumerFactory">
         <constructor-arg name="session" ref="jmsSession"/>
         <constructor-arg name="destination" ref="marketMakerUpdatesTopic"/>
@@ -142,13 +159,10 @@
         <constructor-arg name="session" ref="jmsSession"/>
         <constructor-arg name="destination" ref="timeSeriesUpdatesTopic"/>
     </bean>
-    <bean id="marketByOrderConsumerFactory" class="com.coherentlogic.coherent.datafeed.factories.hornetq.ConsumerFactory">
-        <constructor-arg name="session" ref="jmsSession"/>
-        <constructor-arg name="destination" ref="marketByOrderUpdatesTopic"/>
-    </bean>
 
     <bean id="statusResponseConsumer" class="javax.jms.MessageConsumer" factory-bean="statusResponseConsumerFactory" factory-method="getInstance"/>
     <bean id="marketPriceConsumer" class="javax.jms.MessageConsumer" factory-bean="marketPriceConsumerFactory" factory-method="getInstance"/>
+    <bean id="marketByPriceConsumer" class="javax.jms.MessageConsumer" factory-bean="marketByPriceConsumerFactory" factory-method="getInstance"/>
     <bean id="marketMakerConsumer" class="javax.jms.MessageConsumer" factory-bean="marketMakerConsumerFactory" factory-method="getInstance"/>
     <bean id="timeSeriesConsumer" class="javax.jms.MessageConsumer" factory-bean="timeSeriesConsumerFactory" factory-method="getInstance"/>
     <bean id="marketByOrderConsumer" class="javax.jms.MessageConsumer" factory-bean="marketByOrderConsumerFactory" factory-method="getInstance"/>
