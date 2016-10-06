@@ -42,7 +42,7 @@ public class AbstractQueryMessageProcessor<T extends RICBeanSpecification>
 
       AbstractQuery<T[]> parameters = message.getPayload();
 
-      log.debug("parameters: " + parameters);
+      // log.debug("parameters: " + parameters); Causes a ConcurrentModificationException so removing this.
 
       String serviceName = parameters.getServiceName();
 
