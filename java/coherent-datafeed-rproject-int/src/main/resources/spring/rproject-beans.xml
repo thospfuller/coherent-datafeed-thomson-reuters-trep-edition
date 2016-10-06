@@ -8,13 +8,14 @@
             <array value-type="java.lang.Class">
                 <value>com.coherentlogic.coherent.datafeed.domain.AbstractCommonProperties</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.AbstractAdvancedCommonProperties</value>
-                <!-- value>com.coherentlogic.coherent.datafeed.domain.SessionBean</value -->
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketPrice</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.TimeSeries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketMaker.Order</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketByOrder</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.MarketByOrder.Order</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketByPrice</value>
+                <value>com.coherentlogic.coherent.datafeed.domain.MarketByPrice.Order</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.StatusResponse</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DirectoryEntries</value>
                 <value>com.coherentlogic.coherent.datafeed.domain.DictionaryEntries</value>
