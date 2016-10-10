@@ -480,7 +480,7 @@ GetTimeSeriesDataFor <- function (serviceName="ELEKTRON_DD", symbol, period = "d
         "***                                                                                                       ***\n",
         "***              Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version               ***\n",
         "***                                                                                                       ***\n",
-        "***                                         Version 1.0.8-RELEASE                                         ***\n",
+        "***                                         Version 1.0.9-RELEASE                                         ***\n",
         "***                                                                                                       ***\n",
         "***                              Please take a moment to follow us on Twitter:                            ***\n",
         "***                                                                                                       ***\n",
