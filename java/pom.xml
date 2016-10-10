@@ -112,7 +112,7 @@
     </pluginRepositories>
 
     <modules>
-        <!-- module>coherent-datafeed-assembly</module -->
+        <module>coherent-datafeed-assembly</module>
         <module>coherent-datafeed-client-core</module>
         <module>coherent-datafeed-client-core-it</module>
         <module>coherent-datafeed-client-example</module>
