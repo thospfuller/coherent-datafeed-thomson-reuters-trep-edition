@@ -4,11 +4,26 @@ Login             Establishes a session with Thomson Reuters, for instance; for
                   example, "Login('YouCos_DACSID')".
 Logout            Terminates the session with Thomson Reuters; for example
                   "Logout()".
-Query             Query Thomson Reuters for market price updates for the RICS
-                  provided; for example "Query('MSFT.O', 'GOOG.O')".
-GetNextUpdateAsJavaObject    Function returns the next market price update Java object reference.
-GetNextUpdate     Function returns the next market price update as a
-                  data.frame; for example "next <- GetNextUpdate()".
+QueryMarketPrice  Query Thomson Reuters for market price updates for the RICS provided; for example
+                  "QueryMarketPrice('MSFT.O', 'GOOG.O')".
+GetNextMarketPriceUpdateAsJavaObject    Function returns the next market price update Java object reference.
+GetNextMarketPriceUpdate     Function returns the next market price update as a data.frame; for example
+                             "next <- GetNextMarketPriceUpdate()".
+
+QueryMarketMaker  Query Thomson Reuters for market maker updates for the RICS provided; for example
+                  "QueryMarketMaker('MSFT.O', 'GOOG.O')".
+GetNextMarketMakerUpdateAsJavaObject    Function returns the next market maker update Java object reference.
+
+QueryMarketByPrice  Query Thomson Reuters for market-by-price updates for the RICS provided; for example
+                  "QueryMarketByPrice('MSFT.O', 'GOOG.O')".
+GetNextMarketByPriceUpdateAsJavaObject    Function returns the next market maker update Java object reference.
+QueryMarketByOrder  Query Thomson Reuters for market-by-order updates for the RICS provided; for example
+                  "QueryMarketByOrder('MSFT.O', 'GOOG.O')".
+GetNextMarketByOrderUpdateAsJavaObject    Function returns the next market by order update Java object reference.
+QueryMarketByPrice  Query Thomson Reuters for market-by-price updates for the RICS provided; for example
+                  "QueryMarketByPrice('MSFT.O', 'GOOG.O')".
+GetNextMarketByPriceUpdateAsJavaObject    Function returns the next market by price update Java object reference.
+
 GetTimeSeriesDataFor     Function returns the time series data for the given
                          RIC; for example "timeSeries <- cdatafeedtre::GetTimeSeriesDataFor("ILMN.O", "daily")"
 About             Function prints some information about this package.
