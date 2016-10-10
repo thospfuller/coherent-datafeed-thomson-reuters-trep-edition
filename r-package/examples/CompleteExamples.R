@@ -1,5 +1,5 @@
-library(cdatafeedtre)
-Initialize()
+library(cdatafeedtrep)
+cdatafeedtrep::Initialize()
 dacsId <- Sys.getenv("DACS_ID")
 cdatafeedtrep::Login(dacsId)
 result <- GetTimeSeriesDataFor(symbol = "MSFT.O", period="monthly")
@@ -12,12 +12,40 @@ tempDF <- data.frame(DATE=unlist(result$DATE), LOW=unlist(result$LOW))
 tempDF$DATE <- as.POSIXct(as.numeric(as.character(tempDF$DATE)),origin="1970-01-01",tz="GMT")
 tempDF$LOW <-as.numeric(as.character(tempDF$LOW))
 
+result <- GetTimeSeriesDataFor(symbol = "TWTR.N", period="monthly", timeout = "120000")
+tempDF <- data.frame(DATE=unlist(result$DATE),OPEN=unlist(result$OPEN))
+tempDF <- tempDF[order(tempDF$DATE),]
+tempDF$DATE <- as.POSIXct(as.numeric(substr(x = as.character(tempDF$DATE), start=1, stop=10)), origin="1970-01-01", tz="GMT")
+tempDF$OPEN <- as.numeric(as.character(tempDF$OPEN))
 plot(tempDF, type="l")
 
-Query(symbols = c("MSFT.O", "ORCL.O", "GOOG.O", "ILMN.O", "TRI.N"))
+plot(tempDF, type="l")
+
+cdatafeedtrep::QueryMarketPrice(symbols = c("MSFT.O", "ORCL.O", "GOOG.O", "ILMN.O", "TRI.N"))
 
 while (TRUE) {
-    nextUpdate <- cdatafeedtre::GetNextUpdate()
+    nextUpdate <- cdatafeedtrep::GetNextMarketPriceUpdate()
+    print(nextUpdate)
+}
+
+cdatafeedtrep::QueryMarketMaker(symbols = c("MSFT.O", "ORCL.O", "GOOG.O", "ILMN.O", "TRI.N"))
+
+while (TRUE) {
+    nextUpdate <- cdatafeedtrep::GetNextMarketMakerUpdateAsJavaObject()
+    print(nextUpdate)
+}
+
+cdatafeedtrep::QueryMarketByPrice(symbols = c("MSFT.O", "ORCL.O", "GOOG.O", "ILMN.O", "TRI.N", "DBSM.SI"))
+
+while (TRUE) {
+    nextUpdate <- cdatafeedtrep::GetNextMarketByPriceUpdateAsJavaObject()
+    print(nextUpdate)
+}
+
+cdatafeedtrep::QueryMarketByOrder(symbols = c("MSFT.O", "ORCL.O", "GOOG.O", "ILMN.O", "TRI.N", "DBSM.SI"))
+
+while (TRUE) {
+    nextUpdate <- cdatafeedtrep::GetNextMarketByOrderUpdateAsJavaObject()
     print(nextUpdate)
 }
 
