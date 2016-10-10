@@ -131,7 +131,7 @@ Logout <- function () {
 #'
 #' @export
 #'
-Query <- function (serviceName="dELEKTRON_DD", symbols) {
+QueryMarketPrice <- function (serviceName="dELEKTRON_DD", symbols) {
 
     client <- .cdatafeedtrep.env$client
 
@@ -142,7 +142,98 @@ Query <- function (serviceName="dELEKTRON_DD", symbols) {
     tryCatch(client$queryMarketPrice(actualServiceName, symbols),
         Throwable = function (e) {
             stop(
-                paste ("Unable to query the following symbols [", symbols,
+                paste ("Unable to execute the query for market price data with the following symbols [", symbols,
+                    "] -- details follow. ", e$getMessage(), sep="")
+            )
+        }
+    )
+}
+
+#' Sends a request to Thomson Reuters to receive market maker updates for the specified symbols.
+#'
+#' Note that querying a large amount of symbols can lead to an OutOfMemoryException due to the number of inbound
+#' messages not being processed fast enough by R and hence memory is slowly eaten up until the VM limit is reached. If
+#' this issue is encountered then you need to reduce the number of symbols until you find a number that works for the
+#' machine this package is running on.
+#'
+#' @param serviceName For example "dELEKTRON_DD" (defaults to "dELEKTRON_DD").
+#' @param symbols One or more symbols, for example "GOOG.O".
+#'
+#' @export
+#'
+QueryMarketMaker <- function (serviceName="dELEKTRON_DD", symbols) {
+
+    client <- .cdatafeedtrep.env$client
+
+    jServiceName <- J("com.coherentlogic.coherent.datafeed.services.ServiceName")
+
+    actualServiceName <- jServiceName$valueOf(serviceName)
+
+    tryCatch(client$queryMarketMaker(actualServiceName, symbols),
+         Throwable = function (e) {
+             e$printStackTrace()
+             stop(
+                 paste ("Unable to execute the query for market maker data with the following symbols [", symbols,
+                        "] -- details follow. ", e$getMessage(), sep="")
+             )
+         }
+    )
+}
+
+#' Sends a request to Thomson Reuters to receive market-by-order updates for the specified symbols.
+#'
+#' Note that querying a large amount of symbols can lead to an OutOfMemoryException due to the number of inbound
+#' messages not being processed fast enough by R and hence memory is slowly eaten up until the VM limit is reached. If
+#' this issue is encountered then you need to reduce the number of symbols until you find a number that works for the
+#' machine this package is running on.
+#'
+#' @param serviceName For example "dELEKTRON_DD" (defaults to "dELEKTRON_DD").
+#' @param symbols One or more symbols, for example "GOOG.O".
+#'
+#' @export
+#'
+QueryMarketByOrder <- function (serviceName="dELEKTRON_DD", symbols) {
+
+    client <- .cdatafeedtrep.env$client
+
+    jServiceName <- J("com.coherentlogic.coherent.datafeed.services.ServiceName")
+
+    actualServiceName <- jServiceName$valueOf(serviceName)
+
+    tryCatch(client$queryMarketByOrder(actualServiceName, symbols),
+         Throwable = function (e) {
+             stop(
+                 paste ("Unable to execute the query for market by order data with the following symbols [", symbols,
+                        "] -- details follow. ", e$getMessage(), sep="")
+             )
+         }
+    )
+}
+
+#' Sends a request to Thomson Reuters to receive market-by-price updates for the specified symbols.
+#'
+#' Note that querying a large amount of symbols can lead to an OutOfMemoryException due to the number of inbound
+#' messages not being processed fast enough by R and hence memory is slowly eaten up until the VM limit is reached. If
+#' this issue is encountered then you need to reduce the number of symbols until you find a number that works for the
+#' machine this package is running on.
+#'
+#' @param serviceName For example "dELEKTRON_DD" (defaults to "dELEKTRON_DD").
+#' @param symbols One or more symbols, for example "GOOG.O".
+#'
+#' @export
+#'
+QueryMarketByPrice <- function (serviceName="dELEKTRON_DD", symbols) {
+
+    client <- .cdatafeedtrep.env$client
+
+    jServiceName <- J("com.coherentlogic.coherent.datafeed.services.ServiceName")
+
+    actualServiceName <- jServiceName$valueOf(serviceName)
+
+    tryCatch(client$queryMarketByPrice(actualServiceName, symbols),
+        Throwable = function (e) {
+            stop(
+                paste ("Unable to execute the query for market by order data with the following symbols [", symbols,
                     "] -- details follow. ", e$getMessage(), sep="")
             )
         }
@@ -169,7 +260,79 @@ Query <- function (serviceName="dELEKTRON_DD", symbols) {
     return(resultantFrame)
 }
 
-#' Retrieves the next update from Thomson Reuters.
+#' Retrieves the next market-by-price update from Thomson Reuters.
+#'
+#' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
+#'  to zero will cause the thread to wait forever.
+#'
+#' @return A reference to the market-by-price [Java] object.
+#'
+#' @export
+#'
+GetNextMarketByPriceUpdateAsJavaObject <- function (timeout = "10000") {
+
+    client <- .cdatafeedtrep.env$client
+
+    tryCatch(
+        result <- client$getNextMarketByPriceUpdateAsJavaObject(timeout), Throwable = function (e) {
+            stop(
+                paste ("Unable to get the next market-by-price update -- details follow. ",
+                       e$getMessage(), sep="")
+            )
+        }
+    )
+    return (result)
+}
+
+#' Retrieves the next market-by-order update from Thomson Reuters.
+#'
+#' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
+#'  to zero will cause the thread to wait forever.
+#'
+#' @return A reference to the market-by-order [Java] object.
+#'
+#' @export
+#'
+GetNextMarketByOrderUpdateAsJavaObject <- function (timeout = "10000") {
+
+    client <- .cdatafeedtrep.env$client
+
+    tryCatch(
+        result <- client$getNextMarketByOrderUpdateAsJavaObject(timeout), Throwable = function (e) {
+            stop(
+                paste ("Unable to get the next market-by-order update -- details follow. ",
+                       e$getMessage(), sep="")
+            )
+        }
+    )
+    return (result)
+}
+
+#' Retrieves the next market maker update from Thomson Reuters.
+#'
+#' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
+#'  to zero will cause the thread to wait forever.
+#'
+#' @return A reference to the market maker [Java] object.
+#'
+#' @export
+#'
+GetNextMarketMakerUpdateAsJavaObject <- function (timeout = "10000") {
+
+    client <- .cdatafeedtrep.env$client
+
+    tryCatch(
+        result <- client$getNextMarketMakerUpdateAsJavaObject(timeout), Throwable = function (e) {
+            stop(
+                paste ("Unable to get the next market maker update -- details follow. ",
+                       e$getMessage(), sep="")
+            )
+        }
+    )
+    return (result)
+}
+
+#' Retrieves the next market price update from Thomson Reuters.
 #'
 #' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
 #'  to zero will cause the thread to wait forever.
@@ -178,7 +341,7 @@ Query <- function (serviceName="dELEKTRON_DD", symbols) {
 #'
 #' @export
 #'
-GetNextUpdateAsJavaObject <- function (timeout = "10000") {
+GetNextMarketPriceUpdateAsJavaObject <- function (timeout = "10000") {
 
     #bigLong <- J("java.lang.Long")
     # actualTimeoutValue <- bigLong$valueOf (timeout)
@@ -196,7 +359,7 @@ GetNextUpdateAsJavaObject <- function (timeout = "10000") {
     return (result)
 }
 
-#' Retrieves the next update from Thomson Reuters.
+#' Retrieves the next market price update from Thomson Reuters.
 #'
 #' @param timeout Wait for timeout millis and then return null -- defaults to 10 seconds. Note that setting the timeout
 #'  to zero will cause the thread to wait forever.
@@ -205,14 +368,14 @@ GetNextUpdateAsJavaObject <- function (timeout = "10000") {
 #'
 #' @export
 #'
-GetNextUpdate <- function (timeout = "10000") {
+GetNextMarketPriceUpdate <- function (timeout = "10000") {
 
     client <- .cdatafeedtrep.env$client
 
     tryCatch(
         result <- client$getNextMarketPriceUpdateAsJson(timeout), Throwable = function (e) {
             stop(
-                paste ("Unable to get the next update -- details follow. ",
+                paste ("Unable to get the next market price update -- details follow. ",
                        e$getMessage(), sep="")
             )
         }
