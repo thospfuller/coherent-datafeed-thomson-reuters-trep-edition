@@ -155,7 +155,6 @@
                                     <exclude>org.apache.spark:spark-sql_2.11</exclude>
                                     <exclude>junit:junit</exclude>
                                     <exclude>org.mockito:mockito-all</exclude>
-                                    <!-- !!!DO NOT COMMIT THIS!!! -->
                                     <exclude>com.reuters:rfa</exclude>
                                 </excludes>
                             </artifactSet>
