@@ -47,10 +47,10 @@ public class GoogleAnalyticsMeasurementService {
             .queryParam("cid", UUID.randomUUID().toString())
             .queryParam("t", "event")
             .queryParam("ec", "Framework Usage") // event category
-            .queryParam("an", "CDTREP4J") // application name
+            .queryParam("an", "CDTREP4R") // application name
             .queryParam("ea", "Framework Started") // event action
-            .queryParam("av", "Version 1.0.8-RELEASE") // Application version.
-            .queryParam("el", "Version 1.0.8-RELEASE");
+            .queryParam("av", "Version 1.0.9-RELEASE") // Application version.
+            .queryParam("el", "Version 1.0.9-RELEASE");
 
         HttpHeaders headers = new HttpHeaders();
 

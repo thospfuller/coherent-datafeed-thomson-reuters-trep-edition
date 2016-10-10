@@ -46,7 +46,7 @@ public class AuthenticationService implements AuthenticationServiceSpecification
         "***                                                                                                       ***",
         "***              Welcome to the Coherent Datafeed: Thomson Reuters Elektron Edition version               ***",
         "***                                                                                                       ***",
-        "***                                         Version 1.0.8-RELEASE                                         ***",
+        "***                                         Version 1.0.9-RELEASE                                         ***",
         "***                                                                                                       ***",
         "***                              Please take a moment to follow us on Twitter:                            ***",
         "***                                                                                                       ***",
